@@ -1,8 +1,6 @@
 ---
-layout: post
+#layout: post
 title: "Reusing Finagle Server Filters on the Client"
-download_sources:
-  - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Reusing-Finagle-Server-Filters-on-Client.scala
 categories:
   - Thrift
   - Scala
@@ -84,3 +82,8 @@ class MethodNameClientFilter(action: String => Unit)
 ```
 
 Having 3 classes instead of 1 is an obvious concession, but issues like this always come up because of the single inheritance limitation. This is why it’s smarter to favour traits, interfaces, and composition over inheritance.
+
+{%
+  include downloadsources.html
+  src="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Reusing-Finagle-Server-Filters-on-Client.scala"
+%}

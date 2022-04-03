@@ -1,5 +1,5 @@
 ---
-layout: post
+#layout: post
 title: "Maintainable Web Development without Javascript"
 categories:
   - Dart

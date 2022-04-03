@@ -1,9 +1,6 @@
 ---
-layout: post
+#layout: post
 title: "Thrift Client Side Caching to Speed Up Unit Tests"
-download_sources:
-  - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Thrift-Client-Side-Caching-to-Speed-Up-Unit-Tests.scala
-  - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Developer-Friendly-Thrift-Request-Logging.scala
 categories:
   - Thrift
   - Scala
@@ -156,3 +153,7 @@ val fromCache1 = client.getOrderIds(1)
 val fromCache2 = client.getOrderIds(2)
 ```
 
+{%
+  include downloadsources.html
+  src="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Thrift-Client-Side-Caching-to-Speed-Up-Unit-Tests.scala,https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Developer-Friendly-Thrift-Request-Logging.scala"
+%}

@@ -1,8 +1,6 @@
 ---
-layout: post
+#layout: post
 title: "Tracking Clients with Finagle"
-download_sources:
-  - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Tracking-Clients-with-Finagle.scala
 categories:
   - Thrift
   - Scala
@@ -132,3 +130,7 @@ minimum=302, p50=302, p90=302, p95=302, p99=302, p999=302, p9999=302, sum=302)
 minimum=229, p50=302, p90=568, p95=568, p99=568, p999=568, p9999=568, sum=1099)
 ```
 
+{%
+  include downloadsources.html
+  src="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Tracking-Clients-with-Finagle.scala"
+%}

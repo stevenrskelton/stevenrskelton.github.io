@@ -1,8 +1,6 @@
 ---
-layout: post
+#layout: post
 title: "Developer Friendly Thrift Request Logging"
-download_sources:
-  - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Developer-Friendly-Thrift-Request-Logging.scala
 categories:
   - Thrift
   - Scala
@@ -122,3 +120,8 @@ When the client calls TestApi.getUserName(1), the console outputs:
 ["getUserName",1,735035982,{"userId":1}]
 ["getUserName",2,735035982,{"success":{"userId":1,"userName":"User1"}}]
 ```
+
+{%
+include downloadsources.html
+src="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Developer-Friendly-Thrift-Request-Logging.scala"
+%}

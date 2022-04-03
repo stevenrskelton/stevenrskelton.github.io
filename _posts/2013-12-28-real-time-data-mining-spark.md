@@ -1,8 +1,6 @@
 ---
-layout: post
+#layout: post
 title: "Real-time Data Mining with Spark"
-download_sources:
-  - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Real-Time-Data-Mining-With-Spark.scala
 categories:
   - Scala
 ---
@@ -253,3 +251,7 @@ INFO spark.CacheManager: Partition rdd_*_* not found, computing it.
 
 The goal is to keep all RDDs cached in memory whenever possible so to avoid paging we will need raise the maximum RAM which the Java VM process is allowed to use. In Eclipse, this can be done on the Run As->Run Configurations… screen. Under the Arguments tab, there is a VM arguments text area. Put in -Xmx6096m, where 6096m is the number of MB to allow Spark to use – this should be chosen to be close to the amount of RAM on your machine. When deployed, this can be done by exporting `JAVA_OPTS="-Xmx6096m"`.
 
+{%
+  include downloadsources.html
+  src="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Real-Time-Data-Mining-With-Spark.scala"
+%}

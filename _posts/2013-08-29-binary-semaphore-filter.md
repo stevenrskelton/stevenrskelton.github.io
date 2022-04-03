@@ -1,8 +1,6 @@
 ---
-layout: post
+#layout: post
 title: "Binary Semaphore Filter"
-download_sources:
-  - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Binary-Semaphore-Filter.scala
 categories:
   - Scala
 ---
@@ -120,3 +118,7 @@ inProcess.getOrElseUpdate(key, {
 }
 ```
 
+{%
+  include downloadsources.html
+  src="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Binary-Semaphore-Filter.scala"
+%}

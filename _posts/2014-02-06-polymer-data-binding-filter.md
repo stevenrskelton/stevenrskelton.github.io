@@ -1,5 +1,5 @@
 ---
-layout: post
+#layout: post
 title: "Polymer Data-Binding Filters"
 categories:
   - Polymer

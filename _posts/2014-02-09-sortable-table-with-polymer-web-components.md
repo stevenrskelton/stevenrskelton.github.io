@@ -1,9 +1,6 @@
 ---
-layout: post
+#layout: post
 title: "Sortable Table with Polymer Web Components"
-download_sources:
-  - /assets/images/2014/02/sortable-table-polymer-web-components.html
-  - /assets/images/2014/02/simple-sortable-table.html
 categories:
   - Polymer
 ---
@@ -150,3 +147,7 @@ We have defined all the code for a sortable table, the only task left is to styl
 
 The following live-demo takes advantage of `columns` data binding and the `window.resize` event to show/hide the number of columns based on user screen resolution (resize your browser to try it out).
 
+{%
+  include downloadsources.html
+  src="/assets/images/2014/02/sortable-table-polymer-web-components.html,/assets/images/2014/02/simple-sortable-table.html"
+%}

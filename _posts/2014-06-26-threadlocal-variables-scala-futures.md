@@ -1,8 +1,6 @@
 ---
-layout: post
+#layout: post
 title: "ThreadLocal Variables and Scala Futures"
-download_sources:
-  - https://github.com/stevenrskelton/Blog/blob/master/src/test/scala/ForkJoinPoolWithDynamicVariableSpec.scala
 categories:
   - Scala
 ---
@@ -165,3 +163,8 @@ implicit val executionContext = scala.concurrent.ExecutionContext.fromExecutorSe
 ```
 
 A small note about garbage collection. As long as a thread exists, it will maintain references to its `ThreadLocal` variables. If the thread-pool does not recycle threads and a thread goes back into the pool without releasing its TLS then those objects will not be freed. Normally this isn’t an issue, however for larger objects it might be wise to explicitly release them after use, or use a [WeakReference](http://www.scala-lang.org/api/current/index.html#scala.ref.WeakReference) if behaviour allows.
+
+{%
+  include downloadsources.html
+  src="https://github.com/stevenrskelton/Blog/blob/master/src/test/scala/ForkJoinPoolWithDynamicVariableSpec.scala"
+%}

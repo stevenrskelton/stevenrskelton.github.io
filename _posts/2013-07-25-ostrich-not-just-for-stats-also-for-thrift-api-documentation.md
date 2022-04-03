@@ -1,5 +1,5 @@
 ---
-layout: post
+#layout: post
 title: "Ostrich. Not just for stats, also for documentation."
 categories:
   - Thrift

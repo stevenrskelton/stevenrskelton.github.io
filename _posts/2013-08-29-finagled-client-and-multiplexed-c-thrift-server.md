@@ -1,5 +1,5 @@
 ---
-layout: post
+#layout: post
 title: "Finagled Client and Multiplexed C# Thrift Server Bug"
 categories:
   - Thrift

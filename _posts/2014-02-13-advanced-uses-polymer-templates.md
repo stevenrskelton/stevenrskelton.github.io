@@ -1,5 +1,5 @@
 ---
-layout: post
+#layout: post
 title: "Advanced Uses of Polymer Templates"
 categories:
   - Polymer

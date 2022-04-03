@@ -1,8 +1,6 @@
 ---
-layout: post
+#layout: post
 title: "Finagle Query Cache with Guava"
-download_sources:
-  - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Finagle-Query-Cache-with-Guava.scala
 categories:
   - Thrift
   - Scala
@@ -148,3 +146,8 @@ class FixedSizeCache(methodsToCache: Seq[String], val maxSizeMegabytes: Int = 10
 ```
 
 As a final note, an assumption has been made that the `Array[Byte]` is encoded `TBinaryProtocol`. Alternativily, a `TProtocolFactory` could have been supplied in the `AbstractCacheFilter` constructor, and fields such as `SeqId` could be obtained by calling `readMessageBegin`. This alternative approach is revisited later in {% link _posts/2013-08-13-thrift-client-side-caching-to-speed-up-unit-tests.md %}.
+
+{%
+  include downloadsources.html
+  src="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Finagle-Query-Cache-with-Guava.scala"
+%}

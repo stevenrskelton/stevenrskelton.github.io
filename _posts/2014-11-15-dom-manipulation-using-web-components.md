@@ -1,5 +1,5 @@
 ---
-layout: post
+#layout: post
 title: "DOM Manipulation using Web Components"
 categories:
   - Polymer

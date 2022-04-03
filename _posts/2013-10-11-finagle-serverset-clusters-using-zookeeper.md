@@ -1,8 +1,6 @@
 ---
-layout: post
+#layout: post
 title: "Finagle ServerSet Clusters using Zookeeper"
-download_sources:
-  - https://github.com/stevenrskelton/Blog/blob/master/src/test/scala/FinagleServersetClustersUsingZookeeperSpec.scala
 categories:
   - Thrift
   - Scala
@@ -116,3 +114,7 @@ While the above code used Twitter `ServerSets` for JSON deserialization, any sta
 
 Integration tests can be run without an external Zookeeper server, Curator comes with an in process TestServer, or it’s possible to manually import the code from [Twitter ZkInstance](https://github.com/twitter/finagle/blob/master/finagle-serversets/src/test/scala/com/twitter/finagle/zookeeper/ZkInstance.scala) into your project.
 
+{%
+  include downloadsources.html
+  src="https://github.com/stevenrskelton/Blog/blob/master/src/test/scala/FinagleServersetClustersUsingZookeeperSpec.scala"
+%}

@@ -1,5 +1,5 @@
 ---
-layout: post
+#layout: post
 title: "Multiplexed Services in Finagle"
 categories:
   - Thrift

@@ -1,8 +1,6 @@
 ---
-layout: post
+#layout: post
 title: "Separation of Concerns with Finagle"
-download_sources:
-  - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Separation-of-Concerns-with-Finagle.scala
 categories:
   - Thrift
   - Scala
@@ -69,3 +67,7 @@ It’s important to note that this can be used for any functionality, whether it
 
 We attached a callback to the `onSuccess` event, but there are also `onFailure` and `ensure` events that are useful. Some uses of these two might be notifications, resource cleanup, or integrity checks.
 
+{%
+  include downloadsources.html
+  src="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Separation-of-Concerns-with-Finagle.scala"
+%}
