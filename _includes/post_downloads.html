@@ -1,9 +1,9 @@
 Post Download!
 
-{% if download_sources.size > 0 %}
+{% if include.download_sources.size > 0 %}
     Full Sources:
     <ul>
-    {% for url in download_sources %}
+    {% for url in include.download_sources %}
         {% assign firstchar = url | slice %}
         {% if firstchar == "/"  %}
             <li><a href="{{ url }}" download>{{url | split: "/" | last}}</a></li>
@@ -14,12 +14,12 @@ Post Download!
     </ul>
 {% endif %}
 
-{% if github_project %}
+{% if include.github_project %}
 <p>
     <img src="/assets/images/github.png" alt="GitHub" style="float:left" width="64" height="64"/>
 </p>
 <div style="height:80px;display: table-cell; vertical-align: middle;padding-left:10px;padding-bottom:6px;">
-    <strong>{{ github_project.description }}</strong><br/>
-    <a href="{{ github_project.url }}" title="{{ github_project.name }}" target="_blank">{{ github_project.url }}</a>
+    <strong>{{ include.github_project.description }}</strong><br/>
+    <a href="{{ include.github_project.url }}" title="{{ include.github_project.name }}" target="_blank">{{ include.github_project.url }}</a>
 </div>
 {% endif %}
