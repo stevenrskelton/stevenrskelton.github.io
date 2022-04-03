@@ -160,7 +160,7 @@ The fruit cell is rendered to include an image, yet remains sortable.
 
 {% 
   include githubproject.html 
-  name: "Sortable-Table Web Component"
-  url: "https://github.com/stevenrskelton/sortable-table"
-  description: "An expanded version of this Web Component featuring cell formulas, footers, and more is available on GitHub!"
+  name="Sortable-Table Web Component"
+  url="https://github.com/stevenrskelton/sortable-table"
+  description="An expanded version of this Web Component featuring cell formulas, footers, and more is available on GitHub!"
 %}
