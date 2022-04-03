@@ -1,8 +1,6 @@
 ---
 layout: post
 title: "DOM Manipulation using Web Components"
-download_sources:
-  - /assets/images/2014/11/article-timeline.html
 categories:
   - Polymer
 ---
@@ -188,6 +186,11 @@ With a little CSS to make things pretty, and are ready to use our new web compon
 </article-timeline>
 ```
 
+{%
+  include downloadsources.html
+  src1="/assets/images/2014/11/article-timeline.html"
+%}
+ 
 {%
   include githubproject.html
   name="Ordered-Columns Web Component"
