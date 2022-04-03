@@ -1,9 +1,6 @@
 ---
 layout: post
 title: "Advanced Uses of Polymer Templates"
-download_sources:
-  - /assets/images/2014/02/templated-table-polymer-web-components.html
-  - /assets/images/2014/02/templated-sortable-table.html
 categories:
   - Polymer
 ---
@@ -157,6 +154,12 @@ var columns = [
 ```
 
 The fruit cell is rendered to include an image, yet remains sortable.
+
+{%
+  include downloadsources.html
+  src1="/assets/images/2014/02/templated-table-polymer-web-components.html"
+  src2="/assets/images/2014/02/templated-sortable-table.html"
+%}
 
 {% 
   include githubproject.html 

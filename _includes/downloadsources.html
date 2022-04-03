@@ -1,0 +1,18 @@
+{% if include.src1 %}
+    {% if include.src2 %}
+        {% assign arr = [ include.src1, include.src2, include.src3, include.src4, include.src5, include.src6 ] | compact %}
+Full Sources:
+<ul>
+    {% for url in arr %}
+    {% assign firstchar = url | slice %}
+    {% if firstchar == "/"  %}
+    <li><a href="{{ url }}" download>{{url | split: "/" | last}}</a></li>
+    {% else %}
+    <li><a href="{{ url }}">{{url | split: "/" | last}}</a></li>
+    {% endif %}
+    {% endfor %}
+</ul>
+    {% else %}
+Full Sources: <a href="{{ url }}" download>{{url | split: "/" | last}}</a>
+    {% endif %}
+{% endif %}

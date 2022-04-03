@@ -1,8 +1,6 @@
 ---
 layout: post
 title: "Multiplexed Services in Finagle"
-download_sources:
-  - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Multiplexed-Services-In-Finagle.scala
 categories:
   - Thrift
   - Scala
@@ -181,3 +179,8 @@ val barClient = new BarApi.FinagledClient(service,
 ```
 
 The only minor issue I’ve encountered are the unavoidable breakages to any Filter directly referencing method names (ie: logging, statistics). They can continue to be attached to either the multiplexing service, or the multiplexed services, but a minor tweak is necessary to account for the multiplexing behaviour.
+
+{%
+  include downloadsources.html
+  src1="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Multiplexed-Services-In-Finagle.scala"
+%}
