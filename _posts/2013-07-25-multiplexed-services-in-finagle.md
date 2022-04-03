@@ -4,7 +4,8 @@ title: "Multiplexed Services in Finagle"
 download_sources:
   - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Multiplexed-Services-In-Finagle.scala
 categories:
-  - Thrift, Scala
+  - Thrift
+  - Scala
 ---
 
 [Apache Thrift](http://thrift.apache.org/) is a pretty good [RPC library](http://en.wikipedia.org/wiki/Remote_procedure_call).  Methods compose a service, and the service is hosted on a raw TCP port. Even a large implementation with a hundred methods will perform effortlessly, but for organizational purposes you’ll want to group calls together into separate services. The standard thrift protocols require that each service retain exclusive use to its own TCP port, creating a firewall maintenance nightmare.

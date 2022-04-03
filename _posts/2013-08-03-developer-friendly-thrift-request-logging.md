@@ -4,7 +4,8 @@ title: "Developer Friendly Thrift Request Logging"
 download_sources:
   - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Developer-Friendly-Thrift-Request-Logging.scala
 categories:
-  - Thrift, Scala
+  - Thrift
+  - Scala
 ---
 
 In a system of async service calls, sometimes the most indispensible debugging tool is knowing what and when network traffic is occurring. Unfortunately for developers Finagle’s default protocol is binary, which while undecipherable, it can be transformed into something a lot more useful.

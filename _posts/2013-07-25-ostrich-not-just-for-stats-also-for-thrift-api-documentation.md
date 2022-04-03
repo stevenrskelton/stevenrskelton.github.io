@@ -2,7 +2,8 @@
 layout: post
 title: "Ostrich. Not just for stats, also for documentation."
 categories:
-  - Thrift, Scala
+  - Thrift
+  - Scala
 ---
 
 Ostrich is a stats collector and reporter created by Twitter, and it is a welcome addition to any [Finagle](http://twitter.github.io/finagle/) ([Apache Thrift](http://thrift.apache.org/)) implementation.  At its core it uses an extremely lightweight `com.sun.net.httpserver.HttpServer` to handle JSON and HTML requests.
