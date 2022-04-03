@@ -188,8 +188,6 @@ With a little CSS to make things pretty, and are ready to use our new web compon
 </article-timeline>
 ```
 
-{% include post_downloads.html with download_sources as download_sources str="errer" %}
-
 {%
   include githubproject.html
   name: "Ordered-Columns Web Component"
