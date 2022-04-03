@@ -157,8 +157,7 @@ The fruit cell is rendered to include an image, yet remains sortable.
 
 {%
   include downloadsources.html
-  src1="/assets/images/2014/02/templated-table-polymer-web-components.html"
-  src2="/assets/images/2014/02/templated-sortable-table.html"
+  src="/assets/images/2014/02/templated-table-polymer-web-components.html,/assets/images/2014/02/templated-sortable-table.html"
 %}
 
 {% 

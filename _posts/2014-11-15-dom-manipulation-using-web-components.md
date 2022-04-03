@@ -188,7 +188,7 @@ With a little CSS to make things pretty, and are ready to use our new web compon
 
 {%
   include downloadsources.html
-  src1="/assets/images/2014/11/article-timeline.html"
+  src="/assets/images/2014/11/article-timeline.html"
 %}
  
 {%

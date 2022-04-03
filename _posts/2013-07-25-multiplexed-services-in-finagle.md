@@ -182,5 +182,5 @@ The only minor issue I’ve encountered are the unavoidable breakages to any Fil
 
 {%
   include downloadsources.html
-  src1="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Multiplexed-Services-In-Finagle.scala"
+  src="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Multiplexed-Services-In-Finagle.scala"
 %}
