@@ -16,5 +16,5 @@ The presentation’s slides are from a technical prospective; a co-worker has an
 
 {%
   include downloadsources.html
-  src="/assets/images/2013/09/19/TransitioningCSharpToScalaUsingThrift.pdf"
+  src="/assets/images/2013/09/TransitioningCSharpToScalaUsingThrift.pdf"
 %}

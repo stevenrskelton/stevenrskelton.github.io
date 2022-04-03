@@ -13,5 +13,5 @@ Presented Dec 3rd at a [Reactive Programming Toronto Meetup](http://www.meetup.c
 
 {%
   include downloadsources.html
-  src="/assets/images/12/reactive_web_components.pdf"
+  src="/assets/images/2014/12/reactive_web_components.pdf"
 %}

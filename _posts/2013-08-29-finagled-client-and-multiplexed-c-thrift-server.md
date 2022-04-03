@@ -62,4 +62,4 @@ to
 ClientBuilder().codec(new ThriftClientFramedCodecFactoryWithoutFinagle()).Build()
 ```
 
-After 10 months, the [0.9.1 release of libthrift](http://search.maven.org/#search|gav|1|g%3A%22org.apache.thrift%22%20AND%20a%3A%22libthrift%22) is out, now Finagle can officially support multiplexing!
+After 10 months, the [0.9.1 release of libthrift](https://search.maven.org/search?q=g:org.apache.thrift%20AND%20a:libthrift) is out, now Finagle can officially support multiplexing!
