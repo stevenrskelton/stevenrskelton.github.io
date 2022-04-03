@@ -1,0 +1,116 @@
+<!--
+ Part of a blog entry at: http://stevenskelton.ca/advanced-table-features-using-polymer-templates/
+-->
+<polymer-element name="templated-sortable-table" attributes="data columns sortColumn sortDescending">
+	<template>
+		<table class="ssDatatable">
+			<tr>
+			  <template repeat="{{column in columns}}">
+				<th on-click="{{changeSort}}" style="{{sortColumn==column.name && sortDescending ? 'text-decoration:overline' : ''}}
+				{{sortColumn==column.name && !sortDescending ? 'text-decoration:underline' : ''}}">{{!(column.title) ? column.name : column.title}}</th>
+			  </template>
+			</tr>
+			<template repeat="{{row in data | sortByKey(sortColumn, sortDescending)}}">
+			  <tr>
+				<template repeat="{{column in columns}}">
+				<template bind="{{templateData in row | computeTemplateData(column)}}">
+				  <template ref="{{column.cellTemplate}}" bind="{{templateData}}">
+					  <td>{{value}}</td>
+				  </template>
+				</template>
+				</template>
+			  </tr>
+			</template>
+		</table>
+    </template>
+
+    <script>
+      PolymerExpressions.prototype.sortByKey = function(array, key, desc) {    
+		return array.sort(function(a, b) {
+          var x = a[key];
+		  var y = b[key];
+
+          if (typeof x == "string"){
+			x = x.toLowerCase(); 
+			y = y.toLowerCase();
+          }
+          if(desc){
+			return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+          }else{
+			return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+          }
+		});
+      };
+      PolymerExpressions.prototype.computeTemplateData = function(row, column) {
+		var value = row[column.name];
+		return { row: row, value: value };
+      };
+      Polymer('templated-sortable-table', {
+		  data: [],
+		  columns: [],
+		  sortColumn: null,
+		  sortDescending: false,
+		  changeSort: function(e,p,o){
+			var clickedSortColumn = o.templateInstance_.model.column.name;
+			if(clickedSortColumn == this.sortColumn){
+			  //column already sorted, reverse sort
+			  this.sortDescending = !this.sortDescending;
+			}else{
+			  this.sortColumn = clickedSortColumn;
+			}
+		  },
+		  importedTemplates: [],
+		  columnsChanged: function(){
+			var self = this;
+			function addTemplateIfNotInDocument(templateId){
+			  if(templateId && !self.shadowRoot.getElementById(templateId)){
+				var t = self.ownerDocument.getElementById(templateId);
+				if(t!=null){
+				  self.shadowRoot.appendChild(t);
+				  self.importedTemplates.push(t);
+				}else{
+				  //TODO: figure out where this are found, they can't be found in the
+				  // self.ownerDocument.  So store them in an importedTemplates array :(
+				  for(var i=0;i<self.importedTemplates.length;i++){
+					self.shadowRoot.appendChild(self.importedTemplates[i]);
+				  }
+				}
+			  }
+			}
+			  
+			for(var i=0;i<this.columns.length;i++){
+			  addTemplateIfNotInDocument(this.columns[i].cellTemplate);
+			}
+		  }
+      });
+    </script>
+    <style>
+      table.ssDatatable {
+		width: 100%;
+		border-collapse: collapse;
+      }
+      table.ssDatatable tr:nth-of-type(even) {
+		background-color: rgba(255,255,224,0.25);
+      }
+      table.ssDatatable .ssDatatableHeader,
+      table.ssDatatable th {
+		background: #555;
+		color: white;
+		font-weight: bold;
+		text-align: center;
+      }
+      table.ssDatatable td,
+      table.ssDatatable th {
+		padding: 6px;
+		border: 1px solid #ccc;
+		text-align: right;
+      }
+      table.ssDatatable th {
+		text-align: center;
+		cursor: pointer;
+      }
+      table.ssDatatable td:first-of-type {
+		text-align: left;
+      }
+    </style>
+</polymer-element>

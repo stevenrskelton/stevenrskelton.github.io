@@ -1,0 +1,83 @@
+<!--
+ Part of a blog entry at: http://stevenskelton.ca/sortable-table-polymer-web-components/
+-->
+<polymer-element name="simple-sortable-table" attributes="data columns sortColumn sortDescending">
+    <template>
+      <table class="ssDatatable">
+	<tr>
+	  <template repeat="{{column in columns}}">
+	    <th on-click="{{changeSort}}" style="{{sortColumn==column.name ? (sortDescending ? 'text-decoration:overline' : 'text-decoration:underline') : ''}}">{{!(column.title) ? column.name : column.title}}</th>
+	  </template>
+	</tr>
+	<template repeat="{{row in data | sortByKey(sortColumn, sortDescending)}}">
+	  <tr>
+	    <template repeat="{{column in columns}}">
+	      <td>{{row[column.name]}}</td>
+	    </template>
+	  </tr>
+	</template>
+      </table>
+    </template>
+    
+    <script>
+      PolymerExpressions.prototype.sortByKey = function(array, key, desc) {
+	return array.sort(function(a, b) {
+	    var x = a[key];
+	    var y = b[key];
+
+	    if (typeof x == "string"){
+	      x = x.toLowerCase(); 
+	      y = y.toLowerCase();
+	    }
+	    if(desc){
+	      return ((x < y) ? 1 : ((x > y) ? -1 : 0));
+	    }else{
+	      return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+	    }
+	});
+      };
+      Polymer('simple-sortable-table', {
+	  data: [],
+	  columns: [],
+	  sortColumn: null,
+	  sortDescending: false,
+	  changeSort: function(e,p,o){
+	    var clickedSortColumn = o.templateInstance_.model.column.name;
+	    if(clickedSortColumn == this.sortColumn){
+	      //column already sorted, reverse sort
+	      this.sortDescending = !this.sortDescending;
+	    }else{
+	      this.sortColumn = clickedSortColumn;
+	    }
+	  }
+      });
+    </script>
+    <style>
+      table.ssDatatable {
+	width: 100%;
+	border-collapse: collapse;
+      }
+      table.ssDatatable tr:nth-of-type(even) {
+	background-color: rgba(255,255,224,0.25);
+      }
+      table.ssDatatable th {
+	background: #555;
+	color: white;
+	font-weight: bold;
+	text-align: center;
+      }
+      table.ssDatatable td,
+      table.ssDatatable th {
+	padding: 6px;
+	border: 1px solid #ccc;
+	text-align: right;
+      }
+      table.ssDatatable th {
+	text-align: center;
+	cursor: pointer;
+      }
+      table.ssDatatable td:first-of-type {
+	text-align: left;
+      }
+    </style>
+</polymer-element>

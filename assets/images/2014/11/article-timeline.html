@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>DOM Manipulation using Web Components</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<meta name="description" content="Blogged @ http://stevenskelton.ca/dom-manipulation-using-web-components/">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<script src="http://stevenskelton.ca/files/2014/11/webcomponents-0.5.1.js"></script>
+	<script src="http://stevenskelton.ca/files/2014/11/polymer-0.5.1.js"></script>
+	<style shim-shadowdom>
+		article-timeline::shadow article {
+			text-align: center;
+			border: 3px solid #DC143C;
+			border-radius:5px;
+			margin: 2px 1px;
+			font-size: 16px;
+			font-weight: bold;
+		}
+		article-timeline::shadow .column {
+			vertical-align: top;
+			width: 300px;
+			display: inline-block;
+		}
+	</style>
+</head>
+<body>
+	<polymer-element name="article-timeline">
+		<template>
+			<div class="column"></div><div class="column"></div>
+		</template>
+		<script>
+		"use strict";
+		Polymer({
+			ready: function(){
+				var items = this.querySelectorAll('article');
+				var columns = this.shadowRoot.querySelectorAll('.column');
+				[].forEach.call(items, function(element){
+					var column = columns[0];
+					[].forEach.call(columns, function(c){
+						if(c.clientHeight < column.clientHeight) column = c;
+					});
+					column.appendChild(element);
+				});
+			}
+		});
+		</script>
+	</polymer-element>
+
+	<article-timeline>
+		<article style="line-height:60px">
+			1
+		</article>
+		<article style="line-height:40px">
+			2
+		</article>
+		<article style="line-height:75px">
+			3
+		</article>
+		<article style="line-height:50px">
+			4
+		</article>
+		<article style="line-height:62px">
+			5
+		</article>
+		<article style="line-height:40px">
+			6
+		</article>
+		<article style="line-height:43px">
+			7
+		</article>
+	</article-timeline>
+</body>

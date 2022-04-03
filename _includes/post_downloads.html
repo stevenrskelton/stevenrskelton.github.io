@@ -1,0 +1,23 @@
+{% if download_sources.size > 0 %}
+    Full Sources:
+    <ul>
+    {% for url in download_sources %}
+        {% assign firstchar = url | slice %}
+        {% if firstchar == "/"  %}
+            <li><a href="{{ url }}" download>{{url | split: "/" | last}}</a></li>
+        {% else %}
+            <li><a href="{{ url }}">{{url | split: "/" | last}}</a></li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+{% endif %}
+
+{% if github_project %}
+<p>
+    <img src="/assets/images/github.png" alt="GitHub" style="float:left" width="64" height="64"/>
+</p>
+<div style="height:80px;display: table-cell; vertical-align: middle;padding-left:10px;padding-bottom:6px;">
+    <strong>{{ github_project.description }}</strong><br/>
+    <a href="{{ github_project.url }}" title="{{ github_project.name }}" target="_blank">{{ github_project.url }}</a>
+</div>
+{% endif %}
