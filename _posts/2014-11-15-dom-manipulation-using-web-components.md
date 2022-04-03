@@ -191,3 +191,5 @@ With a little CSS to make things pretty, and are ready to use our new web compon
     </article>
 </article-timeline>
 ```
+
+{% include post_downloads.html %}
