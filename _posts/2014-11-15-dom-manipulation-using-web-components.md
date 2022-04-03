@@ -192,4 +192,4 @@ With a little CSS to make things pretty, and are ready to use our new web compon
 </article-timeline>
 ```
 
-{% include post_downloads.html download_sources=download_sources github_project=github_project str="errer" %}
+{% include post_downloads.html with download_sources as download_sources str="errer" %}
