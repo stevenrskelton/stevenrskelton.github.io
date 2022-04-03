@@ -29,6 +29,7 @@ One example would be to have 2 numbers which are a multiple of each other:
     Polymer('multiply-bind', { multiplyBind: 10 }); 
   </script>
 </polymer-element>
+<multiply-bind by="5"></multiply-bind>
 
 But not everyone is writing a spreadsheet application. Filters can also be used to perform arbitrary transformations; including text transformations.
 
@@ -37,6 +38,7 @@ But not everyone is writing a spreadsheet application. Filters can also be used 
     <strong>1:</strong> <input type="text" value="{{-"{{"-}}simpleBind}}"> <strong style="margin-left:2em">2:</strong><input type="text" value="{{-"{{"-}}simpleBind}}">
   </template>
 </polymer-element>
+<simple-bind></simple-bind>
 
 ```html
 <input type="text" value="{{-"{{"-}}simpleBind}}">
@@ -50,6 +52,7 @@ Polymer allows rudimentary logic to be performed within bind `{{-"{{"-}}expressi
     <strong>1:</strong> <input type="text" value="{{-"{{"-}}expressionBind}}"> <strong style="margin-left:2em">2:</strong> <input type="text" value="{{-"{{"-}}!expressionBind ? '' : expressionBind+', hi!'}}">
   </template>
 </polymer-element>
+<expression-bind></expression-bind>
 
 ```html
 <input type="text" value="{{-"{{"-}}expressionBind}}">
@@ -87,6 +90,7 @@ If 2-way binding isn’t required, the toDom definition can be omitted. Filters 
     Polymer('filter-bind');      
   </script>
 </polymer-element>
+<filter-bind></filter-bind>
 
 ```js
 String.prototype.endsWith = function(suffix) {
@@ -146,6 +150,7 @@ Filters can also take additional arguments, any number of `{{-"{{"-}}expression}
     Polymer('args-bind', { arg: 'hi!' });      
   </script>
 </polymer-element>
+<args-bind></args-bind>
 
 ```js
 PolymerExpressions.prototype.myCustomFilter = function(value, a) {
