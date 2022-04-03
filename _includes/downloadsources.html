@@ -5,7 +5,7 @@ Full Sources: <a href="{{ include.src }}" download>{{include.src | split: "/" | 
 Full Sources:
 <ul>
     {% for url in urls %}
-    {% assign firstchar = url | slice %}
+    {% assign firstchar = url | slice: 0 %}
     {% if firstchar == "/"  %}
     <li><a href="{{ url }}" download>{{url | split: "/" | last}}</a></li>
     {% else %}
