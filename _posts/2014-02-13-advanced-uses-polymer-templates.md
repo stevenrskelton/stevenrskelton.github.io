@@ -4,10 +4,6 @@ title: "Advanced Uses of Polymer Templates"
 download_sources:
   - /assets/images/2014/02/templated-table-polymer-web-components.html
   - /assets/images/2014/02/templated-sortable-table.html
-github_project:
-  name: Sortable-Table Web Component
-  url: https://github.com/stevenrskelton/sortable-table
-  description: An expanded version of this Web Component featuring cell formulas, footers, and more is available on GitHub!
 categories:
   - Polymer
 ---
@@ -161,3 +157,10 @@ var columns = [
 ```
 
 The fruit cell is rendered to include an image, yet remains sortable.
+
+{% 
+  include githubproject.html 
+  name: "Sortable-Table Web Component"
+  url: "https://github.com/stevenrskelton/sortable-table"
+  description: "An expanded version of this Web Component featuring cell formulas, footers, and more is available on GitHub!"
+%}

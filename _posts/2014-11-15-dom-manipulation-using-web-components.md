@@ -3,10 +3,6 @@ layout: post
 title: "DOM Manipulation using Web Components"
 download_sources:
   - /assets/images/2014/11/article-timeline.html
-github_project:
-  name: Ordered-Columns Web Component
-  url: https://github.com/stevenrskelton/ordered-columns
-  description: An expanded version of this Web Component featuring demos, mutation observers, and themes is available on GitHub!
 categories:
   - Polymer
 ---
@@ -193,3 +189,10 @@ With a little CSS to make things pretty, and are ready to use our new web compon
 ```
 
 {% include post_downloads.html with download_sources as download_sources str="errer" %}
+
+{%
+  include githubproject.html
+  name: "Ordered-Columns Web Component"
+  url: "https://github.com/stevenrskelton/ordered-columns"
+  description: "An expanded version of this Web Component featuring demos, mutation observers, and themes is available on GitHub!"
+%}
