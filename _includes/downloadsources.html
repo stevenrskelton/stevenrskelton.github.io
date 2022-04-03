@@ -1,6 +1,6 @@
 {% if include.src1 %}
     {% if include.src2 %}
-        {% assign arr = include.src1 | concat include.src2 | concat include.src3 | concat include.src4 | concat include.src5 | concat include.src6 | compact %}
+        {% assign arr = include.src1 | concat: include.src2 | concat: include.src3 | concat: include.src4 | concat: include.src5 | concat: include.src6 | compact %}
 Full Sources:
 <ul>
     {% for url in arr %}
