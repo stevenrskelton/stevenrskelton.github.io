@@ -211,7 +211,7 @@ window.addEventListener('polymer-ready', function(){
 
 {%
   include downloadsources.html
-  src="/assets/images/2014/02/advanced-table-features-using-polymer-templates.html,/assets/images/2014/02/templated-sortable-table.html"
+  src="/assets/images/2014/02/advanced-table-features-using-polymer-templates.html,/assets/images/2014/02/templated-sortable-table.html,/assets/images/2014/02/platform-0.1.4.js,/assets/images/2014/02/polymer-0.1.4.js"
 %}
 
 {% 
