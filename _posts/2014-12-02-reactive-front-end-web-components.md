@@ -2,7 +2,9 @@
 layout: post
 title: "Reactive Front-End with Web Components"
 download_sources:
-- /assets/images/12/reactive_web_components.pdf)
+  - /assets/images/12/reactive_web_components.pdf
+categories:
+  - Polymer
 ---
 
 The [Reactive Manifesto](http://www.reactivemanifesto.org/) puts together the ideal architecture for today’s system infrastructure, designed to cope with the ever increasing need for performance, reliability and responsiveness. The same evolution of expectations is taking place in the JavaScript front-end, but do the same ideas and principles apply?

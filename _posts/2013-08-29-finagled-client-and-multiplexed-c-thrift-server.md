@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Finagled Client and Multiplexed C# Thrift Server Bug"
+categories:
+  - Thrift, Scala
 ---
 
 This is an obscure issue, with an easy workaround, but no obvious solution.

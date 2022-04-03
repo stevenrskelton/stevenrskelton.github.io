@@ -1,10 +1,12 @@
 ---
 layout: post
 title: "Maintainable Web Development without Javascript"
+categories:
+  - Dart
 ---
 
 In the years 2002-2003, Internet Explorer captured 95% of world-wide browser market share. It was unfathomable to many that over the next 10 years IE would decline to just over 15%.
-World-Wide 2008 to 2014
+![World-Wide 2008 to 2014](/assets/images/2014/01/StatCounter-browser-ww-monthly-200812-201312.jpg)
 
 The open-source community perceived a problem with yesterday’s browsers and put forth a solution – alternative browsers took root despite the best efforts of the domineering incumbent. In this light it would seem silly to think there isn’t yet another radical change waiting in the wings of today’s browser landscape. As all major browsers automatically upgrade to maintain an up-to-date “evergreen” status, the barrier to change has never been lower.
 
@@ -17,13 +19,13 @@ Other attempts to creating a workable veneer are [transpiled](http://en.wikipedi
 
 The best chance of mass adoption comes from Dart. It is a mature, high-performance language pragmatically designed from the ground up to address Google’s own web development. The Chrome browser represents ⅓ of users so client-support is assured.
 
-
+<iframe src="//www.youtube.com/embed/FqsU3TbUw_s" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="" class="aligncenter" width="720" height="405" frameborder="0"></iframe>
 
 AngularDartAs with all transpiled languages, browser adoption is an immaterial gauge of success, the fair measure lies in developer adoption. On this front, the popular AngularJS web framework has quietly been supplanted by its Dart port, [Angular.Dart](https://github.com/angular/angular.dart). As developers are promised newer features and increased productivity only available in the Dart stream the impedance to switch is reversed. Attesting to Dart’s prime-time status, Google’s Lars Bak addressed the 2013 Devoxx conference with the [Shaping the Future of Web Development – Dart 1.0](http://parleys.com/p/52a9897ce4b04354fb7e57d0) keynote.
 
 Also making the leap to Dart as its premier language is [Google Polymer](http://www.polymer-project.org/) library, the supporting library for the rapidly developing, landscape changing, [Web Components](http://stevenskelton.ca/web-components/) standard.
 
-
+<iframe src="//player.vimeo.com/video/74391396" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="" class="aligncenter" width="720" height="405" frameborder="0"></iframe>
 
 ### Scala-to-Javascript
 

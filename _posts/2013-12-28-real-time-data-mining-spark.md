@@ -2,7 +2,9 @@
 layout: post
 title: "Real-time Data Mining with Spark"
 download_sources:
-- https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Real-Time-Data-Mining-With-Spark.scala
+  - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Real-Time-Data-Mining-With-Spark.scala
+categories:
+  - Scala
 ---
 
 There are 2 new principles at the vanguard of today’s technology:

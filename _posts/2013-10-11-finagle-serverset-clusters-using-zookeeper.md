@@ -2,7 +2,9 @@
 layout: post
 title: "Finagle ServerSet Clusters using Zookeeper"
 download_sources:
-- https://github.com/stevenrskelton/Blog/blob/master/src/test/scala/FinagleServersetClustersUsingZookeeperSpec.scala
+  - https://github.com/stevenrskelton/Blog/blob/master/src/test/scala/FinagleServersetClustersUsingZookeeperSpec.scala
+categories:
+  - Thrift, Scala
 ---
 
 The key to high availability is redundancy; it follows that if uptime matters, [Finagle](http://twitter.github.io/finagle/) needs to be deployed to multiple servers. This article walks through both the basic multi-host configuration using finagle-core, as well as a more robust deployment scenario utilizing the finagle-serversets module.

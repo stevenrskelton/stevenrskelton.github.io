@@ -2,12 +2,14 @@
 layout: post
 title: "Advanced Uses of Polymer Templates"
 download_sources:
-- /assets/images/2014/02/templated-table-polymer-web-components.html
-- /assets/images/2014/02/templated-sortable-table.html
+  - /assets/images/2014/02/templated-table-polymer-web-components.html
+  - /assets/images/2014/02/templated-sortable-table.html
 github_project:
   name: Sortable-Table Web Component
   url: https://github.com/stevenrskelton/sortable-table
   description: An expanded version of this Web Component featuring cell formulas, footers, and more is available on GitHub!
+categories:
+  - Polymer
 ---
 
 Most sortable HTML table generators (such as AngularJS’s [ng-grid](http://angular-ui.github.io/ng-grid/)) allow cells to be customized and formatted according to templates, however all templates are specified as parsed strings of HTML content. The Web Components specification allows for [HTML Templates](http://www.w3.org/TR/components-intro/#template-section), meaning actual HTML fragments can be used instead of pieced together strings. Two benefits are better readability, CSS encapsulation by way of [Shadow DOM](http://www.w3.org/TR/components-intro/#shadow-dom-section), and soon to be native support by modern browsers.

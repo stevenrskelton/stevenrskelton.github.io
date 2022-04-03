@@ -2,11 +2,13 @@
 layout: post
 title: "DOM Manipulation using Web Components"
 download_sources:
-- /assets/images/2014/11/article-timeline.html
+  - /assets/images/2014/11/article-timeline.html
 github_project:
   name: Ordered-Columns Web Component
   url: https://github.com/stevenrskelton/ordered-columns
   description: An expanded version of this Web Component featuring demos, mutation observers, and themes is available on GitHub!
+categories:
+  - Polymer
 ---
 
 HTML elements are free to change the style, size, and placement of their children, and even their order. A lot of advanced use cases define rendering based on both the properties of element as well as the properties of their children; one particularly interesting case is the 2 column timeline. This is similar to a standard 2 column flow, except instead of first filling one column and overflowing to the second, columns are filled simultaneously – inserting elements into whichever has the least content. The net effect is elements occurring earlier in the HTML markup are placed vertically higher in the page than elements occurring later. The page reads top to bottom as a chronological timeline, which while being a simple enough concept cannot be done using standard HTML. In fact, the exact ordering of elements are different based on widths of the columns. Column placements are determined by previous element’s heights, and heights are a function of widths, so setting column widths as a percent of the screen sizes means layouts must be recalculated for each resolution. A simple way of doing this is using a Web Component.

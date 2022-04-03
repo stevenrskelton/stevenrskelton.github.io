@@ -2,8 +2,10 @@
 layout: post
 title: "Thrift Client Side Caching to Speed Up Unit Tests"
 download_sources:
-- https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Thrift-Client-Side-Caching-to-Speed-Up-Unit-Tests.scala
-- https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Developer-Friendly-Thrift-Request-Logging.scala
+  - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Thrift-Client-Side-Caching-to-Speed-Up-Unit-Tests.scala
+  - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Developer-Friendly-Thrift-Request-Logging.scala
+categories:
+  - Thrift, Scala
 ---
 
 One of the largest headaches associated with network system architecture is abstracting away the network. External resources are always slower and more disjoint than working locally. While there are various caching techniques, few are suitable for use in a development environment.

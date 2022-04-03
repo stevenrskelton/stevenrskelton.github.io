@@ -2,7 +2,9 @@
 layout: post
 title: "Transitioning C# to Scala Using Thrift"
 download_sources:
-- /assets/images/2013/09/19/TransitioningCSharpToScalaUsingThrift.pdf
+  - /assets/images/2013/09/19/TransitioningCSharpToScalaUsingThrift.pdf
+categories:
+  - Thrift, Scala
 ---
 
 A 30 minute presentation I made on Sept 19th in a [Scala-Toronto Meetup](http://www.meetup.com/Scala/Toronto-CA/). The slides introduce [Apache Thrift](http://thrift.apache.org/) and the additional features offered by the [Twitter Finagle](http://twitter.github.io/finagle/) stack.

@@ -1,6 +1,8 @@
 ---
 layout: post
 title: "Polymer Data-Binding Filters"
+categories:
+  - Polymer
 ---
 
 One useful feature of modern Javascript libraries is 2-way data-binding. All interactive websites perform this functionality one way or another, but only a few libraries such as [Ember.js](http://emberjs.com/), [AngularJS](http://angularjs.org/) and [Polymer](http://www.polymer-project.org/) don’t require a single line of Javascript.

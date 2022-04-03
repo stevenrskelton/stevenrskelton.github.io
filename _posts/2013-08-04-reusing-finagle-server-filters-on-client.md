@@ -2,7 +2,9 @@
 layout: post
 title: "Reusing Finagle Server Filters on the Client"
 download_sources:
-- https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Reusing-Finagle-Server-Filters-on-Client.scala
+  - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Reusing-Finagle-Server-Filters-on-Client.scala
+categories:
+  - Thrift, Scala
 ---
 
 When using Thrift, Finagle Filters on the client inherit from `SimpleFilter[ThriftClientRequest, Array[Byte]]`, while on the server they must inherit from `SimpleFilter[Array[Byte], Array[Byte]]`. In this article, we will demonstrate one approach to creating a dual-function filter without repeating code.

@@ -2,7 +2,9 @@
 layout: post
 title: "Binary Semaphore Filter"
 download_sources:
-- https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Binary-Semaphore-Filter.scala
+  - https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Binary-Semaphore-Filter.scala
+categories:
+  - Scala
 ---
 
 Long running queries are very taxing on a database. But caching idempotent queries may not always be a suitable solution.

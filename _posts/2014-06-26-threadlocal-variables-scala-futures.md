@@ -2,7 +2,9 @@
 layout: post
 title: "ThreadLocal Variables and Scala Futures"
 download_sources:
-- https://github.com/stevenrskelton/Blog/blob/master/src/test/scala/ForkJoinPoolWithDynamicVariableSpec.scala
+  - https://github.com/stevenrskelton/Blog/blob/master/src/test/scala/ForkJoinPoolWithDynamicVariableSpec.scala
+categories:
+  - Scala
 ---
 
 [Thread-Local storage (TLS)](http://en.wikipedia.org/wiki/Thread-local_storage) allows static variables to be attached to the currently executing thread. The most common use of TLS is to pass global context through the call-stack without method parameters. In a web-application, this will allow data (such as the current request’s URL) to be globally available throughout the codebase – extremely useful for logging or auditing purposes.
