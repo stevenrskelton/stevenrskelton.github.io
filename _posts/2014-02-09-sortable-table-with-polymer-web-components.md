@@ -5,7 +5,7 @@ categories:
   - Polymer
 ---
 
-![Web Components](/assets/images/2014/02/webcomponents.png) As businesses now rely more heavily on web applications to perform daily operations, a user friendly datatable/spreadsheet is indispensable to all web developers. While individual requirements vary, the core staple is the sortable table. Using Polymer’s Templates and Data-Binding, one can be implemented in a remarkably concise way.
+{% include postlogo.html title="Web Components" src="/assets/images/2014/02/webcomponents.png" %} As businesses now rely more heavily on web applications to perform daily operations, a user friendly datatable/spreadsheet is indispensable to all web developers. While individual requirements vary, the core staple is the sortable table. Using Polymer’s Templates and Data-Binding, one can be implemented in a remarkably concise way.
 
 The code in this post references *Polymer 0.1.4*, and may change in subsequent releases.
 

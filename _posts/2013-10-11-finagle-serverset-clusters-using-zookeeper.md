@@ -6,7 +6,7 @@ categories:
   - Scala
 ---
 
-![Web Components](/assets/images/2013/10/zookeeper.png) The key to high availability is redundancy; it follows that if uptime matters, [Finagle](http://twitter.github.io/finagle/) needs to be deployed to multiple servers. This article walks through both the basic multi-host configuration using finagle-core, as well as a more robust deployment scenario utilizing the finagle-serversets module.
+{% include postlogo.html title="Zookeeper" src="/assets/images/2013/10/zookeeper.png" %} The key to high availability is redundancy; it follows that if uptime matters, [Finagle](http://twitter.github.io/finagle/) needs to be deployed to multiple servers. This article walks through both the basic multi-host configuration using finagle-core, as well as a more robust deployment scenario utilizing the finagle-serversets module.
 
 With proper architecture, server capacity will scale linearly with the number of servers, for <em>N</em> servers, each should receive <em><sup>1</sup>/<sub>N</sub></em> of all traffic. This is a complex problem that can’t always be handled using an external/hardware load balancer. Any load balancer external to the application is naïve to internal details; configuration changes cannot be appropriately handled, and factors such as connection pooling or variable response times will reduce their overall effectiveness.
 

@@ -9,7 +9,7 @@ There are 2 new principles at the vanguard of today’s technology:
 - [Reactive UX](http://www.reactivemanifesto.org/). As the world’s population spends an increasing portion of their lives electronically, it’s becoming more and more important for businesses to capture the online audience. Web 2.0 is now over a decade old: the age of the static website is gone. UI advancements of HTML5, CSS, and a new breed of high performance JavaScript engines are bringing native app experiences to the browser.
 - [Big Data](http://en.wikipedia.org/wiki/Big_data) analytics. Business needs have increased in complexity beyond simple Business Intelligence (BI) aggregates. To separate one business from the rest it’s becoming increasing important to find the needle in a growing haystack.
 
-![Spark](/assets/images/2013/12/spark.png)
+{% include postlogo.html title="Spark" src="/assets/images/2013/12/spark.png" %}
 Apache SparkToday’s web users expect a Reactive UX, just as today’s business analysts expect Big Data functionality. One of today’s hottest fields for R&D lies in their intersection. There are few software packages optimized for this purpose, perhaps the best originated in [UC Berkeley’s AMPLab](https://amplab.cs.berkeley.edu/), and it’s called Spark.
 
 Reactive UX

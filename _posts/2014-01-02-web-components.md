@@ -5,7 +5,7 @@ categories:
   - Polymer
 ---
 
-![Web Components](/assets/images/2014/01/webcomponents.png) At the heart of a web page, there are UI elements and these elements interact: with the user, each other, and the server. Although [HTML5](http://dev.w3.org/html5/markup/elements.html) expanded the original set of elements to include audio, video, and date pickers, there has been no standard way to define custom elements. Elements not specified in the HTML specification have had no support thrusting this responsibility onto client-side and server-side web frameworks.
+{% include postlogo.html title="Web Components" src="/assets/images/2014/01/webcomponents.png" %} At the heart of a web page, there are UI elements and these elements interact: with the user, each other, and the server. Although [HTML5](http://dev.w3.org/html5/markup/elements.html) expanded the original set of elements to include audio, video, and date pickers, there has been no standard way to define custom elements. Elements not specified in the HTML specification have had no support thrusting this responsibility onto client-side and server-side web frameworks.
 
 The [Web Components](http://w3c.github.io/webcomponents/explainer/) standard solves this issue by allowing the creation of custom HTML elements, seamlessly integrating them into HTML markup as if they were part of the original specification.
 

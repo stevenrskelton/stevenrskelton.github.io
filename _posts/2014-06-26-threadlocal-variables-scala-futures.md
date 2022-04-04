@@ -5,7 +5,7 @@ categories:
   - Scala
 ---
 
-![Scala](/assets/images/2014/06/Scala_logo.png) [Thread-Local storage (TLS)](http://en.wikipedia.org/wiki/Thread-local_storage) allows static variables to be attached to the currently executing thread. The most common use of TLS is to pass global context through the call-stack without method parameters. In a web-application, this will allow data (such as the current request’s URL) to be globally available throughout the codebase – extremely useful for logging or auditing purposes.
+{% include postlogo.html title="Scala" src="/assets/images/2014/06/Scala_logo.png" %} [Thread-Local storage (TLS)](http://en.wikipedia.org/wiki/Thread-local_storage) allows static variables to be attached to the currently executing thread. The most common use of TLS is to pass global context through the call-stack without method parameters. In a web-application, this will allow data (such as the current request’s URL) to be globally available throughout the codebase – extremely useful for logging or auditing purposes.
 
 Where TLS can fail is when the execution path moves between threads. Anywhere [Futures](http://docs.scala-lang.org/overviews/core/futures.html) parallelize code, execution is handled off to a random thread from a thread-pool for async execution where all TLS is lost. `Future`s are at the heart of new [Reactive web frameworks](http://www.reactivemanifesto.org/) such as [Play! 2.0](http://www.playframework.com/), requiring everyone to rethink how TLS is done.
 

@@ -6,6 +6,7 @@ categories:
 ---
 
 In the years 2002-2003, Internet Explorer captured 95% of world-wide browser market share. It was unfathomable to many that over the next 10 years IE would decline to just over 15%.
+
 ![World-Wide 2008 to 2014](/assets/images/2014/01/StatCounter-browser-ww-monthly-200812-201312.jpg)
 
 The open-source community perceived a problem with yesterday’s browsers and put forth a solution – alternative browsers took root despite the best efforts of the domineering incumbent. In this light it would seem silly to think there isn’t yet another radical change waiting in the wings of today’s browser landscape. As all major browsers automatically upgrade to maintain an up-to-date “evergreen” status, the barrier to change has never been lower.
