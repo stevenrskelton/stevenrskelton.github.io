@@ -9,38 +9,116 @@ categories:
 
 The standard 2 column layout using [CSS3 columns](https://developer.mozilla.org/en-US/docs/Web/CSS/columns) has a left-to-right rendering, which is suitable for continuous text (like a newspaper), but not for blocked content like images or separate articles.
 
-1
-2
-3
-4
-5
-6
-7
+<style shim-shadowdom>
+    article-timeline {
+        margin-right: auto;
+        margin-left: auto;
+        width:721px;
+        border:2px solid #333;
+        display: block;
+    }
+    #csscolumns > article,
+    article-timeline::shadow article {
+        text-align: center;
+        border: 3px solid #DC143C;
+        border-radius:5px;
+        margin: 2px 1px;
+        font-size: 16px;
+        font-weight: bold;
+    }
+    article-timeline::shadow .column {
+        vertical-align: top;
+        width: 50%;
+        display: inline-block;
+    }
+    #csscolumns {
+        margin-right: auto;
+        margin-left: auto;
+        width:721px;
+        -moz-columns: 2;
+        -webkit-columns: 2;
+        columns: 2;
+        -moz-column-gap: 0;
+        -webkit-column-gap: 0;
+        column-gap: 0;
+        border:2px solid #333;
+    }
+</style>
+<script src="/assets/images/2014/11/webcomponents-0.5.1.js"></script>
+<script src="/assets/images/2014/11/polymer-0.5.1.js"></script>
+<polymer-element name="article-timeline">
+    <template>
+        <div class="column"></div><div class="column"></div>
+    </template>
+    <script>
+    "use strict";
+    Polymer({
+        ready: function(){
+            var items = this.querySelectorAll('article');
+            var columns = this.shadowRoot.querySelectorAll('.column');
+            [].forEach.call(items, function(element){
+                var column = columns[0];
+                [].forEach.call(columns, function(c){
+                    if(c.clientHeight < column.clientHeight) column = c;
+                });
+                column.appendChild(element);
+            });
+        }
+    });
+    </script>
+</polymer-element>
+<div id="csscolumns">
+    <article style="line-height:60px">
+        1
+    </article>
+    <article style="line-height:40px">
+        2
+    </article>
+    <article style="line-height:75px">
+        3
+    </article>
+    <article style="line-height:50px">
+        4
+    </article>
+    <article style="line-height:62px">
+        5
+    </article>
+    <article style="line-height:40px">
+        6
+    </article>
+    <article style="line-height:43px">
+        7
+    </article>
+</div>
 
 Our goal is to create a top-down render.
 
-1
-4
-5
-2
-3
-6
-7
+<article-timeline>
+    <article style="line-height:60px">
+        1
+    </article>
+    <article style="line-height:40px">
+        2
+    </article>
+    <article style="line-height:75px">
+        3
+    </article>
+    <article style="line-height:50px">
+        4
+    </article>
+    <article style="line-height:62px">
+        5
+    </article>
+    <article style="line-height:40px">
+        6
+    </article>
+    <article style="line-height:43px">
+        7
+    </article>
+</article-timeline>
 
 This requires a little knowledge of how HTML content behaviour is defined within a Polymer Web Component, along with strategies of how we can define reordering of the output DOM elements.
 Web components opt-in to child HTML content; if no behaviour is defined web components will ignore inner elements by default. Polymer uses `<content>` elements to specify inclusion, where each `content` element can define a `select` attribute containing a standard CSS selector. For example, a custom element that renders only child `<div>` elements with a `show` CSS class could be defined as follows:
-
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
   
 ```html
 <polymer-element name="div-with-show" noscript>
@@ -57,10 +135,6 @@ Web components opt-in to child HTML content; if no behaviour is defined web comp
 ```
   
 DOM Output:
-
-1
-2
-3
   
 ```html
 <div-with-show>
@@ -69,21 +143,6 @@ DOM Output:
 ```
   
 Taking this one step further, we could render all elements matching a selector before others that don’t. All `<div>` elements with a `first` class could be displayed before any other `<div>`s, irrespective of the order they were initially in-lined in the DOM.
-
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-11
-12
-13
-14
   
 ```html
 <polymer-element name="first-then-second" noscript>
@@ -103,13 +162,6 @@ Taking this one step further, we could render all elements matching a selector b
 ```
 
 DOM Output:
-
-1
-2
-3
-4
-5
-6
   
 ```html
 <first-then-second>
