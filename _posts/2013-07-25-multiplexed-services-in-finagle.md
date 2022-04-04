@@ -182,25 +182,23 @@ The only minor issue I’ve encountered are the unavoidable breakages to any Fil
 
 ### Feedback
 
-<table>
+<table style="border:1px solid grey">
 <tr><td>
-<i>Matthew on September 18, 2013 at 11:59 am said:</i>
+<p><i>Matthew on September 18, 2013 at 11:59 am said:</i></p>
 Hi,
 
 Firstly thank you for your example and included code, there’s very little documentation that I am able to find on Multiplexing with Finagle and even less code examples, so +1 for your post.
 
 I’m attempting to implement this with a very simple client/server, and I’m getting this exception from the client side when trying to make a request:
-```
-SeqMismatchException: got 0, expected 1392947530 at com.twitter.finagle.thrift.SeqIdFilter$$anonfun$apply$1.apply(SeqIdFilter.scala:89)
-```
+<code>SeqMismatchException: got 0, expected 1392947530 at com.twitter.finagle.thrift.SeqIdFilter$$anonfun$apply$1.apply(SeqIdFilter.scala:89)</code>
 
 Which is raised from here:
-[https://github.com/twitter/finagle/blob/master/finagle-thrift/src/main/scala/com/twitter/finagle/thrift/SeqIdFilter.scala#L89](https://github.com/twitter/finagle/blob/master/finagle-thrift/src/main/scala/com/twitter/finagle/thrift/SeqIdFilter.scala#L89)
+<a href="https://github.com/twitter/finagle/blob/master/finagle-thrift/src/main/scala/com/twitter/finagle/thrift/SeqIdFilter.scala#L89">https://github.com/twitter/finagle/blob/master/finagle-thrift/src/main/scala/com/twitter/finagle/thrift/SeqIdFilter.scala#L89</a>
 
 The 0 value is the same over any request. I note you mentioned there may be some problem with filters, any pointers?
 </td></tr>
 <tr><td>
-<i>steven on September 20, 2013 at 4:55 pm said:</i>
+<p><i>steven on September 20, 2013 at 4:55 pm said:</i></p>
 
 That’s a very strange error, the server shouldn’t be modifying the SeqId. I would look closely into any other Filters. You can also try printing the Thrift transport to the console using http://stevenskelton.ca/developer-friendly-thrift-request-logging/
 
@@ -208,7 +206,7 @@ I’ve commited Specs2 tests into GitHub for my code examples; you can compare y
 https://github.com/stevenrskelton/Blog
 </td></tr>
 <tr><td>
-<i>Matthew on September 23, 2013 at 7:12 am said:</i>
+<p><i>Matthew on September 23, 2013 at 7:12 am said:</i></p>
 
 Hi Steven,
 
@@ -216,14 +214,15 @@ I managed to solve that error by adding the two Java files that you referenced (
 </td></tr>
 </table>
 
-<table>
+
+<table style="border:1px solid grey">
 <tr><td>
-<i>Tim on January 20, 2015 at 1:16 pm said:</i>
+<p><i>Tim on January 20, 2015 at 1:16 pm said:</i></p>
 
 Thanks for the informative post Steven. However, I’m curious to understand the relationship between your example, and Finagle’s ThriftMux. Are these complementary, or overlapping? (or does ThriftMux obviate the need for this approach?)
 </td></tr>
 <tr><td>
-<i>steven on January 20, 2015 at 1:54 pm said:</i>
+<p><i>steven on January 20, 2015 at 1:54 pm said:</i></p>
 
 Hi Tim, thanks for reading my blog.
 
