@@ -3,6 +3,10 @@ permalink: /about/
 title: "About"
 ---
 
-Tempor velit sint sunt ipsum tempor enim ad qui ullamco. Est dolore anim ad velit duis dolore minim sunt aliquip amet commodo labore. Ut eu pariatur aute ea aute excepteur laborum. Esse ea esse excepteur minim mollit qui cillum excepteur ex dolore magna. Labore deserunt fugiat incididunt incididunt sint ea. Consequat dolore aute laboris quis proident quis non et est consectetur ex eiusmod sit culpa.
+Steven Skelton has experience as a consultant to some of the largest asset management companies in Canada. Specializing in systems integration and the architecture of automated workflows, he has now turned his full attention to software technologies enabling modular, event driven and highly available software. Today, as senior software developer at Nurun he is working on the integration and web services powering the Walmart Canada website.
 
-Cupidatat ea do et in excepteur in. Ad nostrud ut est esse eu duis ea sunt eiusmod. Aliquip tempor veniam sint elit fugiat. Velit incididunt laboris amet incididunt labore dolore irure velit excepteur commodo deserunt laborum. Consectetur eu fugiat veniam veniam Lorem labore magna eiusmod. Ea occaecat reprehenderit pariatur consectetur minim labore ut aliquip.
+16 years experience in Internet software, 6 years financial services, 7 years e-commerce.
+★ Cloud Architect: N-Tier, SOA, REST, API design, sidecar, CAP, layer abstraction.
+★ R&D specialist: benefit analysis, feasibility, integration strategies, initial adoption timelines.
+★ Data expert: algorithms, caching, full-text search, serialization, optimization.
+★ Security: audits, SSO, OAuth, SAML, dual-hop impersonation, encryption, signed tokens.
