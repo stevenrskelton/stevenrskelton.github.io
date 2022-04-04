@@ -170,13 +170,13 @@ A small note about garbage collection. As long as a thread exists, it will maint
 <tr><td>
 <p><i><a href="http://yanns.github.io/">Yann</a> on June 26, 2014 at 5:45 am said: </i></p>
 <p>In the same spirit, I wrote about passing the slf4j MDC context with Future (the MDC is based on thread local variables)</p>
-<p><a href="http://yanns.github.io/blog/2014/05/04/slf4j-mapped-diagnostic-context-mdc-with-play-framework">http://yanns.github.io/blog/2014/05/04/slf4j-mapped-diagnostic-context-mdc-with-play-framework</p>
+<p><a href="http://yanns.github.io/blog/2014/05/04/slf4j-mapped-diagnostic-context-mdc-with-play-framework">http://yanns.github.io/blog/2014/05/04/slf4j-mapped-diagnostic-context-mdc-with-play-framework</a></p>
 </td></tr>
 <tr><td>
 <p><i>steven on June 26, 2014 at 12:22 pm said: </i></p>
 <p>Very nice Yann!</p>
 <p>Setting up better logging for a web application pays for itself many times over. :) Your code is eerily similiar to mine – it makes me wonder if this is missing functionality in Play….</p>
-<p>When I was working with Finagle, Twitter’s Futures had ThreadLocal functionality built-in (without the need for a custom ExecutionContext). Anything saved using https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Local.scala would be automatically copied by the Future into it’s code block using a closure. But trying to sell ThreadLocal hacks to the functional programming crowd is tough, it’s no wonder Typesafe didn’t include it in theirs.</p>
+<p>When I was working with Finagle, Twitter’s Futures had ThreadLocal functionality built-in (without the need for a custom ExecutionContext). Anything saved using<br/><a href="https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Local.scala">https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Local.scala</a><br/>would be automatically copied by the Future into it’s code block using a closure. But trying to sell ThreadLocal hacks to the functional programming crowd is tough, it’s no wonder Typesafe didn’t include it in theirs.</p>
 </td></tr>
 <tr><td>
 <p><i><a href="http://chris-wewerka.de/">Chris Wewerka</a> on September 10, 2014 at 8:08 am said: </i></p>
