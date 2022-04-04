@@ -185,32 +185,20 @@ The only minor issue I’ve encountered are the unavoidable breakages to any Fil
 <table style="border:1px solid grey">
 <tr><td>
 <p><i>Matthew on September 18, 2013 at 11:59 am said:</i></p>
-Hi,
-
-Firstly thank you for your example and included code, there’s very little documentation that I am able to find on Multiplexing with Finagle and even less code examples, so +1 for your post.
-
-I’m attempting to implement this with a very simple client/server, and I’m getting this exception from the client side when trying to make a request:
-<code>SeqMismatchException: got 0, expected 1392947530 at com.twitter.finagle.thrift.SeqIdFilter$$anonfun$apply$1.apply(SeqIdFilter.scala:89)</code>
-
-Which is raised from here:
-<a href="https://github.com/twitter/finagle/blob/master/finagle-thrift/src/main/scala/com/twitter/finagle/thrift/SeqIdFilter.scala#L89">https://github.com/twitter/finagle/blob/master/finagle-thrift/src/main/scala/com/twitter/finagle/thrift/SeqIdFilter.scala#L89</a>
-
-The 0 value is the same over any request. I note you mentioned there may be some problem with filters, any pointers?
+<p>Hi,<br/>Firstly thank you for your example and included code, there’s very little documentation that I am able to find on Multiplexing with Finagle and even less code examples, so +1 for your post.</p>
+<p>I’m attempting to implement this with a very simple client/server, and I’m getting this exception from the client side when trying to make a request:<br/><code>SeqMismatchException: got 0, expected 1392947530 at com.twitter.finagle.thrift.SeqIdFilter$$anonfun$apply$1.apply(SeqIdFilter.scala:89)</code></p>
+<p>Which is raised from here:<br/><a href="https://github.com/twitter/finagle/blob/master/finagle-thrift/src/main/scala/com/twitter/finagle/thrift/SeqIdFilter.scala#L89">https://github.com/twitter/finagle/blob/master/finagle-thrift/src/main/scala/com/twitter/finagle/thrift/SeqIdFilter.scala#L89</a></p>
+<p>The 0 value is the same over any request. I note you mentioned there may be some problem with filters, any pointers?</p>
 </td></tr>
 <tr><td>
 <p><i>steven on September 20, 2013 at 4:55 pm said:</i></p>
-
-That’s a very strange error, the server shouldn’t be modifying the SeqId. I would look closely into any other Filters. You can also try printing the Thrift transport to the console using http://stevenskelton.ca/developer-friendly-thrift-request-logging/
-
-I’ve commited Specs2 tests into GitHub for my code examples; you can compare your setup to mine:
-https://github.com/stevenrskelton/Blog
+<p>That’s a very strange error, the server shouldn’t be modifying the SeqId. I would look closely into any other Filters.<br/>You can also try printing the Thrift transport to the console using {% link _posts/2013-08-03-developer-friendly-thrift-request-logging.md %}</p>
+<p>I’ve commited Specs2 tests into GitHub for my code examples; you can compare your setup to mine:<br/>https://github.com/stevenrskelton/Blog</p>
 </td></tr>
 <tr><td>
 <p><i>Matthew on September 23, 2013 at 7:12 am said:</i></p>
-
-Hi Steven,
-
-I managed to solve that error by adding the two Java files that you referenced (sorry missed that on the first run!). It’s not producing any error now but doesn’t seem to be completing any requests. I think I need to have a look at the versions I’m running. The tests should be helpful and also the logging link, thanks again.
+<p>Hi Steven,</p>
+<p>I managed to solve that error by adding the two Java files that you referenced (sorry missed that on the first run!). It’s not producing any error now but doesn’t seem to be completing any requests. I think I need to have a look at the versions I’m running. The tests should be helpful and also the logging link, thanks again.</p>
 </td></tr>
 </table>
 
@@ -218,17 +206,13 @@ I managed to solve that error by adding the two Java files that you referenced (
 <table style="border:1px solid grey">
 <tr><td>
 <p><i>Tim on January 20, 2015 at 1:16 pm said:</i></p>
-
-Thanks for the informative post Steven. However, I’m curious to understand the relationship between your example, and Finagle’s ThriftMux. Are these complementary, or overlapping? (or does ThriftMux obviate the need for this approach?)
+<p>Thanks for the informative post Steven. However, I’m curious to understand the relationship between your example, and Finagle’s ThriftMux. Are these complementary, or overlapping? (or does ThriftMux obviate the need for this approach?</p>
 </td></tr>
 <tr><td>
 <p><i>steven on January 20, 2015 at 1:54 pm said:</i></p>
-
-Hi Tim, thanks for reading my blog.
-
-At its core, Mux is a generic RPC multiplexing protocol. Although its primary implementation is as a Finagle subproject, Mux is not Finagle-specific. See Finagle’s documentation, or the W3C specification.
-
-The difference here is MUX allows any number of generic services to be multiplexed over the same TCP connection, while using the TMultiplexedProcessor only allows the same TCP connection to multiplex multiple Thrift services. By default, Thrift was only allowing a single service per connection.
+<p>Hi Tim, thanks for reading my blog.</p>
+<p>At its core, Mux is a generic RPC multiplexing protocol. Although its primary implementation is as a Finagle subproject, Mux is not Finagle-specific. See Finagle’s documentation, or the W3C specification.</p>
+<p>The difference here is MUX allows any number of generic services to be multiplexed over the same TCP connection, while using the TMultiplexedProcessor only allows the same TCP connection to multiplex multiple Thrift services. By default, Thrift was only allowing a single service per connection.</p>
 </td></tr>
 </table>
 
