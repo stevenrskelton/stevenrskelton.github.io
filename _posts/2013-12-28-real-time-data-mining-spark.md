@@ -6,12 +6,10 @@ categories:
 ---
 
 There are 2 new principles at the vanguard of today’s technology:
-
 - [Reactive UX](http://www.reactivemanifesto.org/). As the world’s population spends an increasing portion of their lives electronically, it’s becoming more and more important for businesses to capture the online audience. Web 2.0 is now over a decade old: the age of the static website is gone. UI advancements of HTML5, CSS, and a new breed of high performance JavaScript engines are bringing native app experiences to the browser.
-
 - [Big Data](http://en.wikipedia.org/wiki/Big_data) analytics. Business needs have increased in complexity beyond simple Business Intelligence (BI) aggregates. To separate one business from the rest it’s becoming increasing important to find the needle in a growing haystack.
 
-
+![Spark](/assets/images/2013/12/spark.png)
 Apache SparkToday’s web users expect a Reactive UX, just as today’s business analysts expect Big Data functionality. One of today’s hottest fields for R&D lies in their intersection. There are few software packages optimized for this purpose, perhaps the best originated in [UC Berkeley’s AMPLab](https://amplab.cs.berkeley.edu/), and it’s called Spark.
 
 Reactive UX
@@ -19,6 +17,23 @@ Real-time Data Mining
 Big Data
 
 ### Reactive Real-Time Big Data Mining and Analysis
+
+<svg version="1.0" width="200" height="200" style="float:right;">
+<g transform="scale(0.5)">
+  <circle cx="175" cy="150" r="145" style="fill:#de7676;fill-opacity:0.5;stroke:black;stroke-width:1;"></circle>
+  <circle cx="250" cy="250" r="145" style="fill:#76a4de;fill-opacity:0.5;stroke:black;stroke-width:1;"></circle>
+  <text x="175" y="75" style="font-size:24px;font-weight:bold;text-align:center;text-anchor: middle;fill:black;fill-opacity:0.8;font-family:Tahoma">
+    <tspan>Reactive UX</tspan>
+  </text>
+  <text y="190" style="font-size:24px;font-weight:bold;text-align:center;text-anchor: middle;fill:black;fill-opacity:0.8;font-family:Tahoma">
+    <tspan x="215">Real-time</tspan>
+    <tspan x="215" dy="1.2em">Data Mining</tspan>
+  </text>
+  <text x="250" y="345" style="font-size:24px;font-weight:bold;text-align:center;text-anchor: middle;fill:black;fill-opacity:0.8;font-family:Tahoma">
+    <tspan>Big Data</tspan>
+  </text>
+</g>
+</svg>
 
 As big data is already pushing today’s hardware capacity to its limits, building a low-latency yet highly interactive reactive user interface presents a technological challenge. [Apache Spark](http://spark.incubator.apache.org/) is an open source cluster computing system aimed to make data analytics fast. Spark is still in Apache incubation, so even though it is deployed in production at a lot of [companies such as Yahoo!](https://cwiki.apache.org/confluence/display/SPARK/Powered+By+Spark), releases and install processes can be a little unpolished and volatile. The Spark framework fully encapsulates network and resource management, exposing only an interface nearly identical to the standard Scala collection operators. The low level, functional user interface is efficiently translated by Spark into distributed jobs across all nodes, achieving high performance through horizontal scalability.
 
