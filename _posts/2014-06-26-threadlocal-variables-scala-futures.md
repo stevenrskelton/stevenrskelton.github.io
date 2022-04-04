@@ -5,7 +5,7 @@ categories:
   - Scala
 ---
 
-[Thread-Local storage (TLS)](http://en.wikipedia.org/wiki/Thread-local_storage) allows static variables to be attached to the currently executing thread. The most common use of TLS is to pass global context through the call-stack without method parameters. In a web-application, this will allow data (such as the current request’s URL) to be globally available throughout the codebase – extremely useful for logging or auditing purposes.
+![Scala](/assets/images/2014/06/Scala_logo.png) [Thread-Local storage (TLS)](http://en.wikipedia.org/wiki/Thread-local_storage) allows static variables to be attached to the currently executing thread. The most common use of TLS is to pass global context through the call-stack without method parameters. In a web-application, this will allow data (such as the current request’s URL) to be globally available throughout the codebase – extremely useful for logging or auditing purposes.
 
 Where TLS can fail is when the execution path moves between threads. Anywhere [Futures](http://docs.scala-lang.org/overviews/core/futures.html) parallelize code, execution is handled off to a random thread from a thread-pool for async execution where all TLS is lost. `Future`s are at the heart of new [Reactive web frameworks](http://www.reactivemanifesto.org/) such as [Play! 2.0](http://www.playframework.com/), requiring everyone to rethink how TLS is done.
 
@@ -163,6 +163,30 @@ implicit val executionContext = scala.concurrent.ExecutionContext.fromExecutorSe
 ```
 
 A small note about garbage collection. As long as a thread exists, it will maintain references to its `ThreadLocal` variables. If the thread-pool does not recycle threads and a thread goes back into the pool without releasing its TLS then those objects will not be freed. Normally this isn’t an issue, however for larger objects it might be wise to explicitly release them after use, or use a [WeakReference](http://www.scala-lang.org/api/current/index.html#scala.ref.WeakReference) if behaviour allows.
+
+### Feedback
+
+<table style="border:1px solid grey">
+<tr><td>
+<p><i><a href="http://yanns.github.io/">Yann</a> on June 26, 2014 at 5:45 am said: </i></p>
+<p>In the same spirit, I wrote about passing the slf4j MDC context with Future (the MDC is based on thread local variables)</p>
+<p><a href="http://yanns.github.io/blog/2014/05/04/slf4j-mapped-diagnostic-context-mdc-with-play-framework">http://yanns.github.io/blog/2014/05/04/slf4j-mapped-diagnostic-context-mdc-with-play-framework</p>
+</td></tr>
+<tr><td>
+<p><i>steven on June 26, 2014 at 12:22 pm said: </i></p>
+<p>Very nice Yann!</p>
+<p>Setting up better logging for a web application pays for itself many times over. :) Your code is eerily similiar to mine – it makes me wonder if this is missing functionality in Play….</p>
+<p>When I was working with Finagle, Twitter’s Futures had ThreadLocal functionality built-in (without the need for a custom ExecutionContext). Anything saved using https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Local.scala would be automatically copied by the Future into it’s code block using a closure. But trying to sell ThreadLocal hacks to the functional programming crowd is tough, it’s no wonder Typesafe didn’t include it in theirs.</p>
+</td></tr>
+<tr><td>
+<p><i><a href="http://chris-wewerka.de/">Chris Wewerka</a> on September 10, 2014 at 8:08 am said: </i></p>
+<p>Very nice post. @steven: as we work with finagle do you know about some doc or blog about how Local’s work there?</p>
+</td></tr>
+<tr><td>
+<p><i>Mayumi on June 26, 2014 at 4:38 pm said:</i></p>
+<p>A great post :) Thanks!</p>
+</td></tr>
+</table>
 
 {%
   include downloadsources.html
