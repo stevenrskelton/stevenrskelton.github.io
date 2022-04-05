@@ -14,14 +14,26 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Steven Skelton
+subtitle: Scala, Flutter, and other software blog
 email:
 description: >- # this means to ignore newlines until "baseurl:"
-  Scala, Flutter, and other software blog
+  Code examples and implementation details I encounter during my software development.
+  Mostly back-end in Scala; mobile in Dart and Flutter.
 #twitter_username: username
 github_username: stevenrskelton
 minimal_mistakes_skin: dirt
 #search: true
 search: false
+
+logo: /assets/images/logo.png
+repository: stevenrskelton/stevenrskelton.github.io
+locale: en-US
+breadcrumbs: true
+
+analytics:
+  provider: google-universal
+  google:
+    tracking_id: "UA-43889710-1"
 
 # Build settings
 markdown: kramdown
@@ -30,7 +42,7 @@ remote_theme: mmistakes/minimal-mistakes
 permalink: /:title/
 paginate: 8 # amount of posts to show
 paginate_path: /page/:num/
-timezone: # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+timezone: America/New_York # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 
 include:
   - _pages
@@ -99,9 +111,10 @@ defaults:
       type: posts
     values:
       layout: single
-      author_profile: true
+      author_profile: false
       read_time: true
-      comments: true
+      show_date: true
+      comments: false
       share: true
       related: true
   # _pages
@@ -110,7 +123,7 @@ defaults:
       type: pages
     values:
       layout: single
-      author_profile: true
+      author_profile: false
 
 category_archive:
   type: liquid
