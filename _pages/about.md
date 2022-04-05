@@ -22,7 +22,7 @@ Steven Skelton has experience as a consultant to some of the largest asset manag
 
 <link rel="stylesheet" type="text/css" href="https://github.githubassets.com/assets/frameworks-da9067fcd9b6.css" media="screen" />
 
-<li class="mb-3 d-flex flex-content-stretch col-12 col-md-6 col-lg-6">
+<li class="mb-3 d-flex flex-content-stretch col-12 col-md-6 col-lg-6" style="border-radius: 5px; border: 2px solid #73AD21;padding: 20px;width: 200px;height: 150px;">
   <div style="Box pinned-item-list-item d-flex p-3 width-full public source">
     <div class="pinned-item-list-item-content">
       <div class="d-flex width-full flex-items-center position-relative">
@@ -32,10 +32,10 @@ Steven Skelton has experience as a consultant to some of the largest asset manag
         <a href="{{ repository.html_url }}" class="text-bold flex-auto min-width-0">
           <span class="repo" title="flag-icon">{{ repository.name }}</span>
         </a>
-        <span></span><span class="Label Label--secondary v-align-middle ml-1"><a href="{{ repo.repository_url }}">{{ repo.repository_url }}</a></span>
+        <span></span><span class="Label Label--secondary v-align-middle ml-1"><a href="{{ repo.url }}">{{ repo.url }}</a></span>
       </div>
       <p class="pinned-item-desc color-fg-muted text-small d-block mt-2 mb-3">
-        {{ repository.desc }}
+        {{ repository.description }}
       </p>
       <p class="mb-0 f6 color-fg-muted">
         <span class="d-inline-block mr-3">
