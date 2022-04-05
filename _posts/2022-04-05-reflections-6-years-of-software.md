@@ -1,8 +1,8 @@
 ---
-title: "Reflections: 6 years of software"
+title: "Reflections: 6 Years of Software"
 categories:
 ---
-Last blog update was 6 years ago.  
+Last blog update was 6 years ago. Javascript still seems popular...  
 
 What is your view of HTML and all HTML elements, is it:
 1. incomplete,
