@@ -215,7 +215,7 @@ window.addEventListener('polymer-ready', function(){
 %}
 
 {% 
-  include githubproject.html 
+  include github_project.html 
   name="Sortable-Table Web Component"
   url="https://github.com/stevenrskelton/sortable-table"
   description="An expanded version of this Web Component featuring cell formulas, footers, and more is available on GitHub!"

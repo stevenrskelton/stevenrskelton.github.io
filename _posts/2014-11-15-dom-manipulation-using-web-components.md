@@ -244,7 +244,7 @@ With a little CSS to make things pretty, and are ready to use our new web compon
 %}
  
 {%
-  include githubproject.html
+  include github_project.html
   name="Ordered-Columns Web Component"
   url="https://github.com/stevenrskelton/ordered-columns"
   description="An expanded version of this Web Component featuring demos, mutation observers, and themes is available on GitHub!"
