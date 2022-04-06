@@ -33,5 +33,6 @@ Steven Skelton has experience as a consultant to some of the largest asset manag
   stargazers=repository.stargazers_count
   forks=repository.forks_count
 %}
+{% endif %}
 {% endfor %}
 </ol>
