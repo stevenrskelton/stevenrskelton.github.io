@@ -20,7 +20,7 @@ Steven Skelton has experience as a consultant to some of the largest asset manag
 <ol>
 
 <link rel="stylesheet" type="text/css" href="https://github.githubassets.com/assets/frameworks-da9067fcd9b6.css" media="screen" />
-{% assign list = site.github.public_repositories | sort: 'stargazers_count' %}
+{% assign list = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
 {% for repository in list %}
 {% if repository.name == "flag-icon" or repository.name == "sortable-table" or repository.name == "d3-geomap" or repository.name == "ordered-columns" or repository.name == "transform-to-json" or repository.name == "Fish-UI" %}
 {%
