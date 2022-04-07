@@ -1,10 +1,14 @@
 ---
 permalink: /about/
 title: "About"
-author_profile: true
+author_profile: false
 ---
 
-Steven Skelton has experience as a consultant to some of the largest asset management companies in Canada. Specializing in systems integration and the architecture of automated workflows, he has now turned his full attention to software technologies enabling modular, event driven and highly available software. Today, as Principal Software Engineer at Publicis Sapient he is working on the integration and web services powering the Walmart Canada website.
+Steven Skelton has experience as a consultant to some of the largest asset management companies in Canada. Specializing in systems integration and the architecture of automated workflows, he has now turned his full attention to software technologies enabling modular, event driven and highly available software.
+
+Today, as Principal Software Engineer at an international digital consulting company, he is working on the web services powering a large ecommerce platform.
+
+### Experience Summary
 
 - 17 years in Internet software: 6 financial services, 8 e-commerce.
 - Best tools for the platform: Scala, C# .Net, and Dart,
@@ -14,11 +18,13 @@ Steven Skelton has experience as a consultant to some of the largest asset manag
 - Data expert: algorithms, caching, full-text search, serialization, optimization.
 - Security: audits, SSO, OAuth, SAML, dual-hop impersonation, encryption, signed tokens.
 
+### Github Repositories
+
 <style type="text/css">
 
 </style>
 
-<ol>
+<ol style="flex-wrap: wrap;">
 
 {% assign list = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
 {% for repository in list %}
