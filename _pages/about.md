@@ -1,6 +1,7 @@
 ---
 permalink: /about/
 title: "About"
+author_profile: true
 ---
 
 Steven Skelton has experience as a consultant to some of the largest asset management companies in Canada. Specializing in systems integration and the architecture of automated workflows, he has now turned his full attention to software technologies enabling modular, event driven and highly available software. Today, as Principal Software Engineer at Publicis Sapient he is working on the integration and web services powering the Walmart Canada website.
