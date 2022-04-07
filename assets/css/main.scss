@@ -4,10 +4,14 @@
 
 @charset "utf-8";
 
-@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
-@import "minimal-mistakes"; // main partials
+// START CUSTOM
 
-// Custom 
 $right-sidebar-width-narrow: 100px !default;
 $right-sidebar-width: 150px !default;
 $right-sidebar-width-wide: 200px !default;
+
+// END CUSTOM
+
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
+@import "minimal-mistakes"; // main partials
+
