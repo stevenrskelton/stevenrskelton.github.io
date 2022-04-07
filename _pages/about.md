@@ -24,7 +24,7 @@ Today, as Principal Software Engineer at an international digital consulting com
 
 </style>
 
-<ol style="flex-wrap: wrap;">
+<ol style="flex-wrap: wrap;-webkit-flex-wrap: wrap;">
 
 {% assign list = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
 {% for repository in list %}
