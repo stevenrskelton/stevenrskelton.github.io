@@ -4,16 +4,34 @@
 
 @charset "utf-8";
 
-// START CUSTOM
-
 $right-sidebar-width-narrow: 50px !default;
 $right-sidebar-width: 60px !default;
 $right-sidebar-width-wide: 70px !default;
 
-// END CUSTOM
+/* plum syntax highlighting (base16) */
+$base00: #f3f3f3 !default;
+$base01: #e0e0e0 !default;
+$base02: #d0d0d0 !default;
+$base03: #b0b0b0 !default;
+$base04: #000000 !default;
+$base05: #101010 !default;
+$base06: #151515 !default;
+$base07: #202020 !default;
+$base08: #ff0086 !default;
+$base09: #fd8900 !default;
+$base0a: #aba800 !default;
+$base0b: #00c918 !default;
+$base0c: #1faaaa !default;
+$base0d: #3777e6 !default;
+$base0e: #ad00a1 !default;
+$base0f: #cc6633 !default;
+
+// START ORIGINAL
 
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
+
+// END ORIGINAL
 
 .archive {
   margin-top: 1em;
