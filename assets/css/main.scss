@@ -21,12 +21,12 @@ $right-sidebar-width-wide: 100px !default;
 
   @include breakpoint($large) {
     float: right;
-    width: calc(100% - #200);
-    padding-right: 200;
+    width: calc(100% - 200px);
+    padding-right: 200px;
   }
 
   @include breakpoint($x-large) {
-    width: calc(100% - #300);
-    padding-right: 300;
+    width: calc(100% - 300px);
+    padding-right: 300px;
   }
 }
