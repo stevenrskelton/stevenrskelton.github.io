@@ -50,3 +50,11 @@ $base0f: #cc6633 !default;
     padding-right: 150px;
   }
 }
+
+input,
+textarea,
+select {
+  width: auto;
+  background-color: #fff;
+  border: $gray;
+}
