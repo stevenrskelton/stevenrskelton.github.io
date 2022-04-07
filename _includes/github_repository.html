@@ -8,8 +8,10 @@
                 <a href="{{ include.html_url }}" style="font-weight: 600;">
                     <span class="repo" title="{{ include.name | escape }}">{{ include.name | escape }}</span>
                 </a>
-                <span><i class="fa-solid fa-globe"></i></span><span><a href="{{ include.homepage }}">{{ include.homepage }}</a></span>
             </div>
+            <p style="font-size: 14px;font-weight:600;">
+                <span><i class="fa-solid fa-globe"></i></span><span><a href="{{ include.homepage }}">{{ include.homepage }}</a></span>
+            </p>
             <p style="font-size: 12px">
                 {{ include.description | escape }}
             </p>
