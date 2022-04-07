@@ -8,10 +8,25 @@
 
 $right-sidebar-width-narrow: 80px !default;
 $right-sidebar-width: 100px !default;
-$right-sidebar-width-wide: 120px !default;
+$right-sidebar-width-wide: 100px !default;
 
 // END CUSTOM
 
 @import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
 @import "minimal-mistakes"; // main partials
 
+.archive {
+  margin-top: 1em;
+  margin-bottom: 2em;
+
+  @include breakpoint($large) {
+    float: right;
+    width: calc(100% - #200);
+    padding-right: 200;
+  }
+
+  @include breakpoint($x-large) {
+    width: calc(100% - #300);
+    padding-right: 300;
+  }
+}
