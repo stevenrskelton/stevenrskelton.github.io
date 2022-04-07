@@ -3,26 +3,24 @@
 
 @import "minima";
 
-@media (min-width: 80em)
-.archive {
-    width: calc(100% - 150px);
-    padding-right: 150px;
+@media (min-width: 80em){
+    .archive {
+        width: calc(100% - 150px);
+        padding-right: 150px;
+    }
+    .page {
+        width: calc(100% - 150px);
+        padding-right: 150px;
+    }
 }
 
-@media (min-width: 80em)
-.page {
-    width: calc(100% - 150px);
-    padding-right: 150px;
-}
-
-@media (min-width: 64em)
-.archive {
-    width: calc(100% - 100px);
-    padding-right: 100px;
-}
-
-@media (min-width: 64em)
-.page {
-    width: calc(100% - 100px);
-    padding-right: 100px;
+@media (min-width: 64em){
+    .archive {
+        width: calc(100% - 100px);
+        padding-right: 100px;
+    }
+    .page {
+        width: calc(100% - 100px);
+        padding-right: 100px;
+    }
 }
