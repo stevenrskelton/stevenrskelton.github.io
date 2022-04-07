@@ -1,0 +1,16 @@
+---
+---
+
+@import "minima";
+
+@media (min-width: 80em)
+.archive {
+    width: calc(100% - 150px);
+    padding-right: 150px;
+}
+
+@media (min-width: 80em)
+.page {
+    width: calc(100% - 150px);
+    padding-right: 150px;
+}
