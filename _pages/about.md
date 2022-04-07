@@ -20,10 +20,6 @@ Today, as Principal Software Engineer at an international digital consulting com
 
 ### Github Repositories
 
-<style type="text/css">
-
-</style>
-
 <ol style="flex-wrap: wrap;-webkit-flex-wrap: wrap;">
 
 {% assign list = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
@@ -32,7 +28,7 @@ Today, as Principal Software Engineer at an international digital consulting com
 {%
   include github_repository.html
   name=repository.name
-  url=repository.url
+  homepage=repository.homepage
   html_url=repository.html_url
   description=repository.description
   language=repository.language
