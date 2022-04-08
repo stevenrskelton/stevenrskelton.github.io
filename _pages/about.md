@@ -20,7 +20,7 @@ Today, as Principal Software Engineer at an international digital consulting com
 
 ### Github Repositories
 
-<ul style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:20px;">
+<ul style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:0px;">
 
 {% assign list = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
 {% for repository in list %}
