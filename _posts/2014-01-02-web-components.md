@@ -14,17 +14,15 @@ The [Web Components](http://w3c.github.io/webcomponents/explainer/) standard sol
 
 ### Introductory Presentations
 
-<iframe src="//www.youtube.com/embed/fqULJBBEVQE" allowfullscreen="" class="aligncenter" width="720" height="405" frameborder="0"></iframe>
+{% include video id="fqULJBBEVQE" provider="youtube" %}
 
-<iframe src="//www.youtube.com/embed/0g0oOOT86NY" allowfullscreen="" class="aligncenter" width="720" height="405" frameborder="0"></iframe>
+{% include video id="0g0oOOT86NY" provider="youtube" %}
 
 Even before browsers are updated, JavaScript libraries called [polyfills](http://en.wikipedia.org/wiki/Polyfill) are allowing today’s browsers to support Web Components. In June 2013, Mozilla and Google polyfill libraries were consolidated into a single library called [Polymer](http://www.polymer-project.org/) bringing Web Component support to all modern browsers.
 
-<iframe src="//www.youtube.com/embed/p1NpZ-0Op0w" allowfullscreen="" class="aligncenter" width="720" height="405" frameborder="0"></iframe>
+{% include video id="p1NpZ-0Op0w" provider="youtube" %}
 
 With browsers natively supporting: custom HTML elements, data binding and templates; client-side web frameworks will soon undergo a great simplification. In the mean while Web Components’ everything-is-in-the-DOM architecture encapsulates all new features allowing it to coexist with methods employed by most Javascript frameworks. Transitioning between AngularJS directives or Bootstrap UI is seamless since Web Components cannot be differentiated from core HTML tags, meaning today’s frameworks already offer full support – leaving no reason to delay migration.
-
-
 
 Two web frameworks, Google Polymer and [Mozilla X-Tags](http://www.x-tags.org/) specifically target and are optimized for Web Components, while other client-side Javascript frameworks such as [AngularJS](http://angularjs.org/) are committed to full support upon their next major release. However the main goal of Web Components is to simplify web applications to an assembly of standalone components, a methodology for reuse and ease of configuration which will lower the learning curve to new developers.
 
