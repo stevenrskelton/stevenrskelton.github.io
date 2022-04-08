@@ -4,17 +4,18 @@ title: "About"
 author_profile: false
 ---
 
-Steven Skelton has experience as a consultant to some of the largest asset management companies in Canada. Specializing in systems integration and the architecture of automated workflows, he has now turned his full attention to software technologies enabling modular, event driven and highly available software.
+Steven Skelton lives in Toronto, Canada and has a Bachelor of Mathematics from the University of Waterloo in Waterloo, Canada.
+After graduating he was a consultant to large asset management companies in Canada, specializing in systems integration, account and trading calculations, and automation of workflows.
 
-Today, as Principal Software Engineer at an international digital consulting company, he is working on the web services powering a large ecommerce platform.
+Today, as Principal Software Engineer at a global digital consulting company, he is working on web services powering a large ecommerce platform.
 
-### Experience Summary
+### Executive Summary
 
 - 17 years in Internet software: 6 financial services, 8 e-commerce.
-- Best tools for the platform: Scala, C# .Net, and Dart,
+- Best tools for the platform: Scala, C# .Net, and Dart Flutter,
 - Reactive: event-driven infrastructure and coding paradigms,
 - Cloud Architect: N-Tier, SOA, REST, API design, sidecar, CAP, layer abstraction.
-- R&D specialist: benefit analysis, feasibility, integration strategies, initial adoption timelines.
+- R&D speialist: benefit analysis, feasibility, integration strategies, initial adoption timelines.
 - Data expert: algorithms, caching, full-text search, serialization, optimization.
 - Security: audits, SSO, OAuth, SAML, dual-hop impersonation, encryption, signed tokens.
 
