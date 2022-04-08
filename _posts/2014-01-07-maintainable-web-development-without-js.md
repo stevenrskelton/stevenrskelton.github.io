@@ -20,13 +20,13 @@ Other attempts to creating a workable veneer are [transpiled](http://en.wikipedi
 
 The best chance of mass adoption comes from Dart. It is a mature, high-performance language pragmatically designed from the ground up to address Google’s own web development. The Chrome browser represents ⅓ of users so client-support is assured.
 
-<iframe src="//www.youtube.com/embed/FqsU3TbUw_s" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="" class="aligncenter" width="720" height="405" frameborder="0"></iframe>
+{% include video id="FqsU3TbUw_s" provider="youtube" %}
 
-![Web Components](/assets/images/2014/01/AngularDart.png) AngularDart with all transpiled languages, browser adoption is an immaterial gauge of success, the fair measure lies in developer adoption. On this front, the popular AngularJS web framework has quietly been supplanted by its Dart port, [Angular.Dart](https://github.com/angular/angular.dart). As developers are promised newer features and increased productivity only available in the Dart stream the impedance to switch is reversed. Attesting to Dart’s prime-time status, Google’s Lars Bak addressed the 2013 Devoxx conference with the [Shaping the Future of Web Development – Dart 1.0](http://parleys.com/p/52a9897ce4b04354fb7e57d0) keynote.
+{% include postlogo.html title="AngularDary" src="/assets/images/2014/01/AngularDart.png" %} AngularDart with all transpiled languages, browser adoption is an immaterial gauge of success, the fair measure lies in developer adoption. On this front, the popular AngularJS web framework has quietly been supplanted by its Dart port, [Angular.Dart](https://github.com/angular/angular.dart). As developers are promised newer features and increased productivity only available in the Dart stream the impedance to switch is reversed. Attesting to Dart’s prime-time status, Google’s Lars Bak addressed the 2013 Devoxx conference with the [Shaping the Future of Web Development – Dart 1.0](http://parleys.com/p/52a9897ce4b04354fb7e57d0) keynote.
 
 Also making the leap to Dart as its premier language is [Google Polymer](http://www.polymer-project.org/) library, the supporting library for the rapidly developing, landscape changing, [Web Components](http://stevenskelton.ca/web-components/) standard.
 
-<iframe src="//player.vimeo.com/video/74391396" webkitallowfullscreen="" mozallowfullscreen="" allowfullscreen="" class="aligncenter" width="720" height="405" frameborder="0"></iframe>
+{% include video id="74391396" provider="vimeo" %}
 
 ### Scala-to-Javascript
 
