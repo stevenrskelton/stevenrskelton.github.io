@@ -11,7 +11,7 @@
             </div>
             <p style="font-size: 14px;font-weight:600;">
                 {% assign homepage = include.homepage | replace: "https://stevenrskelton.github.io", "stevenskelton.ca" %}
-                <img src="/assets/images/globe.svg" style="height:14px;padding-right:4px;"/><span><a href="https://www.{{ homepage }}">{{ homepage }}</a></span>
+                <img src="/assets/images/globe.svg" style="height:14px;padding-right:4px;"/><span><a href="https://www.{{ homepage }}">https://{{ homepage }}</a></span>
             </p>
             <p style="font-size: 12px">
                 {{ include.description | escape }}
