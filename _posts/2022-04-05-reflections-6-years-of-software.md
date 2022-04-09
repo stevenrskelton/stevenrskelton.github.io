@@ -52,21 +52,23 @@ It is natural to think addition is the only type of evolution, and website evolu
 
 According to the [2021 StackOverflow Survey](https://insights.stackoverflow.com/survey/2021):
 > "50% indicating they have been coding for less than a decade, and more than 35% having less than five years in the trade"
+
 > "60% of respondents learned how to code from online resources"
 
 The market is saturated with new Javascript developers every year and hiring managers gravitate to pools of talent.  Javascript remains the most popular programming language with strong momentum into the future, adding in Typescript and server-side NodeJS it looks unstoppable.
 
-Outside the realm of transpiled Javascript languages such as Typescript or Coffeescript, there exist alternatives such as [ScalaJS](https://www.scala-js.org) and [WASM (WebAssembly)](https://en.wikipedia.org/wiki/WebAssembly) paired with the [Rust programming language](https://www.rust-lang.org/).  While offering unique value propositions in specialized non-web oriented fields such as data manipulation and performance computing, it is also the reason they of limited general application.
+Outside the realm of transpiled Javascript languages such as Typescript or Coffeescript, there exist alternatives Javascript. Two languages that offer rigourous compiled programming languages and the ability to call existing Javascript libraries are [ScalaJS](https://www.scala-js.org) and [Elm](https://elm-lang.org/), however neither have found large scale support.  Performance applications, while a small niche,  are leaving Javascript behind to the fully native supported [WASM (WebAssembly)](https://en.wikipedia.org/wiki/WebAssembly), which while supporting practically every language through LLVM truely excels with non-garbage collected languages such as [Rust](https://www.rust-lang.org/) and C/C++. But for these approaches, their strengths also limit their general adoption.
 
-The primary challenger to the HTML-Javascript ecosystem is the mobile app.  Newer easier to work with languages of Swift and Kotlin have drastically lowered the experience required of mobile app development.  Multi-platform support has made monumental improvements with [Flutter](https://flutter.dev/) which even offers budding support for [web](https://flutter.dev/multi-platform/web) without Javascript.  Flutter promises write once run anywhere with a highly capable typed programming language [Dart programming language](https://dart.dev/), but so does the Javascript-based React Native.
+The primary challenger to the HTML-Javascript ecosystem is the mobile app.  Newer easier to work with languages of Swift and Kotlin have drastically lowered the experience required of mobile app development.  Multi-platform support has made monumental improvements with [Flutter](https://flutter.dev/) which even offers [budding support for web](https://flutter.dev/multi-platform/web) without Javascript.  Flutter promises write once run anywhere with a highly capable typed programming language [Dart programming language](https://dart.dev/), but so does the Javascript-based React Native.
 
 For every improvement in Javascript alternatives, Javascript is making equal steps forward. For developers who enjoy and are productive in Javascript the ecosystem continues its steady progression of improvement and innovation.  But for others, many who begrudgingly work in the Javascript language, others who may appeciate more robust languages to work in, there are finally competitive alternatives.
 
 ### Conclusion
 
-This is good for both web and mobile development as a whole.
+I've done my share of full-stack development, worked on many different Javascript frameworks - popular ones, defunct ones and custom.  The vast majority of my work today isn't in Javascript, but as an observation: _if feels like time spent learning Javascript is lost time._
 
-  
+Consider vanilla Javascript and time lost to debugging dynamic types during refactors when a compiler could do it in a half a second. To avoid that, sink time into configuring transpiling from Typescript, but surprise you would be doing that anyways since you need ES6 but want to code in the latest spec since this isn't 2015.  Don't forget to bookmark _https://caniuse.com/_. All of these seem like good reasons to minimize the use of Javascript on the web and look for alternative approaches. I've tried to make the case that Web Components with `<custom-elements>` will reduce Javascript complexity not only by being a well supported standard, but by increasing the pool of compatible components that can be inserted into your projects.  The best Javascript code is code that has been debugged by someone else.
+
 
 
 
