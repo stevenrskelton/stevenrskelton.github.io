@@ -4,7 +4,7 @@ categories:
 ---
 My last blog update was 6 years ago, and Javascript still seems popular. Is this a case of _There Is No Alternative_?
 
-### Javascript and HTML
+## Javascript and HTML
 
 Javascript popularity is is driven by the web browsers, and an outlook on Javascript is based on a perception of HTML.
 What is your view of HTML, is it:
@@ -12,8 +12,8 @@ What is your view of HTML, is it:
 2. [Complete and has the building blocks for web?](#html-is-complete-and-has-the-building-blocks-for-web)
 3. [Needs to be replaced!](#html-needs-to-be-replaced)
 
-#### HTML is Incomplete and Requires Javascript
-##### Custom Elements fixes that
+## HTML is Incomplete and Requires Javascript
+_**Custom Elements fixes that**_
 
 HTML is limited as a markup language, static by nature, so scripting is a necessary. Javascript came in to make pages dynamic, as a glue between HTML DOM element `onevent` handlers.
 
@@ -35,9 +35,8 @@ There will always be a use for frameworks even in a world with custom elements. 
 
 The standardization to custom element can paradoxically allow diversity to flourish in Javascript libraries. Using it to break down monolythic PWAs from one large project to many smaller, independent, well-defined projects will promote the use of alternative Javascript libraries as developers are less locked in to the project's initial codebase. Native browser support means libraries can be more lightweight so more can be used without weighing down pagesize, and HTTP/2 multiplexing means separate projects can be maintained without blocking rendering. The Javascript in web pages might not be disappearing, however it might look a lot different in the future than it does now.
 
-
-### HTML is Complete and has the Building Blocks for Web
-#### HTML has all the necessary primatives, most people just need templates
+## HTML is Complete and has the Building Blocks for Web
+_**HTML has all the necessary primatives, most people just need templates**_
 
 What if HTML had all of the primatives necessary?  Obviously people need more than a `<div>` and some CSS to make an app.  But what if a `<custom-elements>` existed for everything you needed to code?
 
@@ -47,8 +46,8 @@ We have all seen pictures of the 6 monitor "power user" setup, but for most peop
 
 It is natural to think addition is the only type of evolution, and website evolution is towards more intensive Javascript.  For some tasks this is true, but the majority of tasks today are to address underserved customers or digital transformation of existing businesses.  The quality and range of the tools available make it less of a race of technological innovation and more about delivering value.  Tasks are leveraging mature libraries and native browser standardizations, and offloading as much as possible to SaaS integrations.  Businesses can be successful with a nicely configured storefront built only using out-of-box customizations.  Websites can thrive being Javascript light and template heavy.
 
-### HTML needs to be replaced
-#### A new paradigm without Javascript or HTML
+## HTML needs to be replaced
+_**A new paradigm without Javascript or HTML**_
 
 According to the [2021 StackOverflow Survey](https://insights.stackoverflow.com/survey/2021):
 > "50% indicating they have been coding for less than a decade, and more than 35% having less than five years in the trade"
@@ -63,7 +62,7 @@ The primary challenger to the HTML-Javascript ecosystem is the mobile app.  Newe
 
 For every improvement in Javascript alternatives, Javascript is making equal steps forward. For developers who enjoy and are productive in Javascript the ecosystem continues its steady progression of improvement and innovation.  But for others, many who begrudgingly work in the Javascript language, others who may appeciate more robust languages to work in, there are finally competitive alternatives.
 
-### Conclusion
+## Conclusion
 
 I've done my share of full-stack development, worked on many different Javascript frameworks - popular ones, defunct ones and custom.  The vast majority of my work today isn't in Javascript, but as an observation: _if feels like time spent learning Javascript is lost time._
 
