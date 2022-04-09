@@ -127,6 +127,10 @@ defaults:
     values:
       layout: single
       author_profile: false
+  - scope:
+      path: "assets/**/*.html"
+    values:
+      sitemap: false
 
 category_archive:
   type: liquid
