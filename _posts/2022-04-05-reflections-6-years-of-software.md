@@ -33,7 +33,7 @@ At this time, all browsers support the extension of HTML using `<custom-elements
 
 There will always be a use for frameworks even in a world with custom elements. But where and when to apply them might change a little. Internally a custom element can be massivily complex application benefiting from the use of framework. Maybe a different framework maps better to the concerns of page scope than inside a custom elements. It is also in everyones best interest to have the freedom to mix components from different sources, it should be possible to drop in a React or Angular component into a Vue app without being an expert in how the component was implemented. 
 
-The standardization to custom element can paradoxically allow diversity to flourish in Javascript libraries. Using it to break down monolythic PWAs from one large project to many smaller, independent, well-defined projects will promote the use of alternative Javascript libraries as developers are less locked in to the project's initial codebase. Native browser support means libraries can be more lightweight so more can be used without weighing down pagesize, and HTTP/2 pipelining means separate projects can be maintained without blocking rendering. The Javascript in web pages might not be disappearing, however it might look a lot different in the future than it does now.
+The standardization to custom element can paradoxically allow diversity to flourish in Javascript libraries. Using it to break down monolythic PWAs from one large project to many smaller, independent, well-defined projects will promote the use of alternative Javascript libraries as developers are less locked in to the project's initial codebase. Native browser support means libraries can be more lightweight so more can be used without weighing down pagesize, and HTTP/2 multiplexing means separate projects can be maintained without blocking rendering. The Javascript in web pages might not be disappearing, however it might look a lot different in the future than it does now.
 
 
 ### HTML is Complete and has the Building Blocks for Web
@@ -45,24 +45,29 @@ User-friendly editors like Wordpress, Shopify, or Wix have created succesful web
 
 We have all seen pictures of the 6 monitor "power user" setup, but for most people that is an uncomfortable amount of information.  Designing a webpage with 20 interdependent widgets can also be too much.  Consider multiple screens or isolated focus sections. The 20 interdependent widgets that were requiring a complex state management Javascript framework has now become 4 sets of 5 interdependent widgets. Would the same heavy-weight framework still be required? Robinhood users didn't want more blinking numbers crammed into a screen when making life changing financial decisions, they just wanted some great looking confetti.
 
-
-It is natural to think evolution means addition, but that is an incorrect assumption, and more Javascript doesn't more Javascript doesn't the constant emergance of new lightweight Javascript frameworks 
-
-If components are well designed the Javascript at the page level can be minimal. Not every site can be coded in a UI or using only templates, most will still benefit from the structure offered by a Javascript framework.  As functionality moves natively browser, frameworks are more lightweight, and there is less emphasis on Javascript.
+It is natural to think addition is the only type of evolution, and website evolution is towards more intensive Javascript.  For some tasks this is true, but the majority of tasks today are to address underserved customers or digital transformation of existing businesses.  The quality and range of the tools available make it less of a race of technological innovation and more about delivering value.  Tasks are leveraging mature libraries and native browser standardizations, and offloading as much as possible to SaaS integrations.  Businesses can be successful with a nicely configured storefront built only using out-of-box customizations.  Websites can thrive being Javascript light and template heavy.
 
 ### HTML needs to be replaced
 #### A new paradigm without Javascript or HTML
-
-Mobile apps are an alternative to Javascript and HTML, so the idea of a world without either isn't crazy.  It probably isn't what we want either, they did get us this far. 
-
-But it might be time to tap the breaks a little, with enthusists going so far as to create Browser Extensions to manage your crypto holdings.
-
-Typescript is getting more and more common. 
-[WASM (WebAssembly)](https://en.wikipedia.org/wiki/WebAssembly) is supported in over 95% of browsers.  [ScalaJS](https://www.scala-js.org) is still progressing.
-And [Flutter supports the web](https://flutter.dev/multi-platform/web).
 
 According to the [2021 StackOverflow Survey](https://insights.stackoverflow.com/survey/2021):
 > "50% indicating they have been coding for less than a decade, and more than 35% having less than five years in the trade"
 > "60% of respondents learned how to code from online resources"
 
-The market is saturated with Javascript developers, and managers gravitate to pools of talent.  Javascript isn't going anywhere, but there are viable alternatives now.
+The market is saturated with new Javascript developers every year and hiring managers gravitate to pools of talent.  Javascript remains the most popular programming language with strong momentum into the future, adding in Typescript and server-side NodeJS it looks unstoppable.
+
+Outside the realm of transpiled Javascript languages such as Typescript or Coffeescript, there exist alternatives such as [ScalaJS](https://www.scala-js.org) and [WASM (WebAssembly)](https://en.wikipedia.org/wiki/WebAssembly) paired with the [Rust programming language](https://www.rust-lang.org/).  While offering unique value propositions in specialized non-web oriented fields such as data manipulation and performance computing, it is also the reason they of limited general application.
+
+The primary challenger to the HTML-Javascript ecosystem is the mobile app.  Newer easier to work with languages of Swift and Kotlin have drastically lowered the experience required of mobile app development.  Multi-platform support has made monumental improvements with [Flutter](https://flutter.dev/) which even offers budding support for [web](https://flutter.dev/multi-platform/web) without Javascript.  Flutter promises write once run anywhere with a highly capable typed programming language [Dart programming language](https://dart.dev/), but so does the Javascript-based React Native.
+
+For every improvement in Javascript alternatives, Javascript is making equal steps forward. For developers who enjoy and are productive in Javascript the ecosystem continues its steady progression of improvement and innovation.  But for others, many who begrudgingly work in the Javascript language, others who may appeciate more robust languages to work in, there are finally competitive alternatives.
+
+### Conclusion
+
+This is good for both web and mobile development as a whole.
+
+  
+
+
+
+
