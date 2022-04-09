@@ -34,10 +34,6 @@ $base0f: #cc6633 !default;
 
 // END ORIGINAL
 
-ins {
- border-bottom: 0px;
-}
-
 .archive {
   margin-top: 1em;
   margin-bottom: 2em;
@@ -60,4 +56,14 @@ select {
   width: auto;
   background-color: #fff;
   border: $gray;
+}
+
+// Google Ads
+
+ins {
+ border-bottom: 0px;
+}
+
+.page__footer footer {
+  margin-top: 4px;
 }
