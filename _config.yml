@@ -34,13 +34,12 @@ locale: en-US
 breadcrumbs: true
 
 analytics:
-  provider: google-universal
+  provider: google-gtag
   google:
-    tracking_id: "UA-43889710-1"
-    
-#   provider: google-gtag
+    tracking_id: "G-0SS2NFKK9Y"
+#   provider: google-universal
 #   google:
-#     tracking_id: "G-0SS2NFKK9Y"
+#     tracking_id: "UA-43889710-1"
 
 # Build settings
 markdown: kramdown
