@@ -134,6 +134,10 @@ defaults:
       path: "assets/**/*.html"
     values:
       sitemap: false
+  - scope:
+      path: "yandex*.html"
+    values:
+      sitemap: false
 
 category_archive:
   type: liquid
