@@ -6,10 +6,9 @@ tags:
   Slack
 ---
 The command line progress bar was the first step towards graphical UI.  It was an exciting addition to a numerical percent ticking away as a running task took forever to complete. It started with safe for everywhere ascii characters 
-```
-[======>                   ]  20.3%
-```
+`[======>                   ]  20.3%`
 Later evolving into fancifal Unicode updating before your eyes:
+
 ![https://mike42.me/blog/2018-06-make-better-cli-progress-bars-with-unicode-block-characters](/assets/images/2022/04/2018-06-progress-bar-animated.gif)
 
 Today shimmering graphical progress bars are the norm, designed to compel your full attention until completion. If your business isn't about dopamine drips and eyeballs the graphics might be less important and arguably a worse implementation than the older simplicity. A large use-case for a simple approach is in SaaS integrations. Workflows across multiple SaaS providers quickly run into issues of compatibility and portability. Simple ASCII implementations are user friendly, pleasant, and will always work.
