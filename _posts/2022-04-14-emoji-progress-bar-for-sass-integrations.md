@@ -6,7 +6,9 @@ tags:
   Slack
 ---
 The command line progress bar was the first step towards graphical UI.  It was an exciting addition to a numerical percent ticking away as a running task took forever to complete. It started with safe for everywhere ascii characters 
-`[======>                   ]  20.3%`
+```
+[======>                   ]  20.3%
+```
 Later evolving into fancifal Unicode updating before your eyes:
 
 ![https://mike42.me/blog/2018-06-make-better-cli-progress-bars-with-unicode-block-characters](/assets/images/2022/04/2018-06-progress-bar-animated.gif)
@@ -56,7 +58,11 @@ class TextProgressBar(progressCharacters: Array[_]) {
   }
 }
 ```
-And now we have progress bar that can be used everywhere and can scale in width from from 1 to N characters.
+And now we have progress bar to use everywhere and can scale in width from from 1 to N characters.
+```
+Congratulations!
+[███████████████████████████████████████████] 100%
+```
 
 {%
   include downloadsources.html
