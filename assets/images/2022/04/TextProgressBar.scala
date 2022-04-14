@@ -2,11 +2,13 @@ class TextProgressBar(progressCharacters: Array[_]) {
 
   def bar(progress: Float, width: Int): String = {
     require(0 <= progress && progress <= 1 && width > 0)
-    val wholeWidth = math.floor(progress * width).toInt
+    val completeWidth = math.floor(progress * width).toInt
     val remainderWidth = (progress * width) % 1
-    val partWidth = math.floor(remainderWidth * (progressCharacters.size - 1)).toInt
-    val partChar = if (width - wholeWidth == 0) "" else progressCharacters(partWidth).toString
-    s"${progressCharacters.last.toString * wholeWidth}$partChar${progressCharacters.head.toString * (width - wholeWidth - 1)}"
+    val progressIndex = math.floor(remainderWidth * (progressCharacters.size - 1)).toInt
+    val progressChar = if (width - completeWidth == 0) "" else progressCharacters(progressIndex).toString
+    val completeBar = progressCharacters.last.toString * completeWidth
+    val remainingBar = progressCharacters.head.toString * (width - completeWidth - 1)
+    s"$completeBar$progressChar$remainingBar"
   }
 
   def create(progress: Float, totalCharacters: Int): String = {
