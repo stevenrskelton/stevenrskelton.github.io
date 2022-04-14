@@ -7,14 +7,14 @@ The command line progress bar was the first step towards graphical UI.  It was a
 ```
 [======>                   ]  20.3%
 ```
-later evolving into fancifal Unicode updating before your eyes:
+Later evolving into fancifal Unicode updating before your eyes:
 ![https://mike42.me/blog/2018-06-make-better-cli-progress-bars-with-unicode-block-characters](/assets/image/2022/04/2018-06-progress-bar-animated.gif)
 
 Today shimmering graphical progress bars are the norm, designed to compel your full attention until completion. If your business isn't about dopamine drips and eyeballs the graphics might be less important and arguably a worse implementation than the older simplicity. A large use-case for a simple approach is in SaaS integrations. Workflows across multiple SaaS providers quickly run into issues of compatibility and portability. Simple ASCII implementations are user friendly, pleasant, and will always work.
 
 My use-case is for a Slack bot to post status updates within Slack messages.  The provided Block Kit has a lot of beautify components to choose from but is missing a progress bar. I found an [updating progress bar](https://github.com/bcicen/slack-progress) build using the Slacker Python library (surprise it was in ASCII!) but I'm looking for something in Java or Scala.
 
-A well-written blog [Make better CLI progress bars with Unicode block characters](https://mike42.me/blog/2018-06-make-better-cli-progress-bars-with-unicode-block-characters) is another ASCII progress bar in Python, but it inspired me to port the code to Scala.
+A well-written blog [Make better CLI progress bars with Unicode block characters](https://mike42.me/blog/2018-06-make-better-cli-progress-bars-with-unicode-block-characters) is another Unicode progress bar in Python, but it inspired me to port the code to Scala.
 
 It used a neat little set of block characters from Unicode:
 ```scala
@@ -22,7 +22,7 @@ val progressCharacters = Array(' ', '▏', '▎', '▍', '▌', '▋', '▊', '�
 ```
 In Scala, we simple implementation class would be:
 ```scala
-class AsciiProgressBar(progressCharacters: Array[_]) {
+class TextProgressBar(progressCharacters: Array[_]) {
   def bar(progress: Float, width: Int): String
 }
 ```
@@ -30,11 +30,11 @@ Using `Array[_]` here allows flexibility from not just Unicode characters, but w
 
 The array looks surprising like a linear progression, and it is! Consider a progress bar of length 1. If there are 10 items in the array, progress of 40% would return the 4<sup>th</sup> index. An overkill way to implement a `floor` would be:
 ```scala
-AsciiProgressBar(Array(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100)).bar(progress: Float, 1)
+TextProgressBar(Array(0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100)).bar(progress: Float, 1)
 ```
 This could be useful if instead of numbers, we wanted `< 10%`, `< 50%`, `< 90%`, and `100%` segments.  This implementation would easily separate jobs which have just started, are less than <sup>1</sup>/<sub>2</sub>, more than <sup>1</sup>/<sub>2</sub>, near complete, and done. In Slack we might want to use emojis:
 ```
-AsciiProgressBar(Array(
+TextProgressBar(Array(
   ":sloth:", ":working:", ":working:", ":working:", ":working:", 
   ":working-on-it:", ":working-on-it:", ":working-on-it:", ":working-on-it:", ":firecracker:", ":done-slant:"
 )).bar(progress: Float, 1)
@@ -43,7 +43,7 @@ AsciiProgressBar(Array(
 
 The Scala code for `bar` follows from the [mike42 blog](https://mike42.me/blog/2018-06-make-better-cli-progress-bars-with-unicode-block-characters) Python:
 ```scala
-class AsciiProgressBar(progressCharacters: Array[_]) {
+class TextProgressBar(progressCharacters: Array[_]) {
   def bar(progress: Float, width: Int): String = {
     require(0 <= progress && progress <= 1 && width > 0)
     val wholeWidth = math.floor(progress * width).toInt
@@ -54,9 +54,9 @@ class AsciiProgressBar(progressCharacters: Array[_]) {
   }
 }
 ```
-And now we have a flexible ubiquitously supported progress bar implementation, that can scale from 1 to N characters.
+And now we have progress bar that can be used everywhere and can scale in width from from 1 to N characters.
 
 {%
   include downloadsources.html
-  src="/assets/images/2022/04/InteractiveJavaUtilTimer.scala,/assets/images/2022/04/InteractiveJavaUtilTimerSpec.scala"
+  src="/assets/images/2022/04/TextProgressBar.scala"
 %}
