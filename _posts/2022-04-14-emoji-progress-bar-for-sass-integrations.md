@@ -34,7 +34,8 @@ Using `Array[_]` here allows flexibility from not just Unicode characters, but w
 The array looks surprising like a linear progression, and it is! Consider a progress bar of length 1. If there are 10 items in the array, progress of 40% would return the 4<sup>th</sup> index. An overkill way to implement a `floor` would be:
 ```scala
 TextProgressBar(Array(
-  0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100
+  0, 10, 20, 30, 40, 
+  50, 60, 70, 80, 90, 100
 )).bar(progress: Float, 1)
 ```
 This could be useful if instead of numbers, we wanted `< 10%`, `< 50%`, `< 90%`, and `100%` segments.  This implementation would easily separate jobs which have just started, are less than <sup>1</sup>/<sub>2</sub>, more than <sup>1</sup>/<sub>2</sub>, near complete, and done. In Slack we might want to use emojis:
@@ -62,7 +63,7 @@ class TextProgressBar(progressCharacters: Array[_]) {
 And now we have progress bar to use everywhere and can scale in width from from 1 to N characters.
 ```
 Congratulations!
-[█████████████████████████████████] 100%
+[███████████████████████████████] 100%
 ```
 
 {%
