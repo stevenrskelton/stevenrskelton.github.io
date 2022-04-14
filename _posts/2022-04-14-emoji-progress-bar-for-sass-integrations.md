@@ -61,7 +61,7 @@ class TextProgressBar(progressCharacters: Array[_]) {
 And now we have progress bar to use everywhere and can scale in width from from 1 to N characters.
 ```
 Congratulations!
-[███████████████████████████████████████████] 100%
+[█████████████████████████████████████] 100%
 ```
 
 {%
