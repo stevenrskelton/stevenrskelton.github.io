@@ -1,0 +1,33 @@
+---
+title: "Emoji Progress Bar for SaaS Integrations"
+published: false
+categories:
+  Scala
+---
+The command line progress bar was the first step towards graphical UI.  It was an exciting addition to a numerical percent ticking away as a running task took forever to complete. It started with safe for everywhere ascii characters: 
+```
+[======>                   ]  20.3%
+```
+Then fancifal Unicode updating before your eyes:
+![https://mike42.me/blog/2018-06-make-better-cli-progress-bars-with-unicode-block-characters](/assets/image/2022/04/2018-06-progress-bar-animated.gif)
+
+Today shimmering graphical progress bars are the norm compelling your full attention until completion. If your business isn't about dopamine drips and eyeballs, I would argue that most people prefer the older simplicity. However the biggest usecase for simplicity is in SaaS. Workflows integrating across multiple SaaS providers start to have issues with compatibility and portability. Simple ASCII will always work.
+
+My current issue is I want my Slack bot to post status updates and Slack's Block Kit doesn't have one in prebuilt UI. I found an [updating progress bar](https://github.com/bcicen/slack-progress) for the Slacker Python library, surprise it was in ASCII, but I'm looking for something simpler.
+
+A well-written blog [Make better CLI progress bars with Unicode block characters](https://mike42.me/blog/2018-06-make-better-cli-progress-bars-with-unicode-block-characters) is another ASCII progress bar for Python, but it inspired me to port it to Scala.
+
+It used a neat little set of block characters from Unicode:
+```scala
+val progressCharacters = Array(' ', '▏', '▎', '▍', '▌', '▋', '▊', '▉', '█')
+```
+A flexible bar would allow not just Unicode characters, but 
+```scala
+  def bar(progress: Float, width: Int): String = {
+    require(0 <= progress && progress <= 1 && width > 0)
+ ```
+
+{%
+  include downloadsources.html
+  src="/assets/images/2022/04/InteractiveJavaUtilTimer.scala,/assets/images/2022/04/InteractiveJavaUtilTimerSpec.scala"
+%}
