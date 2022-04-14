@@ -10,17 +10,17 @@ The command line progress bar was the first step towards graphical UI.  It was a
 [======>                   ]  20.3%
 ```
 Later evolving into fancifal Unicode updating before your eyes:
-![https://mike42.me/blog/2018-06-make-better-cli-progress-bars-with-unicode-block-characters](/assets/image/2022/04/2018-06-progress-bar-animated.gif)
+![https://mike42.me/blog/2018-06-make-better-cli-progress-bars-with-unicode-block-characters](/assets/images/2022/04/2018-06-progress-bar-animated.gif)
 
 Today shimmering graphical progress bars are the norm, designed to compel your full attention until completion. If your business isn't about dopamine drips and eyeballs the graphics might be less important and arguably a worse implementation than the older simplicity. A large use-case for a simple approach is in SaaS integrations. Workflows across multiple SaaS providers quickly run into issues of compatibility and portability. Simple ASCII implementations are user friendly, pleasant, and will always work.
 
-My use-case is for a Slack bot to post status updates within Slack messages.  The provided Block Kit has a lot of beautify components to choose from but is missing a progress bar. I found an [updating progress bar](https://github.com/bcicen/slack-progress) build using the Slacker Python library (surprise it was in ASCII!) but I'm looking for something in Java or Scala.
+My use-case is for a Slack bot to post status updates within Slack messages.  The provided Block Kit has a lot of beautify components to choose from but is missing a progress bar. I found an [updating progress bar](https://github.com/bcicen/slack-progress) build using the Slacker Python library (surprise it uses Unicode!) but I'm looking for something in Java or Scala.
 
 A well-written blog [Make better CLI progress bars with Unicode block characters](https://mike42.me/blog/2018-06-make-better-cli-progress-bars-with-unicode-block-characters) is another Unicode progress bar in Python, but it inspired me to port the code to Scala.
 
 It used a neat little set of block characters from Unicode:
 ```scala
-val progressCharacters = Array(' ', '&#x258F;', '&#x258E;', '&#x258D;', '&#x258C;', '&#x258B;', '&#x258A;', '&#x2589;', '&#x2588;')
+val progressCharacters = Array(' ', '▏', '▎', '▍', '▌', '▋', '▊', '▉', '█')
 ```
 In Scala, we simple implementation class would be:
 ```scala
@@ -41,7 +41,7 @@ TextProgressBar(Array(
   ":working-on-it:", ":working-on-it:", ":working-on-it:", ":working-on-it:", ":firecracker:", ":done-slant:"
 )).bar(progress: Float, 1)
 ```
-![Slack emojis](slackemoji.png)
+![Slack emojis](/assets/images/2022/04/slackemoji.png)
 
 The Scala code for `bar` follows from the [mike42 blog](https://mike42.me/blog/2018-06-make-better-cli-progress-bars-with-unicode-block-characters) Python:
 ```scala
