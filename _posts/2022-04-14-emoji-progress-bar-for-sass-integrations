@@ -18,7 +18,7 @@ A well-written blog [Make better CLI progress bars with Unicode block characters
 
 It used a neat little set of block characters from Unicode:
 ```scala
-val progressCharacters = Array(' ', '▏', '▎', '▍', '▌', '▋', '▊', '▉', '█')
+val progressCharacters = Array(' ', '&#x258F;', '&#x258E;', '&#x258D;', '&#x258C;', '&#x258B;', '&#x258A;', '&#x2589;', '&#x2588;')
 ```
 In Scala, we simple implementation class would be:
 ```scala
