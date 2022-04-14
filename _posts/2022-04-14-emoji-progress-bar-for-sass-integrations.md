@@ -54,7 +54,7 @@ def bar(progress: Float, width: Int): String = {
   val completeWidth = math.floor(progress * width).toInt
   val partialWidth = (progress * width) % 1
   val progressIndex = math.floor(partialWidth * (progressCharacters.size - 1)).toInt
-  val progressChar = if (width - completeWidth == 0) "" else progressCharacters(progressIndex).toString
+  val progressChar = if (width == completeWidth) "" else progressCharacters(progressIndex).toString
   val completeBar = progressCharacters.last.toString * completeWidth
   val remainingBar = progressCharacters.head.toString * (width - completeWidth - 1)
   s"$completeBar$progressChar$remainingBar"
