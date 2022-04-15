@@ -15,7 +15,7 @@ Today, as Principal Software Engineer at a global digital consulting company, he
 - Best tools for the platform: Scala, C# .Net, and Dart Flutter,
 - Reactive: event-driven infrastructure and coding paradigms,
 - Cloud Architect: N-Tier, SOA, REST, API design, sidecar, CAP, layer abstraction.
-- R&D speialist: benefit analysis, feasibility, integration strategies, initial adoption timelines.
+- R&D specialist: benefit analysis, feasibility, integration strategies, initial adoption timelines.
 - Data expert: algorithms, caching, full-text search, serialization, optimization.
 - Security: audits, SSO, OAuth, SAML, dual-hop impersonation, encryption, signed tokens.
 
