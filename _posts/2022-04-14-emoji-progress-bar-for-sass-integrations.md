@@ -40,7 +40,7 @@ TextProgressBar(Array(
 )).bar(progress: Float, 1)
 ```
 This could be useful if instead of numbers, we wanted `< 10%`, `< 50%`, `< 90%`, and `100%` segments.  This implementation would easily separate jobs which have just started, are less than <sup>1</sup>/<sub>2</sub>, more than <sup>1</sup>/<sub>2</sub>, near complete, and done. In Slack we might want to use emojis:
-![:sloth:](/assets/images/2022/04/slack_sloth.png), ![:working:](/assets/images/2022/04/slack_working.png), ![:working-on-it:](/assets/images/2022/04/slack_working-on-it.png), ![:done-slant:](/assets/images/2022/04/slack_firecracker.png), ![:firecracker:](/assets/images/2022/04/slack_done-slant.png)
+![:sloth:](/assets/images/2022/04/slack_sloth.png), ![:working:](/assets/images/2022/04/slack_working.png), ![:working-on-it:](/assets/images/2022/04/slack_working-on-it.png), ![:firecracker:](/assets/images/2022/04/slack_firecracker.png), ![:done-slant:](/assets/images/2022/04/slack_done-slant.png)
 ```
 TextProgressBar(Array(
   ":sloth:", ":working:", ":working:", ":working:", ":working:", 
@@ -63,9 +63,12 @@ def bar(progress: Float, width: Int): String = {
 }
 ```
 And now we have progress bar to use everywhere and can scale in width from from 1 to N characters.
+<div style="float:left">
+  ![:done-slant:](/assets/images/2022/04/slack_done-slant.png)
+</div>
 ```
 Congratulations!
-[███████████████████████████████] 100%
+[█████████████████████████] 100%
 ```
 
 {%
