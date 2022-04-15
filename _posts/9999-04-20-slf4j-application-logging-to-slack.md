@@ -29,6 +29,7 @@ SLF4J
 |[tobias-/slack-appender](https://github.com/tobias-/slack-appender)|7|Oct 2018|Log4J|Web Hook|
 |[rage28/log4j-slack](https://github.com/rage28/log4j2-slack)|3|Aug 2017|SLF4J|Web Hook|
 
+https://laravel.com/docs/6.x/logging (PHP)
 https://plugins.jenkins.io/slack
 10K of your team's most recent messages
 A one-word message or single emoji are counted the same as a message with 500 words and multiple paragraphs.
