@@ -36,7 +36,7 @@ For a Scala project, it makes sense to use SLF4J which is a simple facade librar
 It is important to note that Slack is trying to phase our their Incoming Web Hooks interface in favour of their App API.
 
 |Github|Stars|Last Update|Interface|Method|
-|------|-----|:---------:|---------|------|
+|------|----:|:---------:|---------|------|
 |[stagnationlab/slack-logger](https://github.com/stagnationlab/slack-logger)|14|Sep 2021|NPM|API|
 |[iotgdev/slack_logging](https://github.com/iotgdev/slack_logging)|2|May 2020|Python|Web Hook|
 |[gmethvin/logslack](https://github.com/gmethvin/logslack)|1|Jul 2019|Logger|API|
