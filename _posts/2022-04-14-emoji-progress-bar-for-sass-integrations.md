@@ -40,13 +40,14 @@ TextProgressBar(Array(
 )).bar(progress: Float, 1)
 ```
 This could be useful if instead of numbers, we wanted `< 10%`, `< 50%`, `< 90%`, and `100%` segments.  This implementation would easily separate jobs which have just started, are less than <sup>1</sup>/<sub>2</sub>, more than <sup>1</sup>/<sub>2</sub>, near complete, and done. In Slack we might want to use emojis:
+![:sloth:](/assets/images/2022/04/slack_sloth.png), ![:working:](/assets/images/2022/04/slack_working.png), ![:working-on-it:](/assets/images/2022/04/slack_working-on-it.png), ![:done-slant:](/assets/images/2022/04/slack_firecracker.png), ![:firecracker:](/assets/images/2022/04/slack_done-slant.png)
 ```
 TextProgressBar(Array(
   ":sloth:", ":working:", ":working:", ":working:", ":working:", 
   ":working-on-it:", ":working-on-it:", ":working-on-it:", ":working-on-it:", ":firecracker:", ":done-slant:"
 )).bar(progress: Float, 1)
 ```
-![Slack emojis](/assets/images/2022/04/slackemoji.png)
+
 
 The Scala code for `bar` follows from the [mike42 blog](https://mike42.me/blog/2018-06-make-better-cli-progress-bars-with-unicode-block-characters) Python:
 ```scala
