@@ -2,8 +2,10 @@
 #layout: post
 title: "Tracking Clients with Finagle"
 categories:
-  - Thrift
+  - Platform
   - Scala
+tags:
+  - Thrift
 ---
 
 In a Service Oriented Architecture, a service may be used by many different clients – each with with different usage patterns and performance profiles. Behind a corporate firewall, without each client authenticating itself to our server, how can monitor a specific client if we can’t identify their requests?

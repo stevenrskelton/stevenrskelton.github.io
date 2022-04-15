@@ -1,9 +1,9 @@
 ---
 title: "Emoji Progress Bar for SaaS Integrations"
 categories:
-  Scala
+  - Scala
 tags:
-  Slack
+  - Slack
 ---
 The command line progress bar was the first step towards graphical UI.  It was an exciting addition to a numerical percent ticking away as a running task took forever to complete. It started with safe for everywhere ascii characters 
 ```

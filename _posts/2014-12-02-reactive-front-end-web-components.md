@@ -2,6 +2,8 @@
 #layout: post
 title: "Reactive Front-End with Web Components"
 categories:
+  - Javascript
+tags:
   - Polymer
 ---
 

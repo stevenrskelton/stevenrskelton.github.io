@@ -2,6 +2,8 @@
 #layout: post
 title: "Polymer Data-Binding Filters"
 categories:
+  - Javascript
+tags:
   - Polymer
 ---
 

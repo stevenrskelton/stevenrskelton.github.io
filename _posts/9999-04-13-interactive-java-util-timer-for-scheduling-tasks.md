@@ -2,7 +2,7 @@
 title: "Interactive java.util.timer for Scheduling Tasks"
 published: false
 categories:
-  Scala
+  - Scala
 ---
 My last blog update was 6 years ago, and Javascript still seems popular. Is this a case of _There Is No Alternative_?
 

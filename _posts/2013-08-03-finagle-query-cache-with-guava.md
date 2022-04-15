@@ -2,8 +2,10 @@
 #layout: post
 title: "Finagle Query Cache with Guava"
 categories:
-  - Thrift
+  - Platform
   - Scala
+tags:
+  - Thrift
 ---
 
 For many data services, any easy way to reduce database load is to cache calls to semi-static data (ie: append-only, or refreshed only on a set schedule), and very recent calls due to backward user navigation. Not all methods and data are suitable for caching, so any implementation will require the ability to be selective.

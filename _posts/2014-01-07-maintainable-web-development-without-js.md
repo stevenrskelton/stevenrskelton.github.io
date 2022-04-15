@@ -3,6 +3,7 @@
 title: "Maintainable Web Development without Javascript"
 categories:
   - Dart
+  - Javascript
 ---
 
 In the years 2002-2003, Internet Explorer captured 95% of world-wide browser market share. It was unfathomable to many that over the next 10 years IE would decline to just over 15%.

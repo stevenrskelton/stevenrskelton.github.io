@@ -2,8 +2,10 @@
 #layout: post
 title: "Separation of Concerns with Finagle"
 categories:
-  - Thrift
+  - Platform
   - Scala
+tags:
+  - Thrift
 ---
 
 The [Separation of Concerns (SoC)](http://en.wikipedia.org/wiki/Separation_of_concerns) pattern is one of those software architectural choices that everyone is helpful. It increases clarity, shortens the amount of code in the working context, and minimizes the chance of side effects. For example, two concerns that shouldn’t require entanglement: updating data and cache invalidation. Both are related, but one is concerned about business logic and database access, while the other deals with the cache servers. Finagle’s generated `FutureIface` can be used to keep these two separate.

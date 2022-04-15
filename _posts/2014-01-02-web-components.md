@@ -2,6 +2,8 @@
 #layout: post
 title: "Web Components"
 categories:
+  - Javascript
+tags:
   - Polymer
 ---
 

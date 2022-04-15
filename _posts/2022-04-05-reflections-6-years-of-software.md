@@ -1,6 +1,7 @@
 ---
 title: "Reflections: 6 Years of Software"
 categories:
+  - Javascript
 ---
 My last blog update was 6 years ago, and Javascript still seems popular. Is this a case of _There Is No Alternative_?
 
@@ -62,7 +63,7 @@ The primary challenger to the HTML-Javascript ecosystem is the mobile app.  Newe
 
 For every improvement in Javascript alternatives, Javascript is making equal steps forward. For developers who enjoy and are productive in Javascript the ecosystem continues its steady progression of improvement and innovation.  But for others, many who begrudgingly work in the Javascript language, others who may appeciate more robust languages to work in, there are finally competitive alternatives.
 
-## Conclusion
+## Final Thoughts
 
 I've done my share of full-stack development, worked on many different Javascript frameworks - popular ones, defunct ones and custom.  The vast majority of my work today isn't in Javascript, but as an observation: _if feels like time spent learning Javascript is lost time._
 

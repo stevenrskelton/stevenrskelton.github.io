@@ -2,6 +2,8 @@
 #layout: post
 title: "Advanced Uses of Polymer Templates"
 categories:
+  - Javascript
+tags:
   - Polymer
 ---
 

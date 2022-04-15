@@ -3,6 +3,8 @@
 published: false
 title: "Github Action to Submit Flutter Android Apps to Play"
 categories:
+  - Platform
+tags:
   - Flutter
 ---
 
