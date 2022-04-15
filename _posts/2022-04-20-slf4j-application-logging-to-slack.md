@@ -19,8 +19,8 @@ SLF4J
 > Incoming WebHooks
 > Please note, this is a legacy custom integration - an outdated way for teams to integrate with Slack. These integrations lack newer features and they will be deprecated and possibly removed in the future. We do not recommend their use. Instead, we suggest that you check out their replacement: Slack apps.
 
-||Github||Stars||Last Update||Interface||Method||
-|--------|------|------------|----------|-------|
+|Github|Stars|Last Update|Interface|Method|
+|------|-----|-----------|---------|------|
 |(stagnationlab/slack-logger)[https://github.com/stagnationlab/slack-logger]|14|Sep 2021|NPM|API|
 |(gmethvin/logslack)[https://github.com/gmethvin/logslack]|1|Jul 2019|Logger|API|
 |(TheConnMan/SlackLogger)[https://github.com/TheConnMan/SlackLogger]|4|Jan 2016|Log4J|Web Hook|
