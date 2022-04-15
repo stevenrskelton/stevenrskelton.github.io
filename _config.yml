@@ -14,17 +14,16 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Steven Skelton
-subtitle: Scala, Flutter, and other software blog
+subtitle: Scala, Flutter, Cloud Platform and other software blog
 name: Steven Skelton
 email:
 url: "https://www.stevenskelton.ca"
-description: >- # this means to ignore newlines until "baseurl:"
+description: >-
   Code examples and implementation details encountered during my software development.
   Mostly back-end = Scala; mobile = Dart && Flutter.
 #twitter_username: username
 github_username: stevenrskelton
 minimal_mistakes_skin: dirt
-#search: true
 search: false
 
 logo: /assets/images/logo.png
