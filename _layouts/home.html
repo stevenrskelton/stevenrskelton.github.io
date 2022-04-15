@@ -12,11 +12,20 @@ layout: archive
   {% assign posts = site.posts %}
 {% endif %}
 
-{% assign postnumber = 0 %}
+{% capture adplacement1 %}
+<ins class="adsbygoogle"
+     style="display:inline-block;width:728px;height:90px"
+     data-ad-client="ca-pub-5000348308466945"
+     data-ad-slot="2968228907"></ins>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({});
+</script>
+{% endcapture %}
+
 {% assign entries_layout = page.entries_layout | default: 'list' %}
 <div class="entries-{{ entries_layout }}">
   {% for post in posts %}
-    {% cycle "", "", "", "<sub>three</sub>" %}
+    {% cycle "", "", "", adplacement1, "", "", "", "", "" %}
     {% include archive-single.html type=entries_layout %}
   {% endfor %}
 </div>
