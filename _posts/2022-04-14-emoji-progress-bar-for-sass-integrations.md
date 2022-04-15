@@ -62,12 +62,12 @@ def bar(progress: Float, width: Int): String = {
   s"$completeBar$progressChar$remainingBar"
 }
 ```
-And now we have progress bar to use everywhere and can scale in width from from 1 to N characters.<br/>
-<img src="/assets/images/2022/04/slack_done-slant.png" alt=":done-slant:" style="float:left">
+And now we have progress bar to use everywhere and can scale in width from from 1 to N characters.
 ```
 Congratulations!
-[█████████████████████████] 100%
+[█████████████████████████████] 100%
 ```
+![:done-slant:](/assets/images/2022/04/slack_done-slant.png)
 
 {%
   include downloadsources.html
