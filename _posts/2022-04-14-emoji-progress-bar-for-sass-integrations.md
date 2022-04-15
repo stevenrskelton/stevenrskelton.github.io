@@ -1,6 +1,7 @@
 ---
 title: "Emoji Progress Bar for SaaS Integrations"
 categories:
+  - Platform
   - Scala
 tags:
   - Slack
