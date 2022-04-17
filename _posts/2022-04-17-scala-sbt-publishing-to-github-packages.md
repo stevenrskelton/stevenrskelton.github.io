@@ -31,6 +31,8 @@ For an activily maintained Github project, I was sad to see an identical 4 month
 ## Über Jar
 <sup>aka: fat or executable jar</sup>
 
+_Sidenote: Steps to publish regular library jars is also [as an appendix](#publishing-non-uber-jars)_
+
 To complicate the issue further, I didn't just want to privately publish my standard artifacts, I want to publish an über jar.  Similar to how Docker creates an easy deploy with just 1 file, an über jar is similiar.  It is also similar to how a Java War file is a deployable package.  Normal Jar files are lean, they only contain your compiled code and publish their dependencies in a POM file.  This is great for libraries, but in the case where the jar is meant to be a standalone executable all of the dependencies will need to be included.  This is an über jar, it is like a regular jar but includes the `.class` or `.jar` of all of your code's dependencies.  It doesn't make sense to publish an über jar like it was a library, since the extra code it includes will likely have conflicts or overlaps with other libraries used in a linking project.
 
 It does however to maintain a set of compiled releases, and here we will be using Github Packages.
@@ -149,7 +151,8 @@ val exe = s"""mvn deploy:deploy-file
   -DrepositoryId=github -Dfile=${assembly.value}
   -DgroupId=${organization.value}
   -DartifactId=${name.value}-assembly
-  -Dversion=${version.value} --settings=target/settings.xml
+  -Dversion=${version.value}
+  --settings=target/settings.xml
 """.stripLineEnd
 
 println(s"Executing shell command $exe")
@@ -198,7 +201,25 @@ jobs:
 
 And now we have working Github Package publishing of an über jar by adding only 2 files to our project.
 
+## Publishing non-Über Jars
+
+This article is a little easier since there is only 1 über jar to publish. A typical library would also want to publish a dependency pom, javadoc jar and sources jar, plus those for any subprojects.
+
+The necessary changes for a monolithic project are very small, we will use other SBT packaging tasks instead of the `assembly` task in the plugin. There is are `mvn deploy:deploy-file` parameters to specify the pom file, and optionally source and JavaDoc jars.
+```scala
+  val exe = s"""mvn deploy:deploy-file
+    -Durl=https://maven.pkg.github.com/$githubRepository
+    -DrepositoryId=github
+    -Dfile=${(Compile / packageBin).value}
+    -DpomFile=${(Compile / makePom).value}
+    -Dsources=${(Compile / packageSrc).value}
+    -Djavadoc=${(Compile / packageDoc).value}
+    --settings=target/settings.xml
+""".stripLineEnd
+``` 
+For monolithic libraries include _publishToGithubPackages.sbt_ instead of _publishAssemblyToGithubPackages.sbt_ and call _publishToGithubPackages_ instead of _publishAssemblyToGithubPackages_ in your Github Action.
+
 {%
 include downloadsources.html
-src="/assets/images/2022/04-16/publish-uber-assembly-to-github.yml, /assets/images/2022/04-16/publishAssembyToGithubPackages.sbt"
+src="/assets/images/2022/04-16/publish-uber-assembly-to-github.yml, /assets/images/2022/04-16/publishAssemblyToGithubPackages.sbt, /assets/images/2022/04-16/publishToGithubPackages.sbt"
 %}

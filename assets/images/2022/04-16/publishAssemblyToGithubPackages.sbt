@@ -1,5 +1,5 @@
-lazy val publishAssembyToGithubPackages = taskKey[Unit]("Publish Über Jar to Github Packages")
-publishAssembyToGithubPackages := {
+lazy val publishAssemblyToGithubPackages = taskKey[Unit]("Publish Über Jar to Github Packages")
+publishAssemblyToGithubPackages := {
   val githubRepository = sys.env.get("GITHUB_REPOSITORY").getOrElse(throw new Exception("You must set environmental variable GITHUB_REPOSITORY, eg: owner/repository"))
   if(!sys.env.keySet.contains("GITHUB_REPOSITORY_OWNER")) throw new Exception("You must set environmental variable GITHUB_REPOSITORY_OWNER, eg: your username")
   if(!sys.env.keySet.contains("GITHUB_TOKEN")) throw new Exception("You must set environmental variable GITHUB_TOKEN")
@@ -44,13 +44,15 @@ publishAssembyToGithubPackages := {
 
   val exe = s"""mvn deploy:deploy-file
     -Durl=https://maven.pkg.github.com/$githubRepository
-    -DrepositoryId=github -Dfile=${assembly.value}
+    -DrepositoryId=github
+    -Dfile=${assembly.value}
     -DgroupId=${organization.value}
     -DartifactId=${name.value}-assembly
-    -Dversion=${version.value} --settings=target/settings.xml
+    -Dversion=${version.value}
+     --settings=target/settings.xml
   """.stripLineEnd
 
   println(s"Executing shell command $exe")
   import scala.sys.process._
-  if(exe.! != 0) throw new Exception("publishAssembyToGithubPackages failed")
+  if(exe.! != 0) throw new Exception("publishAssemblyToGithubPackages failed")
 }
