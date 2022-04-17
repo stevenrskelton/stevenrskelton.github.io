@@ -31,7 +31,7 @@ For an activily maintained Github project, I was sad to see an identical 4 month
 ## Über Jar
 <sup>aka: fat or executable jar</sup>
 
-_Sidenote: Steps to publish regular library jars is also [as an appendix](#publishing-non-uber-jars)_
+_**Steps to publish regular library jars is [included as an appendix](#publishing-non-uber-jars)**_
 
 To complicate the issue further, I didn't just want to privately publish my standard artifacts, I want to publish an über jar.  Similar to how Docker creates an easy deploy with just 1 file, an über jar is similiar.  It is also similar to how a Java War file is a deployable package.  Normal Jar files are lean, they only contain your compiled code and publish their dependencies in a POM file.  This is great for libraries, but in the case where the jar is meant to be a standalone executable all of the dependencies will need to be included.  This is an über jar, it is like a regular jar but includes the `.class` or `.jar` of all of your code's dependencies.  It doesn't make sense to publish an über jar like it was a library, since the extra code it includes will likely have conflicts or overlaps with other libraries used in a linking project.
 
