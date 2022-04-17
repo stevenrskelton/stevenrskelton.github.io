@@ -1,3 +1,5 @@
+//https://www.stevenskelton.ca/emoji-progress-bar-for-sass-integrations
+
 class TextProgressBar(progressCharacters: Array[_]) {
 
   def bar(progress: Float, width: Int): String = {

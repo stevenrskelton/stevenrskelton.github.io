@@ -1,3 +1,5 @@
+//https://www.stevenskelton.ca/scala-sbt-publishing-to-github-packages/
+
 lazy val publishToGithubPackages = taskKey[Unit]("Publish Jar to Github Packages")
 publishToGithubPackages := {
   val githubRepository = sys.env.get("GITHUB_REPOSITORY").getOrElse(throw new Exception("You must set environmental variable GITHUB_REPOSITORY, eg: owner/repository"))
