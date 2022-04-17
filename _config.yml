@@ -51,7 +51,6 @@ timezone: America/New_York # https://en.wikipedia.org/wiki/List_of_tz_database_t
 
 include:
   - _pages
-  - page
 
 # Exclude from processing.
 # The following items will not be processed, by default. Create a custom list
