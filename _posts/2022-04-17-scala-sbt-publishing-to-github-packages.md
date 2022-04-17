@@ -29,7 +29,7 @@ For an activily maintained Github project, I was sad to see an identical 4 month
 [Without change the SBT file, I get a "java.io.IOException: Error writing to server" exception](https://github.com/djspiewak/sbt-github-packages/issues/48).  Even manually configuring SBT without the plugin couldn't resolve the issues, there might be an incompatibility with how my project is named or versioned that I just couldn't resolve.
 
 ## Über Jar
-<sup>aka: fat jar</sup>
+<sup>aka: fat or executable jar</sup>
 
 To complicate the issue further, I didn't just want to privately publish my standard artifacts, I want to publish an über jar.  Similar to how Docker creates an easy deploy with just 1 file, an über jar is similiar.  It is also similar to how a Java War file is a deployable package.
 Normal Jar files are lean, they only contain your compiled code and publish their dependencies in a POM file.  This is great for libraries, but in the case where the jar is meant to be a standalone executable all of the dependencies will need to be included.  This is an über jar, it is like a regular jar but includes the `.class` or `.jar` of all of your code's dependencies.
