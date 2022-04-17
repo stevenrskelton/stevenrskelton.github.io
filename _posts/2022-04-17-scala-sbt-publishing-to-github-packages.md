@@ -54,12 +54,12 @@ A second alternative approach would be to keep SBT, but create an SBT task to pu
 The command for our über jar will be something like:
 ```shell
 mvn deploy:deploy-file \
-        -Durl=https://maven.pkg.github.com/user/repo \
-        -DrepositoryId=github \
-        -Dfile=target/scala-2.13/project_2.13-version.jar \
-        -DgroupId=com.yourcompany \
-        -DartifactId=yourproject \
-        -Dversion=1.0.0
+  -Durl=https://maven.pkg.github.com/user/repo \
+  -DrepositoryId=github \
+  -Dfile=target/scala-2.13/project_2.13-version.jar \
+  -DgroupId=com.yourcompany \
+  -DartifactId=yourproject \
+  -Dversion=1.0.0
 ```
 There is an implicit file that the `repositoryId=github` parameter refers to, it expects your repository credentials for the `github` repository id to be stored in your `~/.m2/settings.xml` file.  Pleasantly there is way to manually specify where this file is located using `--settings=`, which will be important for us because our repository credentials for our Github Action are stored in Github.
 
@@ -207,14 +207,14 @@ This article is a little easier since there is only 1 über jar to publish. A ty
 
 The necessary changes for a monolithic project are very small, we will use other SBT packaging tasks instead of the `assembly` task in the plugin. There is are `mvn deploy:deploy-file` parameters to specify the pom file, and optionally source and JavaDoc jars.
 ```scala
-  val exe = s"""mvn deploy:deploy-file
-    -Durl=https://maven.pkg.github.com/$githubRepository
-    -DrepositoryId=github
-    -Dfile=${(Compile / packageBin).value}
-    -DpomFile=${(Compile / makePom).value}
-    -Dsources=${(Compile / packageSrc).value}
-    -Djavadoc=${(Compile / packageDoc).value}
-    --settings=target/settings.xml
+val exe = s"""mvn deploy:deploy-file
+  -Durl=https://maven.pkg.github.com/$githubRepository
+  -DrepositoryId=github
+  -Dfile=${(Compile / packageBin).value}
+  -DpomFile=${(Compile / makePom).value}
+  -Dsources=${(Compile / packageSrc).value}
+  -Djavadoc=${(Compile / packageDoc).value}
+  --settings=target/settings.xml
 """.stripLineEnd
 ``` 
 For monolithic libraries include _publishToGithubPackages.sbt_ instead of _publishAssemblyToGithubPackages.sbt_ and call _publishToGithubPackages_ instead of _publishAssemblyToGithubPackages_ in your Github Action.
