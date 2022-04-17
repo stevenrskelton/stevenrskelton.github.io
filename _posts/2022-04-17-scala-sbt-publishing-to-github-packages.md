@@ -201,6 +201,28 @@ jobs:
 
 And now we have working Github Package publishing of an über jar by adding only 2 files to our project.
 
+## Downloading using wget
+
+In the Github repository package page, for SNAPSOT artifacts there will a list of _Assets_ such as:
+```
+yourproject-0.1.0-20220417.184322-1.jar
+```
+Which correspond to the indicated artifact, such as:
+```
+<dependency>
+  <groupId>com.yourcompany</groupId>
+  <artifactId>yourproject</artifactId>
+  <version>0.1.0-SNAPSHOT</version>
+</dependency> 
+```
+These can be downloaded from the Github web page, or directly using a Maven URL of the form:
+```
+wget -d --header="Authorization: token {GITHUB_TOKEN}" \
+ "https://maven.pkg.github.com/{user}/{repository}/com/yourcompany/yourproject/0.1.0-SNAPSHOT/yourproject-0.1.0-20220417.184322-1.jar"
+```
+The exact URL will be in the Github Action logs.
+
+
 ## Publishing non-Über Jars
 
 This article is a little easier since there is only 1 über jar to publish. A typical library would also want to publish a dependency pom, javadoc jar and sources jar, plus those for any subprojects.
