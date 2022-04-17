@@ -178,7 +178,7 @@ on:
 The `GITHUB_TOKEN` isn't populated into ENV by default, so do this now. It will also need write privileges to packages to push to Github Packages.
 ```yaml
 env:
-  GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}  
+  GITHUB_TOKEN: ${{-"{{"-}}secrets.GITHUB_TOKEN}}  
 permissions:
   contents: read
   packages: write
