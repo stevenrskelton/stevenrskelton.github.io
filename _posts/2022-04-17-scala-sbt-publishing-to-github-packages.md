@@ -29,7 +29,7 @@ For an activily maintained Github project, I was sad to see an identical 4 month
 [Without change the SBT file, I get a "java.io.IOException: Error writing to server" exception](https://github.com/djspiewak/sbt-github-packages/issues/48).  Even manually configuring SBT without the plugin couldn't resolve the issues, there might be an incompatibility with how my project is named or versioned that I just couldn't resolve.
 
 ## Über Jar
-<sup>aka: fat or executable jar</sup>
+<sup>aka: fat jar, uber jar, or executable jar</sup>
 
 _**Steps to publish regular library jars is [included as an appendix](#publishing-non-über-jars)**_
 
