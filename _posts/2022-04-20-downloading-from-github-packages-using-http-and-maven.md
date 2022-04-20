@@ -9,9 +9,11 @@ tags:
 Github Packages is a Maven compatible respository and is accessible independent of Github. This article expands on alternative access to these files, such as direct download URLs and browsing using Maven metadata. When working outside of Github Actions, it is important to be aware of Github's tier pricing, the free tier is currently:
 
 <div style="text-align: center;">
+
 | Artifact Storage | Data Transfer Out within a Github Action | Data Transfer Out outside of a Github Action |
 |:----------------:|:----------------------------------------:|:--------------------------------------------:|
 |      500MB       |                Unlimited                 |                1GB per Month                 |
+
 </div>
 
 It follows that using Github Packages as a Maven repository is best done through a proxy (such as Artifactory or Nexus) to cache files and minimize external data transfer.
@@ -161,7 +163,9 @@ Outbound bandwidth caps/cost makes Github Actions a more logical choice for tran
 The `md5` and `sha1` are meant for use in integrity validation.  In a multi-hop or cloud situation it is quite possible intermediate storage (such as S3) poses risks as an attack vector, opportunity for partial transfers, or file corruption. Even if Github servers and the final deployment server are secure, if artifacts pass though a layer with security administered by a separate authority mistakes can happen. A final `md5` comparision directly to the Github Packages hosted md5 file can ensure the correct artifacts were properly copied with little complexity or performance overhead.
 
 <div style="text-align: center;">
+
 ![M55 Validation](/assets/images/2022/04-20/md5validation.png)
+
 </div>
 
 Another use is in version monitoring and publication. For Continuous Delivery pipelines that stop short of deployment upgrading, there can be a need for version publication and monitoring.  Applications or tools can directly use Github Packages metadata to monitor release versions to provide update notification on projects that are not managed by a formal package manager.
