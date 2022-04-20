@@ -32,5 +32,9 @@ wget -d --header="Authorization: token {GITHUB_TOKEN}" \
 The exact URL will be in the Github Action logs.
 
 ```
-mvn dependency:copy -Dartifact=org.scalariform:scalariform_2.9.1-SNAPSHOT:0.1.1 -DoutputDirectory=.
+mvn dependency:copy \
+  -Dartifact=org.scalariform:scalariform_2.9.1-SNAPSHOT:0.1.1 \
+  -DoutputDirectory=. \
+  -DrepositoryId=github '
+  --global-settings settings.xml
 ```
