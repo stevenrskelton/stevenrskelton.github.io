@@ -205,7 +205,7 @@ And now we have working Github Package publishing of an über jar by adding only
 
 ## Downloading using wget
 
-A separate article {% post_link 2022-04-20-downloading-from-github-packages-using-http-and-maven.md %} has instructions on how to browse and download artifacts from Github Packages using HTTP and Maven.
+A separate article {% post_url 2022-04-20-downloading-from-github-packages-using-http-and-maven.md %} has instructions on how to browse and download artifacts from Github Packages using HTTP and Maven.
 
 ## Publishing non-Über Jars
 

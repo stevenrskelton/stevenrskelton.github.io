@@ -1,8 +1,8 @@
 ---
 title: "Github Actions Written in Scala SBT"
 categories:
-- Platform
+  - Platform
 tags:
-- Github
+  - Github
 published: false
 ---

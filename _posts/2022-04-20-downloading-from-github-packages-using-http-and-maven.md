@@ -150,7 +150,7 @@ mvn dependency:copy \
   -DrepositoryId=github '
   --global-settings settings.xml
 ```
-The benefit here is that this will take advantage of a separate `settings.xml` containing the credentials to the `github` repository, useful if the `wget` or `curl` command won't have access to the `GITHUB_TOKEN` or if this command will be executed within a Github Action similiar to how {% post_link 2022-04-17-scala-sbt-publishing-to-github-packages.md %} publishes Maven artifacts using `mvn deploy:deploy-file`.
+The benefit here is that this will take advantage of a separate `settings.xml` containing the credentials to the `github` repository, useful if the `wget` or `curl` command won't have access to the `GITHUB_TOKEN` or if this command will be executed within a Github Action similiar to how {% post_url 2022-04-17-scala-sbt-publishing-to-github-packages.md %} publishes Maven artifacts using `mvn deploy:deploy-file`.
 
 ## Security, Validation and Upgrade Notification Applications
 
