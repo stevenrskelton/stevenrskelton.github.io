@@ -14,11 +14,11 @@ Client-side unit tests usually only have two options: executing calls against a 
 
 An alternative approach available within Finagle: a pre-populated query cache on the client side. In my article [Finagle Query Cache with Guava](http://stevenskelton.ca/finagle-query-cache-with-guava/) the idea of using a Filter as a means of intercepting and short circuiting service calls was demonstrated. Instead of filling the cache at runtime, the known service calls can be loaded into a static map at compile.
 
-Capturing the necessary unit test request/response pairs is quite simple using a [Finagle LoggingFilter](https://github.com/twitter/finagle/blob/master/finagle-core/src/main/scala/com/twitter/finagle/filter/LoggingFilter.scala), but it’s hard to handle the binary output. A cleaner, and more developer friendly approach is to translate the binary data into JSON, an approach broached in {% post_link 2013-08-03-developer-friendly-thrift-request-logging %}.
+Capturing the necessary unit test request/response pairs is quite simple using a [Finagle LoggingFilter](https://github.com/twitter/finagle/blob/master/finagle-core/src/main/scala/com/twitter/finagle/filter/LoggingFilter.scala), but it’s hard to handle the binary output. A cleaner, and more developer friendly approach is to translate the binary data into JSON, an approach broached in [Developer Friendly Thrift Request Logging]({% post_url 2013-08-03-developer-friendly-thrift-request-logging %}).
 
 The advantage of re-encoding to `TJSONProtocol` is that mocked data can be contained directly within Scala files as opposed to external resources. Another advantage is the ability to log human readable output directly to the console.
 
-Using `ProtocolHelpers` class previously constructed in {% post_link 2013-08-03-developer-friendly-thrift-request-logging %} we can execute our `TProtocol↔TJSONProtocol` reserialization:
+Using `ProtocolHelpers` class previously constructed in [Developer Friendly Thrift Request Logging]({% post_url 2013-08-03-developer-friendly-thrift-request-logging %}) we can execute our `TProtocol↔TJSONProtocol` reserialization:
 
 ```scala
 import com.twitter.finagle.{ Service, SimpleFilter }

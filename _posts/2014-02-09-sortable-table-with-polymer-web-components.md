@@ -110,7 +110,7 @@ Using overline and underline to indicate descending and ascending sorting respec
 </template>
 ```
 
-The actual row sorting will be performed using a Polymer Filter applied to the row template data. For an introduction on Polymer Filters, I have written an article: {% post_link 2014-02-06-polymer-data-binding-filters %}.
+The actual row sorting will be performed using a Polymer Filter applied to the row template data. For an introduction on Polymer Filters, I have written an article: [Polymer Data Binding Filters]({% post_url 2014-02-06-polymer-data-binding-filters %}).
 
 ```js
 PolymerExpressions.prototype.sortByKey = function(array, key, desc) {
