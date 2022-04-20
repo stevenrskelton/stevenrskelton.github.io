@@ -72,6 +72,10 @@ plugins:
   - jekyll-feed
   - jemoji
   - jekyll-include-cache
+  - jekyll-post-link
+
+whitelist:
+  - jekyll-post-link
 
 author:
   name   : "Steven Skelton"
