@@ -147,7 +147,7 @@ class FixedSizeCache(methodsToCache: Seq[String], val maxSizeMegabytes: Int = 10
 }
 ```
 
-As a final note, an assumption has been made that the `Array[Byte]` is encoded `TBinaryProtocol`. Alternativily, a `TProtocolFactory` could have been supplied in the `AbstractCacheFilter` constructor, and fields such as `SeqId` could be obtained by calling `readMessageBegin`. This alternative approach is revisited later in {% link _posts/2013-08-13-thrift-client-side-caching-to-speed-up-unit-tests.md %}.
+As a final note, an assumption has been made that the `Array[Byte]` is encoded `TBinaryProtocol`. Alternativily, a `TProtocolFactory` could have been supplied in the `AbstractCacheFilter` constructor, and fields such as `SeqId` could be obtained by calling `readMessageBegin`. This alternative approach is revisited later in {% post_link 2013-08-13-thrift-client-side-caching-to-speed-up-unit-tests %}.
 
 {%
   include downloadsources.html
