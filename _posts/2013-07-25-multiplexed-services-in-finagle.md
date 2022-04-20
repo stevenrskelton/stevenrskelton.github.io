@@ -194,7 +194,7 @@ The only minor issue I’ve encountered are the unavoidable breakages to any Fil
 </td></tr>
 <tr><td>
 <p><i>steven on September 20, 2013 at 4:55 pm said:</i></p>
-<p>That’s a very strange error, the server shouldn’t be modifying the SeqId. I would look closely into any other Filters.<br/>You can also try printing the Thrift transport to the console using {% post_link 2013-08-03-developer-friendly-thrift-request-logging %}</p>
+<p>That’s a very strange error, the server shouldn’t be modifying the SeqId. I would look closely into any other Filters.<br/>You can also try printing the Thrift transport to the console using [Developer Friendly Thrift Request Logging]({% post_url 2013-08-03-developer-friendly-thrift-request-logging %})</p>
 <p>I’ve commited Specs2 tests into GitHub for my code examples; you can compare your setup to mine:<br/>https://github.com/stevenrskelton/Blog</p>
 </td></tr>
 <tr><td>
