@@ -162,4 +162,4 @@ The `md5` and `sha1` are meant for use in integrity validation.  In a multi-hop 
 
 Another use is in version monitoring and publication. For Continuous Delivery pipelines that stop short of deployment upgrading, there can be a need for version publication and monitoring.  Applications or tools can directly use Github Packages metadata to monitor release versions to provide update notification on projects that are not managed by a formal package manager.
 
-These are two practical uses of directly accessing Github Package files outside of a Github Action.  Both will not accure significant use of external bandwidth and provide benefits in custom CI/CD pipelines. 
+These are two practical uses of directly accessing Github Package files outside of a Github Action.  Neither will incure significant use of external bandwidth, and both can provide flexibility in custom CI/CD pipelines. 
