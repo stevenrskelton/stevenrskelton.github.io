@@ -27,7 +27,7 @@ In the case of Lambda function URLs, AWS will expose `https://<url-id>.lambda-ur
 ```JSON
 [
   { "symbol": "SPY", "time": 1660229200, "prices": "eyJyZWd1bGFyTWFya2V0UHJpY2UiOjQxOS43OCwicHJldmlvdXNDbG9zZSI6NDIwLjAwfQ==" },
-  { "symbol": "SPY", "time": 1660142800, "prices": "eyJyZWd1bGFyTWFya2V0UHJpY2UiOjQxMi42NywicHJldmlvdXNDbG9zZSI6NDE5LjMzfQ==" }
+  { "symbol": "SPY", "time": 1660142800, "prices": "eyJyZWd1bGFyTWFya2V0UHJpY2UiOjQxMi42NywicHJldmlvdXNDbG9zZSI6NDE5LjMzfQ==" },
   { "symbol": "SPY", "time": 1660056400, "prices": "eyJyZWd1bGFyTWFya2V0UHJpY2UiOjQxOC4xMiwicHJldmlvdXNDbG9zZSI6NDE4Ljk4fQ==" }  
 ]
 ```
@@ -38,7 +38,7 @@ import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.annotation.JsonProp
 
 class StockPriceItem:
   @JsonProperty("symbol") var stockSymbol: String = ""
-  @JsonProperty("time") var time: Long = ""
+  @JsonProperty("time") var time: String = ""
   @JsonProperty("prices") var prices: String = ""
 
 class Handler extends RequestHandler[java.util.List[StockPriceItem], String] :
