@@ -25,7 +25,11 @@ The JSON payload depends on what generated the event, the AWS SDK includes convi
 In the case of Lambda function URLs, AWS will expose `https://<url-id>.lambda-url.<region>.on.aws` and then use Jackson to convert the POST body of the request into the POJO specified in your code.  Consider a POST JSON:
 
 ```JSON
-{ "symbol": "SPY", "time": 1660229277, "prices": "ewogICJyZWd1bGFyTWFya2V0UHJpY2UiOjQyMy41MiwKICAicHJldmlvdXNDbG9zZSI6NDE5Ljk5LAp9"
+[
+  { "symbol": "SPY", "time": 1660229200, "prices": "eyJyZWd1bGFyTWFya2V0UHJpY2UiOjQxOS43OCwicHJldmlvdXNDbG9zZSI6NDIwLjAwfQ==" },
+  { "symbol": "SPY", "time": 1660142800, "prices": "eyJyZWd1bGFyTWFya2V0UHJpY2UiOjQxMi42NywicHJldmlvdXNDbG9zZSI6NDE5LjMzfQ==" }
+  { "symbol": "SPY", "time": 1660056400, "prices": "eyJyZWd1bGFyTWFya2V0UHJpY2UiOjQxOC4xMiwicHJldmlvdXNDbG9zZSI6NDE4Ljk4fQ==" }  
+]
 ```
 
 Which would have a Lambda function signature of:
@@ -101,6 +105,6 @@ Standard Scala plugins,
 {% 
   include github_project.html 
   name="AWS Lambda DynamoDB importer"
-  url="https://github.com/stevenrskelton/aws-lambda-dynamo-import"
-  description="Lambda function that inserts new items into a DynamoDB table"
+  url="https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer"
+  description="Lambda function Url that inserts into a DynamoDB table"
 %}
