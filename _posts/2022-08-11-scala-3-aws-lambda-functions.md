@@ -82,12 +82,13 @@ A small performance optimization of initializing any clients into the global sta
 ## Jar files
 
 There is a breakdown of:
-||Size||Name|| ||
-|6.9 MB|aws-lambda-java-core|Mandatory|
+| Size | Name                        |         |
+|------|-----------------------------|---------|
+|6.9 MB|aws-lambda-java-core         |Mandatory|
 |2.2 MB|aws-lambda-java-serialization|Optional to support custom POJOs|
-|1.2 MB|Scala 3.1|Scala 3 depends on Scala 2|
-|5.7 MB|Scala 2.13||
-|9.9 MB|awssdk / dynamodb|Mandatory for interacting with other AWS services|
+|1.2 MB|Scala 3.1                    |Scala 3 depends on Scala 2|
+|5.7 MB|Scala 2.13                   | |
+|9.9 MB|awssdk / dynamodb            |Mandatory for interacting with other AWS services|
 
 The minimal Java artifact size would the size of the core library at 6.9MB. 
 Using Scala 2 adds only 5.7MB, and bumping up to Scala 3 only adds another 1.2MB.
