@@ -86,11 +86,14 @@ Maintaining lightweight resource usage is the key to keeping execution costs low
 |------|-----------------------------|--------------------------------------------------|
 |6.9 MB|aws-lambda-java-core         |Mandatory                                         |
 |2.2 MB|aws-lambda-java-serialization|Optional to support custom POJOs                  |
-|9.9 MB|awssdk-dynamodb              |Mandatory for interacting with other AWS services |
+|9.9 MB|awssdk-[1st]-service         |Mandatory for interacting with other AWS services |
+|2.0 MB|awssdk-[additional]-service  |For each additional AWS service after the first   |
 |5.7 MB|Scala 2.13                   |Mandatory for Scala 2/3                           |
 |1.2 MB|Scala 3.1                    |Mandatory only for Scala 3                        |
 
 Note that AWS Lambda Layers allows shared `/lib` folder however all dependencies continue to contribute to runtime resource usage. Mandatory libraries make it unlikely to be able to run any JVM Lambda with the minimal 128MB RAM, typically the requiring at least 150MB.
+
+While the AWS SDK represents 9.9MB above, the majority is contributed by shared libraries rather than code specific to the DynamoDB service.  Additional services can be added with minimal size increase, for example adding the `awssdk-s3` to support read/write from S3 would be 3 MB, or `awsdsk-sns` to support Notifications would be 1 MB.
 
 
 ## CI/CD
