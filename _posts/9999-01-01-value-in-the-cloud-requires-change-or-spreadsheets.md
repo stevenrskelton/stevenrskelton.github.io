@@ -1,7 +1,9 @@
 ---
-title: "Transformative Cloud Migrations"
+title: "Value in the Cloud Requires Change or Spreadsheets"
 categories:
   - Platform
+tags:
+  - AWS
 published: false
 ---
 Math explanation of variance decrease as N increases.
