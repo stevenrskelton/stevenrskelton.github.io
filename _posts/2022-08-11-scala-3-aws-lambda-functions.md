@@ -78,28 +78,20 @@ A small performance optimization of initializing any clients into the global sta
 
 # Automated deployment from Github Actions
 
-## Jar files
+## Artifact Sizes of Java versus Scala
 
-There is a breakdown of:
-| Size | Name                        |         |
-|------|-----------------------------|---------|
-|6.9 MB|aws-lambda-java-core         |Mandatory|
-|2.2 MB|aws-lambda-java-serialization|Optional to support custom POJOs|
-|1.2 MB|Scala 3.1                    |Scala 3 depends on Scala 2|
-|5.7 MB|Scala 2.13                   | |
-|9.9 MB|awssdk / dynamodb            |Mandatory for interacting with other AWS services|
+Maintaining lightweight resource usage is the key to keeping execution costs low.  Unfortunately the overhead of the JVM already places it behind Python and NodeJS deployments, but less than a full containerized build. Library dependencies should be kept to the minimum since JVM artifacts do not perform tree-shaking code removal that Go or GraalVM will.
 
-The minimal Java artifact size would the size of the core library at 6.9MB. 
-Using Scala 2 adds only 5.7MB, and bumping up to Scala 3 only adds another 1.2MB.
+| Size | Name                        |                                                  |
+|------|-----------------------------|--------------------------------------------------|
+|6.9 MB|aws-lambda-java-core         |Mandatory                                         |
+|2.2 MB|aws-lambda-java-serialization|Optional to support custom POJOs                  |
+|9.9 MB|awssdk-dynamodb              |Mandatory for interacting with other AWS services |
+|5.7 MB|Scala 2.13                   |Mandatory for Scala 2/3                           |
+|1.2 MB|Scala 3.1                    |Mandatory only for Scala 3                        |
 
-The largest addition is adding the AWS SDK which is necessary to access other AWS services
+Note that AWS Lambda Layers allows shared `/lib` folder however all dependencies continue to contribute to runtime resource usage. Mandatory libraries make it unlikely to be able to run any JVM Lambda with the minimal 128MB RAM, typically the requiring at least 150MB.
 
-
-- 1.2 MB Scala 3.1
-- 5.7 MB Scala 2.13
-- 6.9 MB com.amazonaws / aws-lambda-java-core
-- 2.2 MB com.amazonaws / aws-lambda-java-serialization
-- 9.9 MB software.amazon.awssdk / dynamodb
 
 ## CI/CD
 
