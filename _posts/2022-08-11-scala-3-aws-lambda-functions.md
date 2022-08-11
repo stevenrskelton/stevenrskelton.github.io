@@ -14,10 +14,10 @@ AWS Lambda offer the ability to run code functions without a server.  Basically 
 
 # Basics of AWS Lambda
 
-Amazon AWS pioneered the FaaS (Functions as a Service) space in 2014, but Microsoft Azure and Google Cloud quickly followed with their own products in 2016.  In AWS Lambdas take a JSON event parameter and a `Context` that represents the execution environment:
+Amazon AWS pioneered the FaaS (Functions as a Service) space in 2014, but Microsoft Azure and Google Cloud quickly followed with their own products in 2016.  In AWS Lambdas take a JSON event parameter (the primative form of a JSON object is a Map) and a `Context` that represents the execution environment:
 
 ```scala
-def handleRequest(event: JSON, context: Context): String
+def handleRequest(event: java.util.Map[String, String], context: Context): String
 ```
 
 The JSON payload depends on what generated the event, the AWS SDK includes convinience classes which will automatically be used if specified in your code but this also extends to custom POJOs that have been correctly annotated using Jackson annotations.
