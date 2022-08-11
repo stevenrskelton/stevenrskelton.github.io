@@ -42,8 +42,7 @@ class StockPriceItem:
   @JsonProperty("prices") var prices: String = ""
 
 class Handler extends RequestHandler[java.util.List[StockPriceItem], String] :
-  override def handleRequest(event: java.util.List[StockPriceItem], context: Context): String =
-    ???
+  override def handleRequest(event: java.util.List[StockPriceItem], context: Context): String = ???
 ```
 That's it.  And in this function you can do _anything_.  The function has predefined CPU and RAM limits which are configurable between 128MB and 10GB of RAM, with up to 10GB of ephemiral `/tmp` storage.
 
