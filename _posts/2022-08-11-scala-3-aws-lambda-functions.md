@@ -8,43 +8,59 @@ tags:
   - Github
 published: false
 ---
+{% include postlogo.html title="Amazon Lambda" src="/assets/images/2022/08/Amazon_Lambda_architecture_logo.svg.png" %}
 # What is AWS Lambda
-AWS Lambda offer the ability to run code functions without a server.  Basically, JSON events are passed to the Lambda, and AWS allows the block of code up to 15 minutes to do anything.  The source for events can be anything, AWS has configured all of their AWS products to emit events - for example uploading a file to S3 creates a JSON blob that contains some information about the file.  Each Lambda can only listen to 1 source of events, and a very generic source would be to have Lambda listen to HTTP events at a specific URL, and the JSON would be the body of the request.
+AWS Lambda offer the ability to run code functions without a server.  Basically standalone functions that receive JSON as a parameter and have up to 15 minutes to do anything. The source of the JSON event can be anything, AWS has configured most of their AWS products to emit events; for example uploading a file to S3 creates JSON that contains information about the file. Lambdas are meant to be simple and shortlived code snippets, so each Lambda can only listen to 1 source for events (although you can proxy multiple types of events through a single source).  The most generic source for events is to listen to HTTP requests on a public URL, and we'll cover how that can be done in this article.
 
-All Lambda functions take a JSON event parameter and a `Context` that represents the execution environment:
+# Basics of AWS Lambda
+
+Amazon AWS pioneered the FaaS (Functions as a Service) space in 2014, but Microsoft Azure and Google Cloud quickly followed with their own products in 2016.  In AWS Lambdas take a JSON event parameter and a `Context` that represents the execution environment:
 
 ```scala
-def handleRequest(event: JsonObject, context: Context): String
+def handleRequest(event: JSON, context: Context): String
 ```
-AWS Lambda is smart enough to use the Jackson JSON library to parse the event, so the `JsonObject` can be parsed to any POJO you would expect.  In this example, lets define an arbitray data class (in Scala 3):
+
+The JSON payload depends on what generated the event, the AWS SDK includes convinience classes which will automatically be used if specified in your code but this also extends to custom POJOs that have been correctly annotated using Jackson annotations.
+
+In the case of Lambda function URLs, AWS will expose `https://<url-id>.lambda-url.<region>.on.aws` and then use Jackson to convert the POST body of the request into the POJO specified in your code.  Consider a POST JSON:
+
+```JSON
+{ "symbol": "SPY", "time": 1660229277, "prices": "ewogICJyZWd1bGFyTWFya2V0UHJpY2UiOjQyMy41MiwKICAicHJldmlvdXNDbG9zZSI6NDE5Ljk5LAp9"
+```
+
+Which would have a Lambda function signature of:
 ```scala
+import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.annotation.JsonProperty
+
 class StockPriceItem:
-  @JsonProperty("stockId") var stockId: String = ""
-  @JsonProperty("tradingDay") var tradingDay: String = ""
-  @JsonProperty("proto") var proto: String = ""
-```
-Then the signature for the Lambda function would be:
-```scala
+  @JsonProperty("symbol") var stockSymbol: String = ""
+  @JsonProperty("time") var time: Long = ""
+  @JsonProperty("prices") var prices: String = ""
+
 class Handler extends RequestHandler[java.util.List[StockPriceItem], String] :
+  override def handleRequest(event: java.util.List[StockPriceItem], context: Context): String =
+    ???
 ```
-That's it.  And in this function you can do _anything_.  The function has predefined CPU and RAM limits, but they can be set between 128MB and 10GB of RAM, with up to 10GB of ephemiral `/tmp` storage.
+That's it.  And in this function you can do _anything_.  The function has predefined CPU and RAM limits which are configurable between 128MB and 10GB of RAM, with up to 10GB of ephemiral `/tmp` storage.
 
-# Scala 3
-One of the con
+# Scala and Other Languages
 
-https://acloudguru.com/blog/engineering/serverless-showdown-aws-lambda-vs-azure-functions-vs-google-cloud-functions
+The 2 main factors to consider when implementing Lambda functions are:
+- execution time per call
+- number of calls.
 
-https://mikhail.io/serverless/coldstarts/aws/languages/
+While there is discussion about first-call latency (https://mikhail.io/serverless/coldstarts/aws/languages/) it tends to affect only a small number of usecases.  AWS will keep most lambda code hot-loaded for hours so which the shock of even comparing a 20MB Java JAR to 50 lines of Python code boils down to nothing.  There are optimizations that can be had both in aggregate resource cost of execution between using Python versus the JVM it would easily be outweighed by initial engineering costs by forcing developers to work outside their language of expertise.
 
-https://www.datadoghq.com/state-of-serverless/
-
+According to https://www.datadoghq.com/state-of-serverless/ Python is the most popular language for Lambda, with NodeJS being a close second.  This aligns with the lightweight market that Lambdas excel at. However Datadog also indicates that over 60% of large organizations have deployed Lambda in 3 or more languages meaning that they are reaching into more stuctured languages such as Java, Go, or .Net for other, more likely complex, tasks.
 
 # Common Action: Interacting with an AWS Service
+
 ## Inserting items into AWS DynamoDB
 
-## AWS permissions
+### AWS permissions
 
-Setting this up as a global variable so that is can be reused between concurrent requests and while hot-loaded.
+Pure computational request use-cases are rare and there are better AWS services available for proxying of requests, the most Lambda functions will have 1 or more interactions with another AWS service.  Thankfully the AWS SDK has streamlined this process.  The AWS permissions are available using their `DefaultCredentialsProvider`, so the code to access an AWS service such as DynamoDB is a quick instantiation:
+
 ```scala
 val dynamoDbClient = DynamoDbClient.builder
   .credentialsProvider(DefaultCredentialsProvider.create)
@@ -52,14 +68,16 @@ val dynamoDbClient = DynamoDbClient.builder
   .build
 ```
 
+A small performance optimization of initializing any clients into the global static scope will allow subsequent requests to reuse them while the Lambda is hot-loaded.
+
+
+
 
 # Automated deployment from Github Actions
 
+Of course AWS has their own internal CI/CD pipeline similiar to GitHub, but it is important to continue to view cloud providers as commodity and interchangeable.  Github (which is hosted in Azure) can easily interact with AWS.
 
-Describes how to get setup a function Url Lambda Function and CI/CD pipeline from Github
-
-Deployed as a single assembly JAR, or using AWS Lambda Layers to have shared `/lib`.
-Standard Scala plugins, 
+The Github Action is a short snippet of YAML:
 ```yaml
 - name: Build Assembly
   run: sbt assembly
@@ -72,6 +90,12 @@ Standard Scala plugins,
     AWS_SECRET_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
     AWS_REGION: "us-east-1"
 ```
+
+
+Describes how to get setup a function Url Lambda Function and CI/CD pipeline from Github
+
+Deployed as a single assembly JAR, or using AWS Lambda Layers to have shared `/lib`.
+Standard Scala plugins, 
 
 
 {% 
