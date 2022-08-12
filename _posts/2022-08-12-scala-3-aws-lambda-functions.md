@@ -6,24 +6,45 @@ categories:
 tags:
   - AWS
   - Github
-published: false
 ---
 {% include postlogo.html title="Amazon Lambda" src="/assets/images/2022/08/Amazon_Lambda_architecture_logo.svg.png" %}
 # What is AWS Lambda
 AWS Lambda offer the ability to run code functions without a server.  Basically standalone functions that receive JSON as a parameter and have up to 15 minutes to do anything. The source of the JSON event can be anything, AWS has configured most of their AWS products to emit events; for example uploading a file to S3 creates JSON that contains information about the file. Lambdas are meant to be simple and shortlived code snippets, so each Lambda can only listen to 1 source for events (although you can proxy multiple types of events through a single source).  The most generic source for events is to listen to HTTP requests on a public URL, and we'll cover how that can be done in this article.
 
+That's it.  And in this function you can do _anything_.  The function has predefined CPU and RAM limits which are configurable between 128MB and 10GB of RAM, with up to 10GB of ephemiral `/tmp` storage.
+
 # Basics of AWS Lambda
 
-Amazon AWS pioneered the FaaS (Functions as a Service) space in 2014, but Microsoft Azure and Google Cloud quickly followed with their own products in 2016.  In AWS Lambdas take a JSON event parameter (the primative form of a JSON object is a Map) and a `Context` that represents the execution environment:
+Amazon AWS pioneered the FaaS (Functions as a Service) space in 2014, but Microsoft Azure and Google Cloud quickly followed with their own products in 2016.  An AWS Lambdas takes an `event` parameter and a `Context` that represents the execution environment:
 
 ```scala
-def handleRequest(event: java.util.Map[String, String], context: Context): String
+def handleRequest(event: Event, context: Context): Response
 ```
 
-The JSON payload depends on what generated the event, the AWS SDK includes convinience classes which will automatically be used if specified in your code but this also extends to custom POJOs that have been correctly annotated using Jackson annotations.
+The source of the `event` will determine what it is, within AWS all events are JSON however AWS will automatically parse the JSON using an internal Jackson library to any POJO specified in the function.  For convinience AWS has made a `aws-lambda-java-events` package that contains classes for all AWS events. Similarily, any class that can be serialized by Jackson can be used as a `Response` output.
 
-In the case of Lambda function URLs, AWS will expose `https://<url-id>.lambda-url.<region>.on.aws` and then use Jackson to convert the POST body of the request into the POJO specified in your code.  Consider a POST JSON:
+When AWS Lambdas are configured as public Internet endpoints they will be accessible at `https://<url-id>.lambda-url.<region>.on.aws`.  In this case, the most appropriate `Event` and `Response` classes to use are of the APIGateway:
 
+```scala
+import com.amazonaws.services.lambda.runtime.events.{APIGatewayV2HTTPEvent, APIGatewayV2HTTPResponse}
+
+class Handler extends RequestHandler[APIGatewayV2HTTPEvent, APIGatewayV2HTTPResponse] :
+  override def handleRequest(event: APIGatewayV2HTTPEvent, context: Context): APIGatewayV2HTTPResponse =
+```
+
+The `APIGatewayV2HTTPEvent` contains fields for standard HTTP information including headers, IP and the body as a `String` when available.  Fortunately binary POST data is supported via Base64 encoding keeping Lambdas flexible to all usecases.  Streaming requests are also supported but beyond the scope of this introduction.
+
+# AWS DynamoDB Usecase
+
+Access to all AWS services is available to the Lambda using the AWS SDK.  A simple use-case to study is writing POST data to DynamoDB.
+For sample data, consider the need to write price information about stocks at various times. Our DynamoDB `stock_prices` table looks like:
+```
+Partition key: symbol (String)
+Sort key: time (Number)
+Attribute1: prices (Binary)
+```
+
+Consider a POST payload to our Lambda of:
 ```JSON
 [
   { "symbol": "SPY", "time": 1660229200, "prices": "eyJyZWd1bGFyTWFya2V0UHJpY2UiOjQxOS43OCwicHJldmlvdXNDbG9zZSI6NDIwLjAwfQ==" },
@@ -31,20 +52,63 @@ In the case of Lambda function URLs, AWS will expose `https://<url-id>.lambda-ur
   { "symbol": "SPY", "time": 1660056400, "prices": "eyJyZWd1bGFyTWFya2V0UHJpY2UiOjQxOC4xMiwicHJldmlvdXNDbG9zZSI6NDE4Ljk4fQ==" }  
 ]
 ```
-
-Which would have a Lambda function signature of:
-```scala
-import com.amazonaws.lambda.thirdparty.com.fasterxml.jackson.annotation.JsonProperty
-
-class StockPriceItem:
-  @JsonProperty("symbol") var stockSymbol: String = ""
-  @JsonProperty("time") var time: String = ""
-  @JsonProperty("prices") var prices: String = ""
-
-class Handler extends RequestHandler[java.util.List[StockPriceItem], String] :
-  override def handleRequest(event: java.util.List[StockPriceItem], context: Context): String = ???
+The pseudocode would be: 
 ```
-That's it.  And in this function you can do _anything_.  The function has predefined CPU and RAM limits which are configurable between 128MB and 10GB of RAM, with up to 10GB of ephemiral `/tmp` storage.
+request -> getBody -> parseItems(body) -> putN(item) -> response
+```
+
+## Parsing JSON
+
+One of the breakages in Scala 3 due to macros being removed is that Jackson deserialization will not work.  This means that JSON parsing has to be explicit, but for only 3 fields this is quite simple.
+```scala
+case class StockPriceItem(symbol: String, time: String, prices: String):
+  def this(jsonNode: JsonNode) = this(
+    jsonNode.field("symbol").get.asString,
+    jsonNode.field("time").get.asNumber,
+    jsonNode.field("prices").get.asString
+  )
+```
+Parsing a `String` to down individual `JsonNode` is done using the AWS SDK's internal JSON library:
+```scala
+import software.amazon.awssdk.protocols.jsoncore.{JsonNode, JsonNodeParser}
+
+val items = Option(event.getBody).withFilter(!_.isBlank).map {
+  json => 
+    JsonNodeParser.create.parse(json).asArray.asScala.map(StockPriceItem.apply)
+}
+```
+
+
+## Interacting with DynamoDB
+
+The first thing to consider is permissions.  Permissions can be attached to the event, or we can use the permissions that the Lambda is currently executing under.  The currently executing credentials are available using their `DefaultCredentialsProvider` in the AWS SDK.
+
+```scala
+val dynamoDbClient = DynamoDbClient.builder
+  .credentialsProvider(DefaultCredentialsProvider.create)
+  .region(Region.US_EAST_1)
+  .build
+```
+
+While Lambda functions should be considered stateless, they are fror practicality reused if still in memory, called hot-loading. A small performance optimization to avoid reinitializing of the credential provider can be to put it into global/static scope.
+
+The DynamoDB client writes data to the table is via a `Map` request to `putItem`:
+```
+val dynamoDBAttributeMap = Map(
+  //writing String data
+  "symbol" -> AttributeValue.builder.s(symbol).build,
+  //writing Numberic data
+  "time" -> AttributeValue.builder.n(time).build,
+  //writing Binary data
+  "prices" -> AttributeValue.builder.b(SdkBytes.fromByteArray(pricesByteArray)).build
+)
+val request = PutItemRequest.builder.tableName("stock_prices").item(dynamoDBAttributeMap).build
+val putItemResponse = dynamoDbClient.putItem(request)
+```
+
+
+
+
 
 # Scala and Other Languages
 
@@ -62,17 +126,7 @@ According to https://www.datadoghq.com/state-of-serverless/ Python is the most p
 
 ### AWS permissions
 
-Pure computational request use-cases are rare and there are better AWS services available for proxying of requests, the most Lambda functions will have 1 or more interactions with another AWS service.  Thankfully the AWS SDK has streamlined this process.  The AWS permissions are available using their `DefaultCredentialsProvider`, so the code to access an AWS service such as DynamoDB is a quick instantiation:
-
-```scala
-val dynamoDbClient = DynamoDbClient.builder
-  .credentialsProvider(DefaultCredentialsProvider.create)
-  .region(Region.US_EAST_1)
-  .build
-```
-
-A small performance optimization of initializing any clients into the global static scope will allow subsequent requests to reuse them while the Lambda is hot-loaded.
-
+Pure computational request use-cases are rare and there are better AWS services available for proxying of requests, the most Lambda functions will have 1 or more interactions with another AWS service.  Thankfully the AWS SDK has streamlined this process.  
 
 
 
