@@ -9,9 +9,7 @@ tags:
 ---
 AWS Lambda offer the ability to run code functions without a server. Basically standalone functions that receive JSON as a parameter and have up to 15 minutes to do anything. The source of the JSON event can be anything, AWS has configured most of their AWS products to emit events; for example uploading a file to S3 creates JSON that contains information about the file. Lambdas are meant to be simple and shortlived code snippets, so each Lambda can only listen to 1 source for events (although you can proxy multiple types of events through a single source).  The most generic source for events is to listen to HTTP requests on a public URL, and we'll cover how that can be done in this article.
 
-{% include postlogo.html title="Amazon Lambda" src="/assets/images/2022/08/Amazon_Lambda_architecture_logo.svg.png" %} That's it; and in this function you can do _anything_.  The function has predefined CPU and RAM limits which are configurable between 128MB and 10GB of RAM, with up to 10GB of ephemiral `/tmp` storage.
-
-
+That's it; and in this function you can do _anything_.  The function has predefined CPU and RAM limits which are configurable between 128MB and 10GB of RAM, with up to 10GB of ephemiral `/tmp` storage.
 
 # Basics of AWS Lambda
 
