@@ -188,13 +188,15 @@ The Github Action is a short snippet of YAML:
     AWS_REGION: "us-east-1"
 ```
 
-# AWS Permission Configuration for Lamdbas
+# AWS Permission Configuration for Lambdas
 
 The CI/CD pipeline will automatically deploy to AWS, but the permissions and Lambda must be initially created.  See [Future Article Here]
 
 # Scala verus Python with AWS Lambda Functions
 
 There are many things to consider when chosing a programming language, see the full article at [Scala 3 verus Python with AWS Lambda Functions](% post_url 2022-08-17-scala-verus-python-aws-lambda-functions %).
+
+---
 
 {% 
   include github_project.html 
