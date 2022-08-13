@@ -8,9 +8,6 @@ tags:
   - Github
 ---
 {% include postlogo.html title="Amazon Lambda" src="/assets/images/2022/08/Amazon_Lambda_architecture_logo.svg.png" %}
-# What is AWS Lambda
-
-
 AWS Lambda offer the ability to run code functions without a server. Basically standalone functions that receive JSON as a parameter and have up to 15 minutes to do anything. The source of the JSON event can be anything, AWS has configured most of their AWS products to emit events; for example uploading a file to S3 creates JSON that contains information about the file. Lambdas are meant to be simple and shortlived code snippets, so each Lambda can only listen to 1 source for events (although you can proxy multiple types of events through a single source).  The most generic source for events is to listen to HTTP requests on a public URL, and we'll cover how that can be done in this article.
 
 That's it; and in this function you can do _anything_.  The function has predefined CPU and RAM limits which are configurable between 128MB and 10GB of RAM, with up to 10GB of ephemiral `/tmp` storage.
@@ -135,13 +132,13 @@ body
 
 ## Errors
 
-Handling errors always add complexity to code.
+Handling errors always add complexity to code. AWS exposes logging to CloudWatch through their `context` object, as well as SLF4J wrappers.  The way Lambdas work is that any unhandled exception will result in a `502 BAD GATEWAY`.  Non-200 errors can also be thrown if the output response can't be serialized to an expected output.  In this example, by choice we are choosing to only allow handled JSON parsing exceptions (caught and wrapped into a `ParseException`) be serialized to a 200 response, and all unhandled exceptions to fail the Lambda (as a 502).
 
 ```scala
 given lambdaLogger: LambdaLogger = context.getLogger
-```
 
-```scala
+case class ParseException(error: String, content: String) extends Exception(error)
+
 def errorToResult(ex: Throwable)(using lambdaLogger: LambdaLogger): APIGatewayV2HTTPResponse =
   ex match
     case ParseException(error, content) =>
@@ -152,10 +149,7 @@ def errorToResult(ex: Throwable)(using lambdaLogger: LambdaLogger): APIGatewayV2
       throw ex
 ```
 
-
-
-
-# Scala and Other Languages
+# Lambda in Scala versus Other Languages
 
 The 2 main factors to consider when implementing Lambda functions are:
 - execution time per call
@@ -164,16 +158,6 @@ The 2 main factors to consider when implementing Lambda functions are:
 While there is discussion about first-call latency (https://mikhail.io/serverless/coldstarts/aws/languages/) it tends to affect only a small number of usecases.  AWS will keep most lambda code hot-loaded for hours so which the shock of even comparing a 20MB Java JAR to 50 lines of Python code boils down to nothing.  There are optimizations that can be had both in aggregate resource cost of execution between using Python versus the JVM it would easily be outweighed by initial engineering costs by forcing developers to work outside their language of expertise.
 
 According to https://www.datadoghq.com/state-of-serverless/ Python is the most popular language for Lambda, with NodeJS being a close second.  This aligns with the lightweight market that Lambdas excel at. However Datadog also indicates that over 60% of large organizations have deployed Lambda in 3 or more languages meaning that they are reaching into more stuctured languages such as Java, Go, or .Net for other, more likely complex, tasks.
-
-# Common Action: Interacting with an AWS Service
-
-## Inserting items into AWS DynamoDB
-
-### AWS permissions
-
-Pure computational request use-cases are rare and there are better AWS services available for proxying of requests, the most Lambda functions will have 1 or more interactions with another AWS service.  Thankfully the AWS SDK has streamlined this process.  
-
-
 
 # Automated deployment from Github Actions
 
@@ -184,16 +168,16 @@ Maintaining lightweight resource usage is the key to keeping execution costs low
 | Size | Name                        |                                                  |
 |------|-----------------------------|--------------------------------------------------|
 |6.9 MB|aws-lambda-java-core         |Mandatory                                         |
-|2.2 MB|aws-lambda-java-serialization|Optional to support custom POJOs                  |
+|0.4 MB|aws-lambda-java-events       |Optional to support AWS event POJOs               |
+|2.2 MB|aws-lambda-java-serialization|Optional to support custom POJO serialization     |
 |9.9 MB|awssdk-[1st]-service         |Mandatory for interacting with other AWS services |
 |2.0 MB|awssdk-[additional]-service  |For each additional AWS service after the first   |
 |5.7 MB|Scala 2.13                   |Mandatory for Scala 2/3                           |
 |1.2 MB|Scala 3.1                    |Mandatory only for Scala 3                        |
 
-Note that AWS Lambda Layers allows shared `/lib` folder however all dependencies continue to contribute to runtime resource usage. Mandatory libraries make it unlikely to be able to run any JVM Lambda with the minimal 128MB RAM, typically the requiring at least 150MB.
+Note: AWS Lambda Layers allows shared `/lib` folder however all dependencies continue to contribute to runtime resource usage. Mandatory libraries make it unlikely to be able to run any JVM Lambda with the minimal 128MB RAM, typically the requiring at least 150MB.
 
 While the AWS SDK represents 9.9MB above, the majority is contributed by shared libraries rather than code specific to the DynamoDB service.  Additional services can be added with minimal size increase, for example adding the `awssdk-s3` to support read/write from S3 would be 3 MB, or `awsdsk-sns` to support Notifications would be 1 MB.
-
 
 ## CI/CD
 
@@ -202,23 +186,20 @@ Of course AWS has their own internal CI/CD pipeline similiar to GitHub, but it i
 The Github Action is a short snippet of YAML:
 ```yaml
 - name: Build Assembly
-  run: sbt assembly
+  run: sbt test assembly
 - name: AWS Update Lambda Action
   uses: stcalica/update-lambda@359ca7975ee5cc5c389fc84b0e11532e39f7b707
   with:
-    package: "./target/scala-3.1.3/aws-lambda-dynamo-import-assembly-0.1.0.jar"
+    package: "./target/scala-3.1.3/scala3-aws-lambda-dynamodb-importer-assembly-0.1.0.jar"
     function-name: "dynamo-import"
     AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     AWS_SECRET_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
     AWS_REGION: "us-east-1"
 ```
 
+# Configuration of AWS for Lamdba
 
-Describes how to get setup a function Url Lambda Function and CI/CD pipeline from Github
-
-Deployed as a single assembly JAR, or using AWS Lambda Layers to have shared `/lib`.
-Standard Scala plugins, 
-
+The CI/CD pipeline will automatically deploy to AWS, but the permissions and Lambda must be initially created.  To see how this is done, see [Future Article Here]
 
 {% 
   include github_project.html 
