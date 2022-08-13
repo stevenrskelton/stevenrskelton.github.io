@@ -149,19 +149,9 @@ def errorToResult(ex: Throwable)(using lambdaLogger: LambdaLogger): APIGatewayV2
       throw ex
 ```
 
-# Lambda in Scala versus Other Languages
+# Automated Deployment from Github Actions
 
-The 2 main factors to consider when implementing Lambda functions are:
-- execution time per call
-- number of calls.
-
-While there is discussion about first-call latency (https://mikhail.io/serverless/coldstarts/aws/languages/) it tends to affect only a small number of usecases.  AWS will keep most lambda code hot-loaded for hours so which the shock of even comparing a 20MB Java JAR to 50 lines of Python code boils down to nothing.  There are optimizations that can be had both in aggregate resource cost of execution between using Python versus the JVM it would easily be outweighed by initial engineering costs by forcing developers to work outside their language of expertise.
-
-According to https://www.datadoghq.com/state-of-serverless/ Python is the most popular language for Lambda, with NodeJS being a close second.  This aligns with the lightweight market that Lambdas excel at. However Datadog also indicates that over 60% of large organizations have deployed Lambda in 3 or more languages meaning that they are reaching into more stuctured languages such as Java, Go, or .Net for other, more likely complex, tasks.
-
-# Automated deployment from Github Actions
-
-## Artifact Sizes of Java versus Scala
+## Minimizing Artifact Size in Scala
 
 Maintaining lightweight resource usage is the key to keeping execution costs low.  Unfortunately the overhead of the JVM already places it behind Python and NodeJS deployments, but less than a full containerized build. Library dependencies should be kept to the minimum since JVM artifacts do not perform tree-shaking code removal that Go or GraalVM will.
 
@@ -179,7 +169,7 @@ Note: AWS Lambda Layers allows shared `/lib` folder however all dependencies con
 
 While the AWS SDK represents 9.9MB above, the majority is contributed by shared libraries rather than code specific to the DynamoDB service.  Additional services can be added with minimal size increase, for example adding the `awssdk-s3` to support read/write from S3 would be 3 MB, or `awsdsk-sns` to support Notifications would be 1 MB.
 
-## CI/CD
+## CI/CD Pipeline
 
 Of course AWS has their own internal CI/CD pipeline similiar to GitHub, but it is important to continue to view cloud providers as commodity and interchangeable.  Github (which is hosted in Azure) can easily interact with AWS.
 
@@ -197,9 +187,13 @@ The Github Action is a short snippet of YAML:
     AWS_REGION: "us-east-1"
 ```
 
-# Configuration of AWS for Lamdba
+# AWS Permission Configuration for Lamdbas
 
-The CI/CD pipeline will automatically deploy to AWS, but the permissions and Lambda must be initially created.  To see how this is done, see [Future Article Here]
+The CI/CD pipeline will automatically deploy to AWS, but the permissions and Lambda must be initially created.  See [Future Article Here]
+
+# Scala verus Python with AWS Lambda Functions
+
+There are many things to consider when chosing a programming language, see the full article at [Scala 3 verus Python with AWS Lambda Functions]({% post_url 2022-08-17-scala-verus-python-aws-lambda-functions %}).
 
 {% 
   include github_project.html 
