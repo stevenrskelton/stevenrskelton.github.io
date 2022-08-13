@@ -11,13 +11,13 @@ Today, as Principal Software Engineer at a global digital consulting company, he
 
 ### Executive Summary
 
-- 17 years in Internet software: 6 financial services, 8 e-commerce.
-- Best tools for the platform: Scala, C# .Net, and Dart Flutter,
-- Reactive: event-driven infrastructure and coding paradigms,
-- Cloud Architect: N-Tier, SOA, REST, API design, sidecar, CAP, layer abstraction.
-- R&D specialist: benefit analysis, feasibility, integration strategies, initial adoption timelines.
-- Data expert: algorithms, caching, full-text search, serialization, optimization.
-- Security: audits, SSO, OAuth, SAML, dual-hop impersonation, encryption, signed tokens.
+★ Experience: 16 total; 6 years financial services, 8 years e-commerce.
+★ Communication: technology evangelist, ways of working, project direction.
+★ Proactive: architectural runway, enterprise best practices, industry awareness.
+★ Cloud: scaling, resilient, secure, CAP and 95th percentile.
+★ R&D: benefit analysis, feasibility, integration strategies, adoption timelines.
+★ Data: algorithms, caching, serialization, read-write asymmetry, low latency streams.
+★ Security: audits, SSO, OAuth, SAML, impersonation, encryption.
 
 ### Github Repositories
 
