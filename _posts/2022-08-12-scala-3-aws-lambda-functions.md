@@ -200,5 +200,5 @@ There are many things to consider when chosing a programming language, see the f
   include github_project.html 
   name="AWS Lambda DynamoDB importer"
   url="https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer"
-  description="Lambda function Url that inserts into a DynamoDB table"
+  description="See the Complete Code on GitHub"
 %}
