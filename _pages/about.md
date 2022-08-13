@@ -11,13 +11,13 @@ Today, as Principal Software Engineer at a global digital consulting company, he
 
 ### Executive Summary
 
-★ Experience: 16 total; 6 years financial services, 8 years e-commerce.
-★ Communication: technology evangelist, ways of working, project direction.
-★ Proactive: architectural runway, enterprise best practices, industry awareness.
-★ Cloud: scaling, resilient, secure, CAP and 95th percentile.
-★ R&D: benefit analysis, feasibility, integration strategies, adoption timelines.
-★ Data: algorithms, caching, serialization, read-write asymmetry, low latency streams.
-★ Security: audits, SSO, OAuth, SAML, impersonation, encryption.
+- **Experience**: 16 total; 6 years financial services, 8 years e-commerce.
+- **Communication**: technology evangelist, ways of working, project direction.
+- **Proactive**: architectural runway, enterprise best practices, industry awareness.
+- **Cloud**: scaling, resilient, secure, CAP and 95th percentile.
+- **R&D**: benefit analysis, feasibility, integration strategies, adoption timelines.
+- **Data**: algorithms, caching, serialization, read-write asymmetry, low latency streams.
+- **Security**: audits, SSO, OAuth, SAML, impersonation, encryption.
 
 ### Github Repositories
 
