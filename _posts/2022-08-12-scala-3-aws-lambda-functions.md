@@ -95,6 +95,7 @@ While Lambda functions should be considered stateless, they are fror practicalit
 
 The DynamoDB client writes data to the table is via a `Map` request to `putItem`:
 ```scala
+val pricesByteArray = Base64.getDecoder.decode(prices)
 val dynamoDBAttributeMap = Map(
   //writing String data
   "symbol" -> AttributeValue.builder.s(symbol).build,
