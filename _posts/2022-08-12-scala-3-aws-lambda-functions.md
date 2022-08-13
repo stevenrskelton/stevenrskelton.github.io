@@ -11,6 +11,8 @@ AWS Lambda offer the ability to run code functions without a server. Basically s
 
 {% include postlogo.html title="Amazon Lambda" src="/assets/images/2022/08/Amazon_Lambda_architecture_logo.svg.png" %} That's it; and in this function you can do _anything_.  The function has predefined CPU and RAM limits which are configurable between 128MB and 10GB of RAM, with up to 10GB of ephemiral `/tmp` storage.
 
+
+
 # Basics of AWS Lambda
 
 Amazon AWS pioneered the FaaS (Functions as a Service) space in 2014, but Microsoft Azure and Google Cloud quickly followed with their own products in 2016.  An AWS Lambdas takes an `event` parameter and a `Context` that represents the execution environment:
