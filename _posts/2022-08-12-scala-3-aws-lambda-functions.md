@@ -192,7 +192,7 @@ The CI/CD pipeline will automatically deploy to AWS, but the permissions and Lam
 
 # Scala verus Python with AWS Lambda Functions
 
-There are many things to consider when chosing a programming language, see the full article at [Scala 3 verus Python with AWS Lambda Functions]({% post_url 2022-08-17-scala-verus-python-aws-lambda-functions %}).
+There are many things to consider when chosing a programming language, see the full article at [Scala 3 verus Python with AWS Lambda Functions](% post_url 2022-08-17-scala-verus-python-aws-lambda-functions %).
 
 {% 
   include github_project.html 
