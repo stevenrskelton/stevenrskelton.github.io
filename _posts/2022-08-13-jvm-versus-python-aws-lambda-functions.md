@@ -29,13 +29,13 @@ https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer/blob/main/
 
 |                           | Scala / JVM | Python    |
 |---------------------------|-------------|-----------|
-| Lines of Code             | 86          | 61        |
-| File size                 | 17.6 MB     | 1.7 KB    |
-| Cold Start                |             |           |
+| **Lines of Code**         | 86          | 61        |
+| **File size**             | 17.6 MB     | 1.7 KB    |
+| **Cold Start**            |             |           |
 | - Init duration           | 429.39 ms   | 315.41 ms |
 | - Duration                | 11077.39 ms | 274.72 ms |
 | - Max memory used         | 152 MB      | 67 MB     |
-| Hot Load                  |             |           |
+| **Hot Load**              |             |           |
 | - Duration                | 21.48 ms    | 13.97 ms  |
 | - Max memory used         | 153 MB      | 70 MB     |
 
