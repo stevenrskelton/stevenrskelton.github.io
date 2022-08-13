@@ -23,12 +23,12 @@ See the full article about the Scala 3 implementation at
 [Scala 3 and AWS Lambda Functions]({% post_url 2022-08-12-scala-3-aws-lambda-functions %}).
 
 The Python 3.9 implementation is available on GitHub at
-https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer/blob/main/src/main/python/handler.py
+[https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer/blob/main/src/main/python/handler.py](https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer/blob/main/src/main/python/handler.py)
 
 ## JVM versus Python Performance Comparison
 
 |                           | Scala / JVM | Python    |
-|---------------------------|-------------|-----------|
+|---------------------------|------------:|----------:|
 | **Lines of Code**         | 86          | 61        |
 | **File size**             | 17.6 MB     | 1.7 KB    |
 | **Cold Start**            |             |           |
