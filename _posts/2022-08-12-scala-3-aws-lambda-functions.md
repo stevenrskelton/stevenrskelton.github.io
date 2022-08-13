@@ -151,27 +151,7 @@ def errorToResult(ex: Throwable)(using lambdaLogger: LambdaLogger): APIGatewayV2
 
 # Automated Deployment from Github Actions
 
-## Minimizing Artifact Size in Scala
-
-Maintaining lightweight resource usage is the key to keeping execution costs low.  Unfortunately the overhead of the JVM already places it behind Python and NodeJS deployments, but less than a full containerized build. Library dependencies should be kept to the minimum since JVM artifacts do not perform tree-shaking code removal that Go or GraalVM will.
-
-| Size | Name                        |                                                  |
-|------|-----------------------------|--------------------------------------------------|
-|6.9 MB|aws-lambda-java-core         |Mandatory                                         |
-|0.4 MB|aws-lambda-java-events       |Optional to support AWS event POJOs               |
-|2.2 MB|aws-lambda-java-serialization|Optional to support custom POJO serialization     |
-|9.9 MB|awssdk-[1st]-service         |Mandatory for interacting with other AWS services |
-|2.0 MB|awssdk-[additional]-service  |For each additional AWS service after the first   |
-|5.7 MB|Scala 2.13                   |Mandatory for Scala 2/3                           |
-|1.2 MB|Scala 3.1                    |Mandatory only for Scala 3                        |
-
-Note: AWS Lambda Layers allows shared `/lib` folder however all dependencies continue to contribute to runtime resource usage. Mandatory libraries make it unlikely to be able to run any JVM Lambda with the minimal 128MB RAM, typically the requiring at least 150MB.
-
-While the AWS SDK represents 9.9MB above, the majority is contributed by shared libraries rather than code specific to the DynamoDB service.  Additional services can be added with minimal size increase, for example adding the `awssdk-s3` to support read/write from S3 would be 3 MB, or `awsdsk-sns` to support Notifications would be 1 MB.
-
-## CI/CD Pipeline
-
-Of course AWS has their own internal CI/CD pipeline similiar to GitHub, but it is important to continue to view cloud providers as commodity and interchangeable.  Github (which is hosted in Azure) can easily interact with AWS.
+While AWS has their own internal CI/CD pipeline similiar to GitHub, but it is important to continue to view cloud providers as commodity and interchangeable.  Github (which is hosted in Azure) can easily interact with AWS.
 
 The Github Action is a short snippet of YAML:
 ```yaml
@@ -193,7 +173,7 @@ The CI/CD pipeline will automatically deploy to AWS, but the permissions and Lam
 
 # Scala verus Python with AWS Lambda Functions
 
-There are many things to consider when chosing a programming language, see the full article at [Scala 3 verus Python with AWS Lambda Functions](% post_url 2022-08-17-scala-verus-python-aws-lambda-functions %).
+There are many things to consider when chosing a programming language, see the full article at [JVM versus Python for AWS Lambda Functions]({% post_url 2022-08-13-jvm-versus-python-aws-lambda-functions %}).
 
 {% 
   include github_project.html 
