@@ -152,9 +152,9 @@ mvn dependency:copy \
 ```
 The benefit here is that this will take advantage of a separate `settings.xml` containing the credentials to the `github` repository, useful if the `wget` or `curl` command won't have access to the `GITHUB_TOKEN` or if this command will be executed within a Github Action similiar to how [Scala SBT Publishing to Github Packages]({% post_url 2022-04-17-scala-sbt-publishing-to-github-packages %}) publishes Maven artifacts using `mvn deploy:deploy-file`.
 
-## Security, Validation and Upgrade Notification Applications
+## Private Repo Download Caps, what about MD5 files?
 
-Outbound bandwidth caps/cost makes Github Actions a more logical choice for transfering larger files, however use-cases exist for the external access of smaller files such as `pom`, `md5`, `sha1` and `maven-metadata.xml`.
+There are costs associated with outbound traffic - either directly paid for Github Pro accounts or indirectly with 1GB transfer limits for private repos with free accounts. However use-cases exist for the external access of smaller files such as `pom`, `md5`, `sha1` and `maven-metadata.xml`.
 
 The `md5` and `sha1` are meant for use in integrity validation.  In a multi-hop or cloud situation it is quite possible intermediate storage (such as S3) poses risks as an attack vector, opportunity for partial transfers, or file corruption. Even if Github servers and the final deployment server are secure, if artifacts pass though a layer with security administered by a separate authority mistakes can happen. A final `md5` comparision directly to the Github Packages hosted md5 file can ensure the correct artifacts were properly copied with little complexity or performance overhead.
 
