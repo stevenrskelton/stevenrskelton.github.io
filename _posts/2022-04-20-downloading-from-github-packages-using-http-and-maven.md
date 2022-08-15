@@ -6,15 +6,15 @@ tags:
   - Github
 ---
 
-Github Packages is a Maven compatible respository and is accessible independent of Github. This article expands on alternative access to these files, such as direct download URLs and browsing using Maven metadata. When working outside of Github Actions, it is important to be aware of Github's tier pricing, the free tier is currently:
+Github Packages is a Maven compatible respository and is accessible independent of Github. This article expands on alternative access to these files, such as direct download URLs and browsing using Maven metadata. When working outside of Github Actions, it is important to be aware of Github's tier pricing when working with private repos, the free tier is currently:
 
 | Artifact Storage | Data Transfer Out within a Github Action | Data Transfer Out outside of a Github Action |
 |:----------------:|:----------------------------------------:|:--------------------------------------------:|
 |      500MB       |                Unlimited                 |                1GB per Month                 |
 
-It follows that using Github Packages as a Maven repository is best done through a proxy (such as Artifactory or Nexus) to cache files and minimize external data transfer.
+Using Github Packages as a Maven repository is best done through a proxy (such as Artifactory or Nexus) which will cache files and minimize external data transfer, even with paid accounts if artifacts are very large.  
 
-Clearly files can be downloaded through the Github website and using Maven, but can we expand access to more flexible HTTP alternatives such as `wget` or `curl`?  Yes we can.
+Clearly files can be downloaded using Maven and through the Github website, but we can also expand access to `wget` or `curl`.
 
 ## Browsing Available Versions in Github Packages
 
