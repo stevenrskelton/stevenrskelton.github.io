@@ -11,7 +11,7 @@ AWS Lambda offer the ability to run code functions without a server. Basically s
 
 That's it; and in this function you can do _anything_.  The function has predefined CPU and RAM limits which are configurable between 128MB and 10GB of RAM, with up to 10GB of ephemiral `/tmp` storage.
 
-# Basics of AWS Lambda
+## Basics of AWS Lambda
 
 Amazon AWS pioneered the FaaS (Functions as a Service) space in 2014, but Microsoft Azure and Google Cloud quickly followed with their own products in 2016.  An AWS Lambdas takes an `event` parameter and a `Context` that represents the execution environment:
 
@@ -36,7 +36,7 @@ class Handler extends RequestHandler[APIGatewayV2HTTPEvent, APIGatewayV2HTTPResp
 
 The `APIGatewayV2HTTPEvent` contains fields for standard HTTP information including headers, IP and the body as a `String` when available.  Fortunately binary POST data is supported via Base64 encoding keeping Lambdas flexible to all usecases.  Streaming requests are also supported but beyond the scope of this introduction.
 
-# AWS DynamoDB Use Case
+## AWS DynamoDB Use Case
 
 Access to all AWS services is available to the Lambda using the AWS SDK.  A simple use-case to study is writing POST data to DynamoDB.
 For sample data, consider the need to write price information about stocks at various times. Our DynamoDB `stock_prices` table looks like:
@@ -59,7 +59,7 @@ The pseudocode would be:
 request -> getBody -> parseItems(body) -> putN(item) -> response
 ```
 
-## Parsing JSON
+### Parsing JSON
 
 One of the breakages in Scala 3 due to macros being removed is that Jackson deserialization will not work.  This means that JSON parsing has to be explicit, but for only 3 fields this is quite simple.
 ```scala
@@ -80,7 +80,7 @@ def parseStockPriceItems(json: String): Try[Iterable[StockPriceItem]]:
 val items = Option(event.getBody).map(parseStockPriceItems)
 ```
 
-## Interacting with DynamoDB
+### Interacting with DynamoDB
 
 The first thing to consider is permissions.  Permissions can be attached to the event, or we can use the permissions that the Lambda is currently executing under.  The currently executing credentials are available using their `DefaultCredentialsProvider` in the AWS SDK.
 
@@ -107,7 +107,7 @@ val dynamoDBAttributeMap = Map(
 val request = PutItemRequest.builder.tableName("stock_prices").item(dynamoDBAttributeMap).build
 val putItemResponse = dynamoDbClient.putItem(request)
 ```
-## Writing the response
+### Writing the response
 
 The format and contents of the response depends on how the Lambda response is consumed.  The easiest pattern is to either return a `String` containing custom JSON (if not being consumed within AWS), or using the corresponding AWS SDK response class that matches the event class.
 
@@ -130,7 +130,7 @@ body
     )
 ```
 
-## Errors
+### Errors
 
 Handling errors always add complexity to code. AWS exposes logging to CloudWatch through their `context` object, as well as SLF4J wrappers.  The way Lambdas work is that any unhandled exception will result in a `502 BAD GATEWAY`.  Non-200 errors can also be thrown if the output response can't be serialized to an expected output.  In this example, by choice we are choosing to only allow handled JSON parsing exceptions (caught and wrapped into a `ParseException`) be serialized to a 200 response, and all unhandled exceptions to fail the Lambda (as a 502).
 
@@ -149,7 +149,7 @@ def errorToResult(ex: Throwable)(using lambdaLogger: LambdaLogger): APIGatewayV2
       throw ex
 ```
 
-# Automated Deployment from Github Actions
+## Automated Deployment from Github Actions
 
 While AWS has their own internal CI/CD pipeline similiar to GitHub, but it is important to continue to view cloud providers as commodity and interchangeable.  Github (which is hosted in Azure) can easily interact with AWS.
 
@@ -167,7 +167,7 @@ The Github Action is a short snippet of YAML:
     AWS_REGION: "us-east-1"
 ```
 
-# AWS Permission Configuration for Lambdas
+## AWS Permission Configuration for Lambdas
 
 The CI/CD pipeline will automatically deploy to AWS, but the permissions and Lambda must be initially created.  See [Future Article Here]
 
