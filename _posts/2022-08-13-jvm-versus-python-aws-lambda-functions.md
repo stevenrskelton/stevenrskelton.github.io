@@ -7,11 +7,11 @@ tags:
 ---
 The suitability of programming languages across different domains is a contested topic.  AWS Lambda Functions are a serverless solution that can be used for a wide range of problems from tiny to large tasks.  For lightweight tasks how does the JVM stack up?
 
-# Lambda Functions in Scala versus Other Languages
+## Lambda Functions in Scala versus Other Languages
 
 The most widely used programming language for Lambda Functions is Python.  Benchmarks show Python offers the best performances, and the language simplicity normally results in faster development and less code for lightweight tasks.  But AWS Lambda can offer massive scale with access to up to 10GB RAM and 15 minutes per execution that are typically benefited from the structure and maintainability offered in languages such as Java, Scala, and C#.  This article investigates how the JVM stacks up on the low-end and if languages like Python are the only choice.
 
-# Sample App
+## Sample App
 
 Features:
 - Usability: Read JSON from HTTP body, JSON response
@@ -25,7 +25,7 @@ See the full article about the Scala 3 implementation at
 The Python 3.9 implementation is available on GitHub at
 [https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer/blob/main/src/main/python/handler.py](https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer/blob/main/src/main/python/handler.py)
 
-## JVM versus Python Performance Comparison
+### JVM versus Python Performance Comparison
 
 |                           | Scala / JVM | Python    |
 |---------------------------|------------:|----------:|
@@ -44,7 +44,7 @@ While [there is discussion](https://mikhail.io/serverless/coldstarts/aws/languag
 
 There are features such as AWS Lambda Layers that allow for a shared library [it is reported](https://www.simform.com/blog/lambda-cold-starts/) that they have only sub-50ms improvement to cold-starts.  It appears the there is no way to optimize JVM overhead away, only minimize the burden by reducing overall dependencies.
 
-## Minimizing JVM Artifact Size
+### Minimizing JVM Artifact Size
 
 Maintaining lightweight resource usage is the key to keeping execution costs low.  Unfortunately the overhead of the JVM already places it behind Python and NodeJS deployments, but less than a full containerized build. Library dependencies should be kept to the minimum since JVM artifacts do not perform tree-shaking code removal that Go or GraalVM will.
 
@@ -60,7 +60,7 @@ Maintaining lightweight resource usage is the key to keeping execution costs low
 
 While the AWS SDK represents 9.9MB above, the majority is contributed by shared libraries rather than code specific to the DynamoDB service.  Additional services can be added with minimal size increase, for example adding the `awssdk-s3` to support read/write from S3 would be 3 MB, or `awsdsk-sns` to support Notifications would be 1 MB.
 
-# Conclusion
+## Conclusion
 
 According to cloud monitoring SaaS Datadog [Python is the most popular language for Lambda](https://www.datadoghq.com/state-of-serverless/) with NodeJS being a close second.  This aligns with the lightweight market that Lambdas excel at. However Datadog also indicates that over 60% of large organizations have deployed Lambda in 3 or more languages meaning that they are reaching into more stuctured languages such as Java, Go, or .Net for other, more likely complex, tasks.
 
