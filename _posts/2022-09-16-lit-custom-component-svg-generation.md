@@ -147,4 +147,4 @@ The Lit approach defines a custom element object rather than a function to encap
 
 The 2 code implementations are very similar. The custom element `<pie-chart>` is nice and the `svg` render engine in Lit is slick. 
 
-Another major benefit of using Lit in this example is that there is no need to use element ids. The direct DOM implimentation requires each use to have a unique id, and to call the `pieChart(id)` function on both page load and any subsequent data change.  Managing corresponding DOM and javascript function calls will require a convoluted mapping should this SVG be used in something like a listview or table.
+Another major benefit of using Lit in this example is that there is no need to use element ids. The direct DOM implimentation requires each use to have a unique id (which can in some contexts be hard to ensure), and to call the `pieChart(id)` function on both page load and any subsequent data change.  When using multiple instances of a generated element, its pretty clear the winner is a custom element.  
