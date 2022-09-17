@@ -20,6 +20,8 @@ The example we will use in this article is a simple pie chart, dynamically creat
 </svg>
 
 The `M`, `A`, `L` commands in the path data field are _moveto_, _arc_, and _lineto_; details on how they are used is in the [SVG documentation](https://www.w3.org/TR/SVG11/paths.html#PathDataEllipticalArcCommands) but beyond the scope of this article. The computation is basic trigonomity and hopefully the code provides an adequite explaination in itself, but the original calculation is covered by David Gilbertson in his blog [A simple pie chart in SVG](https://medium.com/hackernoon/a-simple-pie-chart-in-svg-dbdd653b6936).
+
+The `viewBox` and `style` specify the render size, unlike static images SVG don't have a default resolution.
 <br style="clear:left"/>
 
 ```xml
@@ -32,19 +34,20 @@ The `M`, `A`, `L` commands in the path data field are _moveto_, _arc_, and _line
 
 ## Comparison of DOM manipultion and Lit Templates
 
-Let's assume we have a dynamic data input, specifying a varying number of slices with their percent and color:
+Let's assume we have a dynamic data specifying a variable number of slices with their percent and color:
 
 ```javascript
-var slices = [
+[
   { "percent": 0.38, "color": "#900C3F" },
   { "percent": 0.45, "color": "#581845" },
   { "percent": 0.17, "color": "#FF5733" }
 ]
 ```
+This data should be associated with the DOM element rendering rather than in global scope.  In most cases, the best way to achieve that is using a HTML attribute, so that is how we will structure both examples.
 
-### Rendering
 
-The first step will be to convert the `slices` data percent to the `d` values used in SVG with a function `computePathData` and a helper:
+The first step in the rendering process will be to convert the slice data percent into the `d` value used by SVG Path elements.  For this we will use a `computePathData` function and a helper function, and these 2 functions will be common to both implementations:
+
 ```javascript
 function getCoordinatesForPercent(percent) {
   const x = Math.cos(2 * Math.PI * percent);
@@ -81,28 +84,35 @@ function computePathData(slices){
 
 #### Direct DOM Manipulation
 
-The raw Javascript approach is straight-forward DOM operations.
+The raw Javascript approach are straight-forward DOM operations called from a `pieChart` function:
 
 ```html
-<svg id="pie" viewBox="-1 -1 2 2" style="transform: rotate(-90deg);height:200px;"/>
+<svg id="piechart" viewBox="..." style="..."/>
 
 <script>
-  function getCoordinatesForPercent(percent) { ... }
-  function computePathData(slices){ ... }
-  
-  //find the <svg> node in the page
-  var svgElement = document.getElementById('piechart');
-  var data = computePathData(slices);
-  data.forEach(slice => {
-    var pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    pathElement.setAttribute('d', slice.d);
-    pathElement.setAttribute('fill', slice.fill);
-    svgElement.appendChild(pathElement);
-  });
+  function pieChart(id){
+    function getCoordinatesForPercent(percent) { ... }
+    function computePathData(slices){ ... }
+
+    //find the <svg> node in the page
+    var svgElement = document.getElementById(id);
+    var attributeContent = svgElement.getAttribute('data-myattr');
+    var slices = JSON.parse(attributeContent);
+    var data = computePathData(slices);
+    data.forEach(slice => {
+      var pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      pathElement.setAttribute('d', slice.d);
+      pathElement.setAttribute('fill', slice.fill);
+      svgElement.appendChild(pathElement);
+    });
+  }
+  pieChart('piechart', slices);
 </script>
 ```
 
 #### Lit Templates
+
+The Lit approach defines a custom element object rather than a function to encapsulate the rendering code:
 
 ```html
 <script type="module">
@@ -110,7 +120,7 @@ The raw Javascript approach is straight-forward DOM operations.
 
   export class PieChart extends LitElement {
     static properties = {
-        slices: { type: Array },
+      slices: { type: Array },
     };
 
     getCoordinatesForPercent(percent) { ... }
@@ -119,7 +129,7 @@ The raw Javascript approach is straight-forward DOM operations.
     render() {
       let data = this.computePathData(this.slices ?? []);
       return svg`
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 2 2" style="transform: rotate(-90deg);height:200px;">
+        <svg viewBox="..." style="...">
           ${data.map(slice => svg`<path d="${slice.d}" fill="${slice.fill}"/>`)}
         </svg>`;
     }
@@ -132,12 +142,13 @@ The raw Javascript approach is straight-forward DOM operations.
   { "percent": 0.45, "color": "#581845" },
   { "percent": 0.17, "color": "#FF5733" }
 ]'/>
-
-
+```
 
 ### Framework
 
-The Lit Templates look better, but how much better?  While Lit is a small 5kb library, does this make it worth it?
+The 2 code implementations are very similar, so what makes the overhead of the Lit Template library worth it?
+
+The key difference here is that there is a disconnect in the direct DOM implementation, and the `slices` data 
 
 
 
