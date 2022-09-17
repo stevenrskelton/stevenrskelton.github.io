@@ -94,7 +94,6 @@ The raw Javascript approach are straight-forward DOM operations called from a `p
     function getCoordinatesForPercent(percent) { ... }
     function computePathData(slices){ ... }
 
-    //find the <svg> node in the page
     var svgElement = document.getElementById(id);
     var attributeContent = svgElement.getAttribute('data-myattr');
     var slices = JSON.parse(attributeContent);
@@ -127,7 +126,7 @@ The Lit approach defines a custom element object rather than a function to encap
     computePathData(slices){ ... }
 
     render() {
-      let data = this.computePathData(this.slices ?? []);
+      let data = this.computePathData(this.slices);
       return svg`
         <svg viewBox="..." style="...">
           ${data.map(slice => svg`<path d="${slice.d}" fill="${slice.fill}"/>`)}
@@ -144,11 +143,8 @@ The Lit approach defines a custom element object rather than a function to encap
 ]'/>
 ```
 
-### Framework
+### Conclusion
 
-The 2 code implementations are very similar, so what makes the overhead of the Lit Template library worth it?
+The 2 code implementations are very similar. The custom element `<pie-chart>` is nice and the `svg` render engine in Lit is slick. 
 
-The key difference here is that there is a disconnect in the direct DOM implementation, and the `slices` data 
-
-
-
+Another major benefit of using Lit in this example is that there is no need to use element ids. The direct DOM implimentation requires each use to have a unique id, and to call the `pieChart(id)` function on both page load and any subsequent data change.  Managing corresponding DOM and javascript function calls will require a convoluted mapping should this SVG be used in something like a listview or table.
