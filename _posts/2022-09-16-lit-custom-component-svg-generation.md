@@ -1,0 +1,31 @@
+---
+title: "Lit Custom Components for SVG generation"
+categories:
+  - Javascript
+tags:
+  - Lit
+---
+SVG markup is very similar to HTML, and the [Lit Web Components](https://lit.dev/) library can be used to not only generate HTML custom components, but also manipulate SVG in a similar way using Lit templates. Lit is a small 5kb library that removes the boilerplate code of DOM generation, and is highly interporable with all web frameworks since it relies on browser native custom elements.
+
+## A simple SVG Pie Chart
+
+SVG is a robust standard that can be used for anything from company logos to graphical artwork.  Because it is a text-based XML markup unlike static images it can be manipulated in the browser; things such as resizing, changing colors, or adding/removing specific elements can be done based on user input.  The example we will use in this article is a simple pie chart:
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 2 2" style="transform: rotate(-90deg);height:100px;float:left">
+  <path d="M 1 0 A 1 1 0 0 1 -0.9510565162951535 0.3090169943749475 L 0 0" fill="#900C3F"/>
+  <path d="M -0.9510565162951535 0.3090169943749475 A 1 1 0 0 1 0.4817536741017157 -0.8763066800438634 L 0 0" fill="#581845"/>
+  <path d="M 0.4817536741017157 -0.8763066800438634 A 1 1 0 0 1 1 0 L 0 0" fill="#FF5733"/>
+</svg>
+
+The `M`, `A`, `L` commands are moveto, arc, and lineto; details on how they are used is in the [SVG documentation](https://www.w3.org/TR/SVG11/paths.html#PathDataEllipticalArcCommands) but beyond the scope of this article, the Javascript to generate them will be covered and hopefully paints a good explaination in itself.
+<br style="clear:left"/>
+
+```xml
+<svg>
+  <path d="M 1 0 A 1 1 0 0 1 -0.9510565162951535 0.3090169943749475 L 0 0" fill="#900C3F"/>
+  <path d="M -0.9510565162951535 0.3090169943749475 A 1 1 0 0 1 0.4817536741017157 -0.8763066800438634 L 0 0" fill="#581845"/>
+  <path d="M 0.4817536741017157 -0.8763066800438634 A 1 1 0 0 1 1 0 L 0 0" fill="#FF5733"/>
+</svg>
+```
+
+
