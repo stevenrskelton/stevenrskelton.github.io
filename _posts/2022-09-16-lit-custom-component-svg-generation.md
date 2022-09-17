@@ -11,7 +11,7 @@ SVG markup is very similar to HTML, and the [Lit Web Components](https://lit.dev
 
 SVG is a robust standard that can be used for anything from company logos to graphical artwork.  Because it is a text-based XML markup unlike static images it can be manipulated in the browser; things such as resizing, changing colors, or adding/removing specific elements can be done based on user input.  The example we will use in this article is a simple pie chart:
 
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 2 2" style="transform: rotate(-90deg);height:100px;float:left">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 2 2" style="transform: rotate(-90deg);height:100px;float:left;margin-right:20px;">
   <path d="M 1 0 A 1 1 0 0 1 -0.9510565162951535 0.3090169943749475 L 0 0" fill="#900C3F"/>
   <path d="M -0.9510565162951535 0.3090169943749475 A 1 1 0 0 1 0.4817536741017157 -0.8763066800438634 L 0 0" fill="#581845"/>
   <path d="M 0.4817536741017157 -0.8763066800438634 A 1 1 0 0 1 1 0 L 0 0" fill="#FF5733"/>
@@ -27,5 +27,48 @@ The `M`, `A`, `L` commands are moveto, arc, and lineto; details on how they are 
   <path d="M 0.4817536741017157 -0.8763066800438634 A 1 1 0 0 1 1 0 L 0 0" fill="#FF5733"/>
 </svg>
 ```
+
+## Comparison of DOM manipultion and Lit Templates
+
+We'll go over generating the values a little later, but assuming we have the data:
+
+```javascript
+//given the data
+const slices = [
+  { d: "M 1 0 A 1 1 0 0 1 -0.9510565162951535 0.3090169943749475 L 0 0", fill:"#900C3F" },
+  { d: "M -0.9510565162951535 0.3090169943749475 A 1 1 0 0 1 0.4817536741017157 -0.8763066800438634 L 0 0", fill: "#581845" },
+  { d: "M 0.4817536741017157 -0.8763066800438634 A 1 1 0 0 1 1 0 L 0 0", fill: "#FF5733" },
+];
+```
+
+### Rendering
+
+#### DOM Manipulation
+
+The raw Javascript approach is straight-forward but verbose.
+
+```javascript 
+//find the <svg> node in the page
+const svgElement = document.querySelector('svg');
+slices.forEach(slice =>
+  const pathElement = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+  pathElement.setAttribute('d', slice.d);
+  pathElement.setAttribute('fill', slice.fill);
+  svgElement.appendChild(pathElement);
+);
+```
+
+#### Lit Templates
+
+```javascript
+return svg`<svg>
+  ${slices.map(slice => svg`<path d="${slice.d}" fill="${slice.fill}"/>`}
+</svg>`;
+```
+
+### Framework
+
+The Lit Templates look better, but how much better?  While Lit is a small 5kb library, does this make it worth it?
+
 
 
