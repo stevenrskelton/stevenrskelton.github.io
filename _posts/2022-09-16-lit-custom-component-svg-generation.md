@@ -36,9 +36,9 @@ Let's assume we have a dynamic data input, specifying a varying number of slices
 
 ```javascript
 var slices = [
-    { percent: 0.38, color: "#900C3F" },
-    { percent: 0.45, color: "#581845" },
-    { percent: 0.17, color: "#FF5733" },
+  { "percent": 0.38, "color": "#900C3F" },
+  { "percent": 0.45, "color": "#581845" },
+  { "percent": 0.17, "color": "#FF5733" }
 ]
 ```
 
@@ -85,6 +85,7 @@ The raw Javascript approach is straight-forward DOM operations.
 
 ```html
 <svg id="pie" viewBox="-1 -1 2 2" style="transform: rotate(-90deg);height:200px;"/>
+
 <script>
   function getCoordinatesForPercent(percent) { ... }
   function computePathData(slices){ ... }
@@ -105,65 +106,34 @@ The raw Javascript approach is straight-forward DOM operations.
 
 ```html
 <script type="module">
-        import {LitElement, html, svg} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/core/lit-core.min.js';
+  import {LitElement, html, svg} from 'https://cdn.jsdelivr.net/gh/lit/dist@2/core/lit-core.min.js';
 
-        export class PieChart2 extends LitElement {
-            static properties = {
-                slices: { type: Array },
-            };
+  export class PieChart extends LitElement {
+    static properties = {
+        slices: { type: Array },
+    };
 
-           getCoordinatesForPercent(percent) {
-              const x = Math.cos(2 * Math.PI * percent);
-              const y = Math.sin(2 * Math.PI * percent);
-              return [x, y];
-            }
+    getCoordinatesForPercent(percent) { ... }
+    computePathData(slices){ ... }
 
-             computePathData(slices){
-                let cumulativePercent = 0;
+    render() {
+      let data = this.computePathData(this.slices ?? []);
+      return svg`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 2 2" style="transform: rotate(-90deg);height:200px;">
+          ${data.map(slice => svg`<path d="${slice.d}" fill="${slice.fill}"/>`)}
+        </svg>`;
+    }
+  }
+  customElements.define('pie-chart', PieChart);
+</script>
 
-                return slices.map(slice => {
-                  // destructuring assignment sets the two variables at once
-                  const [startX, startY] = getCoordinatesForPercent(cumulativePercent);
+<pie-chart slices='[
+  { "percent": 0.38, "color": "#900C3F" },
+  { "percent": 0.45, "color": "#581845" },
+  { "percent": 0.17, "color": "#FF5733" }
+]'/>
 
-                  // each slice starts where the last slice ended, so keep a cumulative percent
-                  cumulativePercent += slice.percent;
 
-                  const [endX, endY] = getCoordinatesForPercent(cumulativePercent);
-
-                  // if the slice is more than 50%, take the large arc (the long way around)
-                  const largeArcFlag = slice.percent > .5 ? 1 : 0;
-
-                    // create an array and join it just for code readability
-                  const pathData = [
-                    `M ${startX} ${startY}`, // Move
-                    `A 1 1 0 ${largeArcFlag} 1 ${endX} ${endY}`, // Arc
-                    `L 0 0`, // Line
-                  ].join(' ');
-
-                  return { d: pathData, fill: slice.color, };
-                });
-            }
-
-          render() {
-            let data = computePathData(slices);
-            return svg`
-               <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 2 2" style="transform: rotate(-90deg);height:200px;">
-               ${data.map(slice => svg`<path d="${slice.d}" fill="${slice.fill}"/>`)}
-            </svg>`;
-          }
-        }
-        customElements.define('pie-chart2', PieChart2);
-        </script>
-pie-chart2
-<pie-chart></pie-chart>
-
-```
-The Lit template 
-```javascript
-return svg`<svg>
-  ${slices.map(slice => svg`<path d="${slice.d}" fill="${slice.fill}"/>`}
-</svg>`;
-```
 
 ### Framework
 
