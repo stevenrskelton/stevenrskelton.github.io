@@ -9,7 +9,9 @@ SVG markup is very similar to HTML, and the [Lit Web Components](https://lit.dev
 
 ## A simple SVG Pie Chart
 
-SVG is a robust standard that can be used for anything from company logos to graphical artwork.  Because it is a text-based XML markup unlike static images it can be manipulated in the browser; things such as resizing, changing colors, or adding/removing specific elements can be done based on user input.  The example we will use in this article is a simple pie chart:
+SVG is a robust standard that can be used for anything from company logos to graphical artwork. It is text-based XML markup, and because it is a text format and not binary data like static images it can be manipulated in the browser using javascript; operations such as resizing, changing colors, adding/removing elements or modifying text can be done based on user input or other external inputs.
+
+The example we will use in this article is a simple pie chart, dynamically created based on numerical input percentages.  The final output will be similiar to this:
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 2 2" style="transform: rotate(-90deg);height:100px;float:left;margin-right:20px;">
   <path d="M 1 0 A 1 1 0 0 1 -0.9510565162951535 0.3090169943749475 L 0 0" fill="#900C3F"/>
@@ -17,7 +19,7 @@ SVG is a robust standard that can be used for anything from company logos to gra
   <path d="M 0.4817536741017157 -0.8763066800438634 A 1 1 0 0 1 1 0 L 0 0" fill="#FF5733"/>
 </svg>
 
-The `M`, `A`, `L` commands are moveto, arc, and lineto; details on how they are used is in the [SVG documentation](https://www.w3.org/TR/SVG11/paths.html#PathDataEllipticalArcCommands) but beyond the scope of this article, the Javascript to generate them will be covered and hopefully paints a good explaination in itself.
+The `M`, `A`, `L` commands in the path data field are _moveto_, _arc_, and _lineto_; details on how they are used is in the [SVG documentation](https://www.w3.org/TR/SVG11/paths.html#PathDataEllipticalArcCommands) but beyond the scope of this article.  The computation is actually quite simple Javascript using basic trigonomity and hopefully the code provides an adequite explaination in itself.
 <br style="clear:left"/>
 
 ```xml
