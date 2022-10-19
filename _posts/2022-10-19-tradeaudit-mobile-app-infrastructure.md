@@ -9,7 +9,7 @@ tags:
   - AWS
   - Github
 ---
-The release of the [TradeAudit](https://tradeaudit.app) mobile app is almost here. It is currently in MVP stage, but its infrastructure is a pretty typical cloud based deployment.  This article discusses some of the design choices made, evaluating how effective they were.
+The release of the [TradeAudit](https://tradeaudit.app) mobile app is almost here. It is currently in MVP stage, but its infrastructure is a pretty typical cloud based deployment.  This article discusses design choices made, evaluating how effective they were.<!--more-->
 
 ### Mobile App Requirements
 
@@ -17,7 +17,7 @@ TradeAudit is a mobile app targeting anyone using Twitter for stock trading idea
 This side of Twitter is colloquially referred to as "fintwit", ie: _Financial Twitter_.
 
 Twitter has a feature called "cashtags" where users can represent stock ticker symbols within Tweets using a dollar sign, for example `$spy` represents the `SPDR S&P 500 ETF`.
-The mobile app allows these Twitter recommendations to be recorded, tracked by price information, and aggregated to create a historical performance record per Twitter account.
+The mobile app allows Tweets made about stocks (with or without cashtags) to be recorded, tracked via price information, and aggregated to create historical performance records for Twitter accounts.
 
 High level, this requires:
 - [Mobile App iOS/Android Client](#mobile-app-iosandroid-client), obviously.
