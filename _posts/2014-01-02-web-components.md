@@ -28,5 +28,5 @@ With browsers natively supporting: custom HTML elements, data binding and templa
 
 Two web frameworks, Google Polymer and [Mozilla X-Tags](http://www.x-tags.org/) specifically target and are optimized for Web Components, while other client-side Javascript frameworks such as [AngularJS](http://angularjs.org/) are committed to full support upon their next major release. However the main goal of Web Components is to simplify web applications to an assembly of standalone components, a methodology for reuse and ease of configuration which will lower the learning curve to new developers.
 
-The open-source community for re-useable Web Components is hosted at [Custom Elements](http://customelements.io/), as well there are bundled libraries such as [Mozilla Brick](http://mozilla.github.io/brick/).
+The open-source community for re-usable Web Components is hosted at [Custom Elements](http://customelements.io/), as well there are bundled libraries such as [Mozilla Brick](http://mozilla.github.io/brick/).
 
