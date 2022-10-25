@@ -23,7 +23,7 @@ Today, as Principal Software Engineer at a global digital consulting company, he
 
 ## Public Github Repositories
 
-<p style="font-size:smalll;margin-left:10px;">(Polymer Web Components is a deprecated framework, as all meaningful functionality is now Browser native.)</p>
+<p style="font-size:small;margin-left:10px;">(Polymer Web Components is a deprecated framework, as all meaningful functionality is now Browser native.)</p>
 
 <div style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:0px;">
 
@@ -51,6 +51,8 @@ TradeAudit is a mobile app for iOS/Android targeting anyone using Twitter for st
 
 Twitter supports a feature called “cashtags” where users can represent stock ticker symbols within Tweets using a dollar sign, for example `$spy` represents the `SPDR S&P 500 ETF`. The TradeAudit mobile app allows Tweets made about stocks (with or without cashtags) to be recorded, tracked via live stock exchange prices, and aggregated to create historical performance records for Twitter accounts.
 
-<p style="font-size:larger;font-weight:bold">See [https://tradeaudit.app](https://tradeaudit.app) for more details</p>
+<p style="font-size:larger;font-weight:bold;">
+  See <a href="https://tradeaudit.app" target="_blank" title="TradeAudit Mobile App">https://tradeaudit.app</a> for more
+</p>
 
 While the app is a closed-source, I have tried to create meaningful documentation around the technology, design, and business environment TradeAudit will operate in on this blog using the [tradeaudit tag](https://www.stevenskelton.ca/tags/#tradeaudit).
