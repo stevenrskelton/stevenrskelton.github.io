@@ -96,7 +96,7 @@
                   <text data-testid="lang-name" class="gray" x="15">{{ include.language }}</text>
                </g>
             </g>
-            {% assign languagelength = include.language | size | times: 14 | plus: 4 %}
+            {% assign languagelength = include.language | size | times: 7 | plus: 4 %}
             <g transform="translate({{ languagelength }}, 0)">
                <g transform="translate(0, 0)">
                   <svg
@@ -114,7 +114,7 @@
                   <text data-testid="stargazers" class="gray">{{ include.stargazers_count }}</text>
                </g>
             </g>
-            {% assign lastlength = include.stargazers_count | size | times: 14 | plus: 20 %}
+            {% assign lastlength = include.stargazers_count | size | times: 7 | plus: 20 %}
             <g transform="translate({{ lastlength }}, 0)">
                <g transform="translate(0, 0)">
                   <svg
