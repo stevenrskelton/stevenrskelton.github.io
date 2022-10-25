@@ -30,13 +30,13 @@ High level, this requires:
 
 For developers not wanting a separate codebase for iOS and Android, there are 3 options:
 
-<table style="margin-left:auto;margin-right:auto;max-width:800px;display:table;">
+<table style="margin-left:auto;margin-right:auto;max-width:750px;display:table;">
   <thead>
     <tr>    
       <th>Framework</th>
       <th>Release</th>
       <th>Language</th>
-      <th></th>    
+      <th>Support</th>    
     </tr>
   </thead>
   <tbody>
@@ -44,19 +44,19 @@ For developers not wanting a separate codebase for iOS and Android, there are 3 
       <td>Xamarin</td>
       <td>2011</td>
       <td>C#</td>
-      <td>Microsoft support since 2016</td>
+      <td>Microsoft since 2016</td>
     </tr>
     <tr>
       <td>React Native</td>
       <td>2015</td>
       <td>JavaScript</td>
-      <td>initial release by Facebook</td>
+      <td>Indirectly by Facebook</td>
     </tr>
     <tr>
       <td>Flutter</td>
       <td>2017</td>
       <td>Dart</td>
-      <td>support from Google</td>
+      <td>Google</td>
     </tr>
   </tbody>
 </table>
@@ -100,7 +100,7 @@ and not-upgrading will likely continue to be a popular and supported choice but 
 
 The data layer can really make or break an application.  TradeAudit currently requires:
 
-<table style="margin-left:auto;margin-right:auto;max-width:600px;display:table;">
+<table style="margin-left:auto;margin-right:auto;max-width:750px;display:table;">
   <thead>
     <tr>    
       <th>Implementation</th>
