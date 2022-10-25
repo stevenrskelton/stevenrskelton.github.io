@@ -86,9 +86,11 @@
          data-testid="main-card-body"
          transform="translate(0, 55)"
       >
-         <text class="description" x="25" y="-5">
-            <tspan dy="1.2em" x="25">{{ include.description | escape }}</tspan>
-         </text>
+         <foreignObject x="25" y="-5" width="100" height="150">
+           <div xmlns="http://www.w3.org/1999/xhtml" class="description">
+               {{ include.description | escape }}
+           </div>
+         </foreignObject>
          <g transform="translate(30, 65)">
             <g transform="translate(0, 0)">
                <g data-testid="primary-lang">
