@@ -12,8 +12,8 @@ Today, as Principal Software Engineer at a global digital consulting company, he
 ## Executive Summary
 
 - **Experience**:
-  - 6 years financial services consulting for Bay Street companies such as Gluskin Sheff + Associates, Dundee Wealth Management, and Home Trust.
-  - 8 years e-commerce for Walmart Canada, leading technical development of the website and API for mobile clients.
+  - **6 years financial services** consulting for Bay Street companies such as Gluskin Sheff + Associates, Dundee Wealth Management, and Home Trust.
+  - **8 years e-commerce** for Walmart Canada, leading technical development of the website and API for mobile clients.
 - **Communication**: technology evangelist, ways of working, and skills development.
 - **Proactive**: architectural runway, enterprise best practices, industry awareness.
 - **Cloud**: scaling, resilient, secure, CAP and 95th percentile.
