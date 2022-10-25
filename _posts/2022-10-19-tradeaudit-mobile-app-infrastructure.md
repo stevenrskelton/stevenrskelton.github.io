@@ -30,30 +30,35 @@ High level, this requires:
 
 For developers not wanting a separate codebase for iOS and Android, there are 3 options:
 
-<table style="margin-left:auto;margin-right:auto;min-width:500px">
-  <tr>    
-    <th>Framework</th>
-    <th>Release</th>
-    <th>Language</th>
-  </tr>
-  <tr>
-    <td>Xamarin</td>
-    <td>2011</td>
-    <td>C#</td>
-    <td>Microsoft support since 2016</td>
-  </tr>
-  <tr>
-    <td>React Native</td>
-    <td>2015</td>
-    <td>JavaScript</td>
-    <td>initial release by Facebook</td>
-  </tr>
-  <tr>
-    <td>Flutter</td>
-    <td>2017</td>
-    <td>Dart</td>
-    <td>support from Google</td>
-  </tr>
+<table style="margin-left:auto;margin-right:auto;max-width:800px;display:table;">
+  <thead>
+    <tr>    
+      <th>Framework</th>
+      <th>Release</th>
+      <th>Language</th>
+      <th><th>    
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Xamarin</td>
+      <td>2011</td>
+      <td>C#</td>
+      <td>Microsoft support since 2016</td>
+    </tr>
+    <tr>
+      <td>React Native</td>
+      <td>2015</td>
+      <td>JavaScript</td>
+      <td>initial release by Facebook</td>
+    </tr>
+    <tr>
+      <td>Flutter</td>
+      <td>2017</td>
+      <td>Dart</td>
+      <td>support from Google</td>
+    </tr>
+  </tbody>
 </table>
 
 The choice for your mobile app, if at all, depends on many factors. While Flutter lacks the maturity of Xamarin and the 
@@ -95,13 +100,32 @@ and not-upgrading will likely continue to be a popular and supported choice but 
 
 The data layer can really make or break an application.  TradeAudit currently requires:
 
-
-| Implementation | Type       | Host |
-| -------------- |------------| ---- |
-| PostgreSQL     | Relational | VPS  |
-| SQS            | Buffering  | AWS  |
-| DynamoDB       | Key Value  | AWS  |
-
+<table style="margin-left:auto;margin-right:auto;max-width:600px;display:table;">
+  <thead>
+    <tr>    
+      <th>Implementation</th>
+      <th>Type</th>
+      <th>Host</th>  
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PostgreSQL</td>
+      <td>Relational</td>
+      <td>VPS</td>
+    </tr>
+    <tr>
+      <td>SQS</td>
+      <td>Buffering</td>
+      <td>AWS</td>
+    </tr>
+    <tr>
+      <td>DynamoDB</td>
+      <td>Key Value</td>
+      <td>AWS</td>
+    </tr>
+  </tbody>
+</table>
 
 The AWS offerings for RDS seem to be the least compelling; both by cost and additional features over VPS.  The primary 
 reason to use public cloud is rapid scalability, and outside of AWS Aurora it seems like the same amount of effort.
