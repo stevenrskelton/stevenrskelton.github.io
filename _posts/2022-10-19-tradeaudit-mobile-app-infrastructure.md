@@ -30,13 +30,31 @@ High level, this requires:
 
 For developers not wanting a separate codebase for iOS and Android, there are 3 options:
 
-
-| Framework    | Release | Language   |                              |
-| ------------ | ------- | ---------- | ---------------------------- |
-| Xamarin      |  2011   | C#         | Microsoft support since 2016 |
-| React Native |  2015   | JavaScript | initial release by Facebook  |
-| Flutter      |  2017   | Dart       | support from Google          |
-  
+<table style="margin-left:auto;margin-right:auto;min-width:500px">
+  <tr>    
+    <th>Framework</th>
+    <th>Release</th>
+    <th>Language</th>
+  </tr>
+  <tr>
+    <td>Xamarin</td>
+    <td>2011</td>
+    <td>C#</td>
+    <td>Microsoft support since 2016</td>
+  </tr>
+  <tr>
+    <td>React Native</td>
+    <td>2015</td>
+    <td>JavaScript</td>
+    <td>initial release by Facebook</td>
+  </tr>
+  <tr>
+    <td>Flutter</td>
+    <td>2017</td>
+    <td>Dart</td>
+    <td>support from Google</td>
+  </tr>
+</table>
 
 The choice for your mobile app, if at all, depends on many factors. While Flutter lacks the maturity of Xamarin and the 
 larger ecosystem of React Native, it is arguably the most intuitive development environment.  The risk is that without 
