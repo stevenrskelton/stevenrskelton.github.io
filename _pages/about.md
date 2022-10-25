@@ -27,7 +27,7 @@ TradeAudit is a mobile app for iOS/Android targeting anyone using Twitter for st
 
 Twitter supports a feature called “cashtags” where users can represent stock ticker symbols within Tweets using a dollar sign, for example `$spy` represents the `SPDR S&P 500 ETF`. The TradeAudit mobile app allows Tweets made about stocks (with or without cashtags) to be recorded, tracked via live stock exchange prices, and aggregated to create historical performance records for Twitter accounts.
 
-<p style="font-size:larger;font-weight:bold;">
+<p style="font-size:larger;font-weight:bold;text-align:center;">
   See <a href="https://tradeaudit.app" target="_blank" title="TradeAudit Mobile App">https://tradeaudit.app</a> for more
 </p>
 
