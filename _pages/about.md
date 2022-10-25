@@ -11,13 +11,15 @@ Today, as Principal Software Engineer at a global digital consulting company, he
 
 ## Executive Summary
 
-- **Experience**: 16 total; 6 years financial services, 8 years e-commerce.
-- **Communication**: technology evangelist, ways of working, project direction.
+- **Experience**:
+  - 6 years financial services consulting for Bay Street companies such as Gluskin Sheff + Associates, Dundee Wealth Management, and Home Trust.
+  - 8 years e-commerce for Walmart Canada, leading technical development of the website and API for mobile clients.
+- **Communication**: technology evangelist, ways of working, and skills development.
 - **Proactive**: architectural runway, enterprise best practices, industry awareness.
 - **Cloud**: scaling, resilient, secure, CAP and 95th percentile.
 - **R&D**: benefit analysis, feasibility, integration strategies, adoption timelines.
 - **Data**: algorithms, caching, serialization, read-write asymmetry, low latency streams.
-- **Security**: audits, SSO, OAuth, SAML, impersonation, encryption.
+- **Security**: audits, integrations, encryption management.
 
 ## Public Github Repositories
 
@@ -49,6 +51,6 @@ TradeAudit is a mobile app for iOS/Android targeting anyone using Twitter for st
 
 Twitter supports a feature called “cashtags” where users can represent stock ticker symbols within Tweets using a dollar sign, for example `$spy` represents the `SPDR S&P 500 ETF`. The TradeAudit mobile app allows Tweets made about stocks (with or without cashtags) to be recorded, tracked via live stock exchange prices, and aggregated to create historical performance records for Twitter accounts.
 
-### See [https://tradeaudit.app](https://tradeaudit.app) for more details
+<p style="font-size:larger;font-weight:bold">See [https://tradeaudit.app](https://tradeaudit.app) for more details</p>
 
 While the app is a closed-source, I have tried to create meaningful documentation around the technology, design, and business environment TradeAudit will operate in on this blog using the [tradeaudit tag](https://www.stevenskelton.ca/tags/#tradeaudit).
