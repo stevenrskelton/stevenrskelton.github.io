@@ -21,7 +21,7 @@ Today, as Principal Software Engineer at a global digital consulting company, he
 
 ### Github Repositories
 
-<ul style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:0px;">
+<div style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:0px;">
 
 {% assign list = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
 {% for repository in list %}
@@ -39,4 +39,4 @@ Today, as Principal Software Engineer at a global digital consulting company, he
 {% endif %}
 {% endfor %}
   
-</ul>
+</div>
