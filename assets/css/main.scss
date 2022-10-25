@@ -66,6 +66,7 @@ ins {
 
 .page__footer {
   margin-top: 0px;  
+  border-top: 1px solid #8e8b82;
 }
 
 .page__footer footer {
@@ -88,10 +89,10 @@ html {
   background-color: #e9dcbe;
 }
 
-.page__footer {
-  border-top: 1px solid #8e8b82;
+.masthead {
+  border-bottom: 1px solid #8e8b82;
 }
 
-.mastheader {
-  border-bottom: 1px solid #8e8b82;
+.greedy-nav {
+  background: inherit;
 }
