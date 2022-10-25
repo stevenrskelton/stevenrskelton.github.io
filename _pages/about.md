@@ -25,8 +25,8 @@ Today, as Principal Software Engineer at a global digital consulting company, he
 
 {% assign list = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
 {% for repository in list %}
-
-  {{ repository.owner_name }} | {{ repository }} |
+{% if respository.fork != true %}
+{{ repository }}
 {%
   include github_repository.html
   name=repository.name
@@ -37,6 +37,7 @@ Today, as Principal Software Engineer at a global digital consulting company, he
   stargazers_count=repository.stargazers_count
   forks_count=repository.forks_count
 %}
+{% endif %}
 {% endfor %}
   
 </div>
