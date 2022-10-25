@@ -30,15 +30,17 @@ High level, this requires:
 
 For developers not wanting a separate codebase for iOS and Android, there are 3 options:
 
-<center>
-  
+<div align="center">
+
+
 | Framework    | Release | Language   |                              |
 | ------------ | ------- | ---------- | ---------------------------- |
 | Xamarin      |  2011   | C#         | Microsoft support since 2016 |
 | React Native |  2015   | JavaScript | initial release by Facebook  |
 | Flutter      |  2017   | Dart       | support from Google          |
   
-</center>
+
+</div>
 
 The choice for your mobile app, if at all, depends on many factors. While Flutter lacks the maturity of Xamarin and the 
 larger ecosystem of React Native, it is arguably the most intuitive development environment.  The risk is that without 
@@ -79,15 +81,17 @@ and not-upgrading will likely continue to be a popular and supported choice but 
 
 The data layer can really make or break an application.  TradeAudit currently requires:
 
-<center>
-  
+<div align="center">
+
+
 | Implementation | Type       | Host |
 | -------------- |------------| ---- |
 | PostgreSQL     | Relational | VPS  |
 | SQS            | Buffering  | AWS  |
 | DynamoDB       | Key Value  | AWS  |
 
-</center>
+
+</div>
   
 The AWS offerings for RDS seem to be the least compelling; both by cost and additional features over VPS.  The primary 
 reason to use public cloud is rapid scalability, and outside of AWS Aurora it seems like the same amount of effort.
