@@ -25,7 +25,7 @@ Today, as Principal Software Engineer at a global digital consulting company, he
 
 {% assign list = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
 {% for repository in list %}
-{% if repository.owner_name == "stevenrskelton" && respository.stargazers_count > 0 %}
+{% if repository.owner_name == "stevenrskelton" and respository.stargazers_count > 0 %}
 {%
   include github_repository.html
   name=repository.name
