@@ -30,11 +30,15 @@ High level, this requires:
 
 For developers not wanting a separate codebase for iOS and Android, there are 3 options:
 
+<center>
+  
 | Framework    | Release | Language   |                              |
 | ------------ | ------- | ---------- | ---------------------------- |
 | Xamarin      |  2011   | C#         | Microsoft support since 2016 |
 | React Native |  2015   | JavaScript | initial release by Facebook  |
 | Flutter      |  2017   | Dart       | support from Google          |
+  
+</center>
 
 The choice for your mobile app, if at all, depends on many factors. While Flutter lacks the maturity of Xamarin and the 
 larger ecosystem of React Native, it is arguably the most intuitive development environment.  The risk is that without 
@@ -75,12 +79,16 @@ and not-upgrading will likely continue to be a popular and supported choice but 
 
 The data layer can really make or break an application.  TradeAudit currently requires:
 
+<center>
+  
 | Implementation | Type       | Host |
 | -------------- |------------| ---- |
 | PostgreSQL     | Relational | VPS  |
 | SQS            | Buffering  | AWS  |
 | DynamoDB       | Key Value  | AWS  |
 
+</center>
+  
 The AWS offerings for RDS seem to be the least compelling; both by cost and additional features over VPS.  The primary 
 reason to use public cloud is rapid scalability, and outside of AWS Aurora it seems like the same amount of effort.
 
@@ -91,7 +99,7 @@ While a lot of mobile apps can get by without a separate website, there are many
 - full web equivalent, or teasing a limited feature-set on the web
 - avoiding 15-30% service fees for transactions within the app
 
-In the case of TradeAudit, the URL [http://tradeaudit.app](https://tradeaudit.app) is hosted from a Github Pages repository.
+In the case of TradeAudit, the URL [https://tradeaudit.app](https://tradeaudit.app) is hosted from a Github Pages repository.
 Github Pages can be a simple and free option for static sites. Dynamic data for this site loads from CORS JSON requests to the main 
 TradeAudit mobile API server, and the data is highly cacheable. There are many free (or low cost) IaaS solutions providing
 highly configurable caching and DDOS protection such a AWS CloudFront or CloudFlare that will protect your API layer 
