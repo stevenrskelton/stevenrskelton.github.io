@@ -114,7 +114,7 @@
                   <text data-testid="stargazers" class="gray">{{ include.stargazers_count }}</text>
                </g>
             </g>
-            {% assign lastlength = include.stargazers_count | size | times: 7 | plus: 40 %}
+            {% assign lastlength = include.stargazers_count | size | times: 7 | plus: 10 | plus: languagelength %}
             <g transform="translate({{ lastlength }}, 0)">
                <g transform="translate(0, 0)">
                   <svg
