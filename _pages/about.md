@@ -19,7 +19,9 @@ Today, as Principal Software Engineer at a global digital consulting company, he
 - **Data**: algorithms, caching, serialization, read-write asymmetry, low latency streams.
 - **Security**: audits, SSO, OAuth, SAML, impersonation, encryption.
 
-### Github Repositories
+### Public Github Repositories
+
+<p style="font-size:small">Polymer Web Components is a deprecated framework, as all meaningful functionality is now Browser native.</p>
 
 <div style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:0px;">
 
@@ -40,3 +42,11 @@ Today, as Principal Software Engineer at a global digital consulting company, he
 {% endfor %}
   
 </div>
+
+### TradeAudit Mobile App
+
+TradeAudit is a mobile app for iOS/Android targeting anyone using Twitter for stock trading ideas or recommendations. This financial side of Twitter is colloquially referred to as “fintwit”, _ie: Financial Twitter_, and is popular with a range of people from individuals managing their own money to hustlers trying to get rich quickly.
+
+Twitter supports a feature called “cashtags” where users can represent stock ticker symbols within Tweets using a dollar sign, for example `$spy` represents the `SPDR S&P 500 ETF`. The TradeAudit mobile app allows Tweets made about stocks (with or without cashtags) to be recorded, tracked via live stock exchange prices, and aggregated to create historical performance records for Twitter accounts.
+
+#### See [https://tradeaudit.app](https://tradeaudit.app) for more details
