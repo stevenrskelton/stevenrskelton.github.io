@@ -36,7 +36,7 @@ For developers not wanting a separate codebase for iOS and Android, there are 3 
       <th>Framework</th>
       <th>Release</th>
       <th>Language</th>
-      <th><th>    
+      <th></th>    
     </tr>
   </thead>
   <tbody>
