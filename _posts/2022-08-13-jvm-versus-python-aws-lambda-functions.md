@@ -39,47 +39,47 @@ The Python 3.9 implementation is available on GitHub at
   </thead>
   <tbody>
     <tr>
-      <td>**Lines of Code**</td>
+      <td style="font-weight:bold">Lines of Code</td>
       <td style="text-align:right">86</td>
       <td style="text-align:right">61</td>
     </tr>
     <tr>
-      <td>**File size**</td>
+      <td style="font-weight:bold">File size</td>
       <td style="text-align:right">17.6 MB</td>
       <td style="text-align:right">1.7 KB</td>
     </tr>
     <tr>
-      <td>**Cold Start**</td>
-      <td style="text-align:right"></td>
-      <td style="text-align:right"></td>
+      <td style="font-weight:bold">Cold Start</td>
+      <td></td>
+      <td></td>
     </tr>
     <tr>
-      <td>- Init duration</td>
+      <td>• Init duration</td>
       <td style="text-align:right">429.39 ms</td>
       <td style="text-align:right">315.41 ms</td>
     </tr>
     <tr>
-      <td>- Duration</td>
+      <td>• Duration</td>
       <td style="text-align:right">11077.39 ms</td>
       <td style="text-align:right">274.72 ms</td>
     </tr>
     <tr>
-      <td>- Max memory used</td>
+      <td>• Max memory used</td>
       <td style="text-align:right">152 MB</td>
       <td style="text-align:right">67 MB</td>
     </tr>
     <tr>
-      <td>**Hot Load**</td>
-      <td style="text-align:right"></td>
-      <td style="text-align:right"></td>
+      <td style="font-weight:bold">Hot Load</td>
+      <td></td>
+      <td></td>
     </tr>
     <tr>
-      <td>- Duration</td>
+      <td>• Duration</td>
       <td style="text-align:right">21.48 ms</td>
       <td style="text-align:right">13.97 ms</td>
     </tr>
     <tr>
-      <td>- Max memory used</td>
+      <td>• Max memory used</td>
       <td style="text-align:right">153 MB</td>
       <td style="text-align:right">70 MB</td>
     </tr>
