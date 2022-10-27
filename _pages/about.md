@@ -7,7 +7,7 @@ author_profile: false
 Steven Skelton lives in Toronto, Canada and has a Bachelor of Mathematics from the University of Waterloo in Waterloo, Canada.
 After graduating he was a consultant to large asset management companies in Canada, specializing in systems integration, account and trading calculations, and automation of workflows.
 
-Today, he is a Principal Software Engineer at a global digital consulting company.
+Today, he is a Principal Software Engineer at a global digital-transformation consulting company.
 
 ## Executive Summary
 
