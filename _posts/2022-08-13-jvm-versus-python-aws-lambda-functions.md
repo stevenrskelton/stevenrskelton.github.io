@@ -29,7 +29,11 @@ The Python 3.9 implementation is available on GitHub at
 
 ### JVM versus Python Performance Comparison
 
-<table style="margin-left:auto;margin-right:auto;max-width:600px;display:table;">
+While [there is discussion](https://mikhail.io/serverless/coldstarts/aws/languages/) about first-call latency it tends to affect only a small number of usecases.  AWS will keep most lambda code hot-loaded for hours so which the shock of even comparing a 20MB Java JAR to 60 lines of Python code boils down to nothing.  There are optimizations that can be had both in aggregate resource cost of execution between using Python versus the JVM it would easily be outweighed by initial engineering costs by forcing developers to work outside their language of expertise.
+
+There are features such as AWS Lambda Layers that allow for a shared library [it is reported](https://www.simform.com/blog/lambda-cold-starts/) that they have only sub-50ms improvement to cold-starts.  It appears the there is no way to optimize JVM overhead away, only minimize the burden by reducing overall dependencies.
+
+<table style="margin-left:auto;margin-right:auto;width:600px;display:table;">
   <thead>
     <tr>    
       <th></th>
@@ -86,23 +90,56 @@ The Python 3.9 implementation is available on GitHub at
   </tbody>
 </table>
 
-While [there is discussion](https://mikhail.io/serverless/coldstarts/aws/languages/) about first-call latency it tends to affect only a small number of usecases.  AWS will keep most lambda code hot-loaded for hours so which the shock of even comparing a 20MB Java JAR to 60 lines of Python code boils down to nothing.  There are optimizations that can be had both in aggregate resource cost of execution between using Python versus the JVM it would easily be outweighed by initial engineering costs by forcing developers to work outside their language of expertise.
-
-There are features such as AWS Lambda Layers that allow for a shared library [it is reported](https://www.simform.com/blog/lambda-cold-starts/) that they have only sub-50ms improvement to cold-starts.  It appears the there is no way to optimize JVM overhead away, only minimize the burden by reducing overall dependencies.
-
 ### Minimizing JVM Artifact Size
 
 Maintaining lightweight resource usage is the key to keeping execution costs low.  Unfortunately the overhead of the JVM already places it behind Python and NodeJS deployments, but less than a full containerized build. Library dependencies should be kept to the minimum since JVM artifacts do not perform tree-shaking code removal that Go or GraalVM will.
 
-| Size | Name                        |                                                  |
-|------|-----------------------------|--------------------------------------------------|
-|6.9 MB|aws-lambda-java-core         |Mandatory                                         |
-|0.4 MB|aws-lambda-java-events       |Optional to support AWS event POJOs               |
-|2.2 MB|aws-lambda-java-serialization|Optional to support custom POJO serialization     |
-|9.9 MB|awssdk-[1st]-service         |Mandatory for interacting with other AWS services |
-|2.0 MB|awssdk-[additional]-service  |For each additional AWS service after the first   |
-|5.7 MB|Scala 2.13                   |Mandatory for Scala 2/3                           |
-|1.2 MB|Scala 3.1                    |Mandatory only for Scala 3                        |
+<table style="margin-left:auto;margin-right:auto;width:650px;display:table;">
+  <thead>
+    <tr>    
+      <th style="text-align:center">Size</th>
+      <th style="text-align:center">Artifact Name</th>
+      <th style="text-align:center">Use</th>  
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align:right">6.9 MB</td>
+      <td>aws-lambda-java-core</td>
+      <td>Mandatory</td>
+    </tr>
+    <tr>
+      <td style="text-align:right">0.4 MB</td>
+      <td>aws-lambda-java-events</td>
+      <td>Optional to support AWS event POJOs</td>
+    </tr>
+    <tr>
+      <td style="text-align:right">2.2 MB</td>
+      <td>aws-lambda-java-serialization</td>
+      <td>Optional to support custom POJO serialization</td>
+    </tr>
+    <tr>
+      <td style="text-align:right">9.9 MB</td>
+      <td>awssdk-[1st]-service</td>
+      <td>Mandatory for interacting with other AWS services</td>
+    </tr>
+    <tr>
+      <td style="text-align:right">2.0 MB</td>
+      <td>awssdk-[additional]-service</td>
+      <td>For each additional AWS service after the first</td>
+    </tr>
+    <tr>
+      <td style="text-align:right">5.7 MB</td>
+      <td>Scala 2.13</td>
+      <td>Mandatory for Scala 2/3</td>
+    </tr>
+    <tr>
+      <td style="text-align:right">1.2 MB</td>
+      <td>Scala 3.1</td>
+      <td>Mandatory only for Scala 3</td>
+    </tr>
+  </tbody>
+</table>
 
 While the AWS SDK represents 9.9MB above, the majority is contributed by shared libraries rather than code specific to the DynamoDB service.  Additional services can be added with minimal size increase, for example adding the `awssdk-s3` to support read/write from S3 would be 3 MB, or `awsdsk-sns` to support Notifications would be 1 MB.
 
