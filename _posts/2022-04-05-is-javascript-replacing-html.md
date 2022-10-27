@@ -1,17 +1,27 @@
 ---
-title: "Reflections: 6 Years of Software"
+title: "Is Javascript Replacing HTML?"
 categories:
   - Javascript
 ---
-My last blog update was 6 years ago, and Javascript still seems popular. Is this a case of _There Is No Alternative_?
+Over time there has been an ebb and flow to the ratio of Javascript:HTML used in websites. What motivates the change, and where is this ratio ultimately headed?
+
+Javascript fumbled along during the last millenium, with development boom times crippled by short-lived fads of browser-wars incompatibility, Java Applets, Shockwave / Flash, and even VRML (which I personally sunk many hours into) that made its use less popular. Up until 2008 the ultimate barrier was the unpredicable runtime execution that could make even properly engineered websites to become unresponse.  That year the V8 Javascript Engine unlocked the performance necessary to go all in on Javascript, and we finally got to achieve the the pinnacle of entry-level developement, the all Javascript page.
+
+```html
+<html>
+  <head><title>I ❤️ JS</title></head>
+  <body><script src="/init.js"></script></body>
+</html>
+```
+
+Is HTML a vestigial reminder of our past or are there reasons to keep it around?
 
 ## Javascript and HTML
 
-Javascript popularity is is driven by the web browsers, and an outlook on Javascript is based on a perception of HTML.
-What is your view of HTML, is it:
-1. [Incomplete and requires Javascript?](#html-is-incomplete-and-requires-javascript)
-2. [Complete and has the building blocks for web?](#html-is-complete-and-has-the-building-blocks-for-web)
-3. [Needs to be replaced!](#html-needs-to-be-replaced)
+One would suppose that their view on Javascript is determined by their personal perception of HTML.  Is yours that HTML is:
+1. [Incomplete: and requires Javascript?](#html-is-incomplete-and-requires-javascript)
+2. [Complete: and has the building blocks for web?](#html-is-complete-and-has-the-building-blocks-for-web)
+3. [Needs to be replaced!](#html-needs-to-be-replaced) (I ❤️ JS)
 
 ## HTML is Incomplete and Requires Javascript
 _**Custom Elements fixes that**_
