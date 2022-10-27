@@ -4,6 +4,7 @@ categories:
   - Scala
 tags:
   - AWS
+  - Serverless
 ---
 The suitability of programming languages across different domains is a contested topic.  AWS Lambda Functions are a serverless solution that can be used for a wide range of problems from tiny to large tasks.  For lightweight tasks how does the JVM stack up?
 
