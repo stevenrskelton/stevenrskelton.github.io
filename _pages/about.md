@@ -5,20 +5,18 @@ author_profile: false
 ---
 
 Steven Skelton lives in Toronto, Canada and has a Bachelor of Mathematics from the University of Waterloo in Waterloo, Canada.
-After graduating he was a consultant to large asset management companies in Canada, specializing in systems integration, account and trading calculations, and automation of workflows.
-
 Today, he is a Principal Software Engineer at a global digital-transformation consulting company.
 
 ## Executive Summary
 
 - **Experience**:
-  - **6 years financial services** consulting for Bay Street companies such as Gluskin Sheff + Associates, Dundee Wealth Management, and Home Trust.
-  - **8 years e-commerce** for Walmart Canada, leading technical development of the website and API for mobile clients.
+  - **6 years financial services** consulting for Bay Street financial service companies including: Gluskin Sheff + Associates, Dundee Wealth Management, and Home Trust.
+  - **8 years e-commerce** for Walmart Canada, leading technical development of the primary e-commerce website and API for mobile clients, instrumenting cloud replatforming, continuous delivery and internal/external integrations.
 - **Communication**: technology evangelist, ways of working, skills development.
 - **Proactive**: architectural runway, enterprise best practices, industry awareness.
 - **R&D**: benefit analysis, feasibility, integration strategies, adoption timelines.
-- **Security**: audits, integrations, CAP-based data strategies, end-to-end encryption.
-- **Data**: algorithms, caching, API efficiency, serialization, read-write asymmetry, low-latency streams.
+- **Security**: audits, integrations, end-to-end encryption.
+- **Data**: API efficiency and cacheability, read-write asymmetry, low-latency streams.
 - **Cloud**: scaling, resiliency, cost-mitigation, and 95th percentile.
 
 ## TradeAudit Mobile App
