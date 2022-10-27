@@ -24,22 +24,67 @@ See the full article about the Scala 3 implementation at
 [Scala 3 and AWS Lambda Functions]({% post_url 2022-08-12-scala-3-aws-lambda-functions %}).
 
 The Python 3.9 implementation is available on GitHub at
+
 [https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer/blob/main/src/main/python/handler.py](https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer/blob/main/src/main/python/handler.py)
 
 ### JVM versus Python Performance Comparison
 
-|                           | Scala / JVM | Python    |
-|---------------------------|------------:|----------:|
-| **Lines of Code**         | 86          | 61        |
-| **File size**             | 17.6 MB     | 1.7 KB    |
-| **Cold Start**            |             |           |
-| - Init duration           | 429.39 ms   | 315.41 ms |
-| - Duration                | 11077.39 ms | 274.72 ms |
-| - Max memory used         | 152 MB      | 67 MB     |
-| **Hot Load**              |             |           |
-| - Duration                | 21.48 ms    | 13.97 ms  |
-| - Max memory used         | 153 MB      | 70 MB     |
-
+<table style="margin-left:auto;margin-right:auto;max-width:600px;display:table;">
+  <thead>
+    <tr>    
+      <th></th>
+      <th style="text-align:center">Scala / JVM</th>
+      <th style="text-align:center">Python</th>  
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>**Lines of Code**</td>
+      <td style="text-align:right">86</td>
+      <td style="text-align:right">61</td>
+    </tr>
+    <tr>
+      <td>**File size**</td>
+      <td style="text-align:right">17.6 MB</td>
+      <td style="text-align:right">1.7 KB</td>
+    </tr>
+    <tr>
+      <td>**Cold Start**</td>
+      <td style="text-align:right"></td>
+      <td style="text-align:right"></td>
+    </tr>
+    <tr>
+      <td>- Init duration</td>
+      <td style="text-align:right">429.39 ms</td>
+      <td style="text-align:right">315.41 ms</td>
+    </tr>
+    <tr>
+      <td>- Duration</td>
+      <td style="text-align:right">11077.39 ms</td>
+      <td style="text-align:right">274.72 ms</td>
+    </tr>
+    <tr>
+      <td>- Max memory used</td>
+      <td style="text-align:right">152 MB</td>
+      <td style="text-align:right">67 MB</td>
+    </tr>
+    <tr>
+      <td>**Hot Load**</td>
+      <td style="text-align:right"></td>
+      <td style="text-align:right"></td>
+    </tr>
+    <tr>
+      <td>- Duration</td>
+      <td style="text-align:right">21.48 ms</td>
+      <td style="text-align:right">13.97 ms</td>
+    </tr>
+    <tr>
+      <td>- Max memory used</td>
+      <td style="text-align:right">153 MB</td>
+      <td style="text-align:right">70 MB</td>
+    </tr>
+  </tbody>
+</table>
 
 While [there is discussion](https://mikhail.io/serverless/coldstarts/aws/languages/) about first-call latency it tends to affect only a small number of usecases.  AWS will keep most lambda code hot-loaded for hours so which the shock of even comparing a 20MB Java JAR to 60 lines of Python code boils down to nothing.  There are optimizations that can be had both in aggregate resource cost of execution between using Python versus the JVM it would easily be outweighed by initial engineering costs by forcing developers to work outside their language of expertise.
 
