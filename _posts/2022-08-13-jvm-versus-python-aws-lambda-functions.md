@@ -33,7 +33,7 @@ While [there is discussion](https://mikhail.io/serverless/coldstarts/aws/languag
 
 There are features such as AWS Lambda Layers that allow for a shared library [it is reported](https://www.simform.com/blog/lambda-cold-starts/) that they have only sub-50ms improvement to cold-starts.  It appears the there is no way to optimize JVM overhead away, only minimize the burden by reducing overall dependencies.
 
-<table style="margin-left:auto;margin-right:auto;width:600px;display:table;">
+<table style="margin-left:auto;margin-right:auto;width:500pt;display:table;">
   <thead>
     <tr>    
       <th></th>
@@ -94,7 +94,7 @@ There are features such as AWS Lambda Layers that allow for a shared library [it
 
 Maintaining lightweight resource usage is the key to keeping execution costs low.  Unfortunately the overhead of the JVM already places it behind Python and NodeJS deployments, but less than a full containerized build. Library dependencies should be kept to the minimum since JVM artifacts do not perform tree-shaking code removal that Go or GraalVM will.
 
-<table style="margin-left:auto;margin-right:auto;width:650px;display:table;">
+<table style="margin-left:auto;margin-right:auto;width:700pt;display:table;">
   <thead>
     <tr>    
       <th style="text-align:center">Size</th>
