@@ -5,7 +5,7 @@ categories:
 ---
 Over time there has been an ebb and flow to the ratio of Javascript:HTML used in websites. What motivates the change, and where is this ratio ultimately headed?
 
-Javascript fumbled along during the last millenium, with development boom times crippled by short-lived fads of browser-wars incompatibility, Java Applets, Shockwave / Flash, and even VRML (which I personally sunk many hours into) that made its use less popular. Up until 2008 the ultimate barrier was the unpredicable runtime execution that could make even properly engineered websites to become unresponse.  That year the V8 Javascript Engine unlocked the performance necessary to go all in on Javascript, and we finally got to achieve the the pinnacle of entry-level developement, the all Javascript page.
+Javascript fumbled along during the last millenium, with development boom times crippled by short-lived fads of browser-wars incompatibility, Java Applets, Shockwave / Flash, and even VRML (which I personally sunk many hours into) that made its use less popular. Up until 2008 the ultimate barrier was the unpredicable runtime execution that could make even properly engineered websites to become unresponse.  That year the V8 Javascript Engine unlocked the performance necessary to go all in on Javascript, and we finally got to achieve the pinnacle of entry-level developement: the all Javascript page.
 
 ```html
 <html>
