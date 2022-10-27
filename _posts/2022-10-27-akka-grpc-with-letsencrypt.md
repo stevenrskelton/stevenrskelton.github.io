@@ -5,11 +5,9 @@ categories:
   - Scala
 ---
 The Electric Frontier Foundation (EFF) has recommendations about [encrypting the web](https://www.eff.org/encrypt-the-web); there is no reason to be 
-running servers over unencrypted HTTP any longer. It is irresponsible to your users and unnecessary. [Let's Encrypt](https://letsencrypt.org/) is 
-the most popular way to get a free TLS certificate so cost is no longer a factor.  
-_(Many still refer to these incorrectly as the outdated an SSL certificate, leaving libraries such as OpenSSL unfortunately named but HTTPS uses TLS now)_
+running servers over unencrypted HTTP any longer. It is irresponsible to your users and unnecessary, as such there is a a formal mechanism called [HTTP Strict Transport Security (HSTS)](https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) that enforces HTTPS for all requests at the domain level. Taking it further, modern browsers include a set of domains which can only work over HTTPS, it started with Google TLDs such as `.dev` and `.app`, but it is growing [https://hstspreload.org/](https://hstspreload.org/). 
 
-While there is no longer a cost associated to HTTPS, there are configuration difficulties. Even glossing over certificate revocation, certificate expiration is a plague in most enterprises.  In my experience TLS certificates has been mostly a manual process, especially with self-signed certs being used in non-production environments. Especially in a microservice setup, development teams would constantly be running into expired certificates that were manually created year(s) ago.
+[Let's Encrypt](https://letsencrypt.org/) is the most popular way to get a free TLS certificate. _(Many still refer to these incorrectly as the outdated an SSL certificate, leaving libraries such as OpenSSL unfortunately named but HTTPS uses TLS now)_ While cost is no longer a factor preventing HTTPS adoption, there certainly are configuration difficulties. Even glossing over certificate revocation, certificate expiration is a plague in most enterprises.  In my experience TLS certificates has been mostly a manual process, especially with self-signed certs being used in non-production environments. Especially in a microservice setup, development teams would constantly be running into expired certificates that were manually created year(s) ago.
 
 The The Let's Encrypt Certbot tool automates renewal, and it is arguably better to use Let's Encrypt's practice of 90 expiry even when you have the choice for more.  DevOps tools rust without use and 90 day processes essentially force automation.
 
