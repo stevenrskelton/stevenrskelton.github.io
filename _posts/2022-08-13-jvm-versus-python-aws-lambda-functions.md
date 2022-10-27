@@ -39,49 +39,49 @@ The Python 3.9 implementation is available on GitHub at
   </thead>
   <tbody>
     <tr>
-      <td style="font-weight:bold">Lines of Code</td>
-      <td style="text-align:right">86</td>
-      <td style="text-align:right">61</td>
+      <td style="font-weight:bold;padding-left:20pt">Lines of Code</td>
+      <td style="text-align:right;padding-right:20pt">86</td>
+      <td style="text-align:right;padding-right:20pt">61</td>
     </tr>
     <tr>
-      <td style="font-weight:bold">File size</td>
-      <td style="text-align:right">17.6 MB</td>
-      <td style="text-align:right">1.7 KB</td>
+      <td style="font-weight:bold;padding-left:20pt">File size</td>
+      <td style="text-align:right;padding-right:20pt">17.6 MB</td>
+      <td style="text-align:right;padding-right:20pt">1.7 KB</td>
     </tr>
     <tr>
-      <td style="font-weight:bold">Cold Start</td>
+      <td style="font-weight:bold;padding-left:20pt">Cold Start</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>• Init duration</td>
-      <td style="text-align:right">429.39 ms</td>
-      <td style="text-align:right">315.41 ms</td>
+      <td style="padding-left:30pt">• Init duration</td>
+      <td style="text-align:right;padding-right:20pt">429.39 ms</td>
+      <td style="text-align:right;padding-right:20pt">315.41 ms</td>
     </tr>
     <tr>
-      <td>• Duration</td>
-      <td style="text-align:right">11077.39 ms</td>
-      <td style="text-align:right">274.72 ms</td>
+      <td style="padding-left:30pt">• Duration</td>
+      <td style="text-align:right;padding-right:20pt">11077.39 ms</td>
+      <td style="text-align:right;padding-right:20pt">274.72 ms</td>
     </tr>
     <tr>
-      <td>• Max memory used</td>
-      <td style="text-align:right">152 MB</td>
-      <td style="text-align:right">67 MB</td>
+      <td style="padding-left:30pt">• Max memory used</td>
+      <td style="text-align:right;padding-right:20pt">152 MB</td>
+      <td style="text-align:right;padding-right:20pt">67 MB</td>
     </tr>
     <tr>
-      <td style="font-weight:bold">Hot Load</td>
+      <td style="font-weight:bold;padding-left:20pt">Hot Load</td>
       <td></td>
       <td></td>
     </tr>
     <tr>
-      <td>• Duration</td>
-      <td style="text-align:right">21.48 ms</td>
-      <td style="text-align:right">13.97 ms</td>
+      <td style="padding-left:30pt">• Duration</td>
+      <td style="text-align:right;padding-right:20pt">21.48 ms</td>
+      <td style="text-align:right;padding-right:20pt">13.97 ms</td>
     </tr>
     <tr>
-      <td>• Max memory used</td>
-      <td style="text-align:right">153 MB</td>
-      <td style="text-align:right">70 MB</td>
+      <td style="padding-left:30pt">• Max memory used</td>
+      <td style="text-align:right;padding-right:20pt">153 MB</td>
+      <td style="text-align:right;padding-right:20pt">70 MB</td>
     </tr>
   </tbody>
 </table>
