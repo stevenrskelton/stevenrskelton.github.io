@@ -5,7 +5,7 @@ categories:
 ---
 Over time there has been an ebb and flow to the ratio of Javascript:HTML used in websites. What motivates the change, and where is this ratio ultimately headed?
 
-Javascript fumbled along during the last millenium, with development boom times crippled by short-lived fads of browser-wars incompatibility, Java Applets, Shockwave / Flash, and even VRML (which I personally sunk many hours into) that made its use less popular. Up until 2008 the ultimate barrier was the unpredicable runtime execution that could make even properly engineered websites to become unresponse.  That year the V8 Javascript Engine unlocked the performance necessary to go all in on Javascript, and we finally got to achieve the pinnacle of entry-level developement: the all Javascript page.
+Javascript fumbled along during the last millenium with development boom times crippled by short-lived fads of browser-wars incompatibility, Java Applets and Shockwave/Flash that made Javascript use less popular. Up until 2008 the ultimate barrier was unpredicable runtime execution that could make even properly engineered websites unresponse.  That year the V8 Javascript Engine unlocked the performance necessary to go all in on Javascript, and we finally got to achieve the pinnacle of entry-level developement: the all Javascript page.
 
 ```html
 <html>
@@ -18,7 +18,7 @@ Is HTML a vestigial reminder of our past or are there reasons to keep it around?
 
 ## Javascript and HTML
 
-One would suppose that their view on Javascript is determined by their personal perception of HTML.  Is yours that HTML is:
+One would suppose that their view on Javascript is influenced by their personal perception of HTML.  Is yours that HTML is:
 1. [Incomplete: and requires Javascript?](#html-is-incomplete-and-requires-javascript)
 2. [Complete: and has the building blocks for web?](#html-is-complete-and-has-the-building-blocks-for-web)
 3. [Needs to be replaced!](#html-needs-to-be-replaced) (I ❤️ JS)
@@ -26,17 +26,17 @@ One would suppose that their view on Javascript is determined by their personal 
 ## HTML is Incomplete and Requires Javascript
 _**Custom Elements fixes that**_
 
-HTML is limited as a markup language, static by nature, so scripting is a necessary. Javascript came in to make pages dynamic, as a glue between HTML DOM element `onevent` handlers.
+HTML is limited as a markup language, static by nature making scripting is a necessary. Javascript came in to make pages dynamic, as a glue between HTML DOM element `onevent` handlers.
 
 ```html
 <button onclick="myFunction()">Click me</button>
 ```
 
-People quickly realized that Javascript needed to exist is its own right, HTML couldn't represent non-visual abstractions like server requests, undo stacks, state management, or conditional DOM elements. But that also doesn't mean abandon HTML because it is too limiting to create 100% Javascript PWAs. The question to answer is how much Javascript is required to implement a complex web page?
+People quickly realized that Javascript needed to exist is its own right, HTML couldn't represent non-visual abstractions like server requests, undo stacks, state management, or conditional DOM elements. There were imfamous early failed attempts at HTML interactivity like the &lt;blink&gt; tag. However that doesn't necessarily mean we need to abandon HTML completely to create 100% Javascript PWAs. The question to answer is how much Javascript is required to implement a complex web page, and how much HTML is suitable as a document scaffolding?
 
-To answer that question, it's important to recognize that HTML already handles more complexity than just UI markup. Consider the `<button>` example above, is capturing a user interaction and firing an event not complex? What about a `<video>` tag, is downloading then decoding a binary stream, rendering using system specific hardware acceleration not complex? Where is all of the Javascript?
+To answer that question, it's important to recognize that HTML already handles more complexity than UI markup. Consider the `<button>` example above, is capturing a user interaction and firing an event not complex? What about a `<video>` tag, is downloading then decoding a binary stream, rendering using system specific hardware acceleration not complex? Where is all of the Javascript?
 
-Javascript doesn't _have_ to handle all of the complexity in a web page if there exist HTML elements that can be used instead. 
+These are examples that prove Javascript doesn't _have_ to handle all of the complexity in a web page, there already exist HTML elements that do the heavy lifting.
 
 Polymer and Web Components served their purpose.  Polymer started as a polyfil implementation of Web Components, pioneered a use case, and then slowly disappeared. The great ideas of Polymer and Web Compoents were moved into browser native support, like how `<button>` and `<video>` are nativily supported. The less useful features such as HTML Imports and 2-way data binding were removed from Polymer.  What remained were snippets of helper utilities not applicable to all scenarios, so it made sense to repackage them as [Lit library](https://lit.dev/).
 
