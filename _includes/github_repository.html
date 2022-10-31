@@ -2,7 +2,7 @@
 {% if homepage != "" %}
 <a href="https://www.{{ homepage }}" style="cursor:pointer;display:flex;" target="_blank">
 {% else %}
-<a href="{{ html_url }}" style="cursor:pointer;display:flex;" target="_blank">
+<a href="{{ include.html_url }}" style="cursor:pointer;display:flex;" target="_blank">
 {% endif %}
    <svg
       width="350"
