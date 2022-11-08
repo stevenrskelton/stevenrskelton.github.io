@@ -29,18 +29,20 @@ The only caveat is that the pages won't be served until the `Enforce HTTPS` chec
 
 ### How Do I Set It Up?
 
-Github pages has good documentation on this, basically you will need to create a `CNAME` entry at your DNS provider to point to your `www.example.com` to `<user>.github.io`.  This is the DNS equivalent of an HTTP redirect, it is telling browsers requesting `www.example.com` to use `<user>.github.io` instead.
+Github pages has [good documentation](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages) on this, basically to point any subdomain, ie: www.example.com to your Github Pages you will need to create a `CNAME` entry at your DNS provider.  The `CNAME` is an entry in the DNS record that points your `www.example.com` to `<user>.github.io`.  It is the DNS equivalent of an HTTP redirect, it is telling browsers requesting `www.example.com` to use `<user>.github.io` instead.
 
-The only hard thing is a `CNAME` doesn't work for _apex_ domains, that is `example.com` without the `www`. These need a more low level approach,  instead of setting up `CNAME` to point to another domain you need to use an `A` record pointing to the Github server IP addresses:
+#### Apex Domain Setup
 
-No big deal, at your DNS provider, add an `A` record for
+Apex domains are what you purchase when you "buy a domain".  You choose a TLD (Top Level Domain) such as `.com` or `.eu`, and then a unique apex domain in it, such as `example.com`.  While you may run your website on `www.example.com` and `api.example.com`, it is import to also setup the apex. The only difference is a `CNAME` doesn't work for _apex_ domains,  These need a more low level approach; instead of setting up `CNAME` to point to another domain you need to use an `A` record set to the Github server IP addresses:
+
+No big deal, at your DNS provider, add an `A` record of:
 ```
 185.199.108.153
 185.199.109.153
 185.199.110.153
 185.199.111.153
 ```
-and an `AAAA` (support IPv6) for
+and an `AAAA` record (support IPv6) of:
 ````
 2606:50c0:8000::153
 2606:50c0:8001::153
@@ -50,13 +52,17 @@ and an `AAAA` (support IPv6) for
 
 The next step is easy to forget, but _very_ important. 
 
-[https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages)
+#### Verify Your Domain with Github
 
-If you don't do this, then should your Github Pages every get disabled someone else can host their Github Pages on your domain! The limitation of using DNS is that it isn't part of HTTP.  When your `CNAME` or `A` record points to `<user>.github.io` it is used to resolve the IP, and then browsers make an HTTP request to that IP for your `example.com`.  Github webservers have no idea if the browser wanted `<user>.github.io` or `<malicious-user>.github.io`.  So should your Github Pages disappear, _malicious-user_ could easily set their Github Pages to the `example.com` custom domain and their site would be served instead of yours!
+If you don't verify, ie: prove ownership of of your domain, then there are cases where other users can pretend that they own it and use it for their pages.  Should your Github Pages every get disabled the next person to request _your domain_ for their Github Page will get it! This is caused by the limitation that DNS isn't part of HTTP, it is completely separate.
 
-The solution is in the link above, the `TXT` record stores a value unique to `<user>.github.io`, so Github Pages knows that it should only ever serve your site.
+When your `CNAME` or `A` record points to `<user>.github.io` it is a DNS configuration to resolve your `example.com` domain to whatever IP is used by `<user>.github.io`, which are the Github Pages server IPs.  It then sends an HTTP request for `example.com` to one of those Github Pages IPs.  
 
-Very similiar to this is if you use a `CNAME` wildcard, as in pointing `*.example.com` to Github Pages.  The problem here is that your Github Pages site can only have 1 domain (plus the apex domain).  Let's say you set up your site to be `www.example.com` (and `example.com`).  Then your `CNAME` also points every subdomain, like `blog.example.com` to Github Pages.  Any user can claim them for their Github Pages custom domain - so *don't do this*.
+If their Github Pages is set to use your domain as its custom domain their site will be used.  Thankfully, stopping this from happening is easy and [explained in the documentation](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/verifying-your-custom-domain-for-github-pages).  The solution adding a `TXT` record in your DNS record with a specific token value that proves you own the domain.  This is a common approach used by AWS, Google Adsense, etc.
+
+#### Don't Use Wildcard Subdomains
+
+Very similiar how domain hijacking happens above, is if you use `CNAME` wildcards, as in pointing `*.example.com` to Github Pages.  The problem here is that your Github Pages site can only have 1 domain (plus the apex domain) and you are pointing an unlimited number of subdomains to Github Pages. Let's say you set up your site to be `www.example.com` (and `example.com`) but wildcard your `CNAME`, this means requests to `blog.example.com` also are directed to Github Pages.  The first Github Pages site to set their custom domain to `blog.example.com` will be served!  So don't use `CNAME` wildcards.
 
 ## Conclusion
 
