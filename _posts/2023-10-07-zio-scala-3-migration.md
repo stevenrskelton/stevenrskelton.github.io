@@ -20,7 +20,11 @@ Remove ScalaMock
 akka-stream-alpakka-ftp -> ZIO ftp
 
 Akka gRPC -> ZIO gRPC
+- rewrite HTTP routes
+- move authenticated user into function parameters rather than class level
 
 Akka HTTP -> ZIO HTTP
 play-ahc-ws-standalone
 play-ws-standalone-json
+
+logger -> ZIO.logger
