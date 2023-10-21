@@ -42,6 +42,8 @@ private val sslConfig = ClientSSLConfig.FromCertFile("/etc/ssl/certs/ca-certific
 
 Part about disabling IPv4, 
 
+java.lang.System.setProperty("java.net.preferIPv4Stack", "true")
+-Djava.net.preferIPv4Stack=true
 ```
 enp5s0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
         ether aa:bb:cc:dd:ee:ff  txqueuelen 1000  (Ethernet)
