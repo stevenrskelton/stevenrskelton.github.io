@@ -4,7 +4,7 @@ categories:
   - Platform
   - Scala
 tags:
-  - Akka
+  - Akka-Pekko
 ---
 The Electric Frontier Foundation (EFF) has recommendations about [encrypting the web](https://www.eff.org/encrypt-the-web); there is no reason to be 
 running servers over unencrypted HTTP any longer. It is irresponsible to your users and unnecessary, as such there is a a formal mechanism called [HTTP Strict Transport Security (HSTS)](https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) that enforces HTTPS for all requests at the domain level. Taking it further, modern browsers include a set of domains which can only work over HTTPS, it started with Google TLDs such as `.dev` and `.app`, but it is growing [https://hstspreload.org/](https://hstspreload.org/). 
