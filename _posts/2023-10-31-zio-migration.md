@@ -1,9 +1,9 @@
 ---
-title: "Migration from Akka Futures to ZIO"
+title: "ZIO migration from Akka Futures"
 categories:
   - Scala
 tags:
-  - Akka
+  - Akka-Pekko
   - ZIO
   - TradeAudit
 ---
