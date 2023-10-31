@@ -64,20 +64,20 @@ ZIO has [documented the pathway from Akka to ZIO](https://zio.dev/guides/migrate
 This code-base wasn't using any of the Cluster or distributed node functionality, it was a very straight-forward gRPC request handler and scheduled task executor with very limited data sharing between parallel tasks.
 
 | Order  | Functionality       | Original                                               | Target                                                       | 
-|-------:|:--------------------|:-------------------------------------------------------|:-------------------------------------------------------------|
-|      1 | SQL                 | akka-stream-alpakka-slick                              | quill-jdbc-zio                                               |
-|      2 | gRPC server         | • akka-http <br/>• (JVM TLS)                           | • grpc-netty<br/>• scalapb-runtime-grpc<br/>• netty-tcnative |
-|      2 | gRPC generation     | sbt-akka-grpc                                          | • sbt-protoc<br/>• zio-grpc-codegen                          |
-|      3 | HTTP server         | akka-http                                              | zio-http                                                     |
-|      4 | Scala               | 2.13                                                   | 3.3                                                          |
-|      4 | Test                | • scalatest<br/>• scalamock                            | ?                                                            |
-|      4 | FTP client          | akka-stream-alpakka-ftp                                | zio-ftp                                                      |
-|      4 | Workflows           | akka-stream                                            | • pekko-stream<br/>• zio                                     |
+|:------:|:--------------------|:-------------------------------------------------------|:-------------------------------------------------------------|
+|    1   | SQL                 | akka-stream-alpakka-slick                              | quill-jdbc-zio                                               |
+|    2   | gRPC server         | • akka-http <br/>• (JVM TLS)                           | • grpc-netty<br/>• scalapb-runtime-grpc<br/>• netty-tcnative |
+|    2    gRPC generation     | sbt-akka-grpc                                          | • sbt-protoc<br/>• zio-grpc-codegen                          |
+|    3   | HTTP server         | akka-http                                              | zio-http                                                     |
+|    4   | Scala               | 2.13                                                   | 3.3                                                          |
+|    4.  | Test                | • scalatest<br/>• scalamock                            | ?                                                            |
+|    4   | FTP client          | akka-stream-alpakka-ftp                                | zio-ftp                                                      |
+|    4   | Workflows           | akka-stream                                            | • pekko-stream<br/>• zio                                     |
 | option | HTTP client         | • play-ahc-ws-standalone<br/>• play-ws-standalone-json | zio-http                                                     |
 | option | Configuration Files | typesafe config                                        | +(zio-config-typesafe)?                                      |
 | option | Cache               | scaffeine                                              | zio-cache                                                    |
-|    n/a | JSON                | play-json                                              | (zio-json)?                                                  |
-|    n/a | Logging             | logback-classic                                        | +(zio-logging-slf4j2)?                                       |
+|   n/a  | JSON                | play-json                                              | (zio-json)?                                                  |
+|   n/a  | Logging             | logback-classic                                        | +(zio-logging-slf4j2)?                                       |
 
 The order is broken down into steps: _1_, _2_, _3_, and _4_; there are _option_ migrations that might be done but for now they are using ZIO ↔ Future conversions.  Finally there are _n/a_ migrations that need to be evaluated if they provide any benefit.
 
@@ -113,5 +113,24 @@ Quill trades off compile time for greater runtime performance.  The sample proje
 
 ## Step 3: Akka HTTP Server to ZIO HTTP Server
 
-## Scala 2 to 3
+## Step 4: Scala 2 to 3
+
+The Scala 3 was a full rewrite based on Dotty, and is less mature than the Scala 2 compiler.  It is noticably slower, however over time this is expected to improve.  The slowness of Quill is notable, outlined in [Step 1:Effect on Compile Time](#effect-on-compile-time).  This is an understandable reason to use Slick over Quill until code can be refactored to maximize incremental compilation, or avoid SQL compilation by moving queries to their own subproject artifact.
+
+### Quill Query AST in Scala 3
+
+The Scala 3 compiler rewrite also removed all support for Scala 2 macros.  Macros operate in a very different way, and this requires a more precise code structure to allow full visibility into the AST of SQL queries. The primary change required is to inline all steps of the query generation, this is achieved using the Scala 3 keyword `inline`.
+```
+val query = quote { ... }
+```
+to 
+```
+inline def query = ...
+```
+There are limitations to inlining, for example inline def cannot be nested.  Swaping `inline def` for `val` was a minor change, restructuing code to single level def depth was a more significant refactor.  Until this was complete those queries used the dynamic runtime generation fallback.
+
+
+### Akka to Pekko
+
+Another required change was enforcing that all Akka libraries had either been removed or migrated to Pekko.  The Akka BUSL 1.1 change took effect before all Akka libraries had Scala 3 compatible versions available; there is no Scala 3 compatible version of akka-http or akka-grpc under an Apache 2.0 license.
 
