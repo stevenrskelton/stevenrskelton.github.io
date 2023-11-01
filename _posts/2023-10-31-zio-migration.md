@@ -105,9 +105,13 @@ Quill trades off compile time for greater runtime performance.  The sample proje
 
 | Implementation | Scala 2 Compile Time | Scala 3 Compile Time |
 |:---------------|:--------------------:|:--------------------:|
-| Slick          |                      |         n/a          |
-| Quill          |                      |                      |
-| Quill Dynamic  |         n/a          |                      |
+| Slick          |         45s          |         n/a          |
+| Quill          |        4m 17s        |        8m 42s        |
+| Quill Dynamic  |         n/a          |        7m 52s        |
+
+8-core 4200MHz, 16GB RAM
+Quill required > 4GB Heap to compile Scala 3
+
 
 ## Step 2: gRPC Migration from Akka to ZIO
 
