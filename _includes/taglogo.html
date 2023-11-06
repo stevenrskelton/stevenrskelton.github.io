@@ -1,0 +1,6 @@
+{% assign tag = include.tags | first %}
+{% if tag = "ZIO" %}
+  {% include postlogo.html title="ZIO" src="/assets/images/tags/ZIO.png" %}
+{% else if tag = "Akka-Pekko" %}
+  {% include postlogo.html title="ZIO" src="/assets/images/tags/Akka_toolkit_logo.svg" %}
+{% endif %}

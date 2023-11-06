@@ -8,7 +8,7 @@ tags:
   - TradeAudit
 ---
 
-Akka / [Apache Pekko](https://pekko.apache.org/) is a robust, popular, and thoroughly tested Scala framework. One of the concurrency primatives it uses is the standard `scala.concurrent.Future` class.  Before these existed in Scala, there was the [Twitter `Future`](https://twitter.github.io/util/guide/util-cookbook/futures.html) offering similiar, but expanded functionality including cancellation/interuptability.  Ignoring the functional coding style promoted by [ZIO](https://zio.dev/) for a second, the concurrency primative used by ZIO, known as `ZIO[R, E, A]` can be viewed as a more advanced `Future[A]`.
+Akka / [Apache Pekko](https://pekko.apache.org/) is a robust and popular Scala framework used to build concurrent production-grade software. One of the concurrency primatives it uses is the standard `scala.concurrent.Future` class.  Before these existed in Scala, there was the [Twitter `Future`](https://twitter.github.io/util/guide/util-cookbook/futures.html) offering similiar, but expanded functionality including cancellation/interuptability.  Ignoring the functional coding style promoted by [ZIO](https://zio.dev/) for a second, the concurrency primative used by ZIO, known as `ZIO[R, E, A]` can be viewed as a more advanced `Future[A]`.
 
 One notices `ZIO` has 2 additional type parameters; each of these offer functionality `Future` is incapable of.
 

@@ -4,7 +4,7 @@ title: "ZIO Http (Client) Preview"
 categories:
   - Scala
 tags:
-  - Akka
+  - Akka-Pekko
   - ZIO
 ---
 
