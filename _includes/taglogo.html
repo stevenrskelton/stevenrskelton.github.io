@@ -1,6 +1,10 @@
 {% assign tag = include.tags | first %}
-{% if tag = "ZIO" %}
+
+{% case tag %}
+{% when "ZIO" %}
   {% include postlogo.html title="ZIO" src="/assets/images/tags/ZIO.png" %}
-{% else if tag = "Akka-Pekko" %}
+{% when "Akka-Pekko" %}
   {% include postlogo.html title="ZIO" src="/assets/images/tags/Akka_toolkit_logo.svg" %}
-{% endif %}
+{% else %}
+
+{% endcase %}

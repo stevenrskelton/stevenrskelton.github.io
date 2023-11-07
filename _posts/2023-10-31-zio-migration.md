@@ -59,25 +59,59 @@ val z: IO[KnownException, A] = t.catchAll {
 
 # Migration
 
-ZIO has [documented the pathway from Akka to ZIO](https://zio.dev/guides/migrate/from-akka/), and it aligns with my personal experience migrating [TradeAudit](https://tradeaudit.app).
+ZIO has [documented the pathway from Akka to ZIO](https://zio.dev/guides/migrate/from-akka/), and it aligns with my personal experience migrating [Trade Audit](https://tradeaudit.app).
 
 This code-base wasn't using any of the Cluster or distributed node functionality, it was a very straight-forward gRPC request handler and scheduled task executor with very limited data sharing between parallel tasks.
 
-| Order  | Functionality       | Original                                               | Target                                                       | 
-|:------:|:--------------------|:-------------------------------------------------------|:-------------------------------------------------------------|
-|    1   | SQL                 | akka-stream-alpakka-slick                              | quill-jdbc-zio                                               |
-|    2   | gRPC server         | • akka-http <br/>• (JVM TLS)                           | • grpc-netty<br/>• scalapb-runtime-grpc<br/>• netty-tcnative |
-|    2    gRPC generation     | sbt-akka-grpc                                          | • sbt-protoc<br/>• zio-grpc-codegen                          |
-|    3   | HTTP server         | akka-http                                              | zio-http                                                     |
-|    4   | Scala               | 2.13                                                   | 3.3                                                          |
-|    4.  | Test                | • scalatest<br/>• scalamock                            | ?                                                            |
-|    4   | FTP client          | akka-stream-alpakka-ftp                                | zio-ftp                                                      |
-|    4   | Workflows           | akka-stream                                            | • pekko-stream<br/>• zio                                     |
-| option | HTTP client         | • play-ahc-ws-standalone<br/>• play-ws-standalone-json | zio-http                                                     |
-| option | Configuration Files | typesafe config                                        | +(zio-config-typesafe)?                                      |
-| option | Cache               | scaffeine                                              | zio-cache                                                    |
-|   n/a  | JSON                | play-json                                              | (zio-json)?                                                  |
-|   n/a  | Logging             | logback-classic                                        | +(zio-logging-slf4j2)?                                       |
+<table>
+    <thead>
+        <th>Order</th>
+        <th>Functionality</th>
+        <th>Original</th>
+        <th>Target</th>
+    </thead>
+    <tbody>
+        <tr>
+            <td style="text-align:center">1</td><td>SQL</td><td>akka-stream-alpakka-slick</td><td>quill-jdbc-zio</td>
+        </tr>
+        <tr>
+            <td rowspan="2" style="text-align:center">2</td><td>gRPC server</td><td>• akka-http <br/>• (JVM TLS)</td><td>• grpc-netty<br/>• scalapb-runtime-grpc<br/>• netty-tcnative</td>
+        </tr>
+        <tr>
+            <td>gRPC generation</td><td>sbt-akka-grpc</td><td>• sbt-protoc<br/>• zio-grpc-codegen</td>
+        </tr>
+        <tr>
+            <td style="text-align:center">3</td><td>HTTP server</td><td>akka-http</td><td>zio-http</td>
+        </tr>
+        <tr>
+            <td rowspan="4" style="text-align:center">4</td><td>Scala</td><td>2.13</td><td>3.3</td>
+        </tr>
+        <tr>
+            <td>Test</td><td>• scalatest<br/>• scalamock</td><td>?</td>
+        </tr>
+        <tr>
+            <td>FTP client</td><td>akka-stream-alpakka-ftp</td><td>zio-ftp</td>
+        </tr>
+        <tr>
+            <td>Workflows</td><td>akka-stream</td><td>• pekko-stream<br/>• zio</td>
+        </tr>
+        <tr>
+            <td rowspan="3" style="text-align:center">option</td><td>HTTP client</td><td>• play-ahc-ws-standalone<br/>• play-ws-standalone-json</td><td>zio-http</td>
+        </tr>
+        <tr>
+            <td>Configuration Files</td><td>typesafe config</td><td>+(zio-config-typesafe)?</td>
+        </tr>
+        <tr>
+            <td>Cache</td><td>scaffeine</td><td>zio-cache</td>
+        </tr>
+        <tr>
+            <td rowspan="2" style="text-align:center">n/a</td><td>JSON</td><td>play-json</td><td>(zio-json)?</td>
+        </tr>
+        <tr>
+            <td>Logging</td><td>logback-classic</td><td>+(zio-logging-slf4j2)?</td>
+        </tr>
+    </tbody>
+</table>
 
 The order is broken down into steps: _1_, _2_, _3_, and _4_; there are _option_ migrations that might be done but for now they are using ZIO ↔ Future conversions.  Finally there are _n/a_ migrations that need to be evaluated if they provide any benefit.
 

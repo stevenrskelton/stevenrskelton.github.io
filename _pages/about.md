@@ -4,36 +4,54 @@ title: "About"
 author_profile: false
 ---
 
-Steven Skelton lives in Toronto, Canada and has a Bachelor of Mathematics from the University of Waterloo in Waterloo, Canada.
-Today, he is a Principal Software Engineer at a global digital-transformation consulting company.
+**🇨🇦 Toronto, Canada**
 
-## Executive Summary
+**Honours Bachelor of Mathematics**  
+Double major in Pure and Applied Mathematics from the University of Waterloo
 
-- **Experience**:
-  - **6 years financial services** consulting for Bay Street financial service companies including:
-    Gluskin Sheff + Associates, Dundee Wealth Management, and Home Trust.
-  - **8 years e-commerce** for Walmart Canada, leading technical development of the e-commerce website and API for mobile clients,
-    with key successes in cloud replatforming, continuous delivery and internal/external integrations.
-- **Communication**: technology evangelist, ways of working, skills development.
-- **Proactive**: architectural runway, enterprise best practices, industry awareness.
-- **R&D**: benefit analysis, feasibility, integration strategies, adoption timelines.
-- **Security**: audits, integrations, end-to-end encryption.
-- **Data**: API efficiency and cacheability, read-write asymmetry, low-latency streams.
-- **Cloud**: scaling, resiliency, cost-mitigation, and 95th percentile.
+**Principal Engineer**  
+Currently at a global digital-transformation consulting company
 
-## TradeAudit Mobile App
+## Work Summary
 
-TradeAudit is a mobile app for iOS/Android targeting anyone using Twitter for stock trading ideas or investment recommendations. This financial side of Twitter is colloquially referred to as “fintwit”, _ie: Financial Twitter_, and is popular with a range of people from individuals managing their own money to hustlers trying to get rich quickly.
+- **8 years** e-commerce for Walmart Canada, leading technical development of the e-commerce website and API for mobile clients,
+with key successes in cloud re-platforming, continuous delivery and internal/3rd-party integrations.
 
-Twitter supports a feature called “cashtags” where users can represent stock ticker symbols within Tweets using a dollar sign, for example `$spy` represents the `SPDR S&P 500 ETF`. The TradeAudit mobile app allows Tweets made about stocks (with or without cashtags) to be recorded, tracked via live exchange prices, and aggregated to create historical performance records for Twitter accounts.
+- **7 years** software consulting in financial services, portfolio and asset management, and fintech;  
+including Gluskin Sheff + Associates, Dundee Wealth Management, Home Trust, Point72 and PureFacts Financial.
 
-<p style="font-size:larger;font-weight:bold;text-align:center;">
-  See <a href="https://tradeaudit.app" target="_blank" title="TradeAudit Mobile App">https://tradeaudit.app</a> for more
-</p>
+- **3 years** shorter engagement consulting across a diverse range of e-commerce, customer data aggregation and non-profit. 
 
-While the app is a closed-source, it is a meaningful source for documentation around the technology, design, and business environment TradeAudit will operate in.  All posts about TradeAudit on this blog will include the [tradeaudit](https://www.stevenskelton.ca/tags/#tradeaudit) tag.
+## Principal Engineering
 
-## Public Github Repositories
+- **Communication**: technology evangelist, ways of working, skills development, inter-team cohesion.
+- **Proactive**: architectural runway, enterprise best practices, industry awareness, maintaining product agility.
+- **R&D**: benefit analysis, feasibility, integration strategies, adoption timelines and planning.
+- **Security**: audits, integrations, end-to-end encryption, PII privacy enforcements.
+- **Data**: API efficiency and cacheability, read-write asymmetry, low-latency and event-driven streams.
+- **Cloud**: agnostic, scaling, resiliency, cost-mitigation, and 95th percentile mitigations.
+
+# Trade Audit Android App
+
+<div style="float:left">
+ <img src="/assets/tradeaudit.png" title="Trade Audit Mobile App" style="width:80px"><br/>
+ <a href="https://tradeaudit.app" target="_blank">https://tradeaudit.app</a>
+</div>
+
+Trade Audit is an Android Mobile App  
+
+
+Stock market speculation is at a record high. Individuals are following social media accounts trying
+to navigate meme-stocks, HODLs, and the opacity of SPACs. There is no accountability, no oversight, and 
+ no rules to what can be presented as knowledgeable advice on social media.
+
+Trade Audit is a mobile application that creates accountability.
+
+Use Trade Audit to catalogue any stock advice found on the internet.  Stock trades and ideas can be tracked 
+creating an immutable track record that the social media accounts refuse to provide.  
+
+
+# Public GitHub Repositories
 
 <p style="font-size:small;margin-left:10px;">(Polymer Web Components is a deprecated framework, as all meaningful functionality is now browser native.)</p>
 
