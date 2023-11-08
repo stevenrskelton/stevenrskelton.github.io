@@ -34,7 +34,7 @@ including Gluskin Sheff + Associates, Dundee Wealth Management, Home Trust, Poin
 # Trade Audit Android App
 
 <div style="float:left">
- <img src="/assets/tradeaudit.png" title="Trade Audit Mobile App" style="width:80px"><br/>
+ <img src="/assets/images/tradeaudit.png" title="Trade Audit Mobile App" style="width:80px" alt="Trade Audit"><br/>
  <a href="https://tradeaudit.app" target="_blank">https://tradeaudit.app</a>
 </div>
 
