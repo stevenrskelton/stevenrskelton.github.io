@@ -1,5 +1,5 @@
 ---
-permalink: /about/
+permalink: /privacy-policy/
 title: "Privacy Policy"
 author_profile: false
 ---
