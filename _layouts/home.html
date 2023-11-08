@@ -17,18 +17,24 @@ layout: archive
      style="display:block;width:728px;height:90px;margin-left:auto;margin-right:auto"
      data-ad-client="ca-pub-5000348308466945"
      data-ad-slot="2968228907"></ins>
+{% endcapture %}
 
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+{% capture adplacement2 %}
+<ins class="adsbygoogle"
+     style="display:block;width:728px;height:90px;margin-left:auto;margin-right:auto"
+     data-ad-client="ca-pub-5000348308466945"
+     data-ad-slot="8295142627"></ins>
 {% endcapture %}
 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
 <div class="entries-{{ entries_layout }}">
   {% for post in posts %}
-    {% cycle "", "", "", "", "", adplacement1, "", "", "", "", "" %}
+    {% cycle "", "", "", "", "", adplacement1, "", "", "", "", "", adplacement2 %}
     {% include archive-single.html type=entries_layout %}
   {% endfor %}
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({});
+  </script>
 </div>
 
 {% include paginator.html %}
