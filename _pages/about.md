@@ -5,12 +5,12 @@ author_profile: false
 ---
 
 <div style="
-  border:1px solid black;
-  background-image:url('/assets/images/about_full.jpg');
-  background-size:cover;
-  background-blend-mode:soft-light;
-  background-color:#e9dcbe;
-  padding:30px;"
+  border: 1px solid black;
+  background-image: url('/assets/images/about_full.jpg');
+  background-size: cover;
+  background-blend-mode: soft-light;
+  background-color: #e9dcbe;
+  padding: 30px;"
 >
   <p><strong>🇨🇦 Toronto, Canada</strong></p>
 
@@ -28,8 +28,15 @@ author_profile: false
   with key successes in cloud re-platforming, continuous delivery and internal/3rd-party integrations.</p>
     </li>
     <li>
-      <p><strong>7 years</strong> software consulting in <strong>financial services</strong>, portfolio and asset management, and fintech;<br>
-  including Gluskin Sheff + Associates, Dundee Wealth Management, Home Trust, Point72 and PureFacts Financial.</p>
+      <p><strong>7 years</strong> software consulting in <strong>financial services</strong>, portfolio and asset management, and fintech;
+  including: 
+        <ul>
+          <li><em>Gluskin Sheff + Associates</em>,</li>
+          <li><em>Dundee Wealth Management</em>,</li>
+          <li><em>Home Trust Company</em>,</li>
+          <li><em>Point72 Asset Management</em>, and</li>
+          <li><em>PureFacts Financial Solutions</em>.</li>
+        </ul>
     </li>
     <li>
       <p><strong>3 years</strong> shorter engagement consulting across a diverse range of e-commerce, customer data aggregation and non-profit.</p>
