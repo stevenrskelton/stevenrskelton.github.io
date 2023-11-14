@@ -1,8 +1,7 @@
-{% assign homepage = include.homepage | replace: "https://stevenrskelton.github.io", "stevenskelton.ca" %}
-{% if homepage != "" %}
-<a href="https://www.{{ homepage }}" style="cursor:pointer;display:flex;" target="_blank">
-{% else %}
-<a href="{{ include.html_url }}" style="cursor:pointer;display:flex;" target="_blank">
+{% assign homepage = include.homepage | replace: "https://stevenrskelton.github.io", "https://www.stevenskelton.ca" %}
+{% assign href = homepage | default include.html_url %}
+{% if href != "" %}
+<a href="{{ href }}" style="cursor:pointer;display:flex;" target="_blank">
 {% endif %}
    <svg
       width="350"
@@ -140,4 +139,6 @@
          </g>
       </g>
    </svg>
+{% if href != "" %}
 </a>
+{% endif %}
