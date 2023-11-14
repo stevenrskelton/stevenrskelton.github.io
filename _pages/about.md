@@ -99,9 +99,8 @@ author_profile: false
 
 <div style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:0px;">
 
-{% assign list = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
+{% assign list = site.github.public_repositories | where "archived", false | where "fork", false | sort: 'updated_at' | reverse %}
 {% for repository in list %}
-{% if respository.fork != true and repository.archived == false %}
 {%
 include github_repository.html
 name=repository.name
@@ -112,7 +111,6 @@ language=repository.language
 stargazers_count=repository.stargazers_count
 forks_count=repository.forks_count
 %}
-{% endif %}
 {% endfor %}
 
 </div>
@@ -122,9 +120,9 @@ forks_count=repository.forks_count
 
 <div style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:0px;">
 
-{% assign list = site.github.public_repositories | where: "archived", true | sort: 'stargazers_count' | reverse %}
+{% assign list = site.github.public_repositories | where: "archived", true | where: "fork", false | sort: 'stargazers_count' | reverse %}
 {% for repository in list %}
-{% if respository.fork != true and repository.stargazers_count > 2 %}
+{% if repository.stargazers_count > 2 %}
 {%
   include github_repository.html
   name=repository.name
