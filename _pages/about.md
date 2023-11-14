@@ -80,15 +80,16 @@ author_profile: false
      <img src="/assets/images/tradeauditapp.png" title="Trade Audit Mobile App" 
       style="width:160px;box-shadow:none;padding:14px 20px 4px 20px;" alt="Trade Audit"/><br/>
      <span style="font-weight:bold;color:#1da1f2;">https://tradeaudit.app</span>
-    </a>
+    </a><br>
+    <a href="https://play.google.com/store/apps/details?id=app.tradeaudit" target="_blank"><img alt="Get it on Google Play" height="60" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"></a>
   </div>
   
   Stock market speculation is at a record high. Individuals are following social media accounts trying
   to navigate meme-stocks, HODLs, and the opacity of SPACs. There is no accountability, no oversight, and 
    no rules to what can be presented as knowledgeable advice on social media.
-  
-  Trade Audit is a mobile application that creates accountability.<br style="clear:left">
-  
+  <br>
+  Trade Audit is a mobile application that creates accountability.
+  <br>
   Use Trade Audit to catalogue any stock advice found on the internet.  Stock trades and ideas can be tracked 
   creating an immutable track record that the social media accounts refuse to provide.
 </div>
@@ -98,9 +99,9 @@ author_profile: false
 
 <div style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:0px;">
 
-{% assign list = site.github.public_repositories | where: "archived", false | sort: 'stargazers_count' | reverse %}
+{% assign list = site.github.public_repositories | sort: 'stargazers_count' | reverse %}
 {% for repository in list %}
-{% if respository.fork != true %}
+{% if respository.fork != true and repository.archived == false %}
 {%
 include github_repository.html
 name=repository.name
@@ -116,7 +117,8 @@ forks_count=repository.forks_count
 
 </div>
 
-<p style="font-size:small;margin-left:10px;">(Polymer Web Components is a deprecated framework, as all meaningful functionality is now browser native.)</p>
+### Archived Polymer Web Components
+*Polymer Library was deprecated in 2019 when functionality became browser native, <wbr>remaining Polymer functionality became [Lit](https://lit.dev/)*
 
 <div style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:0px;">
 
