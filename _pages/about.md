@@ -4,9 +4,14 @@ title: "About"
 author_profile: false
 ---
 
-<div style="float:left;margin-right:10px;">
-  <img height="240" width="180" src="/assets/images/about_full.jpg" alt="Steven Skelton">
-</div>
+<div style="
+  border:1px solid black;
+  background-image:url('/assets/images/about_full.jpg');
+  background-size:cover;
+  background-blend-mode:soft-light;
+  background-color:#e9dcbe;
+  padding:30px;"
+>
 
 **🇨🇦 Toronto, Canada**
 
@@ -15,7 +20,6 @@ Double major in Pure and Applied Mathematics from the University of Waterloo
 
 **Principal Engineer**  
 Currently at a global digital-transformation consulting company
-<br style="clear:left">
 
 ## Work Summary
 
@@ -26,6 +30,8 @@ with key successes in cloud re-platforming, continuous delivery and internal/3rd
 including Gluskin Sheff + Associates, Dundee Wealth Management, Home Trust, Point72 and PureFacts Financial.
 
 - **3 years** shorter engagement consulting across a diverse range of e-commerce, customer data aggregation and non-profit. 
+
+</div>
 
 ## What makes a good Principal Engineer?
 
