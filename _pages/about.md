@@ -4,27 +4,38 @@ title: "About"
 author_profile: false
 ---
 
+<div style="
+  border:1px solid black;
+  background-image:url('/assets/images/about_full.jpg');
+  background-size:cover;
+  background-blend-mode:soft-light;
+  background-color:#e9dcbe;
+  padding:30px;"
+>
+  <p><strong>🇨🇦 Toronto, Canada</strong></p>
 
+  <p><strong>Honours Bachelor of Mathematics</strong><br>
+  Double major in Pure and Applied Mathematics from the University of Waterloo</p>
+  
+  <p><strong>Principal Engineer</strong><br>
+  Currently at a global digital-transformation consulting company</p>
+  
+  <h2 id="work-summary">Work Summary<a class="header-link" href="#work-summary" title="Permalink"><span class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h2>
 
-**🇨🇦 Toronto, Canada**
-
-**Honours Bachelor of Mathematics**  
-Double major in Pure and Applied Mathematics from the University of Waterloo
-
-**Principal Engineer**  
-Currently at a global digital-transformation consulting company
-
-## Work Summary
-
-- **8 years e-commerce** for Walmart Canada, leading technical development of the e-commerce website and API for mobile clients,
-with key successes in cloud re-platforming, continuous delivery and internal/3rd-party integrations.
-
-- **7 years** software consulting in **financial services**, portfolio and asset management, and fintech;  
-including Gluskin Sheff + Associates, Dundee Wealth Management, Home Trust, Point72 and PureFacts Financial.
-
-- **3 years** shorter engagement consulting across a diverse range of e-commerce, customer data aggregation and non-profit. 
-
-
+  <ul>
+    <li>
+      <p><strong>8 years e-commerce</strong> for Walmart Canada, leading technical development of the e-commerce website and API for mobile clients,
+  with key successes in cloud re-platforming, continuous delivery and internal/3rd-party integrations.</p>
+    </li>
+    <li>
+      <p><strong>7 years</strong> software consulting in <strong>financial services</strong>, portfolio and asset management, and fintech;<br>
+  including Gluskin Sheff + Associates, Dundee Wealth Management, Home Trust, Point72 and PureFacts Financial.</p>
+    </li>
+    <li>
+      <p><strong>3 years</strong> shorter engagement consulting across a diverse range of e-commerce, customer data aggregation and non-profit.</p>
+    </li>
+  </ul>
+</div>
 
 ## What makes a good Principal Engineer?
 
