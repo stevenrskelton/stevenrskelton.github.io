@@ -4,14 +4,7 @@ title: "About"
 author_profile: false
 ---
 
-<div style="
-  border:1px solid black;
-  background-image:url('/assets/images/about_full.jpg');
-  background-size:cover;
-  background-blend-mode:soft-light;
-  background-color:#e9dcbe;
-  padding:30px;"
->
+
 
 **🇨🇦 Toronto, Canada**
 
@@ -31,7 +24,7 @@ including Gluskin Sheff + Associates, Dundee Wealth Management, Home Trust, Poin
 
 - **3 years** shorter engagement consulting across a diverse range of e-commerce, customer data aggregation and non-profit. 
 
-</div>
+
 
 ## What makes a good Principal Engineer?
 
