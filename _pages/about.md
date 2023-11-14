@@ -28,15 +28,15 @@ author_profile: false
   with key successes in cloud re-platforming, continuous delivery and internal/3rd-party integrations.</p>
     </li>
     <li>
-      <p><strong>7 years</strong> software consulting in <strong>financial services</strong>, portfolio and asset management, and fintech;
-  including: 
-        <ul>
-          <li><em>Gluskin Sheff + Associates</em></li>
-          <li><em>Dundee Wealth Management</em></li>
-          <li><em>Home Trust Company</em></li>
-          <li><em>Point72 Asset Management</em></li>
-          <li><em>PureFacts Financial Solutions</em></li>
-        </ul>
+      <p><strong>7 years</strong> software consulting in <strong>financial services</strong> and fintech;<br>
+      including:</p> 
+      <ul>
+        <li><em>Gluskin Sheff + Associates</em></li>
+        <li><em>Dundee Wealth Management</em></li>
+        <li><em>Home Trust Company</em></li>
+        <li><em>Point72 Asset Management</em></li>
+        <li><em>PureFacts Financial Solutions</em></li>
+      </ul>
     </li>
     <li>
       <p><strong>3 years</strong> shorter engagement consulting across a diverse range of e-commerce, customer data aggregation and non-profit.</p>
