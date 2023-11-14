@@ -72,13 +72,14 @@ author_profile: false
     border: 1px solid #343434;
     border-radius: 4px;
     margin-right: 20px;
-    background-color: #e9dcbe;
+    margin-bottom: 4px;
+    background-color: rgb(104, 66, 207);
     font-size: small;
   ">
     <a href="https://tradeaudit.app" target="_blank">
      <img src="/assets/images/tradeauditapp.png" title="Trade Audit Mobile App" 
-      style="width:160px;box-shadow:none;padding:20px 30px 1em 30px;" alt="Trade Audit"/><br/>
-     <span style="padding-bottom:20px;display: inline-block;font-weight:bold;">https://tradeaudit.app</span>
+      style="width:160px;box-shadow:none;padding:14px 20px 4px 20px;" alt="Trade Audit"/><br/>
+     <span style="font-weight:bold;color:#1da1f2;">https://tradeaudit.app</span>
     </a>
   </div>
   
@@ -99,7 +100,7 @@ author_profile: false
 
 {% assign list = site.github.public_repositories | where: "archived", false | sort: 'stargazers_count' | reverse %}
 {% for repository in list %}
-{% if respository.fork != true and repository.stargazers_count > 2 %}
+{% if respository.fork != true %}
 {%
 include github_repository.html
 name=repository.name
