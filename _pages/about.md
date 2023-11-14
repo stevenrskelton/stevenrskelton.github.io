@@ -99,7 +99,7 @@ author_profile: false
 
 <div style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:0px;">
 
-{% assign list = site.github.public_repositories | where "archived", false | where "fork", false | sort: 'updated_at' | reverse %}
+{% assign list = site.github.public_repositories | where: "archived", false | where: "fork", false | sort: 'updated_at' | reverse %}
 {% for repository in list %}
 {%
 include github_repository.html
