@@ -70,14 +70,14 @@ author_profile: false
   text-align: center;
   border: 1px solid #343434;
   border-radius: 4px;
-  padding: 20px;
   margin-right: 20px;
   background-color: #e9dcbe;
   font-size: small;
 ">
   <a href="https://tradeaudit.app" target="_blank">
-   <img src="/assets/images/tradeauditapp.png" title="Trade Audit Mobile App" style="width:200px" alt="Trade Audit"/><br/>
-   https://tradeaudit.app
+   <img src="/assets/images/tradeauditapp.png" title="Trade Audit Mobile App" 
+    style="width:200px;box-shadow:none;padding:20px 30px 1em 30px;" alt="Trade Audit"/><br/>
+   <span style="padding-bottom:20px;display: inline-block;font-weight:bold;">https://tradeaudit.app</span>
   </a>
 </div>
 
