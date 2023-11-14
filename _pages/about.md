@@ -3,19 +3,20 @@ permalink: /about/
 title: "About"
 author_profile: false
 ---
-
-<div style="
-  border: 1px solid #343434;
-  background-image: url('/assets/images/about_full.jpg');
-  background-size: cover;
-  background-blend-mode: soft-light;
-  background-color: #e9dcbe;
-  background-position: center;
-  border-radius: 4px;
-  padding: 30px;
-">
+<style>
+  .img-bg {
+    border: 1px solid #343434;
+    background-size: cover;
+    background-blend-mode: soft-light;
+    background-color: #e9dcbe;
+    background-position: center;
+    border-radius: 4px;
+    padding: 30px;
+  }
+</style>
+<div class="img-bg" style="background-image:url('/assets/images/about_full.jpg');">
   <p>
-    <strong>🇨🇦 Toronto, Canada</strong>
+    <span style="font-size:36pt;vertical-align: middle;line-height:0;">🇨🇦</span><strong>Toronto, Canada</strong>
   </p>
 
   <p>
@@ -36,25 +37,24 @@ author_profile: false
   </p>
 
   <p>
-    <strong>7 years</strong> software consulting in <strong>financial services</strong> and fintech;<br>
-    including:
+    <strong>7 years</strong> software consulting in <strong>financial services</strong> and fintech; 
+    <wbr>including:
   </p> 
-  <ul>
+  <ul style="padding-bottom:0.5em">
     <li><em>Gluskin Sheff + Associates</em></li>
     <li><em>Dundee Wealth Management</em></li>
     <li><em>Home Trust Company</em></li>
     <li><em>Point72 Asset Management</em></li>
     <li><em>PureFacts Financial Solutions</em></li>
   </ul>
-  <br>
 
   <p>
     <strong>3 years</strong> shorter engagement consulting across a diverse range of e-commerce, 
-    customer data aggregation and non-profit.
+    <wbr>customer data aggregation and non-profit.
   </p>
 </div>
 
-## What makes a good Principal Engineer?
+## Principal Skills
 
 - **Communication**: technology evangelist, ways of working, skills development, inter-team cohesion.
 - **Proactive**: architectural runway, enterprise best practices, industry awareness, maintaining product agility.
@@ -63,32 +63,34 @@ author_profile: false
 - **Data**: API efficiency and cacheability, read-write asymmetry, low-latency and event-driven streams.
 - **Cloud**: agnostic, scaling, resiliency, cost-mitigation, and 95th percentile mitigations.
 
-<h1 style="margin-top: 50px;margin-bottom: 30px;">Trade Audit Android App</h1>
-
-<div style="
-  float: left;
-  text-align: center;
-  border: 1px solid #343434;
-  border-radius: 4px;
-  margin-right: 20px;
-  background-color: #e9dcbe;
-  font-size: small;
-">
-  <a href="https://tradeaudit.app" target="_blank">
-   <img src="/assets/images/tradeauditapp.png" title="Trade Audit Mobile App" 
-    style="width:160px;box-shadow:none;padding:20px 30px 1em 30px;" alt="Trade Audit"/><br/>
-   <span style="padding-bottom:20px;display: inline-block;font-weight:bold;">https://tradeaudit.app</span>
-  </a>
+<div class="img-bg">
+  <h1 style="margin-top: 50px;margin-bottom: 30px;">Trade Audit Android App</h1>
+  
+  <div style="
+    float: left;
+    text-align: center;
+    border: 1px solid #343434;
+    border-radius: 4px;
+    margin-right: 20px;
+    background-color: #e9dcbe;
+    font-size: small;
+  ">
+    <a href="https://tradeaudit.app" target="_blank">
+     <img src="/assets/images/tradeauditapp.png" title="Trade Audit Mobile App" 
+      style="width:160px;box-shadow:none;padding:20px 30px 1em 30px;" alt="Trade Audit"/><br/>
+     <span style="padding-bottom:20px;display: inline-block;font-weight:bold;">https://tradeaudit.app</span>
+    </a>
+  </div>
+  
+  Stock market speculation is at a record high. Individuals are following social media accounts trying
+  to navigate meme-stocks, HODLs, and the opacity of SPACs. There is no accountability, no oversight, and 
+   no rules to what can be presented as knowledgeable advice on social media.
+  
+  Trade Audit is a mobile application that creates accountability.<br style="clear:left">
+  
+  Use Trade Audit to catalogue any stock advice found on the internet.  Stock trades and ideas can be tracked 
+  creating an immutable track record that the social media accounts refuse to provide.
 </div>
-
-Stock market speculation is at a record high. Individuals are following social media accounts trying
-to navigate meme-stocks, HODLs, and the opacity of SPACs. There is no accountability, no oversight, and 
- no rules to what can be presented as knowledgeable advice on social media.
-
-Trade Audit is a mobile application that creates accountability.<br style="clear:left">
-
-Use Trade Audit to catalogue any stock advice found on the internet.  Stock trades and ideas can be tracked 
-creating an immutable track record that the social media accounts refuse to provide.  
 
 
 # Public GitHub Repositories
