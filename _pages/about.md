@@ -20,7 +20,7 @@ author_profile: false
   <p><strong>Principal Engineer</strong><br>
   Currently at a global digital-transformation consulting company</p>
   
-  <h2 id="work-summary">Work Summary<a class="header-link" href="#work-summary" title="Permalink"><span class="sr-only">Permalink</span><i class="fas fa-link"></i></a></h2>
+  <h2 id="work-summary">Work Summary</h2>
 
   <ul>
     <li>
@@ -31,11 +31,11 @@ author_profile: false
       <p><strong>7 years</strong> software consulting in <strong>financial services</strong>, portfolio and asset management, and fintech;
   including: 
         <ul>
-          <li><em>Gluskin Sheff + Associates</em>,</li>
-          <li><em>Dundee Wealth Management</em>,</li>
-          <li><em>Home Trust Company</em>,</li>
-          <li><em>Point72 Asset Management</em>, and</li>
-          <li><em>PureFacts Financial Solutions</em>.</li>
+          <li><em>Gluskin Sheff + Associates</em></li>
+          <li><em>Dundee Wealth Management</em></li>
+          <li><em>Home Trust Company</em></li>
+          <li><em>Point72 Asset Management</em></li>
+          <li><em>PureFacts Financial Solutions</em></li>
         </ul>
     </li>
     <li>
