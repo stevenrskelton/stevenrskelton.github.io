@@ -63,7 +63,7 @@ author_profile: false
 - **Data**: API efficiency and cacheability, read-write asymmetry, low-latency and event-driven streams.
 - **Cloud**: agnostic, scaling, resiliency, cost-mitigation, and 95th percentile mitigations.
 
-# Trade Audit Android App
+<h1 style="margin-top: 50px;margin-bottom: 30px;">Trade Audit Android App</h1>
 
 <div style="
   float: left;
