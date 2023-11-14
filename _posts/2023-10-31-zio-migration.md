@@ -1,5 +1,5 @@
 ---
-title: "ZIO migration from Akka Futures"
+title: "ZIO migration from Akka and Futures"
 categories:
   - Scala
 tags:

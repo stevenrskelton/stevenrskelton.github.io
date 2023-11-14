@@ -4,6 +4,10 @@ title: "About"
 author_profile: false
 ---
 
+<div style="float:left">
+  <img src="/assets/images/about_full.jpg" alt="Steven Skelton">
+</div>
+
 **🇨🇦 Toronto, Canada**
 
 **Honours Bachelor of Mathematics**  
@@ -11,18 +15,19 @@ Double major in Pure and Applied Mathematics from the University of Waterloo
 
 **Principal Engineer**  
 Currently at a global digital-transformation consulting company
+<br style="clear:left">
 
 ## Work Summary
 
-- **8 years** e-commerce for Walmart Canada, leading technical development of the e-commerce website and API for mobile clients,
+- **8 years e-commerce** for Walmart Canada, leading technical development of the e-commerce website and API for mobile clients,
 with key successes in cloud re-platforming, continuous delivery and internal/3rd-party integrations.
 
-- **7 years** software consulting in financial services, portfolio and asset management, and fintech;  
+- **7 years** software consulting in **financial services**, portfolio and asset management, and fintech;  
 including Gluskin Sheff + Associates, Dundee Wealth Management, Home Trust, Point72 and PureFacts Financial.
 
 - **3 years** shorter engagement consulting across a diverse range of e-commerce, customer data aggregation and non-profit. 
 
-## Principal Engineering
+## What makes a good Principal Engineer?
 
 - **Communication**: technology evangelist, ways of working, skills development, inter-team cohesion.
 - **Proactive**: architectural runway, enterprise best practices, industry awareness, maintaining product agility.
