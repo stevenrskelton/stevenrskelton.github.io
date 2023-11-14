@@ -4,8 +4,8 @@ title: "About"
 author_profile: false
 ---
 
-<div style="float:left">
-  <img src="/assets/images/about_full.jpg" alt="Steven Skelton">
+<div style="float:left;margin-right:10px;">
+  <img height="240" width="180" src="/assets/images/about_full.jpg" alt="Steven Skelton">
 </div>
 
 **🇨🇦 Toronto, Canada**
