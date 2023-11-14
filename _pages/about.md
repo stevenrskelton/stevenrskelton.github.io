@@ -10,6 +10,7 @@ author_profile: false
   background-size: cover;
   background-blend-mode: soft-light;
   background-color: #e9dcbe;
+  background-position: center;
   padding: 30px;"
 >
   <p><strong>🇨🇦 Toronto, Canada</strong></p>
@@ -55,8 +56,8 @@ author_profile: false
 
 # Trade Audit Android App
 
-<div style="float:left">
- <img src="/assets/images/tradeaudit.png" title="Trade Audit Mobile App" style="width:80px" alt="Trade Audit"><br/>
+<div style="float:left;text-align:center">
+ <img src="/assets/images/tradeauditapp.png" title="Trade Audit Mobile App" style="width:250px" alt="Trade Audit"><br/>
  <a href="https://tradeaudit.app" target="_blank">https://tradeaudit.app</a>
 </div>
 
@@ -67,7 +68,7 @@ Stock market speculation is at a record high. Individuals are following social m
 to navigate meme-stocks, HODLs, and the opacity of SPACs. There is no accountability, no oversight, and 
  no rules to what can be presented as knowledgeable advice on social media.
 
-Trade Audit is a mobile application that creates accountability.
+Trade Audit is a mobile application that creates accountability.<br style="clear:left">
 
 Use Trade Audit to catalogue any stock advice found on the internet.  Stock trades and ideas can be tracked 
 creating an immutable track record that the social media accounts refuse to provide.  
