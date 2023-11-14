@@ -5,44 +5,53 @@ author_profile: false
 ---
 
 <div style="
-  border: 1px solid black;
+  border: 1px solid #343434;
   background-image: url('/assets/images/about_full.jpg');
   background-size: cover;
   background-blend-mode: soft-light;
   background-color: #e9dcbe;
   background-position: center;
-  padding: 30px;"
->
-  <p><strong>🇨🇦 Toronto, Canada</strong></p>
+  border-radius: 4px;
+  padding: 30px;
+">
+  <p>
+    <strong>🇨🇦 Toronto, Canada</strong>
+  </p>
 
-  <p><strong>Honours Bachelor of Mathematics</strong><br>
-  Double major in Pure and Applied Mathematics from the University of Waterloo</p>
+  <p>
+    <strong>Honours Bachelor of Mathematics</strong><br>
+    Double major in Pure and Applied Mathematics from the University of Waterloo
+  </p>
   
-  <p><strong>Principal Engineer</strong><br>
-  Currently at a global digital-transformation consulting company</p>
+  <p>
+    <strong>Principal Engineer</strong><br>
+    Currently at a global digital-transformation consulting company
+  </p>
   
   <h2 id="work-summary">Work Summary</h2>
 
+  <p>
+    <strong>8 years e-commerce</strong> for Walmart Canada, leading technical development of the e-commerce website 
+    and API for mobile clients, with key successes in cloud re-platforming, continuous delivery and internal/3rd-party integrations.
+  </p>
+
+  <p>
+    <strong>7 years</strong> software consulting in <strong>financial services</strong> and fintech;<br>
+    including:
+  </p> 
   <ul>
-    <li>
-      <p><strong>8 years e-commerce</strong> for Walmart Canada, leading technical development of the e-commerce website and API for mobile clients,
-  with key successes in cloud re-platforming, continuous delivery and internal/3rd-party integrations.</p>
-    </li>
-    <li>
-      <p><strong>7 years</strong> software consulting in <strong>financial services</strong> and fintech;<br>
-      including:</p> 
-      <ul>
-        <li><em>Gluskin Sheff + Associates</em></li>
-        <li><em>Dundee Wealth Management</em></li>
-        <li><em>Home Trust Company</em></li>
-        <li><em>Point72 Asset Management</em></li>
-        <li><em>PureFacts Financial Solutions</em></li>
-      </ul>
-    </li>
-    <li>
-      <p><strong>3 years</strong> shorter engagement consulting across a diverse range of e-commerce, customer data aggregation and non-profit.</p>
-    </li>
+    <li><em>Gluskin Sheff + Associates</em></li>
+    <li><em>Dundee Wealth Management</em></li>
+    <li><em>Home Trust Company</em></li>
+    <li><em>Point72 Asset Management</em></li>
+    <li><em>PureFacts Financial Solutions</em></li>
   </ul>
+  <br>
+
+  <p>
+    <strong>3 years</strong> shorter engagement consulting across a diverse range of e-commerce, 
+    customer data aggregation and non-profit.
+  </p>
 </div>
 
 ## What makes a good Principal Engineer?
@@ -56,10 +65,19 @@ author_profile: false
 
 # Trade Audit Android App
 
-<div style="float:left;text-align:center">
- <img src="/assets/images/tradeauditapp.png" title="Trade Audit Mobile App" style="width:250px" alt="Trade Audit"><br/>
- <a href="https://tradeaudit.app" target="_blank">https://tradeaudit.app</a>
-</div>
+<a href="https://tradeaudit.app" target="_blank"><div style="
+  float: left;
+  text-align: center;
+  border: 1px solid #343434;
+  border-radius: 4px;
+  padding: 20px;
+  margin-right: 20px;
+  background-color: #e9dcbe;
+  font-size: small;
+">
+ <img src="/assets/images/tradeauditapp.png" title="Trade Audit Mobile App" style="width:200px" alt="Trade Audit"/><br/>
+ https://tradeaudit.app
+</div></a>
 
 Trade Audit is an Android Mobile App  
 
