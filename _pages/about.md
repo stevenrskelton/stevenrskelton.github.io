@@ -65,7 +65,7 @@ author_profile: false
 
 # Trade Audit Android App
 
-<a href="https://tradeaudit.app" target="_blank"><div style="
+<div style="
   float: left;
   text-align: center;
   border: 1px solid #343434;
@@ -75,9 +75,11 @@ author_profile: false
   background-color: #e9dcbe;
   font-size: small;
 ">
- <img src="/assets/images/tradeauditapp.png" title="Trade Audit Mobile App" style="width:200px" alt="Trade Audit"/><br/>
- https://tradeaudit.app
-</div></a>
+  <a href="https://tradeaudit.app" target="_blank">
+   <img src="/assets/images/tradeauditapp.png" title="Trade Audit Mobile App" style="width:200px" alt="Trade Audit"/><br/>
+   https://tradeaudit.app
+  </a>
+</div>
 
 Trade Audit is an Android Mobile App  
 
