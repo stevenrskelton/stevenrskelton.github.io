@@ -81,17 +81,20 @@ author_profile: false
       style="width:160px;box-shadow:none;padding:14px 20px 4px 20px;" alt="Trade Audit"/><br/>
      <span style="font-weight:bold;color:#1da1f2;">https://tradeaudit.app</span>
     </a><br>
-    <a href="https://play.google.com/store/apps/details?id=app.tradeaudit" target="_blank"><img alt="Get it on Google Play" height="60" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"></a>
+    <a href="https://play.google.com/store/apps/details?id=app.tradeaudit" target="_blank"><img alt="Get it on Google Play" style="height:60px;box-shadow:none;" height="60" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"></a>
   </div>
-  
-  Stock market speculation is at a record high. Individuals are following social media accounts trying
-  to navigate meme-stocks, HODLs, and the opacity of SPACs. There is no accountability, no oversight, and 
-   no rules to what can be presented as knowledgeable advice on social media.
-  <br>
-  Trade Audit is a mobile application that creates accountability.
-  <br>
-  Use Trade Audit to catalogue any stock advice found on the internet.  Stock trades and ideas can be tracked 
-  creating an immutable track record that the social media accounts refuse to provide.
+  <p>
+    Stock market speculation is at a record high. Individuals are following social media accounts trying
+    to navigate meme-stocks, HODLs, and the opacity of SPACs. There is no accountability, no oversight, and 
+    no rules to what can be presented as knowledgeable advice on social media.
+  </p>
+  <p>
+    Trade Audit is a mobile application that creates accountability.
+  </p>
+  <p>
+    Use Trade Audit to catalogue any stock advice found on the internet.  Stock trades and ideas can be tracked 
+    creating an immutable track record that the social media accounts refuse to provide.
+  </p>
 </div>
 
 
