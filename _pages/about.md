@@ -96,7 +96,7 @@ author_profile: false
 
 ## Public GitHub Repositories
 
-<p style="font-size:small;margin-left:10px;">(Polymer Web Components is a deprecated framework, as all meaningful functionality is now browser native.)</p>
+<div style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:0px;">
 
 {% assign list = site.github.public_repositories | where: "archived", false | sort: 'stargazers_count' | reverse %}
 {% for repository in list %}
@@ -113,6 +113,10 @@ forks_count=repository.forks_count
 %}
 {% endif %}
 {% endfor %}
+
+</div>
+
+<p style="font-size:small;margin-left:10px;">(Polymer Web Components is a deprecated framework, as all meaningful functionality is now browser native.)</p>
 
 <div style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:0px;">
 
