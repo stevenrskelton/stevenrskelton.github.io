@@ -5,6 +5,7 @@ categories:
   - Javascript
 tags:
   - Polymer
+  - WebComponents
 ---
 
 {% include postlogo.html title="Web Components" src="/assets/images/2014/12/webcomponents.png" %} The [Reactive Manifesto](http://www.reactivemanifesto.org/) puts together the ideal architecture for today’s system infrastructure, designed to cope with the ever increasing need for performance, reliability and responsiveness. The same evolution of expectations is taking place in the JavaScript front-end, but do the same ideas and principles apply?

@@ -4,6 +4,7 @@ categories:
   - Javascript
 tags:
   - Lit
+  - WebComponents
 ---
 SVG markup is very similar to HTML, and the [Lit Web Components](https://lit.dev/) library can be used to not only generate HTML custom components, but also manipulate SVG in a similar way using Lit templates. Lit is a small 5kb library that removes the boilerplate code of DOM generation, and is highly interoperable with all web frameworks since it relies on browser native custom elements.
 
