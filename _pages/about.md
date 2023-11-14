@@ -76,13 +76,10 @@ author_profile: false
 ">
   <a href="https://tradeaudit.app" target="_blank">
    <img src="/assets/images/tradeauditapp.png" title="Trade Audit Mobile App" 
-    style="width:200px;box-shadow:none;padding:20px 30px 1em 30px;" alt="Trade Audit"/><br/>
+    style="width:160px;box-shadow:none;padding:20px 30px 1em 30px;" alt="Trade Audit"/><br/>
    <span style="padding-bottom:20px;display: inline-block;font-weight:bold;">https://tradeaudit.app</span>
   </a>
 </div>
-
-Trade Audit is an Android Mobile App  
-
 
 Stock market speculation is at a record high. Individuals are following social media accounts trying
 to navigate meme-stocks, HODLs, and the opacity of SPACs. There is no accountability, no oversight, and 
