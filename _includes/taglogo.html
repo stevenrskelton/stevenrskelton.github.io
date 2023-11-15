@@ -1,6 +1,6 @@
 {% assign tag = include.tags | first %}
 
-<h1>taglogo</h1>
+<h1>taglogo {{ include.tags }} | {{ include.categories }}</h1>
 <!-- taglogo {{ tag }} -->
 {% case tag %}
 {% when "ZIO" %}
