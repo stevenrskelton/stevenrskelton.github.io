@@ -30,7 +30,7 @@ layout: archive
 <div class="entries-{{ entries_layout }}">
   {% for post in posts %}
     {% cycle "", "", "", "", "", adplacement1, "", "", "", "", "", adplacement2 %}
-    {% include archive-single1.html type=entries_layout %}
+    {% include archive-single.html type=entries_layout %}
   {% endfor %}
   <script>
     (adsbygoogle = window.adsbygoogle || []).push({});
