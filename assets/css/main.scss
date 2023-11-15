@@ -127,3 +127,13 @@ html {
 .greedy-nav {
   background: inherit;
 }
+
+.post__taxonomy-item {
+  display: inline-block;
+  text-decoration: none;
+  border: 1px solid #afa58f;
+  border-radius: 4px;
+}
+.post__taxonomy-item img {
+  max-height: 30px;
+}
