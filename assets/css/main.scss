@@ -137,7 +137,14 @@ html {
 .post__taxonomy-item img {
   max-height: 1em;
 }
+.page__taxonomy-item img {
+  max-height: 2em;
+}
 .post__taxonomy-item div {
   min-width: 1.5em;
+  text-align: center;
+}
+.page__taxonomy-item div {
+  min-width: 3em;
   text-align: center;
 }
