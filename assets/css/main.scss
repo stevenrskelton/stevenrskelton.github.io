@@ -67,6 +67,8 @@ ins {
 .page__footer {
   margin-top: 0px;  
   border-top: 1px solid #8e8b82;
+  background-color: transparent;
+  color: inherit;
 }
 
 .page__footer footer {
@@ -75,6 +77,10 @@ ins {
 
 .page__footer-follow {
   margin-top: 2em;
+}
+
+.page__footer-copyright {
+  color: #8e8b82;
 }
 
 .pagination {
@@ -87,6 +93,10 @@ ins {
 
 html {
   background-color: #e9dcbe;
+  background-size: 200px;
+  background-blend-mode: lighten;
+  background-image: url('/assets/images/background.jpg');
+  background-repeat: repeat;
 }
 
 .masthead {
