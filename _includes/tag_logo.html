@@ -1,4 +1,4 @@
-{% case include.tag %}
+<div>{% case include.tag %}
 {% when "Akka-Pekko" %}
 <img src="/assets/images/tags/Akka_toolkit_logo.svg" alt="Pekko"/>
 {% when "AWS" %}
@@ -21,4 +21,4 @@
 <img src="/assets/images/tags/ZIO.png" alt="ZIO"/>
 {% else %}
 {{ include.tag }}
-{% endcase %}
+{% endcase %}</div>
