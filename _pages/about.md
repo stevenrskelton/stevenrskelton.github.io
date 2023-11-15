@@ -3,7 +3,7 @@ permalink: /about/
 title: "About"
 author_profile: false
 ---
-<div class="img-bg" style="background-image:url('/assets/images/about_full.jpg');">
+<div class="img-bg" style="background-image:url('/assets/images/about/bg_full.jpg');">
   <p>
     <span style="font-size:36pt;vertical-align: middle;line-height:0;">🇨🇦</span><strong>Toronto, Canada</strong>
   </p>
@@ -66,7 +66,7 @@ author_profile: false
     font-size: small;
   ">
     <a href="https://tradeaudit.app" target="_blank">
-     <img src="/assets/images/tradeauditapp.png" title="Trade Audit Mobile App" 
+     <img src="/assets/images/about/tradeauditapp.png" title="Trade Audit Mobile App" 
       style="
         width: 160px;
         box-shadow: none;
