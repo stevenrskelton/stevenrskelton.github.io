@@ -39,7 +39,7 @@ author_profile: false
 
   <p>
     <strong>3 years</strong> shorter engagement consulting across a diverse range of e-commerce, 
-    <wbr>customer data aggregation and non-profit.
+    <wbr>customer data aggregation and non-for-profit.
   </p>
 </div>
 
