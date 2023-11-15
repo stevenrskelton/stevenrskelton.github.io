@@ -105,6 +105,9 @@ html {
   background-blend-mode: lighten;
   background-image: url('/assets/images/background.jpg');
   background-repeat: repeat;
+  border: 1px solid #343434;
+  border-radius: 4px;
+  padding: 30px;
 }
 
 .masthead {
