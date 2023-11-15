@@ -99,6 +99,14 @@ html {
   background-repeat: repeat;
 }
 
+.html-bg {
+  background-color: #e9dcbe;
+  background-size: 140px;
+  background-blend-mode: lighten;
+  background-image: url('/assets/images/background.jpg');
+  background-repeat: repeat;
+}
+
 .masthead {
   border-bottom: 1px solid #8e8b82;
 }

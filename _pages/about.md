@@ -63,7 +63,7 @@ author_profile: false
 - **Data**: API efficiency and cacheability, read-write asymmetry, low-latency and event-driven streams.
 - **Cloud**: agnostic, scaling, resiliency, cost-mitigation, and 95th percentile mitigations.
 
-<div class="img-bg" style="margin-top: 50px;margin-bottom: 30px;">
+<div class="html-bg" style="margin-top: 50px;margin-bottom: 30px;">
   <h1>Trade Audit Android App</h1>
   
   <div style="
@@ -78,7 +78,12 @@ author_profile: false
   ">
     <a href="https://tradeaudit.app" target="_blank">
      <img src="/assets/images/tradeauditapp.png" title="Trade Audit Mobile App" 
-      style="width:160px;box-shadow:none;padding:14px 20px 4px 20px;" alt="Trade Audit"/><br/>
+      style="
+        width: 160px;
+        box-shadow: none;
+        padding: 14px 20px 4px 20px;
+        display: block;
+      " alt="Trade Audit"/><br/>
      <span style="font-weight:bold;color:#1da1f2;">https://tradeaudit.app</span>
     </a><br>
     <a href="https://play.google.com/store/apps/details?id=app.tradeaudit" target="_blank"><img alt="Get it on Google Play" style="height:60px;box-shadow:none;" height="60" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"></a>
