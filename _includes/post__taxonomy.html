@@ -9,7 +9,7 @@
 {% if site.tag_archive.path %}
 {% assign tags_sorted = post.tags | sort_natural %}
 
-<div class="post__taxonomy">
+<div class="page__taxonomy">
     {% comment %}<strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> {{ site.data.ui-text[site.locale].tags_label | default: "Tags:" }} </strong>{% endcomment %}
     <span itemprop="keywords">
     {% for tag_word in tags_sorted %}
