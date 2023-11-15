@@ -10,10 +10,10 @@
 
 <p class="page__taxonomy">
     <strong><i class="fas fa-fw fa-tags" aria-hidden="true"></i> {{ site.data.ui-text[site.locale].tags_label | default: "Tags:" }} </strong>
-    <span itemprop="keywords">
+    <div itemprop="keywords">
     {% for tag_word in tags_sorted %}
       <a href="{{ tag_word | slugify | prepend: path_type | prepend: site.tag_archive.path | relative_url }}" class="page__taxonomy-item p-category" rel="tag">{% include tag_logo.html tag=tag_word %}</a>{% unless forloop.last %}<span class="sep">, </span>{% endunless %}
     {% endfor %}
-    </span>
+    </div>
 </p>
 {% endif %}
