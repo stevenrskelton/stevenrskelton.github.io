@@ -3,17 +3,6 @@ permalink: /about/
 title: "About"
 author_profile: false
 ---
-<style>
-  .img-bg {
-    border: 1px solid #343434;
-    background-size: cover;
-    background-blend-mode: soft-light;
-    background-color: #e9dcbe;
-    background-position: center;
-    border-radius: 4px;
-    padding: 30px;
-  }
-</style>
 <div class="img-bg" style="background-image:url('/assets/images/about_full.jpg');">
   <p>
     <span style="font-size:36pt;vertical-align: middle;line-height:0;">🇨🇦</span><strong>Toronto, Canada</strong>
