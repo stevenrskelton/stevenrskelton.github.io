@@ -1,12 +1,7 @@
-{% assign tag = include.tags | first %}
-
-<h1>taglogo {{ include.tags }} | {{ include.categories }}</h1>
-<!-- taglogo {{ tag }} -->
 {% case tag %}
 {% when "ZIO" %}
-  {% include postlogo.html title="ZIO" src="/assets/images/tags/ZIO.png" %}
+<img src="/assets/images/tags/ZIO.png" alt="ZIO" style="padding-right:10px;max-width:40px;max-height:20px;"/>
 {% when "Akka-Pekko" %}
-  {% include postlogo.html title="ZIO" src="/assets/images/tags/Akka_toolkit_logo.svg" %}
+<img src="/assets/images/tags/Akka_toolkit_logo.svg" alt="Pekko" style="padding-right:10px;max-width:40px;max-height:20px;"/>
 {% else %}
-
 {% endcase %}

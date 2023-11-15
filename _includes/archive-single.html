@@ -17,7 +17,6 @@
             <img src="{{ teaser | relative_url }}" alt="">
         </div>
         {% endif %}
-        {% include taglogo.html tag=post.tags categories=post.categories %}
         <h2 class="archive__item-title no_toc" itemprop="headline">
             {% if post.link %}
             <a href="{{ post.link }}">{{ title }}</a> <a href="{{ post.url | relative_url }}" rel="permalink"><i class="fas fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
