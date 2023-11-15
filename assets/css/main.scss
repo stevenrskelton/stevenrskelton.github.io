@@ -135,5 +135,6 @@ html {
   border-radius: 4px;
 }
 .post__taxonomy-item img {
-  max-height: 30px;
+  max-height: 1em;
+  min-width: 1em;
 }
