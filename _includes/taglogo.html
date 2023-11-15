@@ -1,7 +1,24 @@
 {% case include.tag %}
-{% when "ZIO" %}
-<img src="/assets/images/tags/ZIO.png" alt="ZIO" style="padding-right:10px;max-width:40px;max-height:20px;"/>
 {% when "Akka-Pekko" %}
-<img src="/assets/images/tags/Akka_toolkit_logo.svg" alt="Pekko" style="padding-right:10px;max-width:40px;max-height:20px;"/>
+<img src="/assets/images/tags/Akka_toolkit_logo.svg" alt="Pekko" style="max-height:30px;"/>
+{% when "AWS" %}
+<img src="/assets/images/tags/Amazon_Web_Services_Logo.svg" alt="AWS" style="max-height:30px;"/>
+{% when "Thrift" %}
+<img src="/assets/images/tags/Apache_Thrift_logo.svg" alt="Thrift" style="max-height:30px;"/>
+{% when "Lit" %}
+<img src="/assets/images/tags/lit.svg" alt="Lit" style="max-height:30px;"/>
+{% when "Polymer" %}
+<img src="/assets/images/tags/polymer-svgrepo-com.svg" alt="Polymer" style="max-height:30px;"/>
+{% when "WebComponents" %}
+<img src="/assets/images/tags/webcomponents.svg" alt="Web Components" style="max-height:30px;"/>
+{% when "TradeAudit" %}
+<img src="/assets/images/tags/tradeaudit.png" alt="Trade Audit" style="max-height:30px;"/>
+{% when "Github" %}
+<img src="/assets/images/tags/github.png" alt="GitHub" style="max-height:30px;"/>
+{% when "Slack" %}
+<img src="/assets/images/tags/Slack-logo-RGB.png" alt="GitHub" style="max-height:30px;"/>
+{% when "ZIO" %}
+<img src="/assets/images/tags/ZIO.png" alt="ZIO" style="max-height:30px;"/>
 {% else %}
+{{ include.tag }}
 {% endcase %}
