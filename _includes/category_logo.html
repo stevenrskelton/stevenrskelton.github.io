@@ -1,0 +1,12 @@
+<div>{% case include.category %}
+{% when "Scala" %}
+<img src="/assets/images/categories/Scala-full-color.svg" alt="Scala"/>
+{% when "Dart" %}
+<img src="/assets/images/categories/Dart_programming_language_logo.svg" alt="Dart"/>
+{% when "Platform" %}
+<img src="/assets/images/categories/cloud-computing-svgrepo-com.svg" alt="Platform"/>
+{% when "Javascript" %}
+<img src="/assets/images/categories/Unofficial_JavaScript_logo_2.svg" alt="Javascript"/>
+{% else %}
+{{ include.category }}
+{% endcase %}</div>
