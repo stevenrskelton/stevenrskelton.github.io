@@ -173,13 +173,9 @@ html {
   position: relative;
 }
 
-.nav__title {
+.toc .nav__title {
   font-size: 1em;
-  background: null;
-  background-color: #e9dcbe;
-  background-size: 140px;
+  background: #e9dcbe url('/assets/images/background.jpg') center/140px repeat;
   background-blend-mode: lighten;
-  background-image: url('/assets/images/background.jpg');
-  background-repeat: repeat;
   padding: 20px;
 }
