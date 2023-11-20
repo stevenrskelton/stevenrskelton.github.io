@@ -173,9 +173,15 @@ html {
   position: relative;
 }
 
+.toc {
+  border: 1px solid #343434;
+}
+
 .toc .nav__title {
   font-size: 1em;
   background: #e9dcbe url('/assets/images/background.jpg') center/140px repeat;
   background-blend-mode: lighten;
   padding: 20px;
+  color: #343434;
+  border-bottom: 0.5px solid #343434;
 }
