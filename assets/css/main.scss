@@ -172,3 +172,14 @@ html {
   padding-left: 10px;
   position: relative;
 }
+
+.nav__title {
+  font-size: 1em;
+  background: null;
+  background-color: #e9dcbe;
+  background-size: 140px;
+  background-blend-mode: lighten;
+  background-image: url('/assets/images/background.jpg');
+  background-repeat: repeat;
+  padding: 20px;
+}
