@@ -29,4 +29,6 @@
     {% endif %}
 </p>
 {% endif %}
-{% include post__taxonomy.html %}
+{% if site.tag_archive.type and page.tags[0] %}
+{% include tag-list.html %}
+{% endif %}
