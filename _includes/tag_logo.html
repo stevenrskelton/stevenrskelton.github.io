@@ -2,7 +2,7 @@
 {% when "Akka-Pekko" %}
 <img src="/assets/images/tags/Akka_toolkit_logo.svg" alt="Pekko"/>
 {% when "AWS" %}
-<img src="/assets/images/tags/Amazon_Web_Services_Logo.svg" alt="AWS"/>
+<img src="/assets/images/tags/Amazon_Web_Services_Logo.svg" alt="AWS" style="padding-left:2px;padding-right:2px;"/>
 {% when "Thrift" %}
 <img src="/assets/images/tags/Apache_Thrift_logo.svg" alt="Thrift"/>
 {% when "Lit" %}
@@ -12,13 +12,20 @@
 {% when "WebComponents" %}
 <img src="/assets/images/tags/webcomponents.svg" alt="Web Components"/>
 {% when "TradeAudit" %}
-<img src="/assets/images/tags/tradeauditapp.png" alt="Trade Audit"/>
+<img src="/assets/images/tags/tradeauditapp.png" alt="Trade Audit"/><em>Trade Audit</em>
 {% when "Github" %}
 <img src="/assets/images/tags/github.png" alt="GitHub"/>
 {% when "Slack" %}
-<img src="/assets/images/tags/Slack-logo-RGB.png" alt="Slack"/>
+<img src="/assets/images/tags/Slack-logo-RGB.png" alt="Slack" style="padding-left:2px;padding-right:2px;"/>
 {% when "ZIO" %}
 <img src="/assets/images/tags/ZIO.png" alt="ZIO"/>
 {% else %}
-{{ include.tag }}
+<span style="font-size: small;
+  vertical-align: middle;
+  display: inline-block;
+  line-height: 30px;
+  padding-left: 4px;
+  padding-right: 4px;
+  font-family: Impact;
+  padding-bottom: 2px;">{{ include.tag }}</span>
 {% endcase %}</div>
