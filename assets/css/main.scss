@@ -156,7 +156,7 @@ html {
 table {
   margin-left: auto;
   margin-right: auto;
-  min-width: 360px;
+  min-width: calc(360px - 2em);
   display: table;
   width: 80%;
 }

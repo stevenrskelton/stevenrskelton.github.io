@@ -15,13 +15,11 @@ url="https://xkcd.com/303"
 caption="Scala is slow to compile."
 %}
 
-But this is a trade-off to the functionality provided by the compiler in the areas of developer productivity and
-runtime reliability that have no equivalent in Java. As Scala 2 matured the compiler optimizations brought compile times
-down,
-but Scala 3 reset the gains to zero. Macro libraries such as [Quill](https://zio.dev/zio-quill/) provide great
-compile-time
-features, and this article dives into optimizations beyond the compiler that can be done to reduce compilation times
-in Scala 3.
+There is a trade-off between compilation speed and compile-time functionality. Advanced syntax constructs can 
+increase developer productivity and runtime reliability; and there is often no substitute or equivalent available in Java, 
+not to mention in dynamic or interpreted languages. As Scala 2 matured compiler optimizations brought compile times
+down, but Scala 3 has reset these gains back to zero. Macro libraries such as [Quill](https://zio.dev/zio-quill/) provide great compile-time
+features through macros, and this article dives into optimizations which will reduce compilation times in Scala 3.
 <!--more-->
 
 {% include table-of-contents.html %}
