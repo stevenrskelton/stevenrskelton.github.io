@@ -11,20 +11,19 @@ excerpt_separator: <!--more-->
     title="XKCD" 
     src="/assets/images/2023/11/compiling.png" 
     url="https://xkcd.com/303" 
-    caption="My code's compiling."
+    caption="Scala is slow to compile."
 %}
 
-Early criticisms of Scala was compiling was slow compared to Java, and especially interpreted languages such as Javascript 
-or Python where compile times aren't a consideration. Long compile times can interrupt developer flow in addition to the 
-actual developer downtime during the wait. As Scala 2 matured the compiler got faster, but Scala 3 reset the gains to zero.
-Challenging compile-time macro libraries such as [Quill](https://zio.dev/zio-quill/) are a large trade-off of additional compile
-time for runtime performance and stability; this article dives into optimizations to compile time that can be performed outside of the compiler.
+But this is a trade-off to the functionality provided by the compiler in the areas of developer productivity and 
+runtime reliability that have no equivalent in Java. As Scala 2 matured the compiler optimizations brought compile times down,
+but Scala 3 reset the gains to zero. Macro libraries such as [Quill](https://zio.dev/zio-quill/) provide great compile-time 
+features, and this article dives into optimizations outside of the compiler that can be done to reduce compilation times in Scala 3.
 <!--more-->
 
 {% include table-of-contents.html %}
 
 
-
+## Sub-Project Compile
 Compile with ordered subprojects
 - (Parallel compile): 10:53
 - (Default GC compile): 9:23
