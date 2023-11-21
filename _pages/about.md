@@ -55,7 +55,7 @@ author_profile: false
 <div class="html-bg" style="margin-top: 50px;margin-bottom: 30px;">
   <h1>Trade Audit Android App</h1>
   
-  <div style="
+  <div class="html-bg" style="
     float: left;
     text-align: center;
     border: 1px solid #343434;
@@ -64,8 +64,9 @@ author_profile: false
     margin-bottom: 4px;
     background-color: rgb(104, 66, 207);
     font-size: small;
+    background-blend-mode: multiply;
   ">
-    <a href="https://tradeaudit.app" target="_blank">
+    <a href="https://tradeaudit.app" target="_blank" style="text-decoration: none;">
      <img src="/assets/images/about/tradeauditapp.png" title="Trade Audit Mobile App" 
       style="
         width: 160px;
