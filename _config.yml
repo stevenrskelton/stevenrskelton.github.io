@@ -25,6 +25,7 @@ description: >-
 github_username: stevenrskelton
 minimal_mistakes_skin: dirt
 search: false
+excerpt_separator: <!--more-->
 
 logo: /assets/images/logo.png
 og_image: /assets/images/bio-photo.jpg
