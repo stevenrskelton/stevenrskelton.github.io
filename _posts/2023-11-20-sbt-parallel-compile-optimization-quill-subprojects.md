@@ -32,7 +32,16 @@ Compile without subprojects
 - (Parallel compile): 13:53
 - (Default GC compile): 13:39
 
+Problems with GC
+```
+[warn] In the last 6 seconds, 5.721 (98.9%) were spent in GC. [Heap: 0.65GB free of 5.21GB, max 5.21GB] Consider increasing the JVM heap using `-Xmx`
+or try a different collector, e.g. `-XX:+UseG1GC`, for better performance.
+```
 
+Optimal GC settings
+```
+SBT_OPTS="-Xmx12G -XX:+UseParallelGC" sbt
+```
 
 ### Effect on Compile Time
 
