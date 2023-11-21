@@ -1,18 +1,18 @@
-{% if include.url %}
-<a href="{{ include.url }}" target="_blank">
-{% endif %}
-  <figure style="
-    display: block;
-    float: left;
-    text-align: center;
-    margin: 10px 14px 10px 4px;
-    font-size: small;
-  ">
-    <img src="{{ include.src }}" alt="{{ include.title }}" style="max-width: 180px;max-height:180px;margin-bottom:4px;"/>
-    {% if include.caption %}
-    <figcaption>{{ include.caption }}</figcaption>
+<figure style="
+  display: block;
+  float: left;
+  text-align: center;
+  margin: 10px 14px 10px 4px;
+  font-size: small;
+">
+  {% if include.url %}
+  <a href="{{ include.url }}" target="_blank">
     {% endif %}
-  </figure>
-{% if include.url %}
-</a>
-{% endif %}
+  <img src="{{ include.src }}" alt="{{ include.title }}" style="max-width: 180px;max-height:180px;margin-bottom:4px;"/>
+  {% if include.caption %}
+  <figcaption>{{ include.caption }}</figcaption>
+  {% endif %}
+  {% if include.url %}
+  </a>
+  {% endif %}
+</figure>
