@@ -90,10 +90,13 @@ author_profile: false
     Use Trade Audit to catalogue any stock advice found on the internet.  Stock trades and ideas can be tracked 
     creating an immutable track record that the social media accounts refuse to provide.
   </p>
+  <div style="height:0;clear:left"></div>
 </div>
 
 
-## Public GitHub Repositories
+## GitHub Repositories
+
+### Public
 
 <div style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:0px;">
 
