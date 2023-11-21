@@ -4,14 +4,15 @@ categories:
   - Scala
 tags:
   - SBT
+excerpt_separator: <!--more-->
 ---
 
-<div style="float:left"><a href="https://xkcd.com/303" target="_blank">
-  <figure>
-    <img src="/assets/images/2023/11/compiling.png" alt="XKCD: My code's compiling." height="100">
-    <figcaption>My code's compiling.</figcaption>
-  </figure>
-</a></div>
+{% include postlogo.html 
+    title="XKCD" 
+    src="/assets/images/2023/11/compiling.png" 
+    url="https://xkcd.com/303" 
+    caption="My code's compiling."
+%}
 
 Early criticisms of Scala was compiling was slow compared to Java, and especially interpreted languages such as Javascript 
 or Python where compile times aren't a consideration. Long compile times can interrupt developer flow in addition to the 

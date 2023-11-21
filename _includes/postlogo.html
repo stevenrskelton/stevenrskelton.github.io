@@ -1,2 +1,14 @@
-<img src="{{ include.src }}" title="{{ include.title }}" alt="{{ include.title }}"
-     style="float:left;padding-right:10px;padding-bottom:10px;object-fit: contain;max-width:140px;max-height:100px;"/>
+<div style="float:left;padding-right:10px;padding-bottom:10px;max-width:140px;max-height:100px;">
+{% if include.url %}
+<a href="{{ include.url }}" target="_blank">
+{% endif %}
+  <figure>
+    <img src="{{ include.src }}" alt="{{ include.title }}" style="object-fit:contain;"/>
+    {% if include.caption %}
+    <figcaption>{{ include.caption }}</figcaption>
+    {% endif %}
+  </figure>
+{% if include.url %}
+</a>
+{% endif %}
+</div>
