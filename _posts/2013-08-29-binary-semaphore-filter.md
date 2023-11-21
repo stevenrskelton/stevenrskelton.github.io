@@ -5,20 +5,28 @@ categories:
   - Scala
 ---
 
-Long running queries are very taxing on a database. But caching idempotent queries may not always be a suitable solution.
+Long running queries are very taxing on a database. But caching idempotent queries may not always be a suitable
+solution.
 What happens if queries run for N-seconds, but users expect to see new changes immediately?
 What happens if queries return large datasets that won’t all fit into memory?
 
-There is a middle ground. Not all requests result in a service call, but results are never stored in memory. If two identical requests are made, only one request will be served from the database and both share the result. Users will be either returned a fresh result, or served faster than a regular database call. Moreover, no extra memory is consumed by a cache, and usage actually decreases as responses are shared.
+There is a middle ground. Not all requests result in a service call, but results are never stored in memory. If two
+identical requests are made, only one request will be served from the database and both share the result. Users will be
+either returned a fresh result, or served faster than a regular database call. Moreover, no extra memory is consumed by
+a cache, and usage actually decreases as responses are shared.
 
-Comparing our [semaphore](http://en.wikipedia.org/wiki/Semaphore_%28programming%29) approach to a N-second query cache (results are added to cache on response), we have the following key differences:
+Comparing our [semaphore](http://en.wikipedia.org/wiki/Semaphore_%28programming%29) approach to a N-second query cache (
+results are added to cache on response), we have the following key differences:
 
 - User will always receive current datasets, but it’s possible to return stale results from a cache,
 - Users cannot hammer the DB with identical queries, but possible with cache when cache is empty or expired,
-- No different configuration required, but cache time needs to configuration and has to be static across all API methods.
+- No different configuration required, but cache time needs to configuration and has to be static across all API
+  methods.
 
-As encountered before when creating our caching solutions, the SeqId must be rewritten to match identical queries across different requests.
-For simplicity, let’s create a reusable Trait to put our previous code (this code can also be found in finagle, but it’s private):
+As encountered before when creating our caching solutions, the SeqId must be rewritten to match identical queries across
+different requests.
+For simplicity, let’s create a reusable Trait to put our previous code (this code can also be found in finagle, but it’s
+private):
 
 ```scala
 trait GetAndSetSeqId {
@@ -53,9 +61,12 @@ trait GetAndSetSeqId {
 }
 ```
 
-The logic to create a semaphore around distinct queries is short, but requires a little understanding of [Scala Futures](https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Future.scala).
+The logic to create a semaphore around distinct queries is short, but requires a little understanding
+of [Scala Futures](https://github.com/twitter/util/blob/master/util-core/src/main/scala/com/twitter/util/Future.scala).
 
-We’ll start first by defining our storage used to keep track of the currently executing requests. A `Map` of `Future`s is the obvious choice, as long as it’s thread safe. This will be good enough, let’s not get overly pedantic with sync locks as the edge cases are harmless.
+We’ll start first by defining our storage used to keep track of the currently executing requests. A `Map` of `Future`s
+is the obvious choice, as long as it’s thread safe. This will be good enough, let’s not get overly pedantic with sync
+locks as the edge cases are harmless.
 
 ```scala
 val inProcess = new HashMap[String, Future[Array[Byte]]] 
@@ -100,8 +111,10 @@ val key = requestHashKey(zeroedSeqId)
 ```
 
 2. check if it’s currently executing,
+
 - if not, update our list, and start execution,
 - if so, return the shared Future from our list,
+
 3. when the execution completes, remove it from our list of executing requests,
 4. return a copy of response, with the correct SeqId, to each waiting response.
 
@@ -119,6 +132,6 @@ inProcess.getOrElseUpdate(key, {
 ```
 
 {%
-  include downloadsources.html
-  src="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Binary-Semaphore-Filter.scala"
+include downloadsources.html
+src="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Binary-Semaphore-Filter.scala"
 %}

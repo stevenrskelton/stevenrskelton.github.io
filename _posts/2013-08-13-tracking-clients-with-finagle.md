@@ -8,13 +8,25 @@ tags:
   - Thrift
 ---
 
-In a Service Oriented Architecture, a service may be used by many different clients – each with with different usage patterns and performance profiles. Behind a corporate firewall, without each client authenticating itself to our server, how can monitor a specific client if we can’t identify their requests?
+In a Service Oriented Architecture, a service may be used by many different clients – each with with different usage
+patterns and performance profiles. Behind a corporate firewall, without each client authenticating itself to our server,
+how can monitor a specific client if we can’t identify their requests?
 
-One way would be to track each client’s IP, but servers change and it may be impossible to coordinate across teams. Another would way is to push the logging and monitoring responsibility to each and every client. However the easiest way would be to watermark each thrift request with client information, but does the standard thrift protocol allow it? The answer is yes, a small amount client information can be transmitted unobtrusively dual-purposing the randomly generated `SeqId`.
+One way would be to track each client’s IP, but servers change and it may be impossible to coordinate across teams.
+Another would way is to push the logging and monitoring responsibility to each and every client. However the easiest way
+would be to watermark each thrift request with client information, but does the standard thrift protocol allow it? The
+answer is yes, a small amount client information can be transmitted unobtrusively dual-purposing the randomly
+generated `SeqId`.
 
-The `SeqId` is a randomly generated `Int32` used to uniquely identify each request. As the particular random value chose for any request is inconsequential, we can partition the SeqId values across clients, thus clearly identifying the origin of each request.
+The `SeqId` is a randomly generated `Int32` used to uniquely identify each request. As the particular random value chose
+for any request is inconsequential, we can partition the SeqId values across clients, thus clearly identifying the
+origin of each request.
 
-Under the covers, every Finagle client uses a [Filter](https://github.com/twitter/finagle/blob/master/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala) class called [SeqIdFilter](https://github.com/twitter/finagle/blob/master/finagle-thrift/src/main/scala/com/twitter/finagle/thrift/SeqIdFilter.scala) class to set the `SeqId` of each request.
+Under the covers, every Finagle client uses
+a [Filter](https://github.com/twitter/finagle/blob/master/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala)
+class
+called [SeqIdFilter](https://github.com/twitter/finagle/blob/master/finagle-thrift/src/main/scala/com/twitter/finagle/thrift/SeqIdFilter.scala)
+class to set the `SeqId` of each request.
 
 So, if we add additional parameters to partition the randomly generated `SeqId`:
 
@@ -38,7 +50,8 @@ class MultiClientSeqIdFilter(clientId: Int, numberOfClients: Int = 100)
 }
 ```
 
-The only code changes required to this class (besides copying in all `private[this]` functions) is to change the id generation, from
+The only code changes required to this class (besides copying in all `private[this]` functions) is to change the id
+generation, from
 
 ```scala
 val id = rng.nextInt()
@@ -50,8 +63,10 @@ to:
 val id = rng.nextInt(intRange) * numberOfClients + clientId
 ```
 
-Now, all clients must register the `MultiClientSeqIdFilter` filter using their assigned `clientId`, and it also makes sense to disable the old `SeqIdFilter`.
-The old `SeqIdFilter` can be disabled by passing `useCallerSeqIds=true` to the `ThriftClientFramedCodecFactory` constructor.
+Now, all clients must register the `MultiClientSeqIdFilter` filter using their assigned `clientId`, and it also makes
+sense to disable the old `SeqIdFilter`.
+The old `SeqIdFilter` can be disabled by passing `useCallerSeqIds=true` to the `ThriftClientFramedCodecFactory`
+constructor.
 
 ```scala
 val appClientId = 3
@@ -67,14 +82,18 @@ val clientService = ClientBuilder()
   .build()
 ```
 
-Any clients that do not implement partitioned `SeqId` will obviously contaminate your statistics, however all other functionality will be unaffected.
-The server can now use its own `Filters` to collect client usage statistics, and for this [Ostrich](https://github.com/twitter/ostrich) is perfect.
+Any clients that do not implement partitioned `SeqId` will obviously contaminate your statistics, however all other
+functionality will be unaffected.
+The server can now use its own `Filters` to collect client usage statistics, and for
+this [Ostrich](https://github.com/twitter/ostrich) is perfect.
 
-Two useful statistics not part of the default [Finagle Ostrich](https://github.com/twitter/ostrich) configuration are: 
+Two useful statistics not part of the default [Finagle Ostrich](https://github.com/twitter/ostrich) configuration are:
+
 1. When was each method last called?
 2. How is each method performing?
 
-Having these two statistics broken down by client provides a high level picture of how your API is being used by each client.
+Having these two statistics broken down by client provides a high level picture of how your API is being used by each
+client.
 
 ```scala
 import com.twitter.ostrich.stats.Stats
@@ -133,6 +152,6 @@ minimum=229, p50=302, p90=568, p95=568, p99=568, p999=568, p9999=568, sum=1099)
 ```
 
 {%
-  include downloadsources.html
-  src="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Tracking-Clients-with-Finagle.scala"
+include downloadsources.html
+src="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Tracking-Clients-with-Finagle.scala"
 %}

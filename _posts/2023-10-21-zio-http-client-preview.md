@@ -11,6 +11,7 @@ tags:
 https://zio.dev/zio-http
 
 Enable `Accept-Encoding`, compression not enabled by default.
+
 ```
   private val defaultClientConfig = ZClient.Config.default
   private val sslConfig = ClientSSLConfig.FromCertFile("/etc/ssl/certs/ca-certificates.crt")
@@ -31,7 +32,6 @@ Enable `Accept-Encoding`, compression not enabled by default.
     )
 ```
 
-
 Add system SSL certs:
 Expanding on the example https://zio.dev/zio-http/examples/basic/https-client
 
@@ -39,11 +39,11 @@ Expanding on the example https://zio.dev/zio-http/examples/basic/https-client
 private val sslConfig = ClientSSLConfig.FromCertFile("/etc/ssl/certs/ca-certificates.crt")
 ```
 
-
-Part about disabling IPv4, 
+Part about disabling IPv4,
 
 java.lang.System.setProperty("java.net.preferIPv4Stack", "true")
 -Djava.net.preferIPv4Stack=true
+
 ```
 enp5s0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
         ether aa:bb:cc:dd:ee:ff  txqueuelen 1000  (Ethernet)
@@ -72,17 +72,18 @@ wlp0s19f2u5: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
 ```
 ifconfig enp5s0 down
 ```
+
 Disable in the kernel
+
 ```
 echo 1 > /proc/sys/net/ipv6/conf/default/disable_ipv6
 echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
 ```
 
-
-
 NoClassFoundException SSLPrivateKeyMethod
 Make sure Netty and Netty's SSL binaries are compatible versions as per netty-tcnative-boringssl-static
 
-Complicated since ZIO-HTTP is a client, and already using (ZIO) grpc-java, so this is two separate packages that both use netty, managed to get working despite having both 
+Complicated since ZIO-HTTP is a client, and already using (ZIO) grpc-java, so this is two separate packages that both
+use netty, managed to get working despite having both
 
 netty-4.1.86 and netty-4.1.93 installed

@@ -16,12 +16,13 @@ https://github.blog/2021-04-22-github-actions-update-helping-maintainers-combat-
 
 https://github.com/actions/virtual-environments/issues/3949
 
->2,000 minutes/month
->Free for public repositories
+> 2,000 minutes/month
+> Free for public repositories
 
 
 
 Not just `ubuntu-latest`
+
 ```yaml
 jobs:
   build:

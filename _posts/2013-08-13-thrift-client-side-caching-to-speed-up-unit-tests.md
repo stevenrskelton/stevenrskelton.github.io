@@ -8,17 +8,29 @@ tags:
   - Thrift
 ---
 
-One of the largest headaches associated with network system architecture is abstracting away the network. External resources are always slower and more disjoint than working locally. While there are various caching techniques, few are suitable for use in a development environment.
+One of the largest headaches associated with network system architecture is abstracting away the network. External
+resources are always slower and more disjoint than working locally. While there are various caching techniques, few are
+suitable for use in a development environment.
 
-Client-side unit tests usually only have two options: executing calls against a deployed server thereby struggling against long waits per testing iteration, or having all calls tediously mocked out.
+Client-side unit tests usually only have two options: executing calls against a deployed server thereby struggling
+against long waits per testing iteration, or having all calls tediously mocked out.
 
-An alternative approach available within Finagle: a pre-populated query cache on the client side. In my article [Finagle Query Cache with Guava](http://stevenskelton.ca/finagle-query-cache-with-guava/) the idea of using a Filter as a means of intercepting and short circuiting service calls was demonstrated. Instead of filling the cache at runtime, the known service calls can be loaded into a static map at compile.
+An alternative approach available within Finagle: a pre-populated query cache on the client side. In my
+article [Finagle Query Cache with Guava](http://stevenskelton.ca/finagle-query-cache-with-guava/) the idea of using a
+Filter as a means of intercepting and short circuiting service calls was demonstrated. Instead of filling the cache at
+runtime, the known service calls can be loaded into a static map at compile.
 
-Capturing the necessary unit test request/response pairs is quite simple using a [Finagle LoggingFilter](https://github.com/twitter/finagle/blob/master/finagle-core/src/main/scala/com/twitter/finagle/filter/LoggingFilter.scala), but it’s hard to handle the binary output. A cleaner, and more developer friendly approach is to translate the binary data into JSON, an approach broached in [Developer Friendly Thrift Request Logging]({% post_url 2013-08-03-developer-friendly-thrift-request-logging %}).
+Capturing the necessary unit test request/response pairs is quite simple using
+a [Finagle LoggingFilter](https://github.com/twitter/finagle/blob/master/finagle-core/src/main/scala/com/twitter/finagle/filter/LoggingFilter.scala),
+but it’s hard to handle the binary output. A cleaner, and more developer friendly approach is to translate the binary
+data into JSON, an approach broached in [Developer Friendly Thrift Request Logging]({% post_url
+2013-08-03-developer-friendly-thrift-request-logging %}).
 
-The advantage of re-encoding to `TJSONProtocol` is that mocked data can be contained directly within Scala files as opposed to external resources. Another advantage is the ability to log human readable output directly to the console.
+The advantage of re-encoding to `TJSONProtocol` is that mocked data can be contained directly within Scala files as
+opposed to external resources. Another advantage is the ability to log human readable output directly to the console.
 
-Using `ProtocolHelpers` class previously constructed in [Developer Friendly Thrift Request Logging]({% post_url 2013-08-03-developer-friendly-thrift-request-logging %}) we can execute our `TProtocol↔TJSONProtocol` reserialization:
+Using `ProtocolHelpers` class previously constructed in [Developer Friendly Thrift Request Logging]({% post_url
+2013-08-03-developer-friendly-thrift-request-logging %}) we can execute our `TProtocol↔TJSONProtocol` reserialization:
 
 ```scala
 import com.twitter.finagle.{ Service, SimpleFilter }
@@ -52,9 +64,14 @@ class MockJSONDataFilter(
 }
 ```
 
-The `thriftEncoding` is what is transmitted over the wire, it can be any `TProtocol`. The `jsonLog` is assumed to use the `TJSONProtocol` since it is the only full-featured human readable `String TProtocol` in Thrift.
+The `thriftEncoding` is what is transmitted over the wire, it can be any `TProtocol`. The `jsonLog` is assumed to use
+the `TJSONProtocol` since it is the only full-featured human readable `String TProtocol` in Thrift.
 
-The approach taken is to populate the requestResponses cache with the supplied `jsonLog`, and throw an exception if any requests are made that aren’t in this cache (this will help developers running the unit tests know they need to update their data). Just like other caches, Thrift’s `SeqId` must be zeroed out to correctly match requests. Previously we directly modified the `SeqId Int32` within the `Array[Byte]`, this time let’s try an alternative approach (just for kicks), and use `TProtocol`’s built in functions:
+The approach taken is to populate the requestResponses cache with the supplied `jsonLog`, and throw an exception if any
+requests are made that aren’t in this cache (this will help developers running the unit tests know they need to update
+their data). Just like other caches, Thrift’s `SeqId` must be zeroed out to correctly match requests. Previously we
+directly modified the `SeqId Int32` within the `Array[Byte]`, this time let’s try an alternative approach (just for
+kicks), and use `TProtocol`’s built in functions:
 
 ```scala
 def changeSeqId(
@@ -93,7 +110,9 @@ def changeSeqId(
 }
 ```
 
-Reflecting on how we just hacked together conditional logic to handle JSON serialization means we’ve written some brittle code. Our code does now however handle both `TBinaryProtocol` and `TJSONProtocol` which is kind of nice, so let’s trudge forward by completing requestResponses.
+Reflecting on how we just hacked together conditional logic to handle JSON serialization means we’ve written some
+brittle code. Our code does now however handle both `TBinaryProtocol` and `TJSONProtocol` which is kind of nice, so
+let’s trudge forward by completing requestResponses.
 
 ```scala
 lazy val requestResponses: Map[String, Array[Byte]] = jsonLog.map {
@@ -106,9 +125,12 @@ lazy val requestResponses: Map[String, Array[Byte]] = jsonLog.map {
 }.toMap
 ```
 
-This code reads in our `TJSONProtocol` log data and populates a request/response dictionary. The keys are JSON – since it might be helpful to developers to know what’s in the map, but we are choosing to reencode all responses to TBinaryProtocol since that’s what the client expects to be returned.
+This code reads in our `TJSONProtocol` log data and populates a request/response dictionary. The keys are JSON – since
+it might be helpful to developers to know what’s in the map, but we are choosing to reencode all responses to
+TBinaryProtocol since that’s what the client expects to be returned.
 
-With the `requestResponses` “cache” prepopulated on initialization, all we need to do is map incoming requests to its entries.
+With the `requestResponses` “cache” prepopulated on initialization, all we need to do is map incoming requests to its
+entries.
 Each request gets its `SeqID` zero’d out, reencoded to JSON, and then compared to what is in the `requestResponses` map.
 
 ```scala
@@ -156,6 +178,6 @@ val fromCache2 = client.getOrderIds(2)
 ```
 
 {%
-  include downloadsources.html
-  src="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Thrift-Client-Side-Caching-to-Speed-Up-Unit-Tests.scala,https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Developer-Friendly-Thrift-Request-Logging.scala"
+include downloadsources.html
+src="https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Thrift-Client-Side-Caching-to-Speed-Up-Unit-Tests.scala,https://github.com/stevenrskelton/Blog/blob/master/src/main/scala/Developer-Friendly-Thrift-Request-Logging.scala"
 %}

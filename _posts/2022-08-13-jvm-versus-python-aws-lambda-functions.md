@@ -6,15 +6,23 @@ tags:
   - AWS
   - Serverless
 ---
-The suitability of programming languages across different domains is a contested topic.  AWS Lambda Functions are a serverless solution that can be used for a wide range of problems from tiny to large tasks.  For lightweight tasks how does the JVM stack up?
+
+The suitability of programming languages across different domains is a contested topic. AWS Lambda Functions are a
+serverless solution that can be used for a wide range of problems from tiny to large tasks. For lightweight tasks how
+does the JVM stack up?
 
 ## Lambda Functions in Scala versus Other Languages
 
-The most widely used programming language for Lambda Functions is Python.  Benchmarks show Python offers the best performances, and the language simplicity normally results in faster development and less code for lightweight tasks.  But AWS Lambda can offer massive scale with access to up to 10GB RAM and 15 minutes per execution that are typically benefited from the structure and maintainability offered in languages such as Java, Scala, and C#.  This article investigates how the JVM stacks up on the low-end and if languages like Python are the only choice.
+The most widely used programming language for Lambda Functions is Python. Benchmarks show Python offers the best
+performances, and the language simplicity normally results in faster development and less code for lightweight tasks.
+But AWS Lambda can offer massive scale with access to up to 10GB RAM and 15 minutes per execution that are typically
+benefited from the structure and maintainability offered in languages such as Java, Scala, and C#. This article
+investigates how the JVM stacks up on the low-end and if languages like Python are the only choice.
 
 ## Sample App
 
 Features:
+
 - Usability: Read JSON from HTTP body, JSON response
 - Functionality: Interact with another AWS service (Batch Put to DynamoDB)
 - Error Handling: Descriptive exception for missing body, fields
@@ -29,9 +37,16 @@ The Python 3.9 implementation is available on GitHub at
 
 ### JVM versus Python Performance Comparison
 
-While [there is discussion](https://mikhail.io/serverless/coldstarts/aws/languages/) about first-call latency it tends to affect only a small number of usecases.  AWS will keep most lambda code hot-loaded for hours so which the shock of even comparing a 20MB Java JAR to 60 lines of Python code boils down to nothing.  There are optimizations that can be had both in aggregate resource cost of execution between using Python versus the JVM it would easily be outweighed by initial engineering costs by forcing developers to work outside their language of expertise.
+While [there is discussion](https://mikhail.io/serverless/coldstarts/aws/languages/) about first-call latency it tends
+to affect only a small number of usecases. AWS will keep most lambda code hot-loaded for hours so which the shock of
+even comparing a 20MB Java JAR to 60 lines of Python code boils down to nothing. There are optimizations that can be had
+both in aggregate resource cost of execution between using Python versus the JVM it would easily be outweighed by
+initial engineering costs by forcing developers to work outside their language of expertise.
 
-There are features such as AWS Lambda Layers that allow for a shared library [it is reported](https://www.simform.com/blog/lambda-cold-starts/) that they have only sub-50ms improvement to cold-starts.  It appears the there is no way to optimize JVM overhead away, only minimize the burden by reducing overall dependencies.
+There are features such as AWS Lambda Layers that allow for a shared
+library [it is reported](https://www.simform.com/blog/lambda-cold-starts/) that they have only sub-50ms improvement to
+cold-starts. It appears the there is no way to optimize JVM overhead away, only minimize the burden by reducing overall
+dependencies.
 
 <table style="margin-left:auto;margin-right:auto;max-width:500pt;display:table;">
   <thead>
@@ -92,7 +107,9 @@ There are features such as AWS Lambda Layers that allow for a shared library [it
 
 ### Minimizing JVM Artifact Size
 
-Maintaining lightweight resource usage is the key to keeping execution costs low.  Unfortunately the overhead of the JVM already places it behind Python and NodeJS deployments, but less than a full containerized build. Library dependencies should be kept to the minimum since JVM artifacts do not perform tree-shaking code removal that Go or GraalVM will.
+Maintaining lightweight resource usage is the key to keeping execution costs low. Unfortunately the overhead of the JVM
+already places it behind Python and NodeJS deployments, but less than a full containerized build. Library dependencies
+should be kept to the minimum since JVM artifacts do not perform tree-shaking code removal that Go or GraalVM will.
 
 <table style="margin-left:auto;margin-right:auto;max-width:700pt;display:table;">
   <thead>
@@ -141,16 +158,21 @@ Maintaining lightweight resource usage is the key to keeping execution costs low
   </tbody>
 </table>
 
-While the AWS SDK represents 9.9MB above, the majority is contributed by shared libraries rather than code specific to the DynamoDB service.  Additional services can be added with minimal size increase, for example adding the `awssdk-s3` to support read/write from S3 would be 3 MB, or `awsdsk-sns` to support Notifications would be 1 MB.
+While the AWS SDK represents 9.9MB above, the majority is contributed by shared libraries rather than code specific to
+the DynamoDB service. Additional services can be added with minimal size increase, for example adding the `awssdk-s3` to
+support read/write from S3 would be 3 MB, or `awsdsk-sns` to support Notifications would be 1 MB.
 
 ## Conclusion
 
-According to cloud monitoring SaaS Datadog [Python is the most popular language for Lambda](https://www.datadoghq.com/state-of-serverless/) with NodeJS being a close second.  This aligns with the lightweight market that Lambdas excel at. However Datadog also indicates that over 60% of large organizations have deployed Lambda in 3 or more languages meaning that they are reaching into more stuctured languages such as Java, Go, or .Net for other, more likely complex, tasks.
+According to cloud monitoring SaaS
+Datadog [Python is the most popular language for Lambda](https://www.datadoghq.com/state-of-serverless/) with NodeJS
+being a close second. This aligns with the lightweight market that Lambdas excel at. However Datadog also indicates that
+over 60% of large organizations have deployed Lambda in 3 or more languages meaning that they are reaching into more
+stuctured languages such as Java, Go, or .Net for other, more likely complex, tasks.
 
-
-{% 
-  include github_project.html 
-  name="AWS Lambda DynamoDB importer"
-  url="https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer"
-  description="See the Complete Code on GitHub"
+{%
+include github_project.html
+name="AWS Lambda DynamoDB importer"
+url="https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer"
+description="See the Complete Code on GitHub"
 %}

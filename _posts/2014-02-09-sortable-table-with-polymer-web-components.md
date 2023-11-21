@@ -8,7 +8,10 @@ tags:
   - WebComponents
 ---
 
-{% include postlogo.html title="Web Components" src="/assets/images/2014/02/webcomponents.png" %} As businesses now rely more heavily on web applications to perform daily operations, a user friendly datatable/spreadsheet is indispensable to all web developers. While individual requirements vary, the core staple is the sortable table. Using Polymer’s Templates and Data-Binding, one can be implemented in a remarkably concise way.
+{% include postlogo.html title="Web Components" src="/assets/images/2014/02/webcomponents.png" %} As businesses now rely
+more heavily on web applications to perform daily operations, a user friendly datatable/spreadsheet is indispensable to
+all web developers. While individual requirements vary, the core staple is the sortable table. Using Polymer’s Templates
+and Data-Binding, one can be implemented in a remarkably concise way.
 
 The code in this post references *Polymer 0.1.4*, and may change in subsequent releases.
 
@@ -18,9 +21,13 @@ The sortable table has a few standard requirements:
 - Columns can be statically configured (renamed, reordered, and hidden), and
 - Rows can be sorted by clicking on the column headers.
 
-Consider a use-case of finding the maximum value contained within various columns: [Ostrich](https://github.com/twitter/ostrich) is a reporting library on the JVM that gathers performance statistics and query execution times, making them available as JSON. It is a realistic input, and a simple sortable table provides a measurable benefit the the user.
+Consider a use-case of finding the maximum value contained within various
+columns: [Ostrich](https://github.com/twitter/ostrich) is a reporting library on the JVM that gathers performance
+statistics and query execution times, making them available as JSON. It is a realistic input, and a simple sortable
+table provides a measurable benefit the the user.
 
-Using the Ostrich JSON dataset as reference, we should create another array to define the order, title, and any other properties for the columns we wish to be in the rendered table:
+Using the Ostrich JSON dataset as reference, we should create another array to define the order, title, and any other
+properties for the columns we wish to be in the rendered table:
 
 ```js
 var columns = [
@@ -39,9 +46,13 @@ var columns = [
 ];
 ```
 
-In addition to being able to add column specific properties, by specifying the `columns` data separately from the input `data` we reduce restrictions on the `data` format. The `data` dataset can now contain arbitrary JSON elements, we will pick and choose what is displayed in our data table simply omitting missing or additional fields.
+In addition to being able to add column specific properties, by specifying the `columns` data separately from the
+input `data` we reduce restrictions on the `data` format. The `data` dataset can now contain arbitrary JSON elements, we
+will pick and choose what is displayed in our data table simply omitting missing or additional fields.
 
-Web Components fully encapsulate all functionality behind an interface of HTML attributes. We have a specification for the `data` source, displayed `columns`, and we will also expose the currently sorted column and its direction. The custom element interface for our new _simple-sortable-table_ element is:
+Web Components fully encapsulate all functionality behind an interface of HTML attributes. We have a specification for
+the `data` source, displayed `columns`, and we will also expose the currently sorted column and its direction. The
+custom element interface for our new _simple-sortable-table_ element is:
 
 ```html
 <simple-sortable-table
@@ -52,7 +63,9 @@ Web Components fully encapsulate all functionality behind an interface of HTML a
 </simple-sortable-table>
 ```
 
-The Polymer element definition mirrors the above by exposing the same set of attributes. The internal logic of the Web Component will take advantage of [HTML Templates](http://www.polymer-project.org/platform/template.html) to perform 2 tasks: create column headers, and create rows.
+The Polymer element definition mirrors the above by exposing the same set of attributes. The internal logic of the Web
+Component will take advantage of [HTML Templates](http://www.polymer-project.org/platform/template.html) to perform 2
+tasks: create column headers, and create rows.
 
 ```html
 <polymer-element name="simple-sortable-table"
@@ -79,9 +92,18 @@ The Polymer element definition mirrors the above by exposing the same set of att
 </polymer-element>
 ```
 
-Both tasks will iterate over the `column` array, as both need to correctly filter and order the displayed columns. Starting on the first task, column headers require a few features, they must: capture click events, display sort status, and show a column title. Column header click events will be handled by a new function called `changeSort`, when a user clicks on a header it will be called, determine which column was clicked, then update the sort settings. Since the sort variables `sortColumn` and `sortDescending` are bound to the Polymer element, updating either will automatically re-render the entire table with the proper sort.
+Both tasks will iterate over the `column` array, as both need to correctly filter and order the displayed columns.
+Starting on the first task, column headers require a few features, they must: capture click events, display sort status,
+and show a column title. Column header click events will be handled by a new function called `changeSort`, when a user
+clicks on a header it will be called, determine which column was clicked, then update the sort settings. Since the sort
+variables `sortColumn` and `sortDescending` are bound to the Polymer element, updating either will automatically
+re-render the entire table with the proper sort.
 
-Because user-defined parameters cannot be sent to event handlers we cannot send `changeSort` the clicked column as an argument. However each event handler is passed the source DOM element, so as long as the source element was rendered using a Polymer template it will expose a `model` property containing a reference to its template’s bound data model. If the element’s template was bound using a `repeat`, the `model` property will be a reference to the specific item of the collection corresponding to this element, in our case the item in the `columns` array.
+Because user-defined parameters cannot be sent to event handlers we cannot send `changeSort` the clicked column as an
+argument. However each event handler is passed the source DOM element, so as long as the source element was rendered
+using a Polymer template it will expose a `model` property containing a reference to its template’s bound data model. If
+the element’s template was bound using a `repeat`, the `model` property will be a reference to the specific item of the
+collection corresponding to this element, in our case the item in the `columns` array.
 
 ```js
 changeSort: function(e,p,o){
@@ -98,20 +120,23 @@ changeSort: function(e,p,o){
 Using overline and underline to indicate descending and ascending sorting respectively, the column header template is:
 
 ```html
-<template repeat="{{-"{{"-}}column in columns}}">
-  <th on-click="{{-"{{"-}}changeSort}}" style="{{-"{{"-}}
-    sortColumn == column.name ? (
-      sortDescending ? 
-        'text-decoration:overline' 
-        : 'text-decoration:underline'
-    ) : ''
-  }}">
-    {{-"{{"-}}!(column.title) ? column.name : column.title}}
-  </th>
+
+<template repeat="{{-" {{"-}}column in columns}}">
+<th on-click="{{-" {{"-}}changeSort}}" style="{{-"{{"-}}
+sortColumn == column.name ? (
+sortDescending ?
+'text-decoration:overline'
+: 'text-decoration:underline'
+) : ''
+}}">
+{{-"{{"-}}!(column.title) ? column.name : column.title}}
+</th>
 </template>
 ```
 
-The actual row sorting will be performed using a Polymer Filter applied to the row template data. For an introduction on Polymer Filters, I have written an article: [Polymer Data Binding Filters]({% post_url 2014-02-06-polymer-data-binding-filters %}).
+The actual row sorting will be performed using a Polymer Filter applied to the row template data. For an introduction on
+Polymer Filters, I have written an article: [Polymer Data Binding Filters]({% post_url
+2014-02-06-polymer-data-binding-filters %}).
 
 ```js
 PolymerExpressions.prototype.sortByKey = function(array, key, desc) {
@@ -132,7 +157,9 @@ PolymerExpressions.prototype.sortByKey = function(array, key, desc) {
 };
 ```
 
-The `data` for the table is JSON meaning each row of data is a JSON object; we can reference a particular cell of the row by column name. This is much cleaner than dealing with a numerical index since the column’s displayed order may be different than its order within the row data.
+The `data` for the table is JSON meaning each row of data is a JSON object; we can reference a particular cell of the
+row by column name. This is much cleaner than dealing with a numerical index since the column’s displayed order may be
+different than its order within the row data.
 
 ```html
 <template repeat="{{-"{{"-}}
@@ -146,9 +173,13 @@ The `data` for the table is JSON meaning each row of data is a JSON object; we c
 </template>
 ```
 
-We have defined all the code for a sortable table, the only task left is to style. Alternating row background color is both appealing and simple using the `nth-of-type` CSS selector, more advanced conditional formatting will hopefully be the subject of a future article – although it is quite straightforward to implement by adding an additional formatting function property to the `columns` array.
+We have defined all the code for a sortable table, the only task left is to style. Alternating row background color is
+both appealing and simple using the `nth-of-type` CSS selector, more advanced conditional formatting will hopefully be
+the subject of a future article – although it is quite straightforward to implement by adding an additional formatting
+function property to the `columns` array.
 
-The following live-demo takes advantage of `columns` data binding and the `window.resize` event to show/hide the number of columns based on user screen resolution (resize your browser to try it out).
+The following live-demo takes advantage of `columns` data binding and the `window.resize` event to show/hide the number
+of columns based on user screen resolution (resize your browser to try it out).
 
 <script src="/assets/images/2014/02/platform-0.1.4.js"></script>
 <script src="/assets/images/2014/02/polymer-0.1.4.js"></script>
@@ -363,49 +394,50 @@ The following live-demo takes advantage of `columns` data binding and the `windo
     ostrichMetricsArray.push(data);
   }
 
-  function bindData(){
-    var columns = null;
-    if(window.innerWidth < 500){
-      columns = [
-        {name:'name', title:'service call'},
-        {name:'average'},
-        {name:'count'}
-      ];
-    }else if(window.innerWidth < 950){
-      columns = [
-        {name:'name', title:'service call'},
-        {name:'average'},
-        {name:'count'},
-        {name:'maximum'},
-        {name:'minimum'}
-      ];
-    }else{
-      columns = [
-        {name:'name', title:'service call'},
-        {name:'average'},
-        {name:'count'},
-        {name:'maximum'},
-        {name:'minimum'},
-        {name:'p50'},
-        {name:'p90'},
-        {name:'p95'},
-        {name:'p99'},
-        {name:'p999'},
-        {name:'p9999'},
-        {name:'sum'}
-      ];
-    }
-    document.getElementById('tableTemplate').model = {
-      data: ostrichMetricsArray,
-      columns: columns
-    };	
-  }      
- 
-  window.addEventListener('polymer-ready', bindData);
-  window.addEventListener('resize', bindData);
+function bindData(){
+var columns = null;
+if(window.innerWidth < 500){
+columns = [
+{name:'name', title:'service call'},
+{name:'average'},
+{name:'count'}
+];
+}else if(window.innerWidth < 950){
+columns = [
+{name:'name', title:'service call'},
+{name:'average'},
+{name:'count'},
+{name:'maximum'},
+{name:'minimum'}
+];
+}else{
+columns = [
+{name:'name', title:'service call'},
+{name:'average'},
+{name:'count'},
+{name:'maximum'},
+{name:'minimum'},
+{name:'p50'},
+{name:'p90'},
+{name:'p95'},
+{name:'p99'},
+{name:'p999'},
+{name:'p9999'},
+{name:'sum'}
+];
+}
+document.getElementById('tableTemplate').model = {
+data: ostrichMetricsArray,
+columns: columns
+};
+}
+
+window.addEventListener('polymer-ready', bindData);
+window.addEventListener('resize', bindData);
 </script>
 
 {%
-  include downloadsources.html
-  src="/assets/images/2014/02/sortable-table-polymer-web-components.html,/assets/images/2014/02/simple-sortable-table.html"
+include downloadsources.html
+src="
+/assets/images/2014/02/sortable-table-polymer-web-components.html,/assets/images/2014/02/simple-sortable-table.html"
 %}

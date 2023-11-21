@@ -1,5 +1,5 @@
 ---
-title: "ZIO migration from Akka and Futures"
+title: "ZIO Migration from Akka and Scala Futures"
 categories:
   - Scala
 tags:
@@ -174,7 +174,7 @@ systems.
 
 ### Effect on Compile Time
 
-Quill trades off compile time for greater runtime performance. The sample project has 80 queries;
+Quill trades off compile time for greater runtime performance. The sample project has 120 queries;
 
 | Implementation | Scala 2 Compile Time | Scala 3 Compile Time |
 |:---------------|:--------------------:|:--------------------:|
@@ -182,8 +182,12 @@ Quill trades off compile time for greater runtime performance. The sample projec
 | Quill          |        4m 17s        |        8m 42s        |
 | Quill Dynamic  |         n/a          |        7m 52s        |
 
-8-core 4200MHz, 16GB RAM
-Quill required > 4GB Heap to compile Scala 3
+_8-core 4200MHz, 16GB RAM_
+Quill required > 5GB Heap to compile Scala 3
+
+Compile times and compile optimizations are covered separately in
+[SBT Parallel Compile Optimizations using Quill Sub-Projects]({% post_url
+2023-11-20-sbt-parallel-compile-optimization-quill-subprojects %}).
 
 ## Step 2: gRPC Migration from Akka to ZIO
 
