@@ -1,7 +1,7 @@
 {% assign height = include.height | default "400px" %}
 <style>
-    .multiplex_responsive_1 { width: 360px; height: 100px; }
-    @media(min-width: 720px) { .multiplex_responsive_1 { width: 360px; height: {{ height }}; margin-top: 1em; margin-bottom: 1em; } }
+    .multiplex_responsive_1 { width: 360px; height: 100px; margin-top: 1em; margin-bottom: 1em; }
+    @media(min-width: 720px) { .multiplex_responsive_1 { width: 360px; margin: 0; height: {{ height }}; } }
 </style>
 <div class="toc-container">
     {% include toc title="Table of Contents" %}
