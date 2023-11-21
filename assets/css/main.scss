@@ -102,13 +102,22 @@ html {
 
 @media (min-width: 80em) {
   html {
-    font-size:18px;
+    font-size: 18px;
   }
 }
 
 .site-logo img {
   max-height: 2.5rem;
   border-radius: 4px;
+}
+
+@media(max-width: 720px) {
+  .pagination {
+    margin-left: auto;
+    margin-right: auto;
+    width: fit-content;
+    float: none;
+  }
 }
 
 .html-bg {
