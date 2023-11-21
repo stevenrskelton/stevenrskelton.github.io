@@ -4,7 +4,7 @@ categories:
   - Scala
 tags:
   - SBT
-  - Github
+  - GitHub
 excerpt_separator: <!--more-->
 ---
 
@@ -92,9 +92,9 @@ Global / concurrentRestrictions := {
 We are working under the assumption that each of your SBT projects will run into serialization bottlenecks, meaning each
 project will eventually be consuming only a single thread
 
-### Github Actions CI/CD
+### GitHub Actions CI/CD
 
-Github Actions compile code
+GitHub Actions compile code
 on [dedicated runners](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources)
 that have _ubuntu-latest_ provisioned at 2 core, 7 GB RAM, 14 GB SSD.
 

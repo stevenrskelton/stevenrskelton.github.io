@@ -5,7 +5,7 @@ categories:
   - Scala
 tags:
   - AWS
-  - Github
+  - GitHub
   - Serverless
 ---
 AWS Lambda offer the ability to run code functions without a server. Basically standalone functions that receive JSON as a parameter and have up to 15 minutes to do anything. The source of the JSON event can be anything, AWS has configured most of their AWS products to emit events; for example uploading a file to S3 creates JSON that contains information about the file. Lambdas are meant to be simple and shortlived code snippets, so each Lambda can only listen to 1 source for events (although you can proxy multiple types of events through a single source).  The most generic source for events is to listen to HTTP requests on a public URL, and we'll cover how that can be done in this article.
@@ -150,11 +150,11 @@ def errorToResult(ex: Throwable)(using lambdaLogger: LambdaLogger): APIGatewayV2
       throw ex
 ```
 
-## Automated Deployment from Github Actions
+## Automated Deployment from GitHub Actions
 
-While AWS has their own internal CI/CD pipeline similiar to GitHub, but it is important to continue to view cloud providers as commodity and interchangeable.  Github (which is hosted in Azure) can easily interact with AWS.
+While AWS has their own internal CI/CD pipeline similiar to GitHub, but it is important to continue to view cloud providers as commodity and interchangeable.  GitHub (which is hosted in Azure) can easily interact with AWS.
 
-The Github Action is a short snippet of YAML:
+The GitHub Action is a short snippet of YAML:
 ```yaml
 - name: Build Assembly
   run: sbt test assembly

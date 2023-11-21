@@ -1,5 +1,5 @@
 ---
-title: "TradeAudit Mobile App Infrastructure"
+title: "Trade Audit Mobile App Infrastructure"
 categories:
   - Platform
   - Scala
@@ -7,13 +7,13 @@ categories:
 tags:
   - TradeAudit
   - AWS
-  - Github
+  - GitHub
 ---
-The release of the [TradeAudit](https://tradeaudit.app) mobile app is almost here. It is currently in MVP stage, but its infrastructure is a pretty typical cloud based deployment.  This article discusses design choices made, evaluating how effective they were.<!--more-->
+The release of the [Trade Audit](https://tradeaudit.app) mobile app is almost here. It is currently in MVP stage, but its infrastructure is a pretty typical cloud based deployment.  This article discusses design choices made, evaluating how effective they were.<!--more-->
 
 ### Mobile App Requirements
 
-TradeAudit is a mobile app targeting anyone using Twitter for stock trading ideas/recommendations. 
+Trade Audit is a mobile app targeting anyone using Twitter for stock trading ideas/recommendations. 
 This side of Twitter is colloquially referred to as "fintwit", ie: _Financial Twitter_.
 
 Twitter has a feature called "cashtags" where users can represent stock ticker symbols within Tweets using a dollar sign, for example `$spy` represents the `SPDR S&P 500 ETF`.
@@ -75,7 +75,7 @@ that already has proper asynchronous or streaming support.
 
 ## Server-side API
 
-The TradeAudit server-side hardware is a mix of non-cloud Virtual Private Servers (VPS) and serverless AWS. During 
+The Trade Audit server-side hardware is a mix of non-cloud Virtual Private Servers (VPS) and serverless AWS. During 
 pre-adoption phase (for bootstrapping ventures; seed investment is different) the emphasis is on 
 economics while remaining flexible to scaling in the future. A monthly VPS server is cheaper than even a yearly 
 reserved instance in AWS, while being more financially flexible. For stateless services leaning on proper DevOps tools 
@@ -90,7 +90,7 @@ a client-server interface with multi-language support. Even if features align in
 feature growth often is better served by expanding server-side languages or frameworks in the future, especially when 
 implementing under a microservice paradigm.
 
-The initial server-side implementation chosen for TradeAudit is based around Akka-HTTP and Akka-Streams.
+The initial server-side implementation chosen for Trade Audit is based around Akka-HTTP and Akka-Streams.
 
 _It should be noted that the [Sept 7, 2002](https://www.lightbend.com/blog/why-we-are-changing-the-license-for-akka)
 license change will require paid licenses to use *future* Akka releases; this also won't apply to many no/low revenue projects,
@@ -98,7 +98,7 @@ and not-upgrading will likely continue to be a popular and supported choice but 
 
 ### Databases
 
-The data layer can really make or break an application.  TradeAudit currently requires:
+The data layer can really make or break an application.  Trade Audit currently requires:
 
 <table style="margin-left:auto;margin-right:auto;max-width:750px;display:table;">
   <thead>
@@ -137,9 +137,9 @@ While a lot of mobile apps can get by without a separate website, there are many
 - full web equivalent, or teasing a limited feature-set on the web
 - avoiding 15-30% service fees for transactions within the app
 
-In the case of TradeAudit, the URL [https://tradeaudit.app](https://tradeaudit.app) is hosted from a Github Pages repository.
-Github Pages can be a simple and free option for static sites. Dynamic data for this site loads from CORS JSON requests to the main 
-TradeAudit mobile API server, and the data is highly cacheable. There are many free (or low cost) IaaS solutions providing
+In the case of Trade Audit, the URL [https://tradeaudit.app](https://tradeaudit.app) is hosted from a GitHub Pages repository.
+GitHub Pages can be a simple and free option for static sites. Dynamic data for this site loads from CORS JSON requests to the main 
+Trade Audit mobile API server, and the data is highly cacheable. There are many free (or low cost) IaaS solutions providing
 highly configurable caching and DDOS protection such a AWS CloudFront or CloudFlare that will protect your API layer 
 without a separate Nginx install.
 

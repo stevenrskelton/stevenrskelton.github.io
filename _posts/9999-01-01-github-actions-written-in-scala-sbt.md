@@ -1,10 +1,10 @@
 ---
-title: "Github Actions Written in Scala SBT, or Ruby, or Python, or Go, or .Net, or..."
+title: "GitHub Actions Written in Scala SBT, or Ruby, or Python, or Go, or .Net, or..."
 categories:
   - Platform
   - Scala
 tags:
-  - Github
+  - GitHub
 published: false
 ---
 

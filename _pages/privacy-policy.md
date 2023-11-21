@@ -10,7 +10,7 @@ Last updated November 6, 2023
 
 This privacy notice for stevenskelton.ca ('Company', 'we', 'us', or 'our',), describes how and why we might collect, store, use, and/or share ('process') your information when you use our services ('Services'), such as when you:
 
-    Download and use our mobile application (TradeAudit), or any other application of ours that links to this privacy notice
+    Download and use our mobile application (Trade Audit), or any other application of ours that links to this privacy notice
 
     Engage with us in other related ways, including any sales, marketing, or events
 

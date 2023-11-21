@@ -1,6 +1,6 @@
 #https://www.stevenskelton.ca/scala-sbt-publishing-to-github-packages/
 
-name: Publish Über Assembly to Github Packages
+name: Publish Über Assembly to GitHub Packages
 
 on:
   workflow_dispatch:
@@ -24,5 +24,5 @@ jobs:
         with:
           java-version: '11'
           distribution: 'temurin'
-      - name: Publish Über Jar to Github Packages
+      - name: Publish Über Jar to GitHub Packages
         run: sbt publishAssemblyToGithubPackages

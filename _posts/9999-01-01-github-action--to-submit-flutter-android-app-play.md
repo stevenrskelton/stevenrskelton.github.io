@@ -1,7 +1,7 @@
 ---
 #layout: post
 published: false
-title: "Github Action to Submit Flutter Android Apps to Play"
+title: "GitHub Action to Submit Flutter Android Apps to Play"
 categories:
   - Platform
 tags:
@@ -22,7 +22,7 @@ the focus is to get everyone moved to [Azure pipeline](https://blogs.infosupport
 If you have an Azure account, not only simplified from Microsoft side, but more likely to use other cloud services
 
 Possible to build using App Center (Using AppCenter for Flutter projects)[https://www.rocksolidknowledge.com/articles/using-appcenter-for-flutter-projects] 
-by manually manipulating pipeline by explicitly including your gradle-wrapper.jar and inserting using custom POST Git clone steps available on the [App Center Github account](https://github.com/microsoft/appcenter/tree/master/sample-build-scripts/flutter), but issues left unresolved and unsupported. Last update Aug 2020
+by manually manipulating pipeline by explicitly including your gradle-wrapper.jar and inserting using custom POST Git clone steps available on the [App Center GitHub account](https://github.com/microsoft/appcenter/tree/master/sample-build-scripts/flutter), but issues left unresolved and unsupported. Last update Aug 2020
 
 Clearly in the Readme.md
 > Currently, Flutter is not supported by App Center.
@@ -31,13 +31,13 @@ Errors https://stackoverflow.com/questions/54962086/gradle-build-fails-due-to-li
 https://stackoverflow.com/questions/67278979/flutter-appcenter-gradle-plugin-4-0-0-build-issue
 
 
-### Microsoft owns Github
+### Microsoft owns GitHub
 
 https://github.com/marketplace/actions/flutter-action
 https://github.com/sagar-viradiya/internal-app-sharing-action
 https://github.com/r0adkll/sign-android-release
 
-Create Github actions
+Create GitHub actions
 
 ```yaml
 uses: actions/checkout@v3
