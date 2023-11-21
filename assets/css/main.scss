@@ -173,6 +173,22 @@ html {
   position: static;
 }
 
+.toc-container {
+  display: flex;
+  flex-wrap: wrap;
+  min-height: 400px;
+  min-width: 360px;
+  margin-left: -1em;
+  clear: both;
+  padding-top: 1em;
+}
+
+.toc-ad {
+  flex: max-content;
+  min-width: 360px;
+  text-align: center;
+}
+
 .toc {
   border: 1px solid #343434;
 }
