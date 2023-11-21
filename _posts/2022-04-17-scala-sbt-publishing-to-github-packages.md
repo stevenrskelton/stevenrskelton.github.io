@@ -4,6 +4,7 @@ categories:
   - Platform
   - Scala
 tags:
+  - SBT
   - Github
 ---
 Github Packages is a natural extension of a CI/CD pipeline created in Github Action. It currently offers repositories for Java (Maven), .Net (NuGet), Ruby (Gems), Javascript (npm), and Docker images.  

@@ -3,6 +3,7 @@ title: "Downloading from Github Packages using HTTP and Maven"
 categories:
   - Platform
 tags:
+  - SBT
   - Github
 ---
 
