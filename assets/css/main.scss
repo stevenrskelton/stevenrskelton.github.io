@@ -185,3 +185,27 @@ html {
   color: #343434;
   border-bottom: 0.5px solid #343434;
 }
+
+// POST-LOGOS
+
+figure.postlogo {
+  display: block;
+  float: left;
+  text-align: center;
+  margin: 10px 20px 4px 4px;
+  font-size: small;
+}
+
+figure.postlogo img {
+  max-width: 100px;
+  max-height: 100px;
+  margin-bottom: 4px;
+}
+
+@media(min-width: 720px) {
+  figure.postlogo img {
+    max-width: 180px;
+    max-height: 180px;
+    margin-bottom: 4px;
+  }
+}

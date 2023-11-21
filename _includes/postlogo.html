@@ -1,12 +1,6 @@
-<figure style="
-  display: block;
-  float: left;
-  text-align: center;
-  margin: 10px 20px 4px 4px;
-  font-size: small;
-">
+<figure class="postlogo">
   {% if include.url %}<a href="{{ include.url }}" target="_blank">{% endif %}
-  <img src="{{ include.src }}" alt="{{ include.title }}" style="max-width: 180px;max-height:180px;margin-bottom:4px;"/>
+  <img src="{{ include.src }}" alt="{{ include.title }}" style=""/>
   {% if include.caption %}<figcaption>{{ include.caption }}</figcaption>{% endif %}
   {% if include.url %}</a>{% endif %}
 </figure>
