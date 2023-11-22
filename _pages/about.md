@@ -3,7 +3,7 @@ permalink: /about/
 title: "About"
 author_profile: false
 ---
-<div class="img-bg" style="background-image:url('/assets/images/about/bg_full.jpg');">
+<div class="img-bg" style="background-image:url('/assets/images/about/bg.jpg');">
   <p>
     <span style="font-size:36pt;vertical-align: middle;line-height:0;">🇨🇦</span><strong>Toronto, Canada</strong>
   </p>
