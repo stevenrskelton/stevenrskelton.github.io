@@ -1,5 +1,5 @@
 ---
-title: "Lit Custom Components for SVG generation"
+title: "Lit Custom Components for SVG Generation"
 categories:
   - Javascript
 tags:
