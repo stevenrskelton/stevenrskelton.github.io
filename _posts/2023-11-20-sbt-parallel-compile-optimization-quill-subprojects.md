@@ -126,6 +126,14 @@ _todo_
 _todo:_ Folder structure before
 _todo:_ Folder structure after
 
+![Single Task CPU](/assets/images/2023/11/single_task_cpu.png)
+
+
+![Parallel Task CPU](/assets/images/2023/11/parallel_task_cpu.png)
+
+
+![Parallel Task Console Output](/assets/images/2023/11/parallel_task_console.png)
+
 ```
 /helloworldproject
 
