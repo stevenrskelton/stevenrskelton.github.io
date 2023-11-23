@@ -23,7 +23,7 @@ structure our Scala 3 code to ensure that we can embrace the rich macro ecosyste
 times?
 <!--more-->
 
-{% include table-of-contents.html height="900px" %}
+{% include table-of-contents.html height="600px" %}
 
 # Symptoms of a Slow Compile
 
