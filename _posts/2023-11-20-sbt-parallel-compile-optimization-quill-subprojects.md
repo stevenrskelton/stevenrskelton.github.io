@@ -15,27 +15,29 @@ url="https://xkcd.com/303"
 caption="Scala is slow to compile."
 %}
 
-Advanced syntax constructs and a robust type system can increase developer productivity and runtime reliability but also create extra work for the 
-compiler. Macro libraries such as [Quill](https://zio.dev/zio-quill/) are effectivily programs written for the compiler, and can represent
-an unbounded amount of work depending on what they are trying to accomplish. Are there ways to structure our Scala 3 
-code to ensure that we can embrace the rich macro ecosystem without excessively long compile times?
+Advanced syntax constructs and a robust type system can increase developer productivity and runtime reliability but also
+create extra work for the compiler. Macro libraries such as [Quill](https://zio.dev/zio-quill/) are effectivily programs
+written for the compiler, and can represent an unbounded amount of work depending on what they are trying to accomplish.
+Are there ways to
+structure our Scala 3 code to ensure that we can embrace the rich macro ecosystem without excessively long compile
+times?
 <!--more-->
 
 {% include table-of-contents.html %}
 
 # Symptoms of a Slow Compile
 
-As Scala 2 matured compiler optimizations brought compilation times down, but the Scala 3 rewrite to TASTy reset many 
-optimizations back to zero. This article is an analysis of the steps used to optimize a Scala 3 project making heavy 
+As Scala 2 matured compiler optimizations brought compilation times down, but the Scala 3 rewrite to TASTy reset many
+optimizations back to zero. This article is an analysis of the steps used to optimize a Scala 3 project making heavy
 use of macros via Quill.
 
-[Quill](https://zio.dev/zio-quill/) is a macro library that adds compile-time query generation to the JVM.  It is 
+[Quill](https://zio.dev/zio-quill/) is a macro library that adds compile-time query generation to the JVM. It is
 similiar to other type-safe SQL generators such as [Slick](https://scala-slick.org/doc/3.0.0/index.html) in how SQL is
-constructed using abstracted functions, but different in that the SQL is generated in the compile phase rather than 
-dynamically during runtime. So while the compile times may be slower in Quill, it eliminates a significant class of 
+constructed using abstracted functions, but different in that the SQL is generated in the compile phase rather than
+dynamically during runtime. So while the compile times may be slower in Quill, it eliminates a significant class of
 runtime errors. This is a trade-off between compilation speed and compile-time functionality.
 
-The example project is outlined in the previous post 
+The example project is outlined in the previous post
 [ZIO Migration from Akka and Scala Futures]({% post_url 2023-10-31-zio-migration %}), and consists of over 120 SQL query
 macros of varying complexity, with some larger queries requiring over 5 minutes to complete and over +5GB of heap.
 
@@ -49,14 +51,14 @@ for the same functionality, represented twice as long compile times:
 | Slick          |   45s   |   n/a   |
 | Quill          | 4m 17s  | 8m 42s  |
 
-While Scala 2 macros aren't apples-to-apples with Scala 3, the end functionality in Quill is the same a difference this 
+While Scala 2 macros aren't apples-to-apples with Scala 3, the end functionality in Quill is the same a difference this
 large wouldn't exist if Scala 3 was optimized.
 
 ## Problems Encountered
 
 ### Increased Heap Space Requirements
 
-Compilation times can be affected by the amount of RAM available.  Scala 3 Quill macros were observed to require 
+Compilation times can be affected by the amount of RAM available. Scala 3 Quill macros were observed to require
 significantly more memory, even failing to compile with the JVM defaults.
 
 ```
@@ -72,7 +74,7 @@ significantly more memory, even failing to compile with the JVM defaults.
 [error]    |This location contains code that was inlined from Context.scala:80
 ```
 
-Struggling garbage collection can have non-fatal effects, the compiler will warn when the amount of memory available 
+Struggling garbage collection can have non-fatal effects, the compiler will warn when the amount of memory available
 is an issue.
 
 ```
@@ -86,9 +88,9 @@ Long running macros (taking over 1 minute) were observed to block compiler from 
 
 ![Single Task CPU](/assets/images/2023/11/single_task_cpu.png)
 
-This wasn't observed to be an issue in all projects, it appeared to be specific to macros being forced to run 
-sequentially within the same project. For SQL heavy projects, non-macro code is quickly compiled, resulting in idle 
-cores. Ideally, the entire compile task should be multithreaded from start to finish. 
+This wasn't observed to be an issue in all projects, it appeared to be specific to macros being forced to run
+sequentially within the same project. For SQL heavy projects, non-macro code is quickly compiled, resulting in idle
+cores. Ideally, the entire compile task should be multithreaded from start to finish.
 
 ![Parallel Task CPU](/assets/images/2023/11/parallel_task_cpu.png)
 
@@ -168,7 +170,7 @@ experiment with.
 ## Forced Parallelized Builds using Sub-Projects
 
 SBT will parallelize compilation and many projects won't require intrusive refactoring to allow compiler multithreading.
-However, it appears that macros represent an edge case where Scala 3 can't always figure things dependencies.  Quill
+However, it appears that macros represent an edge case where Scala 3 can't always figure things dependencies. Quill
 query macros would not be compiled in parallel whether in separate methods, separate classes or separate packages.
 
 To force parallelization of macro compilation, the significant code change was made to break-up queries into independent
@@ -178,8 +180,9 @@ SBT projects.
 
 ### Basic Sub-Project Template
 
-Scala 3 projects can be [minimally defined](https://docs.scala-lang.org/scala3/book/tools-sbt.html) with only 2 
+Scala 3 projects can be [minimally defined](https://docs.scala-lang.org/scala3/book/tools-sbt.html) with only 2
 additional SBT build files:
+
 ```
 $ tree
 .
@@ -192,7 +195,8 @@ $ tree
 The `build.properties` simply contains `sbt.version=1.9.6`
 
 SBT sub-projects will inherit properties from the root project so the `build.sbt` will only need to define
-project dependencies.  Our typical `build.sbt` used for each Quill sub-project is similiar to:
+project dependencies. Our typical `build.sbt` used for each Quill sub-project is similiar to:
+
 ```sbt
 name := "sqluser"
 version := "0.1.0-SNAPSHOT"
@@ -264,11 +268,12 @@ lazy val root = (project in file("."))
   )
 ```
 
-See the [SBT documentation](https://www.scala-sbt.org/1.x/docs/Multi-Project.html#Aggregation)  on how `aggregate` is different than `dependsOn`.
+See the [SBT documentation](https://www.scala-sbt.org/1.x/docs/Multi-Project.html#Aggregation)  on how `aggregate` is
+different than `dependsOn`.
 
 The project order used in `aggregate` is important, placing longest running sub-projects first allowing them to begin
 immediately. SBT will execute `compile` tasks in separate threads starting from left-to-right when no other dependencies
-preventing it.  Once threads complete, they will begin to pick up the smaller projects later in the order.
+preventing it. Once threads complete, they will begin to pick up the smaller projects later in the order.
 
 # Limitations and Downsides
 
