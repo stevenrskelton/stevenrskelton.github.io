@@ -289,13 +289,20 @@ but could easily turn this codebase into a multi-headed project.
 
 ## Compile Times with and without Sub-Projects
 
-| Sub-Projects | Parallel GC | Default GC |
-|:-------------|------------:|-----------:|
-| No           |       13:53 |      13:39 |
-| Yes          |       10:53 |       9:23 |
+| Sub-Projects | Serial GC | Parallel GC | G1 GC |  Z GC |
+|:-------------|----------:|------------:|------:|------:|
+| No           |           |       13:53 | 13:39 |       |
+| Yes          |     10:56 |        9:18 |  9:29 | 13:14 |
 
-Breaking down our Quill queries into separate projects has net a 30% reduction in compile times.
-Heap required was reduced from +6G to under 3GB.
+Breaking down our Quill queries into separate projects has net a 30% reduction in compile time from 13:39 to 9:18.
+Heap required was reduced from +6 GB to under 3 GB.
+
+Reference machine is 8x4.2GHz core, sbt 1.9.6, Scala 3.3.1, Eclipse Adoptium Java 21.0.1
+
+From the Oracle documentation on the 
+[parallel GC](https://docs.oracle.com/en/java/javase/21/gctuning/parallel-collector1.html):
+
+> The parallel collector is also known as throughput collector, it's a generational collector similar to the serial collector. The primary difference between the serial and parallel collectors is that the parallel collector has multiple threads that are used to speed up garbage collection.
 
 
 
