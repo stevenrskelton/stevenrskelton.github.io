@@ -287,23 +287,49 @@ but same downsides:
 This example is a diamond pattern where all sub-projects are aggregated into the same root,
 but could easily turn this codebase into a multi-headed project.
 
-## Compile Times with and without Sub-Projects
+# Optimized Results
 
-| Sub-Projects | Serial GC | Parallel GC | G1 GC |  Z GC |
-|:-------------|----------:|------------:|------:|------:|
-| No           |           |       13:53 | 13:39 |       |
-| Yes          |     10:56 |        9:18 |  9:29 | 13:14 |
+The following compilations were performed on a _4.2GHz x 8 core_ server,
+with `sbt 1.9.6`, `Scala 3.3.1`, `Eclipse Adoptium Java 21.0.1`.
+The end result is a **30% reduction in compile time** from 13:39 to 9:18.
 
-Breaking down our Quill queries into separate projects has net a 30% reduction in compile time from 13:39 to 9:18.
-Heap required was reduced from +6 GB to under 3 GB.
+## Compile Times With and Without Sub-Projects
 
-Reference machine is 8x4.2GHz core, sbt 1.9.6, Scala 3.3.1, Eclipse Adoptium Java 21.0.1
+We find that by breaking down our monolithic Quill project into sub-projects, the resulting parallelization allowed for
+faster compilation with lower Heap memory requirements.
 
-From the Oracle documentation on the 
-[parallel GC](https://docs.oracle.com/en/java/javase/21/gctuning/parallel-collector1.html):
+| Sub-Projects | Minimum Heap Required | Serial GC | Parallel GC | G1 GC |  Z GC |
+|:------------:|:---------------------:|----------:|------------:|------:|------:|
+|      No      |         > 6GB         |     15:46 |       13:53 | 13:39 | 41:52 |
+|     Yes      |         3 GB          |     10:56 |        9:18 |  9:29 | 13:14 |
 
-> The parallel collector is also known as throughput collector, it's a generational collector similar to the serial collector. The primary difference between the serial and parallel collectors is that the parallel collector has multiple threads that are used to speed up garbage collection.
+Reductions in Heap had the most significant affect on compilations on the standard GitHub Action runners. With SBT
+configured to use all 7GB available, compilations within GitHub CI/CD reached an average of 16:48 in length with
+continual warnings about GC CPU usage under all garbage collectors. After optimization GitHub compilation times dropped
+to 11:11, which is a **33%** improvement, matching our local build server.
 
+## Garbage Collection
 
+Additional optimizations are possible unrelated to sub-project parallelization with regards to JVM configuration. The 
+latest JRE available, `openjdk-bin-21`, improved compilation times from 9:52 to 9:18, **5.7%** improvement from 
+`openjdk-bin-17`.
+
+The configuration from the default (G1) garbage collector to the Parallel garbage collector resulted in a **2%** 
+improvement, reducing compilation times from 9:29 to 9:18. From the Oracle documentation on the
+[parallel GC](https://docs.oracle.com/en/java/javase/21/gctuning/parallel-collector1.html) indicates it may offer better throughput when latency isn't being prioritized:
+
+> The parallel collector is also known as throughput collector, it's a generational collector similar to the serial
+> collector. The primary difference between the serial and parallel collectors is that the parallel collector has
+> multiple threads that are used to speed up garbage collection.
+
+| Heap Allocated | Parallel GC Compilation Time | G1 GC Compilation Time | 
+|:--------------:|:----------------------------:|:----------------------:|
+|      4 GB      |           ¹ 10:58            |         10:02          |
+|      5 GB      |             9:06             |          9:42          |
+|      6 GB      |             9:19             |          9:39          |
+|     10 GB      |             8:52             |          9:26          |
+|     12 GB      |             9:18             |          9:29          |
+
+¹ _A maximal warning of 78% GC CPU was encountered, indicating insufficient RAM allocation_
 
 
