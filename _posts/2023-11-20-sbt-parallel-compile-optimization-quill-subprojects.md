@@ -308,7 +308,7 @@ configured to use all 7GB available, compilations within GitHub CI/CD reached an
 continual warnings about GC CPU usage under all garbage collectors. After optimization GitHub compilation times dropped
 to 11:11, which is a **33%** improvement, matching our local build server.
 
-## Garbage Collection
+## Garbage Collection and JVM Configurations
 
 Additional optimizations are possible unrelated to sub-project parallelization with regards to JVM configuration. The 
 latest JRE available, `openjdk-bin-21`, improved compilation times from 9:52 to 9:18, **5.7%** improvement from 
