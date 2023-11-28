@@ -12,7 +12,7 @@ generate HTML custom components, but also manipulate SVG in a similar way using 
 library that removes the boilerplate code of DOM generation, and is highly interoperable with all web frameworks since
 it relies on browser native custom elements.
 
-{% include table-of-contents.html height="300px" %}
+{% include table-of-contents.html height="200px" %}
 
 ## A simple SVG Pie Chart
 
