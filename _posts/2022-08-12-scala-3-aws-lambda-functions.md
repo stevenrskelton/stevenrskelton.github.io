@@ -17,7 +17,7 @@ about the file. Lambdas are meant to be simple and short-lived code snippets, so
 for events (although you can proxy multiple types of events through a single source). The most generic source for events
 is to listen to HTTP requests on a public URL, and we'll cover how that can be done in this article.<!--more-->
 
-{% include table-of-contents.html height="500px" %}
+{% include table-of-contents.html height="400px" %}
 
 That's it; and in this function you can do _anything_. The function has predefined CPU and RAM limits which are
 configurable between 128MB and 10GB of RAM, with up to 10GB of ephemeral `/tmp` storage.
