@@ -274,10 +274,16 @@ figure {
   margin-right: auto;
   border: 1px solid #343434;
   border-radius: 4px;
+  background-color: #e9dcbe;
+  background-size: 140px;
+  background-blend-mode: lighten;
+  background-image: url('/assets/images/background.jpg');
+  background-repeat: repeat;
 }
 
 figure img {
   border-radius: 4px 4px 0px 0px;
+  margin-bottom: 0.5em;
 }
 
 figcaption {
