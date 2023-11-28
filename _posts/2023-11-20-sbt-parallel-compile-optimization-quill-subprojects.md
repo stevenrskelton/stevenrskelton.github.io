@@ -235,7 +235,7 @@ lazy val sqluser = (project in file("."))
 The `build.sbt` in the root folder contains the diamond pattern project structure, with common dependencies containing
 in the `sqlcommon` project, fanning out to `sql*` projects, and then aggregated again in `root`.
 
-```scala 3
+```scala
 //Compile time 5:03
 lazy val sqlevent = RootProject(file("modules/sqlevent"))
 //Compile time 2:18
