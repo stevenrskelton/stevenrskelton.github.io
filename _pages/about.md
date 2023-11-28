@@ -132,7 +132,7 @@ forks_count=repository.forks_count
 
 </div>
 
-### Archived Polymer Web Components
+### Archived Polymer Web Components, Outdated JS and Scala
 *Polymer Library was deprecated in 2019 when functionality became browser native, <wbr>remaining Polymer functionality became [Lit](https://lit.dev/)*
 
 <div style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:0px;">
