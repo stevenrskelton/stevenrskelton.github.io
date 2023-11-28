@@ -179,10 +179,6 @@ table {
   border-radius: 4px;
 }
 
-.post__taxonomy-item:hover {
-  border: 1px solid #343434;
-}
-
 .post__taxonomy-item img {
   max-height: 1em;
 }
@@ -199,6 +195,14 @@ table {
 .page__taxonomy-item div {
   min-width: 3em;
   text-align: center;
+}
+
+.post__taxonomy-item:hover {
+  border: 1px solid #343434;
+}
+
+.pag__taxonomy-item:hover {
+  border: 1px solid #343434;
 }
 
 .archive__item .page__taxonomy {
