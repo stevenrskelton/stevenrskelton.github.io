@@ -267,27 +267,39 @@ header .text_tag_category {
   border-bottom: 0.5px solid #343434;
 }
 
-
-figure img {
+figure {
+  display: block;
   max-width: 700px;
   margin-left: auto;
   margin-right: auto;
+  border: 1px solid #343434;
+  border-radius: 4px;
+}
+
+figure img {
+  border-radius: 4px 4px 0px 0px;
+}
+
+figcaption {
+  padding-left: 1em;
+  padding-right: 1em;
 }
 
 // POST-LOGOS
 
 figure.postlogo {
-  display: block;
   float: left;
   text-align: center;
   margin: 10px 20px 4px 4px;
   font-size: small;
+  border: none;
 }
 
 figure.postlogo img {
   max-width: 100px;
   max-height: 100px;
   margin-bottom: 4px;
+  border-radius: 0;
 }
 
 @media(min-width: 720px) {
