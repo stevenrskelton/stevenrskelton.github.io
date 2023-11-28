@@ -8,11 +8,14 @@ tags:
   - TradeAudit
   - AWS
   - GitHub
+excerpt_separator: <!--more-->
 ---
 
 The release of the [Trade Audit](https://tradeaudit.app) mobile app is almost here. It is currently in MVP stage, but
 its infrastructure is a pretty typical cloud based deployment. This article discusses design choices made, evaluating
 how effective they were.<!--more-->
+
+{% include table-of-contents.html height="300px" %}
 
 ### Mobile App Requirements
 
@@ -26,17 +29,23 @@ and aggregated to create historical performance records for Twitter accounts.
 
 High level, this requires:
 
-- [Mobile App iOS/Android Client](#mobile-app-iosandroid-client), obviously.
+- [Mobile App iOS/Android Client](#mobile-app-iosandroid-client)
 - [Server-side API](#server-side-api) with both relational data representing trades made by Twitter accounts, and
-  random-access stock pricing data.
+  random-access stock pricing data
 - [Support Website](#support-website) which can provide additional information about the app outside of the Apple App
-  Store and Google Play Store pages.
+  Store and Google Play Store pages
 
 ![Infrastructure](/assets/images/2022/10/tradeaudit-release-infrastructure.png)
 
 ## Mobile App iOS/Android Client
 
 For developers not wanting a separate codebase for iOS and Android, there are 3 options:
+
+| Framework    | Release |  Language  | Support                |
+|:-------------|:-------:|:----------:|:-----------------------|
+| Xamarin      |  2011   |     C#     | Microsoft since 2016   |
+| React Native |  2015   | JavaScript | Indirectly by Facebook |
+| Flutter      |  2017   |    Dart    | Google                 |
 
 <table style="margin-left:auto;margin-right:auto;max-width:750px;display:table;">
   <thead>
@@ -112,6 +121,12 @@ and not-upgrading will likely continue to be a popular and supported choice but 
 ### Databases
 
 The data layer can really make or break an application. Trade Audit currently requires:
+
+| Implementation | Type       | Host |
+|----------------|------------|------|
+| PostgreSQL     | Relational | VPS  |
+| SQS            | Buffering  | AWS  |
+| DynamoDB       | Key Value  | AWS  |
 
 <table style="margin-left:auto;margin-right:auto;max-width:750px;display:table;">
   <thead>

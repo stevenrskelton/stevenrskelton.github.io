@@ -60,6 +60,7 @@ author_profile: false
       .img-fill {
         float: left;
         margin-right: 20px;
+        margin-bottom: 4px;
       }
     }
   </style>
@@ -67,7 +68,7 @@ author_profile: false
     text-align: center;
     border: 1px solid #343434;
     border-radius: 4px;
-    margin-bottom: 4px;
+    margin-bottom: 1em;
     background-color: rgb(104, 66, 207);
     font-size: small;
     background-blend-mode: multiply;
