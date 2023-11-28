@@ -12,6 +12,8 @@ generate HTML custom components, but also manipulate SVG in a similar way using 
 library that removes the boilerplate code of DOM generation, and is highly interoperable with all web frameworks since
 it relies on browser native custom elements.
 
+{% include table-of-contents.html height="300px" %}
+
 ## A simple SVG Pie Chart
 
 SVG is a robust standard that can be used for anything from company logos to graphical artwork. It is text-based XML
