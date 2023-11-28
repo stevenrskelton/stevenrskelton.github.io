@@ -55,12 +55,18 @@ author_profile: false
 <div class="html-bg" style="margin-top: 50px;margin-bottom: 30px;">
   <h1>Trade Audit Android App</h1>
   
-  <div class="html-bg" style="
-    float: left;
+  <style>
+    @media(min-width: 400px) {
+      .img-fill {
+        float: left;
+        margin-right: 20px;
+      }
+    }
+  </style>
+  <div class="html-bg img-fill" style="
     text-align: center;
     border: 1px solid #343434;
     border-radius: 4px;
-    margin-right: 20px;
     margin-bottom: 4px;
     background-color: rgb(104, 66, 207);
     font-size: small;
@@ -72,7 +78,6 @@ author_profile: false
         width: 160px;
         box-shadow: none;
         padding: 14px 20px 4px 20px;
-        display: block;
       " alt="Trade Audit"/><br/>
      <span style="font-weight:bold;color:#1da1f2;">https://tradeaudit.app</span>
     </a><br>
