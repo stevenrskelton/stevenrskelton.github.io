@@ -7,19 +7,22 @@ tags:
   - AWS
   - GitHub
   - Serverless
+excerpt_separator: <!--more-->
 ---
 
 AWS Lambda offer the ability to run code functions without a server. Basically standalone functions that receive JSON as
 a parameter and have up to 15 minutes to do anything. The source of the JSON event can be anything, AWS has configured
 most of their AWS products to emit events; for example uploading a file to S3 creates JSON that contains information
-about the file. Lambdas are meant to be simple and shortlived code snippets, so each Lambda can only listen to 1 source
+about the file. Lambdas are meant to be simple and short-lived code snippets, so each Lambda can only listen to 1 source
 for events (although you can proxy multiple types of events through a single source). The most generic source for events
-is to listen to HTTP requests on a public URL, and we'll cover how that can be done in this article.
+is to listen to HTTP requests on a public URL, and we'll cover how that can be done in this article.<!--more-->
+
+{% include table-of-contents.html height="500px" %}
 
 That's it; and in this function you can do _anything_. The function has predefined CPU and RAM limits which are
-configurable between 128MB and 10GB of RAM, with up to 10GB of ephemiral `/tmp` storage.
+configurable between 128MB and 10GB of RAM, with up to 10GB of ephemeral `/tmp` storage.
 
-## Basics of AWS Lambda
+# Basics of AWS Lambda
 
 Amazon AWS pioneered the FaaS (Functions as a Service) space in 2014, but Microsoft Azure and Google Cloud quickly
 followed with their own products in 2016. An AWS Lambdas takes an `event` parameter and a `Context` that represents the
@@ -55,7 +58,7 @@ The `APIGatewayV2HTTPEvent` contains fields for standard HTTP information includ
 a `String` when available. Fortunately binary POST data is supported via Base64 encoding keeping Lambdas flexible to all
 usecases. Streaming requests are also supported but beyond the scope of this introduction.
 
-## AWS DynamoDB Use Case
+# AWS DynamoDB Use Case
 
 Access to all AWS services is available to the Lambda using the AWS SDK. A simple use-case to study is writing POST data
 to DynamoDB.
@@ -96,7 +99,7 @@ The pseudocode would be:
 request -> getBody -> parseItems(body) -> putN(item) -> response
 ```
 
-### Parsing JSON
+## Parsing JSON
 
 One of the breakages in Scala 3 due to macros being removed is that Jackson deserialization will not work. This means
 that JSON parsing has to be explicit, but for only 3 fields this is quite simple.
@@ -124,7 +127,7 @@ Try(JsonNodeParser.create.parse(json).asArray.asScala.map(StockPriceItem.apply))
 val items = Option(event.getBody).map(parseStockPriceItems)
 ```
 
-### Interacting with DynamoDB
+## Interacting with DynamoDB
 
 The first thing to consider is permissions. Permissions can be attached to the event, or we can use the permissions that
 the Lambda is currently executing under. The currently executing credentials are available using
@@ -157,7 +160,7 @@ val request = PutItemRequest.builder.tableName("stock_prices").item(dynamoDBAttr
 val putItemResponse = dynamoDbClient.putItem(request)
 ```
 
-### Writing the response
+## Writing the response
 
 The format and contents of the response depends on how the Lambda response is consumed. The easiest pattern is to either
 return a `String` containing custom JSON (if not being consumed within AWS), or using the corresponding AWS SDK response
@@ -183,7 +186,7 @@ body
   )
 ```
 
-### Errors
+## Errors
 
 Handling errors always add complexity to code. AWS exposes logging to CloudWatch through their `context` object, as well
 as SLF4J wrappers. The way Lambdas work is that any unhandled exception will result in a `502 BAD GATEWAY`. Non-200
@@ -192,24 +195,21 @@ we are choosing to only allow handled JSON parsing exceptions (caught and wrappe
 to a 200 response, and all unhandled exceptions to fail the Lambda (as a 502).
 
 ```scala
-given lambdaLogger: LambdaLogger
-= context.getLogger
+given lambdaLogger: LambdaLogger = context.getLogger
 
 case class ParseException(error: String, content: String) extends Exception(error)
 
-def errorToResult(ex: Throwable)(using lambdaLogger: LambdaLogger
-): APIGatewayV2HTTPResponse =
+def errorToResult(ex: Throwable)(using lambdaLogger: LambdaLogger): APIGatewayV2HTTPResponse =
   ex match
-case ParseException(error, content)
-=>
-val message = s"Error parsing request $error in $content"
-lambdaLogger.log(message)
-APIGatewayV2HTTPResponse.builder.withStatusCode(400).withBody(message).build
-case _ =>
-  throw ex
+    case ParseException(error, content) =>
+      val message = s"Error parsing request $error in $content"
+      lambdaLogger.log(message)
+      APIGatewayV2HTTPResponse.builder.withStatusCode(400).withBody(message).build
+    case _ =>
+      throw ex
 ```
 
-## Automated Deployment from GitHub Actions
+# Automated Deployment from GitHub Actions
 
 While AWS has their own internal CI/CD pipeline similiar to GitHub, but it is important to continue to view cloud
 providers as commodity and interchangeable. GitHub (which is hosted in Azure) can easily interact with AWS.
