@@ -63,7 +63,7 @@ Patrick Hunt as part of Airbnb’s tech talks available on YouTube:
 
 For the purpose of Finagle, it’s okay to think of Zookeeper as a dynamic configuration store – as long as a server is
 connected to Zookeeper it is allowed to publicize its address to clients. Finagle clients no longer have to be
-preprogrammed with a static list of available Finagle hosts, they retrieve and monitor the available servers stored
+pre-programmed with a static list of available Finagle hosts, they retrieve and monitor the available servers stored
 within Zookeeper. Zookeeper is complete with the ability to notify clients when the configuration changes, and Finagle
 clients will instantly react to added or removed servers.
 

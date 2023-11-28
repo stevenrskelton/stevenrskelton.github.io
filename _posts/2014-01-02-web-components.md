@@ -37,7 +37,7 @@ all modern browsers.
 {% include video id="p1NpZ-0Op0w" provider="youtube" %}
 
 With browsers natively supporting: custom HTML elements, data binding and templates; client-side web frameworks will
-soon undergo a great simplification. In the mean while Web Components’ everything-is-in-the-DOM architecture
+soon undergo a great simplification. In the meantime Web Components’ everything-is-in-the-DOM architecture
 encapsulates all new features allowing it to coexist with methods employed by most Javascript frameworks. Transitioning
 between AngularJS directives or Bootstrap UI is seamless since Web Components cannot be differentiated from core HTML
 tags, meaning today’s frameworks already offer full support – leaving no reason to delay migration.

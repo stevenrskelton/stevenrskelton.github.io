@@ -11,7 +11,7 @@ GitHub Packages is a Maven compatible repository and is accessible independent o
 alternative access to these files through direct download URLs and HTTP browsing using Maven metadata, and how to
 effectively use the free tier for private repositories.
 
-{% include table-of-contents.html height="300px" %}
+{% include table-of-contents.html height="200px" %}
 
 GitHub generally has separate pricing tiers (or caps) depending on a repo being set to public or private. Public 
 repos are generally free, and private repos usually have a minimal use that is free, above which requires 
