@@ -48,15 +48,14 @@ In this case, the most appropriate `Event` and `Response` classes to use are of 
 ```scala
 import com.amazonaws.services.lambda.runtime.events.{APIGatewayV2HTTPEvent, APIGatewayV2HTTPResponse}
 
-class Handler extends RequestHandler[APIGatewayV2HTTPEvent, APIGatewayV2HTTPResponse]
-
-:
-override def handleRequest(event: APIGatewayV2HTTPEvent, context: Context): APIGatewayV2HTTPResponse =
+class Handler extends RequestHandler[APIGatewayV2HTTPEvent, APIGatewayV2HTTPResponse] {
+  override def handleRequest(event: APIGatewayV2HTTPEvent, context: Context): APIGatewayV2HTTPResponse
+}
 ```
 
 The `APIGatewayV2HTTPEvent` contains fields for standard HTTP information including headers, IP and the body as
 a `String` when available. Fortunately binary POST data is supported via Base64 encoding keeping Lambdas flexible to all
-usecases. Streaming requests are also supported but beyond the scope of this introduction.
+use-cases. Streaming requests are also supported but beyond the scope of this introduction.
 
 # AWS DynamoDB Use Case
 
@@ -105,14 +104,13 @@ One of the breakages in Scala 3 due to macros being removed is that Jackson dese
 that JSON parsing has to be explicit, but for only 3 fields this is quite simple.
 
 ```scala
-case class StockPriceItem(symbol: String, time: String, prices: String)
-
-:
-def this(jsonNode: JsonNode) = this(
-  jsonNode.field("symbol").get.asString,
-  jsonNode.field("time").get.asNumber,
-  jsonNode.field("prices").get.asString
-)
+case class StockPriceItem(symbol: String, time: String, prices: String) {
+  def this(jsonNode: JsonNode) = this(
+    jsonNode.field("symbol").get.asString,
+    jsonNode.field("time").get.asNumber,
+    jsonNode.field("prices").get.asString
+  )
+}
 ```
 
 Parsing a `String` to down individual `JsonNode` is done using the AWS SDK's internal JSON library:
@@ -120,9 +118,9 @@ Parsing a `String` to down individual `JsonNode` is done using the AWS SDK's int
 ```scala
 import software.amazon.awssdk.protocols.jsoncore.{JsonNode, JsonNodeParser}
 
-def parseStockPriceItems(json: String): Try[Iterable[StockPriceItem]]
-:
-Try(JsonNodeParser.create.parse(json).asArray.asScala.map(StockPriceItem.apply))
+def parseStockPriceItems(json: String): Try[Iterable[StockPriceItem]] = {
+  Try(JsonNodeParser.create.parse(json).asArray.asScala.map(StockPriceItem.apply))
+}
 
 val items = Option(event.getBody).map(parseStockPriceItems)
 ```
@@ -194,7 +192,7 @@ errors can also be thrown if the output response can't be serialized to an expec
 we are choosing to only allow handled JSON parsing exceptions (caught and wrapped into a `ParseException`) be serialized
 to a 200 response, and all unhandled exceptions to fail the Lambda (as a 502).
 
-```scala
+```scala3
 given lambdaLogger: LambdaLogger = context.getLogger
 
 case class ParseException(error: String, content: String) extends Exception(error)
@@ -234,7 +232,7 @@ The GitHub Action is a short snippet of YAML:
 The CI/CD pipeline will automatically deploy to AWS, but the permissions and Lambda must be initially created.
 See [Future Article Here]
 
-# Scala verus Python with AWS Lambda Functions
+# Scala versus Python with AWS Lambda Functions
 
 There are many things to consider when chosing a programming language, see the full article at
 [JVM versus Python for AWS Lambda Functions]({% post_url 2022-08-13-jvm-versus-python-aws-lambda-functions %}).
