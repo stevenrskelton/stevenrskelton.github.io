@@ -202,14 +202,19 @@ table {
 }
 
 .text_tag_category {
-  font-size: 20px;
+  font-size: 16px;
   padding-left: 2px;
   padding-right: 2px;
   font-family: Impact;
-  line-height: 27px;
-  vertical-align: middle;
   color: #343434;
 }
+
+.page__taxonomy .text_tag_category {
+  font-size: 20px;
+  line-height: 27px;
+  vertical-align: middle;
+}
+
 
 // TABLE OF CONTENTS
 
