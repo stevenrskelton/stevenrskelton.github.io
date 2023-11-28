@@ -61,7 +61,7 @@ large wouldn't exist if Scala 3 was optimized.
 Compilation times can be affected by the amount of RAM available. Scala 3 Quill macros were observed to require
 significantly more memory, even failing to compile with the JVM defaults.
 
-```
+```logcatfilter
 [error] -- Error: /home/runner/work/tradeauditserver/src/main/scala/SQLWeb.scala:46:16 
 [error] 46 |      quill.run(q).map {
 [error]    |                ^
@@ -77,7 +77,7 @@ significantly more memory, even failing to compile with the JVM defaults.
 Struggling garbage collection can have non-fatal effects, the compiler will warn when the amount of memory available
 is an issue.
 
-```
+```logcatfilter
 [warn] In the last 10 seconds, 6.884 (70.9%) were spent in GC. [Heap: 1.84GB free of 3.34GB, max 5.33GB] 
 Consider increasing the JVM heap using `-Xmx` or try a different collector, e.g. `-XX:+UseG1GC`, for better performance.
 ```
@@ -148,7 +148,7 @@ to function.
 IntelliJ has its own resource requirements, so depending on the machine configuration the compile settings may be lower
 than on a dedicated CI/CD runner.
 
-```
+```shell
 SBT_OPTS="-Xmx12G -XX:+UseParallelGC" sbt
 ```
 
@@ -183,7 +183,7 @@ SBT projects.
 Scala 3 projects can be [minimally defined](https://docs.scala-lang.org/scala3/book/tools-sbt.html) with only 2
 additional SBT build files:
 
-```
+```shell
 $ tree
 .
 ├── build.sbt
@@ -228,7 +228,6 @@ lazy val sqluser = (project in file("."))
     },
     javacOptions ++= Seq("-source", javaVersion, "-target", javaVersion),
   )
-
 ```
 
 ### Root Project Structure
@@ -236,7 +235,7 @@ lazy val sqluser = (project in file("."))
 The `build.sbt` in the root folder contains the diamond pattern project structure, with common dependencies containing
 in the `sqlcommon` project, fanning out to `sql*` projects, and then aggregated again in `root`.
 
-```sbt
+```scala 3
 //Compile time 5:03
 lazy val sqlevent = RootProject(file("modules/sqlevent"))
 //Compile time 2:18
