@@ -7,10 +7,15 @@ tags:
   - GitHub
 ---
 
-GitHub Packages is a Maven compatible respository and is accessible independent of GitHub. This article expands on
-alternative access to these files, such as direct download URLs and browsing using Maven metadata. When working outside
-of GitHub Actions, it is important to be aware of GitHub's tier pricing when working with private repos, the free tier
-is currently:
+GitHub Packages is a Maven compatible repository and is accessible independent of GitHub. This article expands on
+alternative access to these files through direct download URLs and HTTP browsing using Maven metadata, and how to
+effectively use the free tier for private repositories.
+
+{% include table-of-contents.html height="300px" %}
+
+GitHub generally has separate pricing tiers (or caps) depending on a repo being set to public or private. Public 
+repos are generally free, and private repos usually have a minimal use that is free, above which requires 
+payment. The free tier is currently:
 
 | Artifact Storage | Data Transfer Out within a GitHub Action | Data Transfer Out outside of a GitHub Action |
 |:----------------:|:----------------------------------------:|:--------------------------------------------:|
@@ -27,7 +32,6 @@ or `curl`.
 The standard Maven packaging defines 3 key fields for every package:
 
 ```xml
-
 <dependency>
     <groupId>{groupId}</groupId>
     <artifactId>{artifactId}</artifactId>
