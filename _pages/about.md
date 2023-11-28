@@ -4,8 +4,11 @@ title: "About"
 author_profile: false
 ---
 <div class="img-bg" style="background-image:url('/assets/images/about/bg.jpg');">
-  <p>
-    <span style="font-size:36pt;vertical-align: middle;line-height:0;">🇨🇦</span><strong>Toronto, Canada</strong>
+  <p style="padding-bottom: 1em;">
+    <span style="font-size:36pt;vertical-align: middle;line-height:0;">🇨🇦</span><strong style="
+      color: #8e8b82;
+      padding-left: 4px;
+    ">Toronto, Canada</strong>
   </p>
 
   <p>
@@ -102,9 +105,16 @@ author_profile: false
 
 ## GitHub Repositories
 
-### Public
+### Public Projects
 
-<div style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:0px;">
+<div style="
+  display: flex;
+  flex-wrap: wrap;
+  -webkit-flex-wrap: wrap;
+  list-style: none;
+  padding-inline-start: 0px;
+  padding-top: 0.75em;
+">
 
 {% assign list = site.github.public_repositories | where: "archived", false | where: "fork", false | sort: 'updated_at' | reverse %}
 {% for repository in list %}
