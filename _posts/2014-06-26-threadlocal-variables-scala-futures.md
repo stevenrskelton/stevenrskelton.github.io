@@ -14,7 +14,7 @@ context to be available throughout the entire call stack without passing it expl
 web-application, this allows contextual request metadata, such as the URL, to be referenced anywhere within the code
 handing the request; which is extremely useful for logging or auditing purposes.<!--more-->
 
-{% include table-of-contents.html height="300px" %}
+{% include table-of-contents.html height="200px" %}
 
 Where TLS can fail is when the execution path is handled by multiple threads.
 Anywhere [Futures](http://docs.scala-lang.org/overviews/core/futures.html) parallelize code,
@@ -141,7 +141,7 @@ This code encounters the problem that `DynamicVariable` will correctly pass on T
 already been created and is being re-unsed from the pool the TLS won’t be copied.  The values will have the old value 
 assigned during its previous use.
 
-## Modified ExecutionContext to Propagate Values
+## Modified ExecutionContext to propagate values
 
 The `ExecutionContext` handles all thread scheduling, can we implement logic into the `ExecutionContext` to copy our 
 TLS into the threads before they execute? The trait is very simple: `execute` can be modified to include these changes:
@@ -233,7 +233,7 @@ a [WeakReference](http://www.scala-lang.org/api/current/index.html#scala.ref.Wea
 
 > ⓘ This blog originally supported comments
 
-<table style="border:1px solid grey">
+<table class="html-bg">
 <tr><td>
 <p><i><a href="http://yanns.github.io/">Yann</a> on June 26, 2014 at 5:45 am said: </i></p>
 <p>In the same spirit, I wrote about passing the slf4j MDC context with Future (the MDC is based on thread local variables)</p>
