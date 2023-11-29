@@ -217,7 +217,7 @@ to
 inline def query = ...
 ```
 
-There are limitations to inlining, for example inline def cannot be nested. Swaping `inline def` for `val` was a minor
+There are limitations to inlining, for example inline def cannot be nested. Swapping `inline def` for `val` was a minor
 change, restructuing code to single level def depth was a more significant refactor. Until this was complete those
 queries used the dynamic runtime generation fallback.
 
