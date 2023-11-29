@@ -9,10 +9,12 @@ tags:
 GitHub Pages is free hosting for static content webpages, and a cost effective way to publish micro-sites for all of
 your projects. Can it handle custom domains, and HSTS domains? How about multiple custom HSTS domains?
 
-## HSTS domains force HTTPS
+{% include table-of-contents.html height="200px" %}
+
+# HSTS domains force HTTPS
 
 Every internet connection should be over HTTPS. The [Let's Encrypt](https://letsencrypt.org/) project offers free TLS
-certificates so there is no excuse to use HTTP, and **many** privacy reasons not to. Every one of your favourite
+certificates so there is no excuse to use HTTP, and privacy reasons not to. Every one of your favourite
 ecommerce websites already force HTTPS, however the most common implementation is to return a *301 Moved Permanently*
 response to any HTTP request directing to the HTTPS url.
 
@@ -20,7 +22,7 @@ But there is a better, formal way to do this
 called [HTTP Strict Transport Security (HSTS)](https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security).
 HSTS is an official HTTP mechanism to enforce secure HTTPS connections at the (sub)domain level without 301s.
 
-## HTTPS-Only Domains: .dev .app .page
+# HTTPS-Only Domains: .dev .app .page
 
 There are many Top Level Domains (TLDs) now, and adoption is growing. The original TLDs are archaic and unhelpful - but
 simple. Thinking in .com terms is also very US centric, the rest of the world has already moved to country code TLDs
@@ -34,13 +36,13 @@ HSTS. That means you cannot serve *any* traffic over HTTP. These are promoted on
 page [https://domains.google/tld/security/](https://domains.google/tld/security/) and are likely the precurser to all
 domains using HSTS.
 
-## GitHub Pages on HTTPS-Only Domains
+# GitHub Pages on HTTPS-Only Domains
 
 Short answer, **YES you can use HTTPS-Only domains on GitHub Pages.**
 
 The only caveat is that the pages won't be served until the `Enforce HTTPS` checkbox has been successfully enabled.
 
-### How Do I Set It Up?
+## How Do I Set It Up?
 
 GitHub pages
 has [good documentation](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages)
@@ -49,7 +51,7 @@ entry at your DNS provider. The `CNAME` is an entry in the DNS record that point
 to `<user>.github.io`. It is the DNS equivalent of an HTTP redirect, it is telling browsers requesting `www.example.com`
 to use `<user>.github.io` instead.
 
-#### Apex Domain Setup
+### GitHub Pages Apex Domain Setup
 
 Apex domains are what you purchase when you "buy a domain". You choose a TLD (Top Level Domain) such as `.com` or `.eu`,
 and then a unique apex domain in it, such as `example.com`. While you may run your website on `www.example.com`
@@ -77,7 +79,7 @@ and an `AAAA` record (support IPv6) of:
 
 The next step is easy to forget, but _very_ important.
 
-#### Verify Your Domain with GitHub
+### Verify Your Domain
 
 If you don't verify, ie: prove ownership of of your domain, then there are cases where other users can pretend that they
 own it and use it for their pages. Should your GitHub Pages every get disabled the next person to request _your domain_
@@ -94,7 +96,7 @@ and [explained in the documentation](https://docs.github.com/en/pages/configurin
 The solution adding a `TXT` record in your DNS record with a specific token value that proves you own the domain. This
 is a common approach used by AWS, Google Adsense, etc.
 
-#### Don't Use Wildcard Subdomains
+### Don't Use Wildcard Subdomains
 
 Very similiar how domain hijacking happens above, is if you use `CNAME` wildcards, as in pointing `*.example.com` to
 GitHub Pages. The problem here is that your GitHub Pages site can only have 1 domain (plus the apex domain) and you are
@@ -103,7 +105,7 @@ and `example.com`) but wildcard your `CNAME`, this means requests to `blog.examp
 Pages. The first GitHub Pages site to set their custom domain to `blog.example.com` will be served!  So don't
 use `CNAME` wildcards.
 
-## Conclusion
+# Conclusion
 
 The flexibility of `CNAME` records will create security exploits when misconfigured, but also allows for many use-cases.
 A common example would be to have a `<user>.github.io` site on `www.example.com`, plus individual repo sites
