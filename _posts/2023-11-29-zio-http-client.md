@@ -1,5 +1,5 @@
 ---
-title: "ZIO Http (Client) Preview"
+title: "ZIO Http Client"
 categories:
   - Scala
 tags:
@@ -7,8 +7,15 @@ tags:
   - ZIO
 ---
 
+There are many libraries that allow HTTP requests to be made, it is not usually the crux of a high performance system. 
+Even the slowest, blocking library can be made performant with the correct handling in ZIO. With all the options 
+available and the low profile, the status of the ZIO HTTP client code in walked through and configured.
 
 {% include table-of-contents.html height="200px" %}
+
+# Alternatives to ZIO HTTP Client
+
+For simplicity in a ZIO system, the obvious choice is to use ZIO-HTTP for client HTTP requests.
 
 https://zio.dev/zio-http
 
