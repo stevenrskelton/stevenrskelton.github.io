@@ -9,7 +9,7 @@ tags:
 GitHub Pages is free hosting for static content webpages, and a cost effective way to publish micro-sites for all of
 your projects. Can it handle custom domains, and HSTS domains? How about multiple custom HSTS domains?
 
-{% include table-of-contents.html height="400px" %}
+{% include table-of-contents.html height="300px" %}
 
 # HSTS domains force HTTPS
 
@@ -50,7 +50,7 @@ entry at your DNS provider. The `CNAME` is an entry in the DNS record that point
 to `<user>.github.io`. It is the DNS equivalent of an HTTP redirect, it is telling browsers requesting `www.example.com`
 to use `<user>.github.io` instead.
 
-### GitHub Pages Apex Domain Setup
+### GitHub Pages Apex Domain
 
 Apex domains are what you purchase when you "buy a domain". You choose a TLD (Top Level Domain) such as `.com` or `.eu`,
 and then a unique apex domain in it, such as `example.com`. While you may run your website on `www.example.com`
