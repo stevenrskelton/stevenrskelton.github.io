@@ -3,12 +3,14 @@
 title: "Binary Semaphore Filter"
 categories:
   - Scala
+tags:
+  - AsyncExecution
+excerpt_separator: <!--more-->
 ---
 
-Long running queries are very taxing on a database. But caching idempotent queries may not always be a suitable
-solution.
-What happens if queries run for N-seconds, but users expect to see new changes immediately?
-What happens if queries return large datasets that won’t all fit into memory?
+Long-running queries are very taxing on a database. But caching idempotent queries may not always be a suitable
+solution. What happens if queries run for N-seconds, but users expect to see new changes immediately? What happens if
+queries return large datasets that won’t all fit into memory?<!--more-->
 
 There is a middle ground. Not all requests result in a service call, but results are never stored in memory. If two
 identical requests are made, only one request will be served from the database and both share the result. Users will be
@@ -30,34 +32,34 @@ private):
 
 ```scala
 trait GetAndSetSeqId {
- def get32(buf: Array[Byte], off: Int) =
-  ((buf(off + 0) & 0xff) << 24) |
-  ((buf(off + 1) & 0xff) << 16) |
-  ((buf(off + 2) & 0xff) << 8) |
-  (buf(off + 3) & 0xff)
- 
- def put32(buf: Array[Byte], off: Int, x: Int) {
-  buf(off) = (x >> 24 & 0xff).toByte
-  buf(off + 1) = (x >> 16 & 0xff).toByte
-  buf(off + 2) = (x >> 8 & 0xff).toByte
-  buf(off + 3) = (x & 0xff).toByte
- }
- 
- def badMsg(why: String) = Failure(new IllegalArgumentException(why))
- 
- def getAndSetId(buf: Array[Byte], newId: Int): Try[Int] = {
-  if (buf.size < 4) return badMsg("short header")
-  val header = get32(buf, 0)
-  val off = if (header < 0)
-   4 + 4 + get32(buf, 4)
-  else 4 + header + 1
- 
-  if (buf.size < off + 4) return badMsg("short buffer")
- 
-  val currentId = get32(buf, off)
-  put32(buf, off, newId)
-  Success(currentId)
- }
+  def get32(buf: Array[Byte], off: Int) =
+    ((buf(off + 0) & 0xff) << 24) |
+      ((buf(off + 1) & 0xff) << 16) |
+      ((buf(off + 2) & 0xff) << 8) |
+      (buf(off + 3) & 0xff)
+
+  def put32(buf: Array[Byte], off: Int, x: Int) {
+    buf(off) = (x >> 24 & 0xff).toByte
+    buf(off + 1) = (x >> 16 & 0xff).toByte
+    buf(off + 2) = (x >> 8 & 0xff).toByte
+    buf(off + 3) = (x & 0xff).toByte
+  }
+
+  def badMsg(why: String) = Failure(new IllegalArgumentException(why))
+
+  def getAndSetId(buf: Array[Byte], newId: Int): Try[Int] = {
+    if (buf.size < 4) return badMsg("short header")
+    val header = get32(buf, 0)
+    val off = if (header < 0)
+      4 + 4 + get32(buf, 4)
+    else 4 + header + 1
+
+    if (buf.size < off + 4) return badMsg("short buffer")
+
+    val currentId = get32(buf, off)
+    put32(buf, off, newId)
+    Success(currentId)
+  }
 }
 ```
 
@@ -69,7 +71,7 @@ is the obvious choice, as long as it’s thread safe. This will be good enough, 
 locks as the edge cases are harmless.
 
 ```scala
-val inProcess = new HashMap[String, Future[Array[Byte]]] 
+val inProcess = new HashMap[String, Future[Array[Byte]]]
   with SynchronizedMap[String, Future[Array[Byte]]]
 ```
 
@@ -83,17 +85,17 @@ def requestHashKey(request: Array[Byte]): String =
 We are now have to tools, and a `Filter` skeleton:
 
 ```scala
-class BinarySemaphoreFilter 
- extends SimpleFilter[Array[Byte], Array[Byte]] 
- with GetAndSetSeqId {
- 
- def requestHashKey(request: Array[Byte]): String
- 
- val inProcess = new HashMap[String, Future[Array[Byte]]] 
-  with SynchronizedMap[String, Future[Array[Byte]]]
- 
- def apply(request: Array[Byte], 
-  service: Service[Array[Byte], Array[Byte]]): Future[Array[Byte]]
+class BinarySemaphoreFilter
+  extends SimpleFilter[Array[Byte], Array[Byte]]
+    with GetAndSetSeqId {
+
+  def requestHashKey(request: Array[Byte]): String
+
+  val inProcess = new HashMap[String, Future[Array[Byte]]]
+    with SynchronizedMap[String, Future[Array[Byte]]]
+
+  def apply(request: Array[Byte],
+            service: Service[Array[Byte], Array[Byte]]): Future[Array[Byte]]
 }
 ```
 
@@ -104,8 +106,8 @@ The `apply` method is the meat of any Finagle Filter, recapping, we want to:
 ```scala
 val zeroedSeqId = request.clone
 val seqId = getAndSetId(zeroedSeqId, 0) match {
- case Success(v) => v
- case Failure(e) => return Future.exception(e)
+  case Success(v) => v
+  case Failure(e) => return Future.exception(e)
 }
 val key = requestHashKey(zeroedSeqId)
 ```
@@ -121,13 +123,13 @@ val key = requestHashKey(zeroedSeqId)
 ```scala
 inProcess.getOrElseUpdate(key, {
   service(zeroedSeqId).ensure({
-   inProcess.remove(key)
+    inProcess.remove(key)
   })
- }).map(r => {
+}).map(r => {
   val zerodSeqIdResponse = r.clone
   getAndSetId(zerodSeqIdResponse, seqId)
   zerodSeqIdResponse
- })
+})
 }
 ```
 

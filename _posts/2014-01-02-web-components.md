@@ -4,7 +4,6 @@ title: "Web Components"
 categories:
   - Javascript
 tags:
-  - Polymer
   - WebComponents
 ---
 

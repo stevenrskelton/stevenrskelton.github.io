@@ -4,7 +4,6 @@ title: "Sortable Table with Polymer Web Components"
 categories:
   - Javascript
 tags:
-  - Polymer
   - WebComponents
 ---
 

@@ -4,7 +4,6 @@ title: "DOM Manipulation using Web Components"
 categories:
   - Javascript
 tags:
-  - Polymer
   - WebComponents
 ---
 
