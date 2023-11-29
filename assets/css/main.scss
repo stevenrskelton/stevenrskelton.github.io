@@ -291,7 +291,7 @@ figure img {
   margin-bottom: 0;
 }
 
-figure figcaption + img {
+figure img:has(+ figcaption) {
   border-radius: 4px 4px 0px 0px;
   margin-bottom: 0.5em;
 }
