@@ -9,7 +9,7 @@ tags:
 GitHub Pages is free hosting for static content webpages, and a cost effective way to publish micro-sites for all of
 your projects. Can it handle custom domains, and HSTS domains? How about multiple custom HSTS domains?
 
-{% include table-of-contents.html height="200px" %}
+{% include table-of-contents.html height="400px" %}
 
 # HSTS domains force HTTPS
 
@@ -38,14 +38,13 @@ domains using HSTS.
 
 # GitHub Pages on HTTPS-Only Domains
 
-Short answer, **YES you can use HTTPS-Only domains on GitHub Pages.**
+Short answer, yes you can use HTTPS-Only domains on GitHub Pages.
 
 The only caveat is that the pages won't be served until the `Enforce HTTPS` checkbox has been successfully enabled.
 
-## How Do I Set It Up?
+## DNS Setup
 
-GitHub pages
-has [good documentation](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages)
+GitHub pages has [good documentation](https://docs.github.com/en/pages/configuring-a-custom-domain-for-your-github-pages-site/about-custom-domains-and-github-pages)
 on this, basically to point any subdomain, ie: www.example.com to your GitHub Pages you will need to create a `CNAME`
 entry at your DNS provider. The `CNAME` is an entry in the DNS record that points your `www.example.com`
 to `<user>.github.io`. It is the DNS equivalent of an HTTP redirect, it is telling browsers requesting `www.example.com`
