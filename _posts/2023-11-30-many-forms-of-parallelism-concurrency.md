@@ -12,7 +12,7 @@ software applications. The abstractions offered by libraries and frameworks to h
 ways to simplify code, but without understanding each parallelism concept it is easy to introduce errors or fail to 
 optimally perform in distributed environments.
 
-{% include table-of-contents.html height="200px" %}
+{% include table-of-contents.html height="400px" %}
 
 # The Basic Idea of Parallelism
 
