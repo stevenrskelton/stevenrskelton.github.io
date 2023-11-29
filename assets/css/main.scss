@@ -287,6 +287,11 @@ figure {
 }
 
 figure img {
+  border-radius: 4px;
+  margin-bottom: 0;
+}
+
+figure img + figcaption {
   border-radius: 4px 4px 0px 0px;
   margin-bottom: 0.5em;
 }
