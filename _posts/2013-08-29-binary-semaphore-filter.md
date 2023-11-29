@@ -14,7 +14,7 @@ requests. And what happens if multiple identical requests are made while one is 
 to share the same result, or do each request need to perform their own?  This isn't a simple caching solution, it's
 more like a subscription behaviour to a running query if one already exists, if not one is created.<!--more-->
 
-{% include table-of-contents.html height="200px" %}
+{% include table-of-contents.html height="400px" %}
 
 # Sharing a Result isn't a Cache
 
