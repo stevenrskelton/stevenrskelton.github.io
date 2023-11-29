@@ -11,7 +11,7 @@ There are many libraries that allow HTTP requests to be made, it is not usually 
 Even the slowest, blocking library can be made performant with the correct handling in ZIO. With all the options 
 available and the low profile, the status of the ZIO HTTP client code in walked through and configured.
 
-{% include table-of-contents.html height="200px" %}
+{% include table-of-contents.html height="300px" %}
 
 # Alternatives to ZIO HTTP Client
 
