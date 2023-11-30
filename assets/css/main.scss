@@ -98,7 +98,6 @@ ins {
 html {
   background-color: #e9dcbe;
   background-size: 140px;
-  background-blend-mode: lighten;
   background-image: url('/assets/images/background.jpg');
   background-repeat: repeat;
   min-width: 360px;
@@ -136,7 +135,6 @@ html {
 .html-bg {
   background-color: #e9dcbe;
   background-size: 140px;
-  background-blend-mode: lighten;
   background-image: url('/assets/images/background.jpg');
   background-repeat: repeat;
   border: 1px solid #343434;
@@ -266,7 +264,6 @@ header .text_tag_category {
 .toc .nav__title {
   font-size: 1em;
   background: #e9dcbe url('/assets/images/background.jpg') center/140px repeat;
-  background-blend-mode: lighten;
   padding: 20px;
   color: #343434;
   border-bottom: 0.5px solid #343434;
@@ -281,7 +278,6 @@ figure {
   border-radius: 4px;
   background-color: #e9dcbe;
   background-size: 140px;
-  background-blend-mode: lighten;
   background-image: url('/assets/images/background.jpg');
   background-repeat: repeat;
 }
