@@ -25,7 +25,7 @@ times?
 
 {% include table-of-contents.html height="600px" %}
 
-# Symptoms of a Slow Compile
+## Symptoms of a Slow Compile
 
 As Scala 2 matured compiler optimizations brought compilation times down, but the Scala 3 rewrite to TASTy reset many
 optimizations back to zero. This article is an analysis of the steps used to optimize a Scala 3 project making heavy
@@ -41,7 +41,7 @@ The example project is outlined in the previous post
 [ZIO Migration from Akka and Scala Futures]({% post_url 2023-10-31-zio-migration %}), and consists of over 120 SQL query
 macros of varying complexity, with some larger queries requiring over 5 minutes to complete and over +5GB of heap.
 
-## Is The Scala 3 Compiler Optimized?
+### Is The Scala 3 Compiler Optimized?
 
 Simple answer, no - but that's a good thing: it will get better as Scala 3 matures. The switch from Scala 2 to Scala 3,
 for the same functionality, represented twice as long compile times:
@@ -54,9 +54,9 @@ for the same functionality, represented twice as long compile times:
 While Scala 2 macros aren't apples-to-apples with Scala 3, the end functionality in Quill is the same a difference this
 large wouldn't exist if Scala 3 was optimized.
 
-## Problems Encountered
+### Problems Encountered
 
-### Increased Heap Space Requirements
+#### Increased Heap Space Requirements
 
 Compilation times can be affected by the amount of RAM available. Scala 3 Quill macros were observed to require
 significantly more memory, even failing to compile with the JVM defaults.
@@ -82,7 +82,7 @@ is an issue.
 Consider increasing the JVM heap using `-Xmx` or try a different collector, e.g. `-XX:+UseG1GC`, for better performance.
 ```
 
-### Macros Blocking Threads Preventing Multithreading
+#### Macros Blocking Threads Preventing Multithreading
 
 Long running macros (taking over 1 minute) were observed to block compiler from running other threads.
 
@@ -102,11 +102,11 @@ cores. Ideally, the entire compile task should be multithreaded from start to fi
     caption="A parallelized task executing on all available cores"
 %}
 
-# Code Refactoring and Configuration Changes
+## Code Refactoring and Configuration Changes
 
-## Increased Heap Space
+### Increased Heap Space
 
-### Optimizing for the Build Server Hardware
+#### Optimizing for the Build Server Hardware
 
 Whether compiling locally or in a remote CI/CD the build should be optimized to the hardware available. The 2 primary
 considerations are CPU and RAM.
@@ -132,7 +132,7 @@ Global / concurrentRestrictions := {
 We are working under the assumption that each of your SBT projects will run into serialization bottlenecks, meaning each
 project will eventually be consuming only a single thread
 
-#### GitHub Actions CI/CD
+##### GitHub Actions CI/CD
 
 GitHub Actions compile code
 on [dedicated runners](https://docs.github.com/en/actions/using-github-hosted-runners/about-github-hosted-runners/about-github-hosted-runners#supported-runners-and-hardware-resources)
@@ -149,7 +149,7 @@ jobs:
   build: ...
 ```
 
-#### Idea IntelliJ
+##### Idea IntelliJ
 
 When compiling locally an optimal resource allocation may need to be restricted to allow other applications to continue
 to function.
@@ -160,7 +160,7 @@ than on a dedicated CI/CD runner.
 SBT_OPTS="-Xmx12G -XX:+UseParallelGC" sbt
 ```
 
-## JVM GC Alternatives
+### JVM GC Alternatives
 
 There aren't many Scala 3 compiler parameters we can affect; one is the besides allocating more memory one is
 There are alternative JVM garbage collectors that may offer better performance by prioritizing different factors.
@@ -175,7 +175,7 @@ There is [more information available](https://www.baeldung.com/jvm-garbage-colle
 collector has multiple configuration options and focuses on throughput over latency making it an interesting choice to
 experiment with.
 
-## Forced Parallelized Builds using Sub-Projects
+### Forced Parallelized Builds using Sub-Projects
 
 SBT will concurrently compilation and many projects won't require intrusive refactoring to allow compiler multithreading.
 However, it appears that macros represent an edge case where Scala 3 can't always figure things dependencies. Quill
@@ -190,7 +190,7 @@ SBT projects.
     caption="SBT indicating 8 `compileIncremental` tasks executing concurrently"
 %}
 
-### Basic Sub-Project Template
+#### Basic Sub-Project Template
 
 Scala 3 projects can be [minimally defined](https://docs.scala-lang.org/scala3/book/tools-sbt.html) with only 2
 additional SBT build files:
@@ -242,7 +242,7 @@ lazy val sqluser = (project in file("."))
   )
 ```
 
-### Root Project Structure
+#### Root Project Structure
 
 The `build.sbt` in the root folder contains the diamond pattern project structure, with common dependencies containing
 in the `sqlcommon` project, fanning out to `sql*` projects, and then aggregated again in `root`.
@@ -286,7 +286,7 @@ The project order used in `aggregate` is important, placing longest running sub-
 immediately. SBT will execute `compile` tasks in separate threads starting from left-to-right when no other dependencies
 preventing it. Once threads complete, they will begin to pick up the smaller projects later in the order.
 
-# Limitations and Downsides
+## Limitations and Downsides
 
 Approach is very similar to a microservice approach, has the same benefit of separation of concerns,
 but same downsides:
@@ -298,13 +298,13 @@ but same downsides:
 This example is a diamond pattern where all sub-projects are aggregated into the same root,
 but could easily turn this codebase into a multi-headed project.
 
-# Optimized Results
+## Optimized Results
 
 The following compilations were performed on a _4.2GHz x 8 core_ server,
 with `sbt 1.9.6`, `Scala 3.3.1`, `Eclipse Adoptium Java 21.0.1`.
 The end result is a **30% reduction in compile time** from 13:39 to 9:18.
 
-## Compile Times With and Without Sub-Projects
+### Compile Times With and Without Sub-Projects
 
 We find that by breaking down our monolithic Quill project into sub-projects, the resulting parallelization allowed for
 faster compilation with lower Heap memory requirements.
@@ -319,7 +319,7 @@ configured to use all 7GB available, compilations within GitHub CI/CD reached an
 continual warnings about GC CPU usage under all garbage collectors. After optimization GitHub compilation times dropped
 to 11:11, which is a **33%** improvement, matching our local build server.
 
-## Garbage Collection and JVM Configurations
+### Garbage Collection and JVM Configurations
 
 Additional optimizations are possible unrelated to sub-project parallelization with regards to JVM configuration. The 
 latest JRE available, `openjdk-bin-21`, improved compilation times from 9:52 to 9:18, **5.7%** improvement from 

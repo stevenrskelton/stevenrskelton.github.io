@@ -169,8 +169,6 @@ html {
 }
 
 table {
-  margin-left: auto;
-  margin-right: auto;
   min-width: calc(360px - 2em);
   display: table;
   width: 80%;
@@ -305,6 +303,7 @@ figure {
   background-size: 140px;
   background-image: url('/assets/images/background.jpg');
   background-repeat: repeat;
+  margin: 0 0 1.3em 0;
 }
 
 figure img {

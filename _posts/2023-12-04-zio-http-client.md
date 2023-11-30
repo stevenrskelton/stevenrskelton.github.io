@@ -13,17 +13,17 @@ available and the low profile, the status of the ZIO HTTP client code in walked 
 
 {% include table-of-contents.html height="300px" %}
 
-# Alternatives to ZIO HTTP Client
+## Alternatives to ZIO HTTP Client
 
 For simplicity in a ZIO system, the obvious choice is to use ZIO-HTTP for client HTTP requests.
 
 https://zio.dev/zio-http
 
-# Client Configuration and Default Settings
+## Client Configuration and Default Settings
 
 These are applicable to `v3.0.0-RC3` (Oct 23, 2023).
 
-## Accept-Encoding Disabled by Default
+### Accept-Encoding Disabled by Default
 
 It is observed that request compression is disabled by default.  It is an understandable default since request 
 compression will make requests over a high-speed network slower; especially for typical service communications.
@@ -48,7 +48,7 @@ lazy val default: Config = Config(
 ```
 After update, requests can use `Accept-Encoding` headers for `GZip`, `todo` or `todo`.
 
-## TLS / SSL Certificates 
+### TLS / SSL Certificates 
 
 An SSL Certificate chain needs to be use to validate HTTPS requests, and non-obviously many libraries will use the JVM 
 system keystore without configuration. ZIO does not access the system chain by default, it will need to be manually 
@@ -63,12 +63,12 @@ ie:
 val ssl = ClientSSLConfig.FromCertFile("/etc/ssl/certs/ca-certificates.crt")
 ```
 
-## IPv4 Only
+### IPv4 Only
 
 Many cloud deployments use IPv4 exclusively for simplicity and brevity over IPv6.  ZIO HTTP can run into
 issues since it has no configurations to disable IPv6.
 
-### JVM Parameters
+#### JVM Parameters
 
 One can instruct the JVM to prefer IPv4 over IPv6 using JVM parameters on initialization, and also in code.
 
@@ -80,7 +80,7 @@ One can instruct the JVM to prefer IPv4 over IPv6 using JVM parameters on initia
 java.lang.System.setProperty("java.net.preferIPv4Stack", "true")
 ```
 
-### Disabling IPv6 on Linux Network Interfaces
+#### Disabling IPv6 on Linux Network Interfaces
 
 JVM preference may still run into issues if system interfaces are misconfigured with IPv6.
 For example, my development laptop has an internal wired NIC `enp5s0` that is unused but still configured with IPv6, 
@@ -121,7 +121,7 @@ echo 1 > /proc/sys/net/ipv6/conf/default/disable_ipv6
 echo 1 > /proc/sys/net/ipv6/conf/all/disable_ipv6
 ```
 
-# Netty Version Conflicts with gRPC-Netty
+## Netty Version Conflicts with gRPC-Netty
 
 An issue with `NoClassFoundException` on `SSLPrivateKeyMethod` resulted from Netty version conflicts.
 
