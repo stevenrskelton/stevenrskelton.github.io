@@ -86,13 +86,21 @@ Consider increasing the JVM heap using `-Xmx` or try a different collector, e.g.
 
 Long running macros (taking over 1 minute) were observed to block compiler from running other threads.
 
-![Single Task CPU](/assets/images/2023/11/single_task_cpu.png)
+{%
+    include figure image_path="/assets/images/2023/11/single_task_cpu.png"
+    alt="Single Task CPI"
+    caption="A non-parallelized task leaving cores idle" 
+%}
 
 This wasn't observed to be an issue in all projects, it appeared to be specific to macros being forced to run
 sequentially within the same project. For SQL heavy projects, non-macro code is quickly compiled, resulting in idle
 cores. Ideally, the entire compile task should be multithreaded from start to finish.
 
-![Parallel Task CPU](/assets/images/2023/11/parallel_task_cpu.png)
+{%
+    include figure image_path="/assets/images/2023/11/parallel_task_cpu.png"
+    alt="Parallel Task CPU"
+    caption="A parallelized task executing on all available cores"
+%}
 
 # Code Refactoring and Configuration Changes
 
