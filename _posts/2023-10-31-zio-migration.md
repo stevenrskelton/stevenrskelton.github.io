@@ -91,7 +91,7 @@ request handler and scheduled task executor with very limited data sharing betwe
 
 <table>
     <thead>
-        <th>Order</th>
+        <th style="text-align:center;">Order</th>
         <th>Functionality</th>
         <th>Original</th>
         <th>Target</th>
@@ -131,7 +131,7 @@ request handler and scheduled task executor with very limited data sharing betwe
             <td>Cache</td><td>scaffeine</td><td>zio-cache</td>
         </tr>
         <tr>
-            <td rowspan="2" style="text-align:center">n/a</td><td>JSON</td><td>play-json</td><td>(zio-json)?</td>
+            <td rowspan="2" style="text-align:center;border-bottom:none;">n/a</td><td>JSON</td><td>play-json</td><td>(zio-json)?</td>
         </tr>
         <tr>
             <td>Logging</td><td>logback-classic</td><td>+(zio-logging-slf4j2)?</td>
