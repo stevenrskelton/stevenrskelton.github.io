@@ -70,14 +70,10 @@ author_profile: false
       }
     }
   </style>
-  <div class="html-bg img-fill" style="
+  <div class="img-fill" style="
     text-align: center;
-    border: 1px solid #343434;
-    border-radius: 4px;
     margin-bottom: 1em;
-    background-color: rgb(104, 66, 207);
     font-size: small;
-    background-blend-mode: multiply;
   ">
     <a href="https://tradeaudit.app" target="_blank" style="text-decoration: none;">
      <img src="/assets/images/about/tradeauditapp.png" title="Trade Audit Mobile App" 
