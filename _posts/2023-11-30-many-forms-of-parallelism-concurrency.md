@@ -10,15 +10,17 @@ excerpt_separator: <!--more-->
 There are different concepts of parallelism and concurrency that exist and need to be considered when architecting 
 software applications. The abstractions offered by libraries and frameworks to hide parallelism can be convenient 
 ways to simplify code, but without understanding each parallelism concept it is easy to introduce errors or fail to 
-optimally perform in distributed environments.
+optimally perform in distributed environments.<!--more-->
 
 {% include table-of-contents.html height="400px" %}
 
 # The Basic Idea of Parallelism
 
-A lucid example of parallelism is the increment operator `+=`; ie `i = i + 1`.  Running this operation in a parallelized
-loop on a global `i` will lead to errors.  If it is run 30 times, at the end `i` won't always equal 30.  Sometimes it 
-will be less than 30.
+A lucid example of parallelism is the increment operator `+=`; 
+ie `i = i + 1`.  
+
+Running this operation in a parallelized loop on a global `i` will lead to errors.  If it is run 30 times, at the end 
+`i` won't always equal 30.  Sometimes `i` will be less than 30.
 
 No matter the mechanism to run work in parallel, the library might call them virtual threads, green threads, tasks, 
 events, or something completely different, if it was run in parallel it had to have run on separate cores of the
