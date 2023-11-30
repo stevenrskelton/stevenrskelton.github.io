@@ -4,11 +4,8 @@ title: "About"
 author_profile: false
 ---
 <div class="img-bg" style="background-image:url('/assets/images/about/bg.jpg');">
-  <p style="margin-bottom: 0.5em;font-size:36pt;">
-    🇨🇦<strong style="
-      color: #e9dcbe;
-      padding-left: 8px;
-    ">Toronto, Canada</strong>
+  <p style="margin-bottom: 0.5em;font-size: 28pt;">
+    🇨🇦<div style="color: #e9dcbe;padding-left: 8px;display:inline-block;font-weight:bolder;">Toronto, Canada</div>
   </p>
 
   <p>
