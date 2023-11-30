@@ -4,12 +4,7 @@ title: "About"
 author_profile: false
 ---
 <div class="img-bg" style="background-image:url('/assets/images/about/bg.jpg');">
-  <h1>
-    🇨🇦<div style="
-      padding-left: 8px;
-      display: inline-block;
-      font-weight: bolder;">Toronto, Canada</div>
-  </h1>
+  <h1> 🇨🇦&nbsp;Toronto, Canada</h1>
 
   <p>
     <strong>Honours Bachelor of Mathematics</strong><br>
