@@ -177,14 +177,18 @@ experiment with.
 
 ## Forced Parallelized Builds using Sub-Projects
 
-SBT will parallelize compilation and many projects won't require intrusive refactoring to allow compiler multithreading.
+SBT will concurrently compilation and many projects won't require intrusive refactoring to allow compiler multithreading.
 However, it appears that macros represent an edge case where Scala 3 can't always figure things dependencies. Quill
 query macros would not be compiled in parallel whether in separate methods, separate classes or separate packages.
 
-To force parallelization of macro compilation, the significant code change was made to break-up queries into independent
+To force concurrency of macro compilation, the significant code change was made to break-up queries into independent
 SBT projects.
 
-![Parallel Task Console Output](/assets/images/2023/11/parallel_task_console.png)
+{%
+    include figure image_path="/assets/images/2023/11/parallel_task_console.png"
+    alt="Parallel Task Console Output"
+    caption="SBT indicating 8 `compileIncremental` tasks executing concurrently"
+%}
 
 ### Basic Sub-Project Template
 
