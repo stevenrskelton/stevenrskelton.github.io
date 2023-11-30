@@ -5,7 +5,13 @@ author_profile: false
 ---
 <div class="img-bg" style="background-image:url('/assets/images/about/bg.jpg');">
   <div style="margin-bottom: 0.5em;font-size: 28pt;">
-    🇨🇦<div style="color: #e9dcbe;padding-left: 8px;display:inline-block;font-weight:bolder;">Toronto, Canada</div>
+    🇨🇦<div style="
+      padding-left: 8px;
+      display: inline-block;
+      font-weight: bolder;
+      font-size: 20pt;
+      vertical-align: text-top;
+      padding-top: 2pt;">Toronto, Canada</div>
   </div>
 
   <p>
@@ -52,7 +58,7 @@ author_profile: false
 - **Data**: API efficiency and cacheability, read-write asymmetry, low-latency and event-driven streams.
 - **Cloud**: agnostic, scaling, resiliency, cost-mitigation, and 95th percentile mitigations.
 
-<div class="html-bg" style="margin-top: 50px;margin-bottom: 30px;">
+<div class="img-bg" style="background-image:url('/assets/images/about/dancing_robots.jpg');margin-top: 50px;margin-bottom: 30px;">
   <h1>Trade Audit Android App</h1>
   
   <style>
