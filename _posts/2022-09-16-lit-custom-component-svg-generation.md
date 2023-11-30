@@ -14,7 +14,7 @@ it relies on browser native custom elements.
 
 {% include table-of-contents.html height="200px" %}
 
-## A simple SVG Pie Chart
+# A simple SVG Pie Chart
 
 SVG is a robust standard that can be used for anything from company logos to graphical artwork. It is text-based XML
 markup, and because it is a text format and not binary data like static images it can be manipulated in the browser
@@ -47,7 +47,7 @@ The `viewBox` and `style` specify the render size, unlike static images SVG don'
 </svg>
 ```
 
-## Comparison of DOM manipultion and Lit Templates
+# Comparison of DOM manipultion and Lit Templates
 
 Let's assume we have a dynamic data specifying a variable number of slices with their percent and color:
 
@@ -100,7 +100,7 @@ function computePathData(slices){
 }
 ```
 
-#### Direct DOM Manipulation
+## Direct DOM Manipulation
 
 The raw Javascript approach are straight-forward DOM operations called from a `pieChart` function:
 
@@ -127,7 +127,7 @@ The raw Javascript approach are straight-forward DOM operations called from a `p
 </script>
 ```
 
-#### Lit Templates
+## Lit Templates
 
 The Lit approach defines a custom element object rather than a function to encapsulate the rendering code:
 
@@ -161,12 +161,12 @@ The Lit approach defines a custom element object rather than a function to encap
 ]'/>
 ```
 
-### Conclusion
+# Conclusion
 
 The 2 code implementations are very similar. The custom element `<pie-chart>` is nice and the `svg` render engine in Lit
 is slick.
 
 Another major benefit of using Lit in this example is that there is no need to use element ids. The direct DOM
-implimentation requires each use to have a unique id (which can in some contexts be hard to ensure), and to call
+implementation requires each use to have a unique id (which can in some contexts be hard to ensure), and to call
 the `pieChart(id)` function on both page load and any subsequent data change. When using multiple instances of a
 generated element, a custom element approach will lead to more maintainable code and less brittle javascript.  

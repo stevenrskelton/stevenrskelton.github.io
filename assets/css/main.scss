@@ -170,6 +170,21 @@ table {
   min-width: calc(360px - 2em);
   display: table;
   width: 80%;
+  border: 1px solid #343434;
+  border-radius: 4px;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+thead {
+  background-color: #e9dcbe;
+  background-size: 140px;
+  background-image: url('/assets/images/background.jpg');
+  background-repeat: repeat;
+}
+
+th {
+  border-bottom: 1px solid #343434;
 }
 
 // TAG BUTTONS
