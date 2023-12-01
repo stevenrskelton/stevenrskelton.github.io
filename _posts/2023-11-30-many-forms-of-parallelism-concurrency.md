@@ -41,7 +41,7 @@ From the perspective of a network service, there can be multiple forms of parall
 requests to serve an HTML page in a serverless cloud environment, such as using [GCP Cloud Functions](https://cloud.google.com/functions) or [AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
 
 {%
-    include figure image_path="/assets/images/2023/11/gcp_cloudfunction_configuration.png"
+    include figure image_path="/assets/images/2023/11/gcp_cloudfunction_configuration.jpg"
     alt="GCP Cloud Function configuration"
     caption="GCP Cloud Function **Runtime, build, connections and security settings**"
 %}
