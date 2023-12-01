@@ -14,7 +14,7 @@ optimally perform in distributed environments.<!--more-->
 
 {% include table-of-contents.html height="400px" %}
 
-## The Basic Idea of Parallelism
+# The Basic Idea of Parallelism
 
 A lucid example of parallelism is the increment operator `+=`; 
 ie `i = i + 1`.  
@@ -30,12 +30,12 @@ Computer operations aren't instantaneous, and there will necessarily be a delay 
 when the `i + 1` result is calculated and stored. During that delay any changes to the memory storing `i` will be lost
 when the `i + 1` result is stored back to `i`.
 
-### Parallelism and Concurrency Defined
+## Parallelism and Concurrency Defined
 
 Parallelism only exists when there are multiple cores, either locally on the same machine or on separate machines connected over 
 a network, available to execute code.  Concurrency is simply the ability to define separate blocks of executable code.
 
-## Forms of Parallelism
+# Forms of Parallelism
 
 From the perspective of a network service, there can be multiple forms of parallelism. Let's consider code that handles
 requests to serve an HTML page in a serverless cloud environment, such as using [GCP Cloud Functions](https://cloud.google.com/functions) or [AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
@@ -51,22 +51,22 @@ There are 3 settings in GCP that affect parallelism and concurrency:
 - `Maximum concurrent requests per instance`
 - `Minimum number of instances` / `Maximum number of instances`
 
-### CPU
+## CPU
 
-### Maximum concurrent requests per instance
+## Maximum concurrent requests per instance
 
-### (Minimum / Maximum) number of instances
+## (Minimum / Maximum) number of instances
 
-## Writing Code For All Configurations
+# Writing Code For All Configurations
 
 - type of work matters, HTTP requests can't be distributed, batch processes and streams can
 
-## Latency and CPU idle
+# Latency and CPU idle
 
 GCP [Scaling based on CPU utilization](https://cloud.google.com/compute/docs/autoscaler/scaling-cpu) has a warning
 > Caution: If your application takes a long time to initialize on new VMs, Google recommends that you do not set a target CPU utilization of 85% or above. In such a case, if your application sees an increase in traffic, your MIG's CPUs might be at risk of getting overloaded while your application slowly initializes on the new VMs that the autoscaler adds.
 
 Batch process is latency insensitive, so can ignore
 
-## Libraries and Project Loom
+# Libraries and Project Loom
 
