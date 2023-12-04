@@ -14,7 +14,7 @@ simplification of others; and libraries trying to treat all levels of parallelis
 concepts for their common interface. In order to optimally design and avoid errors, all levels of concurrency and
 parallelism need to be understood no matter what framework is chosen.<!--more-->
 
-{% include table-of-contents.html height="400px" %}
+{% include table-of-contents.html height="500px" %}
 
 # The Basic Idea of Parallelism
 
