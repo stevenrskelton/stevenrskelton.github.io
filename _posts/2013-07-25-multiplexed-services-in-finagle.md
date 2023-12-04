@@ -14,7 +14,7 @@ hosted on a raw TCP port. Even a large implementation with a hundred methods wil
 organizational purposes you’ll want to group calls together into separate services. The standard thrift protocols
 require that each service retain exclusive use to its own TCP port, creating a firewall maintenance nightmare.
 
-{% include table-of-contents.html height="200px" %}
+{% include table-of-contents.html height="100px" %}
 
 # Multiplexing Finagle servers on a Single Port
 
@@ -177,7 +177,7 @@ def multiplexedBinaryProtocolFactory(serviceName: String)
 }
 ```
 
-## Service Implementation using Multiplexing
+## Sample Implementation
 
 To put this all into context, let’s put together a sample multiplexed service.
 Suppose we have defined two Thrift services, called `FooApi` and `BarApi`, with implementations `FooService`
