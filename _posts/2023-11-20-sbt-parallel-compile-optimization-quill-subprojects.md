@@ -280,9 +280,9 @@ lazy val root = (project in file("."))
 ```
 
 See the [SBT documentation](https://www.scala-sbt.org/1.x/docs/Multi-Project.html#Aggregation)  on how `aggregate` is
-different than `dependsOn`.
+different from `dependsOn`.
 
-The project order used in `aggregate` is important, placing longest running sub-projects first allowing them to begin
+The project order used in `aggregate` is important, placing longer running subprojects first allowing them to begin
 immediately. SBT will execute `compile` tasks in separate threads starting from left-to-right when no other dependencies
 preventing it. Once threads complete, they will begin to pick up the smaller projects later in the order.
 
@@ -314,14 +314,14 @@ faster compilation with lower Heap memory requirements.
 |      No      |         > 6GB         |     15:46 |       13:53 | 13:39 | 41:52 |
 |     Yes      |         3 GB          |     10:56 |        9:18 |  9:29 | 13:14 |
 
-Reductions in Heap had the most significant affect on compilations on the standard GitHub Action runners. With SBT
+Reductions in Heap had the most significant effect on compilations on the standard GitHub Action runners. With SBT
 configured to use all 7GB available, compilations within GitHub CI/CD reached an average of 16:48 in length with
 continual warnings about GC CPU usage under all garbage collectors. After optimization GitHub compilation times dropped
 to 11:11, which is a **33%** improvement, matching our local build server.
 
 ## Garbage Collection and JVM Configurations
 
-Additional optimizations are possible unrelated to sub-project parallelization with regards to JVM configuration. The 
+Additional optimizations are possible unrelated to subproject parallelization within JVM configuration. The 
 latest JRE available, `openjdk-bin-21`, improved compilation times from 9:52 to 9:18, **5.7%** improvement from 
 `openjdk-bin-17`.
 
