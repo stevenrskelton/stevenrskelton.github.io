@@ -14,6 +14,8 @@ hosted on a raw TCP port. Even a large implementation with a hundred methods wil
 organizational purposes you’ll want to group calls together into separate services. The standard thrift protocols
 require that each service retain exclusive use to its own TCP port, creating a firewall maintenance nightmare.
 
+{% include table-of-contents.html height="200px" %}
+
 Enter service multiplexing: the ability to run all services on a single port. Under the covers it prepends the service
 name to method calls, and it can do this transparently without effecting your code.
 
@@ -215,9 +217,11 @@ The only minor issue I’ve encountered are the unavoidable breakages to any Fil
 logging, statistics). They can continue to be attached to either the multiplexing service, or the multiplexed services,
 but a minor tweak is necessary to account for the multiplexing behaviour.
 
-### Feedback
+# Article Feedback
 
-<table style="border:1px solid grey">
+> ⓘ This blog originally supported comments
+
+<table class="html-bg">
 <tr><td>
 <p><i>Matthew on September 18, 2013 at 11:59 am said:</i></p>
 <p>Hi,<br/>Firstly thank you for your example and included code, there’s very little documentation that I am able to find on Multiplexing with Finagle and even less code examples, so +1 for your post.</p>
@@ -228,7 +232,7 @@ but a minor tweak is necessary to account for the multiplexing behaviour.
 <tr><td>
 <p><i>steven on September 20, 2013 at 4:55 pm said:</i></p>
 <p>That’s a very strange error, the server shouldn’t be modifying the SeqId. I would look closely into any other Filters.<br/>You can also try printing the Thrift transport to the console using [Developer Friendly Thrift Request Logging]({% post_url 2013-08-03-developer-friendly-thrift-request-logging %})</p>
-<p>I’ve commited Specs2 tests into GitHub for my code examples; you can compare your setup to mine:<br/>https://github.com/stevenrskelton/Blog</p>
+<p>I’ve committed Specs2 tests into GitHub for my code examples; you can compare your setup to mine:<br/>https://github.com/stevenrskelton/Blog</p>
 </td></tr>
 <tr><td>
 <p><i>Matthew on September 23, 2013 at 7:12 am said:</i></p>
@@ -238,7 +242,7 @@ but a minor tweak is necessary to account for the multiplexing behaviour.
 </table>
 
 
-<table style="border:1px solid grey">
+<table class="html-bg">
 <tr><td>
 <p><i>Tim on January 20, 2015 at 1:16 pm said:</i></p>
 <p>Thanks for the informative post Steven. However, I’m curious to understand the relationship between your example, and Finagle’s ThriftMux. Are these complementary, or overlapping? (or does ThriftMux obviate the need for this approach?</p>
