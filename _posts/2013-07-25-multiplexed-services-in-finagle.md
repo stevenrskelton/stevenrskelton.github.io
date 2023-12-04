@@ -16,6 +16,8 @@ require that each service retain exclusive use to its own TCP port, creating a f
 
 {% include table-of-contents.html height="200px" %}
 
+# Multiplexing
+
 Enter service multiplexing: the ability to run all services on a single port. Under the covers it prepends the service
 name to method calls, and it can do this transparently without effecting your code.
 
@@ -174,6 +176,8 @@ def multiplexedBinaryProtocolFactory(serviceName: String)
  }
 }
 ```
+
+## Service Implementation using Multiplexing
 
 To put this all into context, let’s put together a sample multiplexed service.
 Suppose we have defined two Thrift services, called `FooApi` and `BarApi`, with implementations `FooService`
