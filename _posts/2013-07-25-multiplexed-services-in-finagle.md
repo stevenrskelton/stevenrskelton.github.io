@@ -16,7 +16,7 @@ require that each service retain exclusive use to its own TCP port, creating a f
 
 {% include table-of-contents.html height="200px" %}
 
-# Multiplexing
+# Multiplexing Finagle servers on a Single Port
 
 Enter service multiplexing: the ability to run all services on a single port. Under the covers it prepends the service
 name to method calls, and it can do this transparently without effecting your code.
