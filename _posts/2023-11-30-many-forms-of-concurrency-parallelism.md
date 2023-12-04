@@ -137,21 +137,40 @@ of instances. Cloud platforms expose this as [Autoscaling](https://cloud.google.
 ### Distributed Concurrency
 
 The concurrency required to take advantage of multiple instances is different than the currency required to take
-advantage of multiple cores.  `Distributed Concurrency` introduces many new concerns that are not present when designing
+advantage of multiple cores. `Distributed Concurrency` introduces many new concerns that are not present when designing
 around `Local Concurrency`.
 
-Distributing data is no longer, _a single copy_ or _always available_.
+Distributing data is no longer _a single copy_ or _always available_.
 
-These concerns are highlighted [Strong versus Eventual Consistency](https://en.wikipedia.org/wiki/Eventual_consistency)
+These concerns are complicated topics categorized as [Strong versus Eventual Consistency](https://en.wikipedia.org/wiki/Eventual_consistency)
 and the [CAP Theorem](https://en.wikipedia.org/wiki/CAP_theorem), respectively.
+
+Within the scope of this article it is noted that certain types of software problems are more easily designed for 
+distributed concurrency, such as web requests and event-based processing.  There is never a guarantee problems of
+any type can be solved using distributed computing, but often harder-to-distribute concerns such as atomic state 
+transitions and transactions can be externalized into separate systems leaving a cleanly distributed core problem.
+
+A typical HTTP web application is implemented using a highly concurrent stateless web-tier, with offloading of state
+and strongly consistent data to separate microservices, which may or may not be distributed. 
 
 # Writing Code For All Configurations
 
 - type of work matters, HTTP requests can't be distributed, batch processes and streams can
 
-# Latency and CPU idle
+## Many Thread-pools Are Unavoidable
 
-Batch process is latency insensitive, so can ignore
+Optimal _mechanical sympathy_ and efficient context-switching will match threads to cores one-to-one, however 
+unavoidable reasons exist making to make this impossible. When using a non-blocking framework, the worker thread-pool 
+shouldn't run blocking code requiring creation of a separate pool. Libraries responsible for logging, caching, and 
+monitoring define their own worker threads to allow seamless execution in the background. The JVM garbage collector 
+continuously runs in parallel threads.
 
-# Libraries and Project Loom
+# Optimal Settings Require Load Testing and Observation
+
+All settings should be pragmatically tuned according to real-world performance under a variety of workloads. The many 
+levels of parallelism and concurrency can compete for resources in unexpected ways with non-linear response to varying 
+load conditions. Optimizing local thread parallelism by way of thread-pool families, sizes and `Executor`, and 
+distributed parallelism layer by way of hardware and traffic shaping have deep implications that cannot be solved with
+a silver-bullet of a software framework or feature.
+
 
