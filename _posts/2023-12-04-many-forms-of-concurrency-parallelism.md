@@ -43,15 +43,15 @@ ever have 1 head element at a time, with the rest queued until ready to be acted
 
 {%
 include figure image_path="/assets/images/2023/12/output_stream.svg"
-alt="Stream Producers"
-caption="Concurrent producers merge into a serialized stream"
+alt="Stream Consumers"
+caption="Stream parallelism into concurrent consumers"
 %}
 
 Elements of a stream can then be processed concurrently and in parallel by consumers working in separate threads.
 
 ## Pitfalls of Parallelism
 
-A simple example of a parallelism pitfall is the increment operator `+=`, _ie_ `i = i + 1`.
+A simple example of a parallelism pitfall is the increment operator `+=`, (`i = i + 1`).
 
 Even though `+=` is a simple low-level operator it is not thread safe. When executed in parallel with a standard global
 variable `i` the resulting value of `i` is indeterminate. It won't always equal the number of iterations. In a loop
