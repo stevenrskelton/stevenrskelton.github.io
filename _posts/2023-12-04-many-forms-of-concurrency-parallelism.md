@@ -32,7 +32,7 @@ as threads are how the OS sends code for executing by the CPU. Any concurrency i
 executed in parallel unless it is also being partitioned into separate OS threads.
 
 {%
-include figure image_path="/assets/images/2023/12/input_stream.svg"
+include figure image_path="/assets/images/2023/12/input_stream.svg" class="figsvgpadding"
 alt="Stream Producers"
 caption="Concurrent producers merge into a serialized stream"
 %}
@@ -42,7 +42,7 @@ present data being produced concurrently as a more convenient serial representat
 ever have 1 head element at a time, with the rest queued until ready to be acted on.
 
 {%
-include figure image_path="/assets/images/2023/12/output_stream.svg"
+include figure image_path="/assets/images/2023/12/output_stream.svg" class="figsvgpadding"
 alt="Stream Consumers"
 caption="Stream parallelism into concurrent consumers"
 %}
