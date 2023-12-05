@@ -123,7 +123,7 @@ consumes time when the CPU cannot execute code, and this is reported as % of CPU
 Concurrency libraries can offer workarounds utilizing [green threads](https://en.wikipedia.org/wiki/Green_thread) or
 with similar concepts of code partitioning that share a single OS thread. In the Java and Scala ecosystem, the
 `ExecutionContext` is a mechanism to selecting an `Executor` defining how concurrent code is assigned to threads. Scala
-`scala.concurrent.ExecutionContext.Implicits.global` defaults to a `Fork/Join` executor that attempts to balance context
+`ExecutionContext.Implicits.global` defaults to a `Fork/Join` executor that attempts to balance context
 switching by maintaining thread affinity when possible but still allowing work-stealing and reassignment to prevent idle
 cores.
 
