@@ -26,10 +26,28 @@ CPU hardware, such as separate cores in a CPU, separate CPUs, or even separate c
 > parallelism, but these hardware instructions have specific applications and not a general application
 
 Concurrency is a separate but related concept: it is the ability to break up work into separate tasks. Parallelism
-requires concurrency, but concurrency doesn't require parallelism. An example of concurrency without parallelism in the
-real world is starting 2 books at a time, but being physically unable to read both books at the same time. In the realm
-of computers, a stream can have concurrency without parallelism. Elements of the stream can come from multiple sources
-however the stream will always have only 1 head element at a time.
+requires concurrency, but concurrency doesn't require parallelism. Concurrency is managed by the OS as a `Thread`, but
+it can also be managed internally within application code. But only OS threads can be executed in parallel by the OS,
+as threads are how the OS sends code for executing by the CPU. Any concurrency internal to the application can't be
+executed in parallel unless it is also being partitioned into separate OS threads.
+
+{%
+include figure image_path="/assets/images/2023/12/input_stream.svg"
+alt="Stream Producers"
+caption="Concurrent producers merge into a serialized stream"
+%}
+
+Elements of the stream can come from multiple sources, threads running concurrently and in parallel. A stream will
+present data being produced concurrently as a more convenient serial representation, since the stream will only
+ever have 1 head element at a time, with the rest queued until ready to be acted on.
+
+{%
+include figure image_path="/assets/images/2023/12/output_stream.svg"
+alt="Stream Producers"
+caption="Concurrent producers merge into a serialized stream"
+%}
+
+Elements of a stream can then be processed concurrently and in parallel by consumers working in separate threads.
 
 ## Pitfalls of Parallelism
 
@@ -43,6 +61,13 @@ The explanation is how computers parallelize execution. Each concurrent `+=` ope
 input value `i`. When 2 parallel operations of `+=` start at the same time they both start with the same value of
 `i`!  Essentially `i += 1` cannot be parallelized because each execution depends on the previous execution's result.
 
+The avoid this pitfall access to `i` must be sequential or able to detect modifications to `i` when threads attempt to
+merge back in their changes. Serialization techniques exist, such as the `Stream` above which is prominent in
+the [Actor Model](https://en.wikipedia.org/wiki/Actor_model), or code can wait to execute using locks (`syncronized` or
+by way of a [semaphore](https://en.wikipedia.org/wiki/Semaphore_(programming)). There conflict detection techniques
+such as transactions
+or [Software Transaction Memory (STM)](https://en.wikipedia.org/wiki/Software_transactional_memory).
+
 # Forms of Parallelism
 
 From the perspective of a network service, there can be multiple forms of parallelism. Consider a distributed system
@@ -51,7 +76,7 @@ as [GCP Cloud Functions](https://cloud.google.com/functions)
 or [AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
 
 {%
-include figure image_path="/assets/images/2023/11/gcp_cloudfunction_configuration.jpg"
+include figure image_path="/assets/images/2023/12/gcp_cloudfunction_configuration.jpg"
 alt="GCP Cloud Function configuration"
 caption="GCP Cloud Function **Runtime, build, connections and security settings**"
 %}
@@ -142,34 +167,35 @@ around `Local Concurrency`.
 
 Distributing data is no longer _a single copy_ or _always available_.
 
-These concerns are complicated topics categorized as [Strong versus Eventual Consistency](https://en.wikipedia.org/wiki/Eventual_consistency)
+These concerns are complicated topics categorized
+as [Strong versus Eventual Consistency](https://en.wikipedia.org/wiki/Eventual_consistency)
 and the [CAP Theorem](https://en.wikipedia.org/wiki/CAP_theorem), respectively.
 
-Within the scope of this article it is noted that certain types of software problems are more easily designed for 
-distributed concurrency, such as web requests and event-based processing.  There is never a guarantee problems of
-any type can be solved using distributed computing, but often harder-to-distribute concerns such as atomic state 
+Within the scope of this article it is noted that certain types of software problems are more easily designed for
+distributed concurrency, such as web requests and event-based processing. There is never a guarantee problems of
+any type can be solved using distributed computing, but often harder-to-distribute concerns such as atomic state
 transitions and transactions can be externalized into separate systems leaving a cleanly distributed core problem.
 
 A typical HTTP web application is implemented using a highly concurrent stateless web-tier, with offloading of state
-and strongly consistent data to separate microservices, which may or may not be distributed. 
+and strongly consistent data to separate microservices, which may or may not be distributed.
 
 # Writing Code For All Configurations
 
 - type of work matters, HTTP requests can't be distributed, batch processes and streams can
 
-## Many Thread-pools Are Unavoidable
+## Having Multiple Thread-pools Is Unavoidable
 
-Optimal _mechanical sympathy_ and efficient context-switching will match threads to cores one-to-one, however 
-unavoidable reasons exist making to make this impossible. When using a non-blocking framework, the worker thread-pool 
-shouldn't run blocking code requiring creation of a separate pool. Libraries responsible for logging, caching, and 
-monitoring define their own worker threads to allow seamless execution in the background. The JVM garbage collector 
+Optimal _mechanical sympathy_ and efficient context-switching will match threads to cores one-to-one, however
+unavoidable reasons exist making to make this impossible. When using a non-blocking framework, the worker thread-pool
+shouldn't run blocking code requiring creation of a separate pool. Libraries responsible for logging, caching, and
+monitoring define their own worker threads to allow seamless execution in the background. The JVM garbage collector
 continuously runs in parallel threads.
 
 # Optimal Settings Require Load Testing and Observation
 
-All settings should be pragmatically tuned according to real-world performance under a variety of workloads. The many 
-levels of parallelism and concurrency can compete for resources in unexpected ways with non-linear response to varying 
-load conditions. Optimizing local thread parallelism by way of thread-pool families, sizes and `Executor`, and 
+All settings should be pragmatically tuned according to real-world performance under a variety of workloads. The many
+levels of parallelism and concurrency can compete for resources in unexpected ways with non-linear response to varying
+load conditions. Optimizing local thread parallelism by way of thread-pool families, sizes and `Executor`, and
 distributed parallelism layer by way of hardware and traffic shaping have deep implications that cannot be solved with
 a silver-bullet of a software framework or feature.
 
