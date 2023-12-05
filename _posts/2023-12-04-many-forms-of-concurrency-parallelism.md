@@ -79,6 +79,7 @@ or [AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
 include figure image_path="/assets/images/2023/12/gcp_cloudfunction_configuration.jpg"
 alt="GCP Cloud Function configuration"
 caption="GCP Cloud Function **Runtime, build, connections and security settings**"
+imgstyle="width:500px"
 %}
 
 There are 3 settings in GCP that affect parallelism and concurrency:
