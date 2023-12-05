@@ -14,7 +14,7 @@ simplification of others; and libraries trying to treat all levels of parallelis
 concepts for their common interface. In order to optimally design and avoid errors, all levels of concurrency and
 parallelism need to be understood no matter what framework is chosen.<!--more-->
 
-{% include table-of-contents.html height="600px" %}
+{% include table-of-contents.html height="500px" %}
 
 # The Basic Idea of Parallelism
 
@@ -35,6 +35,7 @@ executed in parallel unless it is also being partitioned into separate OS thread
 include figure image_path="/assets/images/2023/12/input_stream.svg" class="figsvgpadding"
 alt="Stream Producers"
 caption="Concurrent producers merge into a serialized stream"
+img_style="padding: 8px;background: white;"
 %}
 
 Elements of the stream can come from multiple sources, threads running concurrently and in parallel. A stream will
@@ -45,6 +46,7 @@ ever have 1 head element at a time, with the rest queued until ready to be acted
 include figure image_path="/assets/images/2023/12/output_stream.svg" class="figsvgpadding"
 alt="Stream Consumers"
 caption="Stream parallelism into concurrent consumers"
+img_style="padding: 8px;background: white;"
 %}
 
 Elements of a stream can then be processed concurrently and in parallel by consumers working in separate threads.
@@ -79,7 +81,7 @@ or [AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html).
 include figure image_path="/assets/images/2023/12/gcp_cloudfunction_configuration.jpg"
 alt="GCP Cloud Function configuration"
 caption="GCP Cloud Function **Runtime, build, connections and security settings**"
-imgstyle="width:500px"
+img_style="width:500px"
 %}
 
 There are 3 settings in GCP that affect parallelism and concurrency:
