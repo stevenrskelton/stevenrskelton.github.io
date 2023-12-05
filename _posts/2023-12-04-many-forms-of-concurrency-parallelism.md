@@ -14,7 +14,7 @@ simplification of others; and libraries trying to treat all levels of parallelis
 concepts for their common interface. In order to optimally design and avoid errors, all levels of concurrency and
 parallelism need to be understood no matter what framework is chosen.<!--more-->
 
-{% include table-of-contents.html height="500px" %}
+{% include table-of-contents.html height="600px" %}
 
 # The Basic Idea of Parallelism
 
@@ -114,7 +114,7 @@ cores available, for an 8 core machine a CPU load of 8 will mean each core will 
 any code having to wait for an available core. A CPU Load < 8 would mean idle cores, and > 8 would mean tasks waiting
 for execution.
 
-#### ExecutionContext and Context Switching
+### ExecutionContext and Context Switching
 
 `Context Switching` refers to whenever the executing thread changes on CPU hardware. This process incurs a penalty
 for the duration of time required to load new thread CPU instructions and cache from memory. Every OS thread switch
@@ -139,19 +139,58 @@ TODO: link to Akka sameThread Executor
 ## Maximum concurrent requests per instance
 
 As the name implies, this GCP parameter controls the level of concurrency. Without sufficient concurrency parallel
-executors can become idle. As mentioned above in [Optimal CPU Usage % and Load](#optimal-cpu-usage--and-load) too much
+executors will idle. As mentioned above in [Optimal CPU Usage % and Load](#optimal-cpu-usage--and-load) too much
 concurrency will be penalized by context switching overhead.
 
-When using _thread-sharing_ frameworks such Spring WebFlux, this setting can be
-arbitrarily high. The framework will fairly allocate CPU resources to requests.
+### Thread-Per-Request Frameworks
 
-When using _thread-per-request_ frameworks such as Spring MVC, this setting will require tuning as it can't be too low
-as to block requests from executing, but setting it too high will allow too many threads to be creating increasing
-context-switching and CPU Load.
+The standard software approach to handling concurrent workloads is a _thread-per-request_ model. For a web framework
+this means assigning an OS thread to the request execution until the response is sent back to the client. For a SQL
+database driver, this means assigning a thread to the network connection for the entirety of the session. This reduces
+complexity in userspace by leveraging OS level security, scheduling, and memory management.
 
-When using a batch or event-based framework, this will be a critical setting defining how many events can be processed
-parallel. Ideally, an event-based system will match the number of concurrent requests to the CPU cores thereby achieving
-[Mechanical Sympathy](https://dzone.com/articles/mechanical-sympathy) of matching software and hardware.
+It can be assumed each concurrent request will use at least 1 thread, meaning at minimum the _maximum concurrent
+requests per instance_ parameter should be at least equal to the number of _CPU_ to prevent cores going idle. An
+exception are requests which create threads with parallel execution, or if background processes exist which
+benefit from a dedicated core, such as a database running on the same physical hardware as a webserver. Not all
+threads require parallel execution, it is frequent to create threads which _block_, as in they will become dormant
+for periods as they wait for external input. Blocked threads run concurrently, but not in parallel since they are not
+actively consuming CPU time.
+
+Performance tuning concurrency is primarily ensuring active threads execute and terminate fast enough to not grow
+without bound, as each consumes additional CPU and memory overhead. Primary configuration metrics are hardware related,
+scaling vertically (adding more vCPU) or horizontally (adding more server instances).
+
+A notable exception to the thread-per-request model is the use of virtual or
+[green threads](https://en.wikipedia.org/wiki/Green_thread), as introduced
+by [Project Loom](https://wiki.openjdk.org/display/loom/Main) in JDK 21.
+This case more closely behaves as a non-blocking approach, discussed below.
+
+### Thread-Sharing Frameworks (Non-Blocking)
+
+An alternative approach to OS thread-per-request is known as _non-blocking_. This approach brings concurrency management
+into the scope of the application, allowing application framework code to optimally assign thread execution within
+groups of threads, called thread-pools. This eliminates lower level OS calls and reduces thread resource overhead.
+
+Common JVM non-blocking frameworks are [WebFlux](https://docs.spring.io/spring-framework/reference/web/webflux.html)
+and [Play](https://www.playframework.com), with supporting
+libraries [Java NIO](https://docs.oracle.com/en/java/javase/17/core/java-nio.html)
+and [Project Reactor](https://projectreactor.io/), and the
+SQL driver [R2DBC](https://r2dbc.io/).
+
+Performance tuning a thread-per-request model involves defining and allocating thread-pool sizes, as well as the
+`Executor` for the thread pools, which is the application code in charge of assigning code to threads from the pool.
+Adding further complexity is managing any legacy code that follows a blocking paradigm; standard configuration is
+creating yet another thread-pool specifically for blocking code to execute. Common problems are inadvertently blocking
+within a non-blocking code segment, which will effectively cause idle CPU during the duration of the block.
+
+Additional complexity is necessarily introduced into user application code, with the necessary wrapping of all
+function return values within special class types to indicate an async continuation.
+
+Similar to a batch or background task, the non-blocking framework will most closely
+achieve [Mechanical Sympathy](https://dzone.com/articles/mechanical-sympathy) of matching software and hardware.
+Thread pools can be created and limited such that no excess threads are created, and the approach encourages a high
+level of interrupter concurrency achieving efficient parallelism and CPU utilization.
 
 ## (Minimum / Maximum) number of instances
 
@@ -179,9 +218,7 @@ transitions and transactions can be externalized into separate systems leaving a
 A typical HTTP web application is implemented using a highly concurrent stateless web-tier, with offloading of state
 and strongly consistent data to separate microservices, which may or may not be distributed.
 
-# Writing Code For All Configurations
-
-- type of work matters, HTTP requests can't be distributed, batch processes and streams can
+# Optimal Configurations
 
 ## Having Multiple Thread-pools Is Unavoidable
 
@@ -191,7 +228,7 @@ shouldn't run blocking code requiring creation of a separate pool. Libraries res
 monitoring define their own worker threads to allow seamless execution in the background. The JVM garbage collector
 continuously runs in parallel threads.
 
-# Optimal Settings Require Load Testing and Observation
+## Load Testing and Pragmatic Observation
 
 All settings should be pragmatically tuned according to real-world performance under a variety of workloads. The many
 levels of parallelism and concurrency can compete for resources in unexpected ways with non-linear response to varying
