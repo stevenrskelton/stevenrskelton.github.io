@@ -1,5 +1,5 @@
 ---
-title: "List Lookup Cache with ZIO"
+title: "List Lookup Cache with Scala ZIO"
 categories:
   - Scala
 tags:
@@ -20,5 +20,5 @@ Body
 include github_project.html
 name="List Lookup ZIO Cache"
 url="https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2023/list-lookup-zio-cache"
-description="See the Complete Code on GitHub"
+description="See the complete Source Code on GitHub"
 %}
