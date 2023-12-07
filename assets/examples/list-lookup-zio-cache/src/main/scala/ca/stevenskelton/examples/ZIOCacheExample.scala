@@ -38,8 +38,10 @@ object ZIOCacheExample extends ZIOAppDefault {
         val zList = for {
           result <- cache
             .getAll(Seq("key1", "key2", "key3"))
-            .zipPar(ZIO.sleep(2.second) *> ZIO.debug("Starting getAll 2") *> cache.getAll(Seq("key1", "key2")))
-            .zipPar(ZIO.sleep(2.second) *> ZIO.debug("Starting getAll 3") *> cache.get("key1"))
+            .zipPar(ZIO.sleep(1.second) *> ZIO.debug("Starting getAll 2") *> cache.getAll(Seq("key1", "key2")))
+            .zipPar(ZIO.sleep(1.second) *> ZIO.debug("Starting getAll 3") *> cache.get("key1"))
+            .zipPar(ZIO.sleep(1.second) *> ZIO.debug("Starting getAll 4") *> cache.getAll(Seq("key1", "key4", "key6")))
+            .zipPar(ZIO.sleep(1.second) *> ZIO.debug("Starting getAll 5") *> cache.get("key5"))
           _ <- ZIO.debug(
             s"Result of parallel execution of three effects with the same key: $result"
           )
