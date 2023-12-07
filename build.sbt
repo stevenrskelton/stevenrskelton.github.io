@@ -7,7 +7,7 @@ scalaVersion := "3.3.1"
 
 val javaVersion = "19"
 
-lazy val listlookupziocache = RootProject(file("./assets/examples/list-lookup-zio-cache"))
+lazy val listlookupziocache = RootProject(file("./assets/examples/2023/list-lookup-zio-cache"))
 
 lazy val root = (project in file("."))
   .dependsOn(listlookupziocache)

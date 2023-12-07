@@ -57,10 +57,12 @@ object ListLookupCache {
 
             override def getAll(keys: Seq[Key])(implicit trace: Trace): IO[Error, Map[Key, Value]] = {
 
-              def createPromise(key: Key): IO[Error, (Key, Promise[Error, Value])] = Promise.make[Error, Value].flatMap {
-                createdPromise =>
-                  val promise = Option(internalMap.putIfAbsent(key, createdPromise)).getOrElse(createdPromise)
-                  internalCache.get(key).fork.as((key, promise))
+              def createPromise(key: Key): IO[Error, (Key, Promise[Error, Value])] = {
+                Promise.make[Error, Value].flatMap {
+                  createdPromise =>
+                    val promise = Option(internalMap.putIfAbsent(key, createdPromise)).getOrElse(createdPromise)
+                    internalCache.get(key).fork.as((key, promise))
+                }
               }
 
               ZIO.collectAll(keys.map(key => internalCache.contains(key).map((key, _))))
