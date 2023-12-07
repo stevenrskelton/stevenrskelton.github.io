@@ -1,10 +1,25 @@
 <hr/>
-<div style="vertical-align: middle;">
-    <img src="/assets/images/github-mark.svg" alt="GitHub" width="64" height="64"/>
-    <div style="height:80px;display: table-cell; vertical-align: middle;padding-left:10px;padding-bottom:6px;">
-        <strong>{{ include.description }}</strong><br/>
-        <a href="{{ include.url }}" title="{{ include.name }}" target="_blank">{{ include.name }}</a>
+<style>
+    .github-project {
+      text-decoration: none;
+    }
+    .github-project > div {
+        margin-bottom: 1em;
+    }
+    .github-project > div > div {
+        display: inline-block;
+        vertical-align: middle;
+        padding-left: 1em;
+    }
+</style>
+<a href="{{ include.url }}" title="{{ include.name }}" target="_blank" class="github-project">
+    <div>
+        <img src="/assets/images/github-mark.svg" alt="GitHub" width="64" height="64"/>
+        <div>
+            <strong>{{ include.description }}</strong><br/>
+            {{ include.name }}
+        </div>
     </div>
-</div>
+</a>
 
 
