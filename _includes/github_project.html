@@ -6,13 +6,23 @@
     .github-project a {
       text-decoration: none;
     }
+    .github-project > img {
+        height: 64px;
+        padding-right: 1em;
+    }
+    @media(max-width: 720px) {
+        .github-project > img {
+            height: 48px;
+            padding-right: 10px;
+        }
+    }
     .github-project > div {
         display: inline-block;
         vertical-align: middle;
-        padding-left: 1em;
     }
     .github-project h1 {
         margin-bottom: 0;
+        font-size: larger;
     }
 </style>
 <div class="github-project">
