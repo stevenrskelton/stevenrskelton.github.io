@@ -1,25 +1,28 @@
 <hr/>
 <style>
     .github-project {
+        margin-bottom: 1em;
+    }
+    .github-project a {
       text-decoration: none;
     }
     .github-project > div {
-        margin-bottom: 1em;
-    }
-    .github-project > div > div {
         display: inline-block;
         vertical-align: middle;
         padding-left: 1em;
     }
+    .github-project h1 {
+        margin-bottom: 0;
+    }
 </style>
-<a href="{{ include.url }}" title="{{ include.name }}" target="_blank" class="github-project">
+<div class="github-project">
+    <img src="/assets/images/github-mark.svg" alt="GitHub" width="64" height="64"/>
     <div>
-        <img src="/assets/images/github-mark.svg" alt="GitHub" width="64" height="64"/>
-        <div>
-            <strong>{{ include.description }}</strong><br/>
+        <a href="{{ include.url }}" title="{{ include.name }}" target="_blank">
+            <h1>{{ include.description }}</h1>
             {{ include.name }}
-        </div>
+        </a>
     </div>
-</a>
+</div>
 
 
