@@ -27,7 +27,7 @@ img_style="padding: 8px;background: white;"
 %}
 Conceptually this is simple, first read from cache, and any uncached in a single call to origin.
 
-# Introduction to the Existing ZIO Cache
+# The Existing ZIO Cache
 
 The ZIO in-memory cache implementation is concise enough to fit into a [single file Cache.scala](https://github.com/zio/zio-cache/blob/series/2.x/zio-cache/shared/src/main/scala/zio/cache/Cache.scala).
 The external load mechanism is implemented in a second class [Lookup.scala](https://github.com/zio/zio-cache/blob/series/2.x/zio-cache/shared/src/main/scala/zio/cache/Lookup.scala) as a `Key => ZIO[Environment, Error, Value]` method.
