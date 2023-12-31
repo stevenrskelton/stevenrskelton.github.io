@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg xmlns="http://www.w3.org/2000/svg" style="background-color: rgb(255, 255, 255);"
-     xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="674px" height="271px" viewBox="-0.5 -0.5 674 271">
+     xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="671px" height="271px" viewBox="-0.5 -0.5 671 271">
     <defs/>
     <g>
         <path d="M 121 23 L 121 0 L 521 0 L 521 23" fill="none" stroke="none" pointer-events="all"/>
@@ -36,18 +36,11 @@
                 </text>
             </switch>
         </g>
-        <path d="M 505 145 L 561 145 L 648.65 145" fill="none" stroke="none" pointer-events="stroke"/>
-        <ellipse cx="501" cy="145" rx="4" ry="4" fill="transparent" stroke="none" pointer-events="all"/>
+        <path d="M 501 145 L 561 145 L 648.65 145" fill="none" stroke="none" pointer-events="stroke"/>
         <path d="M 657.65 145 L 648.65 149.5 L 648.65 140.5 Z" fill="none" stroke="none" pointer-events="all"/>
-        <path d="M 505 145 M 505 145 C 516.66 145.07 532.99 148.54 561 145 M 505 145 C 519.49 144.56 533.36 147.28 561 145 M 561 145 C 597.81 147.26 628.66 145.22 648.65 145 M 561 145 C 592.21 146.79 624.33 146.98 648.65 145"
+        <path d="M 501 145 M 501 145 C 513.53 145.05 530.71 148.51 561 145 M 501 145 C 516.48 144.63 531.36 147.35 561 145 M 561 145 C 597.81 147.26 628.66 145.22 648.65 145 M 561 145 C 592.21 146.79 624.33 146.98 648.65 145"
               fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"
               stroke-miterlimit="10" pointer-events="stroke"/>
-        <path d="M 496.8 141.33 C 496.8 141.33 496.8 141.33 496.8 141.33 M 496.8 141.33 C 496.8 141.33 496.8 141.33 496.8 141.33"
-              fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"
-              stroke-miterlimit="10" pointer-events="all"/>
-        <path d="M 500.43 141.69 C 500.61 141.49 501.47 142.17 501.98 142.75 C 502.49 143.33 502.9 144.14 503.48 145.16 C 504.05 146.18 505.59 148.16 505.43 148.87 C 505.28 149.58 503.27 149.25 502.56 149.43 C 501.86 149.6 501.9 150.36 501.18 149.95 C 500.47 149.54 498.73 147.67 498.26 146.96 C 497.8 146.25 498.62 146.66 498.4 145.69 C 498.19 144.72 496.1 141.81 496.97 141.14 C 497.84 140.46 502.27 141.3 503.61 141.66 C 504.95 142.02 505.41 142.92 505.03 143.3 M 500.34 144.28 C 500.85 143.99 499 140.66 499.77 140.51 C 500.54 140.36 504.3 142.96 504.94 143.38 C 505.57 143.81 503.98 142.14 503.58 143.05 C 503.19 143.97 503.11 147.67 502.55 148.85 C 501.99 150.03 501.05 150.58 500.2 150.16 C 499.35 149.74 497.58 146.46 497.44 146.35 C 497.3 146.23 499.63 150.27 499.36 149.46 C 499.09 148.66 495.85 142.69 495.82 141.52 C 495.79 140.35 498.68 142.09 499.17 142.44 C 499.66 142.79 498.38 143.75 498.76 143.61"
-              fill="none" stroke="rgb(0, 0, 0)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"
-              stroke-miterlimit="10" pointer-events="all"/>
         <path d="M 648.48 140.69 C 648.48 140.69 648.48 140.69 648.48 140.69 M 648.48 140.69 C 648.48 140.69 648.48 140.69 648.48 140.69"
               fill="none" stroke="rgb(0, 0, 0)" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"
               stroke-miterlimit="10" pointer-events="all"/>

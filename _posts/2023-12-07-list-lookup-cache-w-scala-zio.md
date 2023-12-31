@@ -18,7 +18,8 @@ inheritance.<!--more-->
 There are many use-cases benefiting from mutiple key requests and lookups. A typical example would be listing a social 
 media user's friend list, reading names and avatars from a profile cache. Different users can have different friends, 
 but also friends in common. When requesting multiple profiles from cache, how can we only request profiles not in the 
-cache from origin?  
+cache from origin?
+
 {%
 include figure image_path="/assets/images/2023/12/list_cache.svg" class="figsvgpadding"
 alt="Multiple Keys Cache"
@@ -46,7 +47,10 @@ img_style="padding: 8px;background: white;"
 
 https://docs.scala-lang.org/scala3/reference/other-new-features/export.html
 
+https://en.wikipedia.org/wiki/Composite_pattern
+
 ## 
+
 {%
 include figure image_path="/assets/images/2023/12/cache_composition.svg" class="figsvgpadding"
 alt="List cache composition using ZIO Cache"
