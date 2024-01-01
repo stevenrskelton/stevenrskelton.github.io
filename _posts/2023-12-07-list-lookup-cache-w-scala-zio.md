@@ -15,7 +15,7 @@ inheritance.<!--more-->
 
 # Making `Seq[Key]` Calls Efficiently
 
-There are many use-cases benefiting from mutiple key requests and lookups. A typical example would be listing a social 
+There are many use-cases where origin is most efficient at serving multiple keys.multiple keys are  from mutiple key requests and lookups. A typical example would be listing a social 
 media user's friend list, reading names and avatars from a profile cache. Different users can have different friends, 
 but also friends in common. When requesting multiple profiles from cache, how can we only request profiles not in the 
 cache from origin?
@@ -26,11 +26,12 @@ alt="Multiple Keys Cache"
 caption="Multiple keys get request to cache, and retrieved by single lookup call"
 img_style="padding: 8px;background: white;"
 %}
+
 Conceptually this is simple, first read from cache, and any uncached in a single call to origin.
 
 # The Existing ZIO Cache
 
-The ZIO in-memory cache implementation is concise enough to fit into a [single file Cache.scala](https://github.com/zio/zio-cache/blob/series/2.x/zio-cache/shared/src/main/scala/zio/cache/Cache.scala).
+The ZIO in-memory cache implementation is concise enough to fit into a single file [Cache.scala](https://github.com/zio/zio-cache/blob/series/2.x/zio-cache/shared/src/main/scala/zio/cache/Cache.scala).
 The external load mechanism is implemented in a second class [Lookup.scala](https://github.com/zio/zio-cache/blob/series/2.x/zio-cache/shared/src/main/scala/zio/cache/Lookup.scala) as a `Key => ZIO[Environment, Error, Value]` method.
 
 When the `get` method is called, a `MapValue` is returned from the internal Map, otherwise a new entry is created containing a `Promise` to be loaded from the `Lookup`.
@@ -43,13 +44,24 @@ img_style="padding: 8px;background: white;"
 
 # Composition over Inheritance
 
+## Motivation
+
 ## Scala 3 `export` keyword
 
 https://docs.scala-lang.org/scala3/reference/other-new-features/export.html
 
 https://en.wikipedia.org/wiki/Composite_pattern
 
-## 
+
+# `ListLookupCache` Implementation
+
+## New Methods 
+
+```scala
+abstract class ListLookupCache[Key, +Error, +Value] extends Cache[Key, Error, Value] {
+  def getAll(k: Seq[Key])(implicit trace: Trace): IO[Error, Map[Key, Value]]
+}
+```
 
 {%
 include figure image_path="/assets/images/2023/12/cache_composition.svg" class="figsvgpadding"
@@ -57,6 +69,15 @@ alt="List cache composition using ZIO Cache"
 caption="ListLookupCache using composition pattern over a ZIO Cache implementation"
 img_style="padding: 8px;background: white;"
 %}
+
+## Fallback to ZIO Cache
+
+## Testing
+
+### Using ScalaTest
+
+### Using ZIO Test
+
 
 {%
 include github_project.html
