@@ -200,6 +200,13 @@ img_style="padding: 8px;background: white;"
 Since our `ListLookupCache` was implemented using composition, leaving the ZIO cache implementation unchanged, there is 
 no need to test any of the unchanged methods.  Tests are only required for the new method, `getAll`.
 
+{%
+include figure image_path="/assets/images/2023/12/list_cache_tests.svg" class="figsvgpadding"
+alt="List cache tests"
+caption="List cache tests to load key lookup and interaction of `getAll` and `get`"
+img_style="padding: 8px;background: white;"
+%}
+
 ### Using ScalaTest
 
 ### Using ZIO Test
