@@ -212,12 +212,7 @@ img_style="padding: 8px;background: white;"
 ### Using ZIO Test
 
 
-{%
-include github_project.html
-name="List Lookup ZIO Cache"
-url="https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2023/list-lookup-zio-cache"
-description="See the complete Source Code on GitHub"
-%}
+<hr>
 
 All ZIO code is included under permission of the Apache License, Version 2.0
 ```
@@ -237,3 +232,11 @@ All ZIO code is included under permission of the Apache License, Version 2.0
  * limitations under the License.
  */
 ```
+
+{%
+include github_project.html
+name="List Lookup ZIO Cache"
+url="https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2023/list-lookup-zio-cache"
+description="See the complete Source Code on GitHub"
+%}
+
