@@ -31,7 +31,8 @@ author_profile: false
     <li><em>Gluskin Sheff + Associates</em></li>
     <li><em>Dundee Wealth Management</em></li>
     <li><em>Home Trust Company</em></li>
-    <li><em>Point72 Asset Management</em></li>
+    <li><em>Point72 Asset Management</em> (formally S.A.C. Capital Advisors)</li>
+    <li><em>Corient Private Wealth</em> (part of CI Financial)</li>
     <li><em>PureFacts Financial Solutions</em></li>
   </ul>
 
