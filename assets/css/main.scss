@@ -357,6 +357,10 @@ figure.postlogo img {
   border-radius: 0;
 }
 
+figure.postlogo figcaption {
+  border: none;
+}
+
 @media(min-width: 720px) {
   figure.postlogo img {
     max-width: 180px;
