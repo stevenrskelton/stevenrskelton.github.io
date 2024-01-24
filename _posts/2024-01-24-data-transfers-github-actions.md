@@ -1,5 +1,5 @@
 ---
-title: "Data Transfers with a Github Action"
+title: "Data Transfers within a Github Action"
 categories:
   - Platform
 tags:
@@ -8,20 +8,36 @@ tags:
 excerpt_separator: <!--more-->
 ---
 
+The free tier of GitHub Packages has limited bandwidth to download private artifacts; which can make it unsuitable for use in a CI/CD pipeline for projects on a budget. In an effort to increase Github Packages' usability, this article develops an alternative approach minimizing the dependency on GitHub Packages as hot storage, but preserving it as a viable cold storage, durable storage solution.<!--more--> Building out a cost effective CI/CD pipeline on the GitHub platform means utilizing the unmetered bandwidth afforded to GitHub Actions to its fullest potential.
+
 {% include table-of-contents.html height="100px" %}
 
-Maximizing Github Free Tier as a CI/CD pipeline, using Scala/Java/JVM for almost everything.
+# Github Packages as a Maven repository
 
-    Github for private source repos.
-    Github Actions for building.
-    Github Packages (Maven) for release backups (500MB limit).
-    Local JVM executes your deployment.
+In an earlier article, [Downloading from GitHub Packages using HTTP and Maven]({% post_url 2022-04-20-downloading-from-github-packages-using-http-and-maven %}) we investigated GitHub Packages as a Maven repository for
+Java artifacts. Standard practices with any network service is evaluating the benefit of implementing a local cache. A local cache can speed up downloads, allow customized permissioning, and increased resiliancy against network failures. Even if a local Maven repository proxy cache such as Artifactory or Nexus is selected, the question remains of how to get artifacts into the local cache if GitHub Packages transfer limits are being hit.
 
-Why would you use this?
+# Github Actions have Unmetered Transfer Out
 
-Other tools like Ansible is probably better for you. Ansible has secure file upload and lots of plugins for simple server-side actions.
+In a GitHub CI/CD pipeline, where compilation occurs within a GitHub Action, a solution is to utilize the unmetered bandwith available during post-compilation actions. Compilation artifacts can be both stored in GitHub Packages as well as transfered to a Nexus or Artifactory proxy cache when bandwidth is available for free, avoiding metered calls being made from the proxy to GitHub Packages.
 
-If you don't want to create SSH accounts, install clients (other than this one), or want to use Scala instead of custom scripting languages, maybe this is for you.
+## Security and Implementation of a push solution
+
+### Maven Repository Checksums
+
+The question is now of how to securely transfer files out of a GitHub Actions to remote endpoints. All receivers should accept only authenticated requests from GitHub Actions.  Does this require receivers to implement token authentication? Practically speaking no, taking a step back this isn't about user authentication, it is about file authentication. For a file to be authentic it needs to exist within Github Packages.  If the receiver is uploaded a file, that file is authentic and secure if and only if it has a corresponding Maven checksum in our Github Packages repository.
+
+### Authentication Flow
+
+An authentication mechanism beyond GitHub is unwanted and unnecessary. HTTP requests to any external receiver can be authenticated by verifying the request includes a valid GitHub auth token. The files the requests are uploading can be validated by accessing GitHub Packages using the GitHub auth token and comparing checksums.
+
+{%
+include figure image_path="https://raw.githubusercontent.com/stevenrskelton/http-maven-receiver/main/requests.drawio.svg" class="figsvgpadding"
+alt="GitHub Actions file push using POST"
+caption="GitHub Action to POST artifacts using HTTP uploads to an external receiver"
+%}
+
+# HTTP Server for receiving and validating GitHub Action upload requests
 
 This project is basically server-side deployment scripts written in Scala, with Akka HTTP receiving builds from Github, so it can easily be integrated as a Route of existing Akka HTTP / Play deployments.
 User Permissions
@@ -42,12 +58,6 @@ HTTP Upload Server
     validates upload is latest version in Maven, and has correct MD5 checksum
     performs any custom server-side tasks, such as deployment and restarting
 
-{%
-include figure image_path="https://raw.githubusercontent.com/stevenrskelton/http-maven-receiver/main/requests.drawio.svg" class="figsvgpadding"
-alt="GitHub Actions file push using POST"
-caption="GitHub Action to POST artifacts using HTTP uploads to an external receiver"
-img_style="padding: 8px;background: white;"
-%}
 
 
 
