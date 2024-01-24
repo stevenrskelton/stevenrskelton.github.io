@@ -27,7 +27,7 @@ files and minimize external data transfer from GitHub Packages.
 Files can be downloaded using Maven as part of the typical developer setup as well as through the GitHub website, 
 but in this article we will examine a third use-case, accessing files directly using `wget` or `curl`.
 
-### Bypassing GitHub Limits
+### Bypassing GitHub Transfer Limits
 
 This article examines how to read from GitHub Packages, which counts against data transfer out quotas.  A keen eye 
 will see that data transfer out within a GitHub Action is unmetered, this is investigated and practically applied 
