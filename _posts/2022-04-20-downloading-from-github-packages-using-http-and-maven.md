@@ -14,18 +14,25 @@ effectively use the free tier for private repositories.
 {% include table-of-contents.html height="200px" %}
 
 GitHub generally has separate pricing tiers (or caps) depending on a repo being set to public or private. Public 
-repos are generally free, and private repos usually have a minimal use that is free, above which requires 
+repos are generally free, and private repos have a minimal use which is free, and exceeding these limits requires 
 payment. The free tier is currently:
 
 | Artifact Storage | Data Transfer Out within a GitHub Action | Data Transfer Out outside of a GitHub Action |
 |:----------------:|:----------------------------------------:|:--------------------------------------------:|
 |      500MB       |                Unlimited                 |                1GB per Month                 |
 
-Using GitHub Packages as a Maven repository is best done through a proxy (such as Artifactory or Nexus) which will cache
-files and minimize external data transfer, even with paid accounts if artifacts are very large.
+Using GitHub Packages as a Maven repository is best done through a proxy (such as Artifactory or Nexus) to cache
+files and minimize external data transfer from GitHub Packages.
 
-Clearly files can be downloaded using Maven and through the GitHub website, but we can also expand access to `wget`
-or `curl`.
+Files can be downloaded using Maven as part of the typical developer setup as well as through the GitHub website, 
+but in this article we will examine a third use-case, accessing files directly using `wget` or `curl`.
+
+### Bypassing GitHub Limits
+
+This article examines how to read from GitHub Packages, which counts against data transfer out quotas.  A keen eye 
+will see that data transfer out within a GitHub Action is unmetered, this is investigated and practically applied 
+in a separate article [Data Transfers within a GitHub Action]({% post_url
+2024-01-24-data-transfers-github-actions %})
 
 ## Browsing Available Versions in GitHub Packages
 
