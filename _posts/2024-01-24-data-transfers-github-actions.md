@@ -8,3 +8,10 @@ tags:
 ---
 
 Coming soon.
+
+{%
+include github_project.html
+name="HTTP Maven Receiver"
+url="https://github.com/stevenrskelton/http-maven-receiver"
+description="See the Complete Code on GitHub"
+%}
