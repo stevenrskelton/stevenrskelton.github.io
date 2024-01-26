@@ -56,13 +56,13 @@
                         <div style="box-sizing: border-box; font-size: 0px; text-align: center;"
                              data-drawio-colors="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); ">
                             <div style="display: inline-block; font-size: 24px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">
-                                Seq(VALUE)
+                                Seq[VALUE]
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="661" y="157" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="24px" text-anchor="middle">
-                    Seq(VALUE)
+                    Seq[VALUE]
                 </text>
             </switch>
         </g>
@@ -203,13 +203,13 @@
                         <div style="box-sizing: border-box; font-size: 0px; text-align: center;"
                              data-drawio-colors="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); ">
                             <div style="display: inline-block; font-size: 11px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">
-                                Seq(NO)
+                                Seq[NO]
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="240" y="214" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="11px" text-anchor="middle">
-                    Seq(NO)
+                    Seq[NO]
                 </text>
             </switch>
         </g>
@@ -291,13 +291,13 @@
                         <div style="box-sizing: border-box; font-size: 0px; text-align: center;"
                              data-drawio-colors="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); ">
                             <div style="display: inline-block; font-size: 11px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">
-                                Seq(VALUE)
+                                Seq[VALUE]
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="428" y="214" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="11px" text-anchor="middle">
-                    Seq(VALUE)
+                    Seq[VALUE]
                 </text>
             </switch>
         </g>
@@ -510,13 +510,13 @@
                         <div style="box-sizing: border-box; font-size: 0px; text-align: center;"
                              data-drawio-colors="color: rgb(0, 0, 0); background-color: rgb(255, 255, 255); ">
                             <div style="display: inline-block; font-size: 24px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 1.2; pointer-events: all; background-color: rgb(255, 255, 255); white-space: nowrap;">
-                                Seq(KEY)
+                                Seq[KEY]
                             </div>
                         </div>
                     </div>
                 </foreignObject>
                 <text x="80" y="157" fill="rgb(0, 0, 0)" font-family="Helvetica" font-size="24px" text-anchor="middle">
-                    Seq(KEY)
+                    Seq[KEY]
                 </text>
             </switch>
         </g>

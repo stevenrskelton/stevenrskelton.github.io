@@ -128,8 +128,7 @@ final case class Lookup[-Key, -Environment, +Error, +Value](lookup: Key => ZIO[E
   /**
    * Computes a value for the specified key or fails with an error.
    */
-  def apply(key: Key): ZIO[Environment, Error, Value] =
-    lookup(key)
+  def apply(key: Key): ZIO[Environment, Error, Value] = lookup(key)
 }
 ```
 
