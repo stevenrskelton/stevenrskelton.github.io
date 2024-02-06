@@ -16,7 +16,7 @@ through common steps and challenges encountered when compiling Scala Native for 
 After 7 years [Scala Native](https://scala-native.org/) is at pre-production
 maturity [version 0.4.17](https://scala-native.org/en/stable/changelog/0.4.17.html).
 
-{% include table-of-contents.html height="100px" %}
+{% include table-of-contents.html height="1000px" %}
 
 # Different versions of OpenJDK
 
@@ -132,7 +132,7 @@ It is very likely that a Scala Native will have a library dependency not install
 application the [FS2](https://fs2.io/) functional library requires the Amazon
 [AWS TLS/SSL library S2N](https://github.com/aws/s2n-tls). Security and cryptography libraries are likely to be native
 dependencies both because they likely already exist as high-performance native implementations, and secondly because
-Scala Native JDK may omit them due to [security concerns around implementation](#Partial-JVM-Implementations).
+Scala Native JDK may omit them due to [security concerns around implementation](#cryptography-and-javasecurity-package).
 
 Compiling a C application with CMake is a straight-forward addition to the GitHub Action YML:
 
@@ -242,21 +242,18 @@ was not.
 
 ```scala
 object MessageDigest {
-  def isEqual(digestA: Array[Byte], digestB: Array[Byte]): Boolean =
-    true
-
-  def getInstance(algorithm: String): MessageDigest =
-    new DummyMessageDigest(algorithm)
+  
+  def isEqual(digestA: Array[Byte], digestB: Array[Byte]): Boolean = true
+  
+  def getInstance(algorithm: String): MessageDigest = new DummyMessageDigest(algorithm)
 }
 
 private class DummyMessageDigest(algorithm: String)
   extends MessageDigest(algorithm) {
+  
   override protected def engineDigest(): Array[Byte] = Array.empty
-
   override protected def engineReset(): Unit = ()
-
   override protected def engineUpdate(input: Byte): Unit = ()
-
   override protected def engineUpdate(input: Array[Byte], offset: Int, len: Int): Unit = ()
 }
 ```
