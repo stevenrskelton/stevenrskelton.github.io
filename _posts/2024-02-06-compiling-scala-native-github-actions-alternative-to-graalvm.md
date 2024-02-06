@@ -16,7 +16,7 @@ through common steps and challenges encountered when compiling Scala Native for 
 After 7 years [Scala Native](https://scala-native.org/) is at pre-production
 maturity [version 0.4.17](https://scala-native.org/en/stable/changelog/0.4.17.html).
 
-{% include table-of-contents.html height="1000px" %}
+{% include table-of-contents.html height="900px" %}
 
 # Different versions of OpenJDK
 
@@ -231,6 +231,10 @@ synchronization primitives. The current recommendation is to import and use nece
 functionality libraries such as FS2 require an additional library to operate in Scala Native, such as the I/O runtime
 [epollcat](https://github.com/armanbilge/epollcat).
 
+Scala libraries are typically built around event-loops and/or monads, so the use of NodeJS's I/O event library
+[libuv](https://libuv.org/) has been made available
+as [Scala Native Loop](https://github.com/scala-native/scala-native-loop).
+
 #### Cryptography and `java.security` package
 
 While the Scala Native lists many JDK packages as [implemented](https://scala-native.org/en/stable/user/lang.html),
@@ -242,19 +246,28 @@ was not.
 
 ```scala
 object MessageDigest {
-  
-  def isEqual(digestA: Array[Byte], digestB: Array[Byte]): Boolean = true
-  
-  def getInstance(algorithm: String): MessageDigest = new DummyMessageDigest(algorithm)
+
+  def isEqual(digestA: Array[Byte], digestB: Array[Byte]): Boolean =
+    true
+
+  def getInstance(algorithm: String): MessageDigest =
+    new DummyMessageDigest(algorithm)
 }
 
 private class DummyMessageDigest(algorithm: String)
   extends MessageDigest(algorithm) {
-  
+
   override protected def engineDigest(): Array[Byte] = Array.empty
+
   override protected def engineReset(): Unit = ()
+
   override protected def engineUpdate(input: Byte): Unit = ()
-  override protected def engineUpdate(input: Array[Byte], offset: Int, len: Int): Unit = ()
+
+  override protected def engineUpdate(
+                                       input: Array[Byte],
+                                       offset: Int,
+                                       len: Int
+                                     ): Unit = ()
 }
 ```
 
@@ -262,14 +275,25 @@ private class DummyMessageDigest(algorithm: String)
 
 ## Performance and Memory
 
-TODO:
+For a cross-compiled project, the `http-maven-reciever` project compiled to an 27.9MB executable "Fat Jar".
+The debug-mode Scala Native produced a 41.4MB linux executable.
+
+TODO: optimized release mode file size
+TODO: startup with Scala 3 Jar
+TODO: load benchmarks with Scala 3 Jar
+TODO: memory foot print with Scala 3 Jar
 
 ## Unit Tests
 
+Scala Native officially supports the major testing libraries.
+TODO: running tests
 
 ## Debugging
 
-The debugging of a native executable or library 
+The debugging of native executables and libraries is not as developer friendly as JIT code. There is less debugging
+information available within the executables for IDEs to interpret. A typical debugging experience using
+[LLDB](https://lldb.llvm.org/) is dramatically different than JVM tooling; meaning cross compilation has practical
+utility within the entire software development lifecycle.
 {%
 include figure
 image_path="/assets/images/2024/02/lldb-gui.jpg"
@@ -278,9 +302,13 @@ alt="LLDB GUI"
 caption="Debugging Scala Native LLVM code using LLDB Gui"
 %}
 
-## Conclusions
+# Conclusions
 
-
+Scala Native is a welcome addition to the C/C++ alternatives for Scala developers. While it is undeniably not as popular
+as Rust, it has room to grow as this ecosystem grows in importance. Modern system hardware is approaching an era of 
+virtually unlimited parallelism and throughput, putting emphasis on the only performance avenue left: latency. 
+Low-level languages will need to solve an increasing diversity of problems, and for many tasks Scala Native will be
+a compelling choice.
 
 {%
 include github_project.html
