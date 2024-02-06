@@ -126,7 +126,7 @@ development the Scala Native
 [install guide covers](https://scala-native.org/en/stable/user/setup.html#installing-clang-and-runtime-dependencies) for
 macOS (using [brew](https://brew.sh/)) and linux using apt.
 
-## Compiling Additional C Libraries with CMake
+## Compiling additional C libraries with CMake
 
 It is very likely that a Scala Native will have a library dependency not installed on the GitHub Runner. In our
 application the [FS2](https://fs2.io/) functional library requires the Amazon
@@ -151,23 +151,35 @@ Compiling a C application with CMake is a straight-forward addition to the GitHu
     cmake --install build
 ```
 
-## Linking Custom C Library Paths in SBT
+## Linking C library paths in SBT
 
-The
-require additional library compilations
-https://fs2.io
-https://github.com/aws/s2n-tls
-https://github.com/armanbilge/epollcat/
+When linking to a GitHub Action compiled C libraries such as S2N, the library needs to be in a path scanned by LD.
+Because LD is being called by CMake and not GCC, typical environmental variables such as `LD_LIBRARY_PATH` and
+`LIBRARY_PATH` do not work.
 
-# Problems Encountered
+TODO: `CMAKE_EXE_LINKER_FLAGS` `LDFLAGS`
 
-## Multithreading
+The easiest option is to include the path in `build.sbt` though this path will differ between local development
+and within the GitHub Action.
 
-## Library Dependencies
+For example, within the `http-maven-receiver` project on GitHub, the runner installed S2N in the following path:
 
-`apt-get install`
+```scala
+nativeLinkingOptions += s"-L/home/runner/work/http-maven-receiver/http-maven-receiver/s2n-tls/s2n-tls-install/lib"
+```
 
-https://github.com/portable-scala/sbt-crossproject
+## Scala Native library dependencies in SBT
+
+The `http-maven-receiver` is a typical Scala web server application, but with compatibility to run Scala Native making
+it suitable for this article. Scala Native compatibility is dictated by the availability of Scala Native versions for
+all library dependencies. These are exist as separate artifacts:
+
+- https://repo1.maven.org/maven2/co/fs2/fs2-core_3/3.9.4/fs2-core_3-3.9.4.jar (1.5MB)
+- https://repo1.maven.org/maven2/co/fs2/fs2-core_native0.4_3/3.9.4/fs2-core_native0.4_3-3.9.4.jar (3.7MB)
+
+This is indicated in `build.sbt` by using the `%%%` operator instead of `%` / `%%`:
+
+*Typical Scala:*
 
 ```scala
 libraryDependencies ++= Seq(
@@ -182,6 +194,8 @@ libraryDependencies ++= Seq(
 )
 ```
 
+*Scala Native:*
+
 ```scala
 libraryDependencies ++= Seq(
   "com.armanbilge" %%% "epollcat" % "0.1.4",
@@ -193,11 +207,72 @@ libraryDependencies ++= Seq(
   "org.scala-lang.modules" %%% "scala-xml" % "2.2.0",
   "org.scalatest" %%% "scalatest" % "3.3.0-alpha.1" % Test
 )
-
 ```
+
+The `%%%` operator and SBT `nativeLink` task to compile the native executables/libraries are added by the
+[SBT Scala Native](https://scala-native.org/en/stable/user/sbt.html#sbt-settings-and-tasks) plugin, and additional
+configuration options are straight forward parameters covered in the setup documentation.
+
+## Code Changes Required to Support Scala Native
+
+#### Cross Compiling
+
+There exists the [SBT-CrossProject](https://github.com/portable-scala/sbt-crossproject) plugin that will hopefully
+alleviate issues with compiling to Scala 3 Jar and Scala 3 Native.
+
+TODO: Examples on this working.
+
+### Partial JVM Implementations
+
+#### Multithreading and Runtime Environment
+
+The Scala Native runtime environment is a very basic implementation lacking a threading model and thread
+synchronization primitives. The current recommendation is to import and use necessary C libraries. To achieve basic
+functionality libraries such as FS2 require an additional library to operate in Scala Native, such as the I/O runtime
+[epollcat](https://github.com/armanbilge/epollcat).
+
+#### Cryptography and `java.security` package
+
+While the Scala Native lists many JDK packages as [implemented](https://scala-native.org/en/stable/user/lang.html),
+some packages such as `java.security` have intentionally been left incomplete. This can have unexpected touch points,
+so while a TLS/SSL implementation was a predictably omitted, the dummy implementation of all hash functions, including
+MD5 and SHA1
+in [java.security.MessageDigest](https://github.com/scala-native/scala-native/blob/main/javalib/src/main/scala/java/security/MessageDigest.scala)
+was not.
+
+```scala
+object MessageDigest {
+  def isEqual(digestA: Array[Byte], digestB: Array[Byte]): Boolean =
+    true
+
+  def getInstance(algorithm: String): MessageDigest =
+    new DummyMessageDigest(algorithm)
+}
+
+private class DummyMessageDigest(algorithm: String)
+  extends MessageDigest(algorithm) {
+  override protected def engineDigest(): Array[Byte] = Array.empty
+
+  override protected def engineReset(): Unit = ()
+
+  override protected def engineUpdate(input: Byte): Unit = ()
+
+  override protected def engineUpdate(input: Array[Byte], offset: Int, len: Int): Unit = ()
+}
+```
+
+# Runtime Observations
+
+## Performance and Memory
+
+TODO:
+
+## Unit Tests
+
 
 ## Debugging
 
+The debugging of a native executable or library 
 {%
 include figure
 image_path="/assets/images/2024/02/lldb-gui.jpg"
@@ -206,24 +281,9 @@ alt="LLDB GUI"
 caption="Debugging Scala Native LLVM code using LLDB Gui"
 %}
 
-## Partial JVM Implementations
+## Conclusions
 
-https://www.scala-native.org/en/latest/lib/javalib.html
 
-https://github.com/scala-native/scala-native/blob/main/javalib/src/main/scala/java/security/MessageDigest.scala
-
-```scala
-  def getInstance(algorithm: String): MessageDigest = new DummyMessageDigest(algorithm)
-```
-
-## CLang Library Linking
-
-`LD_LIBRARY_PATH`, `LIBRARY_PATH`
-`CMAKE_EXE_LINKER_FLAGS` `LDFLAGS`
-
-```scala
-nativeLinkingOptions += s"-L/home/runner/work/http-maven-receiver/http-maven-receiver/s2n-tls/s2n-tls-install/lib"
-```
 
 {%
 include github_project.html
