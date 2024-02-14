@@ -8,7 +8,9 @@ layout: archive
 {% assign categories_max_dates = [] %}
 {% for category in site.categories %}
 {% assign categories_max_dates = categories_max_dates | push: category[1][0].date %}
-<span>{{ categories_max_dates }}</span>
+<span>0{{ category | inspect }}</span>
+<span>1{{ category[1] | inspect }}</span>
+<span>10{{ category[1][0] | inspect }}</span>
 {% if category[1].size > categories_max %}
 {% assign categories_max = category[1].size %}
 {% endif %}
