@@ -35,7 +35,7 @@ layout: archive
 </ul>
 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
-{% for tag_max_date in tags_max_dates sort reversed %}
+{% for tag_max_date in tags_max_dates %}
 {% for tag in site.tags %}
 {% if tag[1][0]['date'] == tag_max_date %}
 <section id="{{ tag[0] | slugify | downcase }}" class="taxonomy__section">
