@@ -8,17 +8,14 @@ layout: archive
 {% assign categories_max_dates = [] %}
 {% for category in site.categories %}
 {% assign categories_max_dates = categories_max_dates | push: category[1][0]['date'] %}
-<span>10{{ category[1][0]['date'] | inspect }}</span>
 {% if category[1].size > categories_max %}
 {% assign categories_max = category[1].size %}
 {% endif %}
 {% endfor %}
 
 <ul class="taxonomy__index">
-    {% for category_max_date in categories_max_dates | reversed %}
     {% for i in (1..categories_max) reversed %}
     {% for category in site.categories %}
-    {% if category[1][0]['date'] == category_max_date %}
     {% if category[1].size == i %}
     <li>
         <a href="#{{ category[0] | slugify }}">
@@ -26,16 +23,14 @@ layout: archive
         </a>
     </li>
     {% endif %}
-    {% endif %}
-    {% endfor %}
     {% endfor %}
     {% endfor %}
 </ul>
 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
-{% for i in (1..categories_max) reversed %}
+{% for category_max_date in categories_max_dates | reversed %}
 {% for category in site.categories %}
-{% if category[1].size == i %}
+{% if category[1][0]['date'] == category_max_date %}
 <section id="{{ category[0] | slugify | downcase }}" class="taxonomy__section">
     <h2 class="archive__subtitle">{{ category[0] }}</h2>
     <div class="entries-{{ entries_layout }}">
