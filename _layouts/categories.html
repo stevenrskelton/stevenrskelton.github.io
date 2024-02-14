@@ -5,7 +5,7 @@ layout: archive
 {{ content }}
 
 {% assign categories_max = 0 %}
-{% assign categories_max_dates = blank %}
+{% assign categories_max_dates = "" | split: "," %}
 {% for category in site.categories %}
 {% assign categories_max_dates = categories_max_dates | push: category[1][0]['date'] %}
 <span>{{ categories_max_dates | inspect }}</span>
