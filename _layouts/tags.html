@@ -19,7 +19,6 @@ layout: archive
     {% endif %}
 {% endfor %}
 {% assign tags_max_dates = tags_max_dates | uniq | sort | reverse %}
-{{ tags_max_dates | inspect }}
 <ul class="taxonomy__index">
     {% for i in (1..tags_max) reversed %}
     {% for tag in site.tags %}

@@ -7,11 +7,18 @@ layout: archive
 {% assign categories_max = 0 %}
 {% assign categories_max_dates = "" | split: "," %}
 {% for category in site.categories %}
-{% assign categories_max_dates = categories_max_dates | push: category[1][0]['date'] %}
-{% if category[1].size > categories_max %}
-{% assign categories_max = category[1].size %}
-{% endif %}
+    {% assign categories_max_date = category[1][0]['date'] %}
+    {% for post in category[1] %}
+        {% if post['date'] > categories_max_date %}
+            {% assign categories_max_date = post['date'] %}
+        {% endif %}
+    {% endfor %}
+    {% assign categories_max_dates = categories_max_dates | push: categories_max_date %}
+    {% if category[1].size > categories_max %}
+        {% assign categories_max = category[1].size %}
+    {% endif %}
 {% endfor %}
+{% assign categories_max_dates = categories_max_dates | uniq | sort | reverse %}
 <ul class="taxonomy__index">
     {% for i in (1..categories_max) reversed %}
     {% for category in site.categories %}
@@ -27,7 +34,7 @@ layout: archive
 </ul>
 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
-{% for category_max_date in categories_max_dates sort reversed %}
+{% for category_max_date in categories_max_dates %}
 {% for category in site.categories %}
 {% if category[1][0]['date'] == category_max_date %}
 <section id="{{ category[0] | slugify | downcase }}" class="taxonomy__section">
