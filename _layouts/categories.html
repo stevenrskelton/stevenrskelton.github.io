@@ -30,6 +30,7 @@ layout: archive
 {% assign entries_layout = page.entries_layout | default: 'list' %}
 {% for category_max_date in categories_max_dates reversed %}
 {% for category in site.categories %}
+<span>{{ category_max_date | inspect }}|{{ category[1][0]['date'] | inspect }}</span>
 {% if category[1][0]['date'] == category_max_date %}
 <section id="{{ category[0] | slugify | downcase }}" class="taxonomy__section">
     <h2 class="archive__subtitle">{{ category[0] }}</h2>
