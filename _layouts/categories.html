@@ -7,18 +7,18 @@ layout: archive
 {% assign categories_max = 0 %}
 {% assign categories_max_dates = [] %}
 {% for category in site.categories %}
-{% assign categories_max_dates = categories_max_dates | push: category[1][0].date %}
-<span>0{{ category | inspect }}</span>
-<span>1{{ category[1] | inspect }}</span>
-<span>10{{ category[1][0] | inspect }}</span>
+{% assign categories_max_dates = categories_max_dates | push: category[1][0]['date'] %}
+<span>10{{ category[1][0]['date'] | inspect }}</span>
 {% if category[1].size > categories_max %}
 {% assign categories_max = category[1].size %}
 {% endif %}
 {% endfor %}
 
 <ul class="taxonomy__index">
+    {% for category_max_date in categories_max_dates | reversed %}
     {% for i in (1..categories_max) reversed %}
     {% for category in site.categories %}
+    {% if category[1][0]['date'] == category_max_date %}
     {% if category[1].size == i %}
     <li>
         <a href="#{{ category[0] | slugify }}">
@@ -26,6 +26,8 @@ layout: archive
         </a>
     </li>
     {% endif %}
+    {% endif %}
+    {% endfor %}
     {% endfor %}
     {% endfor %}
 </ul>
