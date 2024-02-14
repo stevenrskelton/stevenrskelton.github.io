@@ -12,7 +12,6 @@ layout: archive
 {% assign tags_max = tag[1].size %}
 {% endif %}
 {% endfor %}
-{{ tags_max_dates | inspect }}
 <ul class="taxonomy__index">
     {% for i in (1..tags_max) reversed %}
     {% for tag in site.tags %}
@@ -28,7 +27,7 @@ layout: archive
 </ul>
 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
-{% for tag_max_date in tags_max_dates reversed %}
+{% for tag_max_date in tags_max_dates sort reversed %}
 {% for tag in site.tags %}
 {% if tag[1][0]['date'] == tag_max_date %}
 <section id="{{ tag[0] | slugify | downcase }}" class="taxonomy__section">
