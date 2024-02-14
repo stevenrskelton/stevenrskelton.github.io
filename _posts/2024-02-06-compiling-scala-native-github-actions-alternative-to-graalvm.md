@@ -271,12 +271,45 @@ private class DummyMessageDigest(algorithm: String)
 }
 ```
 
+### Scala-XML
+
+The incompleteness of the Scala-XML library was a little puzzling. What is the point of publishing an XML library when
+it can't pass the most simple, obvious use-case.
+
+```
+[error] Found 21 missing definitions while linking
+[error] Not found Top(javax.xml.parsers.SAXParser)
+[error] 	at file:/home/runner/work/scala-xml/scala-xml/shared/src/main/scala/scala/xml/factory/XMLLoader.scala:51
+```
+
+The problem with `"org.scala-lang.modules" %%% "scala-xml" % "2.2.0"` is that `javax` library hasn't been implemented.
+
 # Runtime Observations
 
 ## Performance and Memory
 
 For a cross-compiled project, the `http-maven-reciever` project compiled to an 27.9MB executable "Fat Jar".
 The debug-mode Scala Native produced a 41.4MB linux executable.
+
+```
+[info] done compiling
+[info] Linking (2666 ms)
+[info] Checking intermediate code (quick) (194 ms)
+[info] Discovered 6982 classes and 47495 methods
+[info] Optimizing (debug mode) (3964 ms)
+[info] Generating intermediate code (5599 ms)
+[info] Produced 10 files
+[info] Compiling to native code (17076 ms)
+[info] Total (29698 ms)
+[success] Total time: 32 s, completed Feb. 7, 2024, 10:29:39 a.m.
+```
+
+35MB
+
+```
+[error] ld: Assertion failed: (aliasSectionNum == sectionNum && "alias and its target must be located in the same section"), function assignAliasAtomOffsetInSection, file Layout.cpp, line 3324.
+[error] clang: error: linker command failed with exit code 1 (use -v to see invocation)
+```
 
 TODO: optimized release mode file size
 TODO: startup with Scala 3 Jar
@@ -304,11 +337,34 @@ caption="Debugging Scala Native LLVM code using LLDB Gui"
 
 # Conclusions
 
-Scala Native is a welcome addition to the C/C++ alternatives for Scala developers. While it is undeniably not as popular
-as Rust, it has room to grow as this ecosystem grows in importance. Modern system hardware is approaching an era of 
-virtually unlimited parallelism and throughput, putting emphasis on the only performance avenue left: latency. 
-Low-level languages will need to solve an increasing diversity of problems, and for many tasks Scala Native will be
-a compelling choice.
+## Pros
+
+* Fast and direct calling of native dependencies
+
+## Cons
+
+* Painful debugging
+* Long compile/linking times
+* Needs Scala Native to compatible dependencies
+* Subtle code changes
+* Hard to use resource and configuration files
+* Usually need to make JVM version work
+
+Scala Native is a welcome addition to the C/C++ alternatives for Scala developers. This ecosystem has room to grow as
+performance and latency bottlenecks are no longer determined by hardware, but by the minuscule overheads determined
+at compile time. Latency can't be solved by more parallelism or faster CPUs, but by slimming the instruction and cache
+footprint of code. Rust and Go have taken off in popularity, and Scala Native, if done right has all of the same
+benefits.
+
+But to make this a compelling choice, Scala Native shouldn't be confused with Scala's JVM presence. Longtime users of
+ScalaJS are familiar with the restrictions to the `lihaoyi` libraries, and Scala Native have the same burden. Projects
+using Scala Native should be selective, and primarily oriented to using C native libraries or staying within the small
+pockets of JVM libraries such as `lihaoyi` or `typelevel` which have been early native adopters.
+
+The advice to use Scala Native for only CLI tools is on point. While it will be a long time before this changes, it
+doesn't need to for Scala Native to be successful. The JDK dominated space doesn't need native via Scala Native,
+advancements in alternative JDKs such as GraalVM are already offering native support in a more suitable and easier to
+apply route. As it's always been, select the right tool for the right job.
 
 {%
 include github_project.html
