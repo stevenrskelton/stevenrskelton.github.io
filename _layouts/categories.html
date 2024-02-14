@@ -32,7 +32,7 @@ layout: archive
 {% for category in site.categories %}
 {% if category[1][0]['date'] == category_max_date %}
 <section id="{{ category[0] | slugify | downcase }}" class="taxonomy__section">
-    <h2 class="archive__subtitle">{{ category[0] }}</h2>
+    <h2 class="archive__subtitle">{{ category[0] }}{{ category_max_date }}</h2>
     <div class="entries-{{ entries_layout }}">
         {% for post in category.last %}
         {% include archive-single.html type=entries_layout %}
