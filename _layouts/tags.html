@@ -7,10 +7,16 @@ layout: archive
 {% assign tags_max = 0 %}
 {% assign tags_max_dates = "" | split: "," %}
 {% for tag in site.tags %}
-{% assign tags_max_dates = tags_max_dates | push: tag[1][0]['date'] %}
-{% if tag[1].size > tags_max %}
-{% assign tags_max = tag[1].size %}
-{% endif %}
+    {% assign tags_max_date = tag[1][0]['date'] %}
+    {% for post in tag[1] %}
+        {% if post['date'] > tags_max_date %}
+            {% assign tags_max_date = post['date'] %}
+        {% endif %}
+    {% endfor %}
+    {% assign tags_max_dates = tags_max_dates | push: tags_max_date %}
+    {% if tag[1].size > tags_max %}
+        {% assign tags_max = tag[1].size %}
+    {% endif %}
 {% endfor %}
 <ul class="taxonomy__index">
     {% for i in (1..tags_max) reversed %}
