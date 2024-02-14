@@ -5,10 +5,10 @@ layout: archive
 {{ content }}
 
 {% assign categories_max = 0 %}
-{% assign categories_max_dates = site.categories | map: first | map: first | map: date %}
+{% assign categories_max_dates = site.categories | map: last %}
 <h1>categories_max_dates</h1>
 {% for category_date in categories_max_dates %}
-<span>category_date</span>
+<span>{{ category_date }}</span>
 {% endfor %}
 {% for category in site.categories %}
 {% if category[1].size > categories_max %}
