@@ -7,6 +7,7 @@ layout: archive
 {% assign categories_max = 0 %}
 {% assign categories_max_dates = "" | split: "," %}
 {% for category in site.categories %}
+{{ category[1][0] | inspect }}
 {% assign datestr = category[1][0]['published_at'] | date_to_xmlschema %}
 {% assign categories_max_dates = categories_max_dates | push: datestr %}
 {% if category[1].size > categories_max %}
