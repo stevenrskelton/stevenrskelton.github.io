@@ -29,7 +29,7 @@ layout: archive
 </ul>
 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
-{% for tag_max_date in tags_max_dates sort %}
+{% for tag_max_date in tags_max_dates reversed %}
 {% for tag in site.tags %}
 {% assign datestr = tag[1][0]['date'] | date: "%Y-%m-%d %H:%M:%S" %}
 {% if datestr == tag_max_date %}

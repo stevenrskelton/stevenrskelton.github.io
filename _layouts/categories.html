@@ -29,7 +29,7 @@ layout: archive
 </ul>
 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
-{% for category_max_date in categories_max_dates sort %}
+{% for category_max_date in categories_max_dates reversed %}
 {% for category in site.categories %}
 {% assign datestr = category[1][0]['date'] | date: "%Y-%m-%d %H:%M:%S" %}
 {% if datestr == category_max_date %}
