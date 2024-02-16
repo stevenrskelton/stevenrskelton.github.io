@@ -1,5 +1,5 @@
 ---
-title: "Code Examples"
+title: "Coding Examples Mentioned in Posts"
 layout: archive
 permalink: /examples/
 ---
@@ -9,6 +9,14 @@ permalink: /examples/
     {% assign example = example_field[1] %}
     <section id="{{ example.name | slugify | downcase }}" class="taxonomy__section">
         <h2 class="archive__subtitle">{{ example.name }}</h2>
+        <div>
+            <img src="/assets/images/github-mark.svg" alt="GitHub">
+            <div>
+                <a href="{{ example.url }}" title="{{ example.name }}" target="_blank">
+                    {{ example.description }}
+                </a>
+            </div>
+        </div>
         <div class="entries-{{ entries_layout }}">
             {% for post in site.posts %}
                 {% if post.examples contains example_field[0] %}
