@@ -37,7 +37,7 @@ See the full article about the Scala 3 implementation at
 
 The Python 3.9 implementation is available on GitHub at
 
-[https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer/blob/main/src/main/python/handler.py](https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer/blob/main/src/main/python/handler.py)
+[scala3-aws-lambda-dynamodb-importer/src/main/python/handler.py](https://github.com/stevenrskelton/stevenrskelton.github.io/blob/main/assets/examples/2022/scala3-aws-lambda-dynamodb-importer/src/main/python/handler.py)
 
 ## JVM versus Python Performance Comparison
 

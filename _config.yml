@@ -159,7 +159,7 @@ examples:
     description: "ZIO Cache expanded to efficiently support Seq[Key] calls."
   scala3-aws-lambda-dynamodb-importer:
     name: "AWS Lambda DynamoDB importer"
-    url: "https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer"
+    url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2022/scala3-aws-lambda-dynamodb-importer"
     description: "Scala3 and Python lambda functions to insert into a DynamoDB."
   ordered-columns:
     name: "Ordered-Columns Web Component"
