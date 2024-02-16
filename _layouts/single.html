@@ -56,7 +56,7 @@ layout: default
                 {% if page.examples %}
                 <hr>
                 <h1>Sources</h1>
-                <div style="margin-bottom:0.5em;">
+                <div class="html-bg" style="margin-bottom:0.5em;">
                 {% assign entries_layout = page.entries_layout | default: 'list' %}
                 {% for example_name in page.examples %}
                     {% assign example=site.examples[example_name] %}
