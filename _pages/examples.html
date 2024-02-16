@@ -10,7 +10,7 @@ permalink: /examples/
     <section id="{{ example.name | slugify | downcase }}" class="taxonomy__section">
         <h2 class="archive__subtitle">{{ example.name }}</h2>
         <div class="entries-{{ entries_layout }}">
-            <div class="{{ include.type | default: 'list' }}__item">
+            <div class="{{ entries_layout }}__item">
                 <a href="{{ example.url }}" title="{{ example.name }}" class="github-project-link" target="_blank">
                     <img src="/assets/images/github-mark.svg" alt="GitHub">
                     {{ example.description }}
