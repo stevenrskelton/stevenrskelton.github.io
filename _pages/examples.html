@@ -9,10 +9,7 @@ permalink: /examples/
     {% assign example = example_field[1] %}
     <section id="{{ example.name | slugify | downcase }}" class="taxonomy__section">
         <div class="archive__subtitle">
-            <h2 class>{{ example.name }}</h2>
-            <a href="{{ example.url }}" title="{{ example.name }}" target="_blank">
-                <img src="/assets/images/github-mark.svg" alt="GitHub"> {{ example.description }}
-            </a>
+            {% include github_project.html name=example.name url=example.url description=example.description type=example.type %}
         </div>
         <div class="entries-{{ entries_layout }}">
             {% for post in site.posts %}
