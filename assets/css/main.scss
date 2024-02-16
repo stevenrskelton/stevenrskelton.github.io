@@ -372,29 +372,3 @@ figure.postlogo figcaption {
     margin-bottom: 4px;
   }
 }
-
-// GITHUB
-
-.github-project {
-    margin-bottom: 1em;
-    display: table-row;
-}
-.github-logo-text > a {
-  text-decoration: none;
-}
-.github-project > img {
-    width: 64px;
-    padding-right: 1em;
-    margin-top: 2px;
-}
-@media(max-width: 720px) {
-    .github-project > img {
-        width: 48px;
-        padding-right: 6px;
-        margin-top: 8px;
-    }
-}
-.github-logo-text {
-    display: table-cell;
-    vertical-align: middle;
-}
