@@ -1,8 +1,9 @@
 ---
-title: "Code Examples"
-permalink: /examples/
 layout: archive
 ---
+
+{{ content }}
+
 {% for example_field in site.examples %}
     {% assign example = example_field[1] %}
     <section id="{{ example.name | slugify | downcase }}" class="taxonomy__section">
