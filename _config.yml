@@ -169,5 +169,5 @@ examples:
   sortable-table:
     name: "Sortable-Table Web Component"
     url: "https://github.com/stevenrskelton/sortable-table"
-    description: "Polymer Web Component that generates a sortable <table> from inlined or AJAX JSON, JSON5, and arrays."
+    description: "Polymer Web Component that generates a sortable &lt;table&gt; from inlined or AJAX JSON, JSON5, and arrays."
     archived: true
