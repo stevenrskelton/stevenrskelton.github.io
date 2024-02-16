@@ -232,10 +232,6 @@ The GitHub Action is a short snippet of YAML:
 ## AWS Permission Configuration for Lambdas
 
 The CI/CD pipeline will automatically deploy to AWS, but the permissions and Lambda must be initially created.
-See [Future Article Here]
+TODO: See [Future Article Here]
 
-# Scala versus Python with AWS Lambda Functions
-
-There are many things to consider when choosing a programming language, see the full article at
-[JVM versus Python for AWS Lambda Functions]({% post_url 2022-08-13-jvm-versus-python-aws-lambda-functions %}).
 
