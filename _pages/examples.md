@@ -4,8 +4,7 @@ permalink: /examples/
 author_profile: false
 ---
 {% assign example_webcomponents = "" | split: "," %}
-{% for name in page.examples %}
-    {% assign example=site.examples[name] %}
+{% for example in site.examples %}
     {% if example.type == "WebComponent" %}
         {% assign example_webcomponents = example_webcomponents | push: example %}
     {% else %}
