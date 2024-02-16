@@ -109,17 +109,16 @@ title: "About"
 
 {% assign list = site.github.public_repositories | where: "archived", false | where: "fork", false | sort: 'updated_at' | reverse %}
 {% for repository in list %}
-{{ repository | inspect }}
 {%
-include github_repository.html
-name=repository.name
-homepage=repository.homepage
-html_url=repository.html_url
-description=repository.description
-language=repository.language
-stargazers_count=repository.stargazers_count
-forks_count=repository.forks_count
-archived=repository.archived
+  include github_repository.html
+  name=repository.name
+  homepage=repository.homepage
+  html_url=repository.html_url
+  description=repository.description
+  language=repository.language
+  stargazers_count=repository.stargazers_count
+  forks_count=repository.forks_count
+  archived=repository.archived
 %}
 {% endfor %}
 
@@ -142,6 +141,7 @@ archived=repository.archived
   language=repository.language
   stargazers_count=repository.stargazers_count
   forks_count=repository.forks_count
+  archived=repository.archived
 %}
 {% endif %}
 {% endfor %}
