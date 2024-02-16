@@ -3,6 +3,19 @@
 {% if href != "" %}
 <a href="{{ href }}" style="cursor:pointer;display:flex;" target="_blank">
 {% endif %}
+{% if include.language == "Scala" %}
+   {% assign lang-color = "#c22d40" %}
+{% elsif include.language == "HTML" %}
+   {% assign lang-color = "#e34c26" %}
+{% elsif include.language == "JavaScript" %}
+   {% assign lang-color = "#f1e05a" %}
+{% elsif include.language == "Java" %}
+   {% assign lang-color = "#b07219" %}
+{% elsif include.language == "Dart" %}
+   {% assign lang-color = "#00B4AB" %}
+{% else %}
+   {% assign lang-color = "#000000" %}
+{% endif %}
    <svg
       width="340"
       viewBox="0 0 350 140"
@@ -96,7 +109,7 @@
          <g transform="translate(30, 65)">
             <g transform="translate(0, 0)">
                <g data-testid="primary-lang">
-                  <circle data-testid="lang-color" cx="0" cy="-5" r="6" fill="#00B4AB" />
+                  <circle data-testid="lang-color" cx="0" cy="-5" r="6" fill="{{ lang-color }}" />
                   <text data-testid="lang-name" class="gray" x="15">{{ include.language }}</text>
                </g>
             </g>
