@@ -165,9 +165,9 @@ examples:
     name: "Ordered-Columns Web Component"
     url: "https://github.com/stevenrskelton/ordered-columns"
     description: "Polymer Web Component that builds vertically ordered columns (timelines) from arbitrary DOM content."
-    type: "WebComponent"
+    archived: true
   sortable-table:
     name: "Sortable-Table Web Component"
     url: "https://github.com/stevenrskelton/sortable-table"
     description: "Polymer Web Component that generates a sortable <table> from inlined or AJAX JSON, JSON5, and arrays."
-    type: "WebComponent"
+    archived: true
