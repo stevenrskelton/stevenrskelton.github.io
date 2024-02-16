@@ -1,0 +1,17 @@
+[
+  {
+    "symbol": "SPY",
+    "time": 1660229200,
+    "prices": "eyJyZWd1bGFyTWFya2V0UHJpY2UiOjQxOS43OCwicHJldmlvdXNDbG9zZSI6NDIwLjAwfQ=="
+  },
+  {
+    "symbol": "SPY",
+    "time": 1660142800,
+    "prices": "eyJyZWd1bGFyTWFya2V0UHJpY2UiOjQxMi42NywicHJldmlvdXNDbG9zZSI6NDE5LjMzfQ=="
+  },
+  {
+    "symbol": "SPY",
+    "time": 1660056400,
+    "prices": "eyJyZWd1bGFyTWFya2V0UHJpY2UiOjQxOC4xMiwicHJldmlvdXNDbG9zZSI6NDE4Ljk4fQ=="
+  }
+]

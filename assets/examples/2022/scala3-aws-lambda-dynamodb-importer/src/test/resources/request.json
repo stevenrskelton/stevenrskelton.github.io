@@ -1,0 +1,27 @@
+{
+  "version": "2.0",
+  "routeKey": "$default",
+  "rawPath": "/",
+  "rawQueryString": "",
+  "headers": {},
+  "requestContext": {
+    "accountId": "anonymous",
+    "apiId": "l5s4ec2mwrsyxpmosu33ftdyca0vywdl",
+    "domainName": "l5s4ec2mwrsyxpmosu33ftdyca0vywdl.cell-1-lambda-url.us-east-1.on.aws",
+    "domainPrefix": "l5s4ec2mwrsyxpmosu33ftdyca0vywdl",
+    "http": {
+      "method": "GET",
+      "path": "/",
+      "protocol": "HTTP/1.1",
+      "sourceIp": "3.84.243.27",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36"
+    },
+    "requestId": "6a3a71d6-8142-42f5-aaa6-2933bca5c4c3",
+    "routeKey": "$default",
+    "stage": "$default",
+    "time": "12/Aug/2022:14:03:43 +0000",
+    "timeEpoch": "1660313023063"
+  },
+  "isBase64Encoded": "false",
+  "body": "[{\"symbol\":\"SPY\",\"time\":1660229200,\"prices\":\"eyJyZWd1bGFyTWFya2V0UHJpY2UiOjQxOS43OCwicHJldmlvdXNDbG9zZSI6NDIwLjAwfQ==\"},{\"symbol\":\"SPY\",\"time\":1660142800,\"prices\":\"eyJyZWd1bGFyTWFya2V0UHJpY2UiOjQxMi42NywicHJldmlvdXNDbG9zZSI6NDE5LjMzfQ==\"},{\"symbol\":\"SPY\",\"time\":1660056400,\"prices\":\"eyJyZWd1bGFyTWFya2V0UHJpY2UiOjQxOC4xMiwicHJldmlvdXNDbG9zZSI6NDE4Ljk4fQ==\"}]"
+}
