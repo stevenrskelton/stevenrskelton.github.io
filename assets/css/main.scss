@@ -398,7 +398,9 @@ figure.postlogo figcaption {
     display: table-cell;
     vertical-align: middle;
 }
-.github-project h1 {
+.github-project h2 {
     margin-bottom: 0;
     font-size: larger;
+    padding-bottom: 0;
+    border-bottom: none;
 }
