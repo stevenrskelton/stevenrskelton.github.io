@@ -6,6 +6,8 @@ tags:
   - SBT
   - GitHub
 excerpt_separator: <!--more-->
+examples:
+  - http-maven-receiver
 ---
 
 The free tier of GitHub Packages has limited bandwidth to download private artifacts; which can make it unsuitable for
@@ -79,9 +81,3 @@ HTTP Upload Server
     validates upload is latest version in Maven, and has correct MD5 checksum
     performs any custom server-side tasks, such as deployment and restarting
 
-{%
-include github_project.html
-name="HTTP Maven Receiver"
-url="https://github.com/stevenrskelton/http-maven-receiver"
-description="See the Complete Code on GitHub"
-%}

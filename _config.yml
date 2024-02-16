@@ -153,3 +153,21 @@ examples:
     name: "HTTP Maven Receiver"
     url: "https://github.com/stevenrskelton/http-maven-receiver"
     description: "See the Complete Code on GitHub"
+  list-lookup-zio-cache:
+    name: "List Lookup ZIO Cache"
+    url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2023/list-lookup-zio-cache"
+    description: "See the complete Source Code on GitHub"
+  scala3-aws-lambda-dynamodb-importer:
+    name: "AWS Lambda DynamoDB importer"
+    url: "https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer"
+    description: "See the Complete Code on GitHub"
+  ordered-columns:
+    name: "Ordered-Columns Web Component"
+    url: "https://github.com/stevenrskelton/ordered-columns"
+    description: "An expanded version of this Web Component featuring demos, mutation observers, and themes is available on GitHub!"
+    type: "WebComponent"
+  sortable-table:
+    name: "Sortable-Table Web Component"
+    url: "https://github.com/stevenrskelton/sortable-table"
+    description: "An expanded version of this Web Component featuring cell formulas, footers, and more is available on GitHub!"
+    type: "WebComponent"

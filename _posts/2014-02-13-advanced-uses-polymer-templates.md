@@ -5,6 +5,8 @@ categories:
   - Javascript
 tags:
   - WebComponents
+examples:
+  - sortable-table
 ---
 
 {% include postlogo.html title="Web Components" src="/assets/images/2014/02/webcomponents.png" %} Most sortable HTML
@@ -245,14 +247,5 @@ window.addEventListener('polymer-ready', function(){
 
 {%
 include downloadsources.html
-src="
-/assets/images/2014/02/advanced-table-features-using-polymer-templates.html,/assets/images/2014/02/templated-sortable-table.html,/assets/images/2014/02/platform-0.1.4.js,/assets/images/2014/02/polymer-0.1.4.js"
-%}
-
-{%
-include github_project.html
-name="Sortable-Table Web Component"
-url="https://github.com/stevenrskelton/sortable-table"
-description="An expanded version of this Web Component featuring cell formulas, footers, and more is available on
-GitHub!"
+src="/assets/images/2014/02/advanced-table-features-using-polymer-templates.html,/assets/images/2014/02/templated-sortable-table.html,/assets/images/2014/02/platform-0.1.4.js,/assets/images/2014/02/polymer-0.1.4.js"
 %}

@@ -6,6 +6,8 @@ tags:
   - ZIO
   - AsyncExecution
 excerpt_separator: <!--more-->
+examples:
+  - list-lookup-zio-cache
 ---
 In-memory caches mapping `Key => Value` are a simple and versitile tool to reduce number of calls to an origin 
 datasource.  There are many use-cases requiring multiple cache calls, prefering `Seq[Key] => Seq[Value]`. Can a standard
@@ -232,10 +234,4 @@ All ZIO code is included under permission of the Apache License, Version 2.0
  */
 ```
 
-{%
-include github_project.html
-name="List Lookup ZIO Cache"
-url="https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2023/list-lookup-zio-cache"
-description="See the complete Source Code on GitHub"
-%}
 

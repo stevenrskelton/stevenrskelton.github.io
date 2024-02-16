@@ -5,6 +5,8 @@ categories:
 tags:
   - AWS
   - Serverless
+examples:
+  - scala3-aws-lambda-dynamodb-importer
 ---
 
 The suitability of programming languages across different domains is a contested topic. AWS Lambda Functions are a
@@ -135,9 +137,4 @@ being a close second. This aligns with the lightweight market that Lambdas excel
 over 60% of large organizations have deployed Lambda in 3 or more languages meaning that they are reaching into more
 structured languages such as Java, Go, or .Net for other, more likely complex, tasks.
 
-{%
-include github_project.html
-name="AWS Lambda DynamoDB importer"
-url="https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer"
-description="See the Complete Code on GitHub"
-%}
+

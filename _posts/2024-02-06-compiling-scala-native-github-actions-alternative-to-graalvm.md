@@ -368,9 +368,3 @@ doesn't need to for Scala Native to be successful. The JDK dominated space doesn
 advancements in alternative JDKs such as GraalVM are already offering native support in a more suitable and easier to
 apply route. As it's always been, select the right tool for the right job.
 
-{%
-include github_project.html
-name="HTTP Maven Receiver"
-url="https://github.com/stevenrskelton/http-maven-receiver"
-description="See the Complete Code on GitHub"
-%}
