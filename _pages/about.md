@@ -1,7 +1,6 @@
 ---
 permalink: /about/
 title: "About"
-author_profile: false
 ---
 <div class="img-bg" style="background-image:url('/assets/images/about/bg.jpg');">
   <h1> 🇨🇦&nbsp;Toronto, Canada</h1>

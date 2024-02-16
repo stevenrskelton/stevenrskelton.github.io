@@ -1,7 +1,6 @@
 ---
 permalink: /privacy-policy/
 title: "Privacy Policy"
-author_profile: false
 ---
 PRIVACY NOTICE
 

@@ -152,22 +152,22 @@ examples:
   http-maven-receiver:
     name: "HTTP Maven Receiver"
     url: "https://github.com/stevenrskelton/http-maven-receiver"
-    description: "See the Complete Code on GitHub"
+    description: "HTTP server that receives artifact uploads and verifies MD5 against Maven."
   list-lookup-zio-cache:
     name: "List Lookup ZIO Cache"
     url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2023/list-lookup-zio-cache"
-    description: "See the complete Source Code on GitHub"
+    description: "ZIO Cache expanded to efficiently support Seq[Key] calls."
   scala3-aws-lambda-dynamodb-importer:
     name: "AWS Lambda DynamoDB importer"
     url: "https://github.com/stevenrskelton/scala3-aws-lambda-dynamodb-importer"
-    description: "See the Complete Code on GitHub"
+    description: "Scala3 and Python lambda functions to insert into a DynamoDB."
   ordered-columns:
     name: "Ordered-Columns Web Component"
     url: "https://github.com/stevenrskelton/ordered-columns"
-    description: "An expanded version of this Web Component featuring demos, mutation observers, and themes is available on GitHub!"
+    description: "Polymer Web Component that builds vertically ordered columns (timelines) from arbitrary DOM content."
     type: "WebComponent"
   sortable-table:
     name: "Sortable-Table Web Component"
     url: "https://github.com/stevenrskelton/sortable-table"
-    description: "An expanded version of this Web Component featuring cell formulas, footers, and more is available on GitHub!"
+    description: "Polymer Web Component that generates a sortable <table> from inlined or AJAX JSON, JSON5, and arrays."
     type: "WebComponent"

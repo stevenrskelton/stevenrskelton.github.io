@@ -1,33 +1,27 @@
 ---
 title: "Code Examples"
 permalink: /examples/
-author_profile: false
 ---
-{% assign example_webcomponents = "" | split: "," %}
 {% for example_field in site.examples %}
     {% assign example = example_field[1] %}
-    {% if example.type == "WebComponent" %}
-        {% assign example_webcomponents = example_webcomponents | push: example %}
-    {% else %}
-        <section id="{{ example.name | slugify | downcase }}" class="taxonomy__section">
-            <h2 class="archive__subtitle">{{ example.name }}</h2>
-            {% include github_project.html name=example.name url=example.url description=example.description type=example.type %}
-
-            <div class="entries-{{ entries_layout }}">
-                {% for post in site.posts %}
-                    {% if post.examples contains example_field[0] %}
-                        {% include archive-single.html type=entries_layout %}
-                    {% endif %}
-                {% endfor %}
+    <section id="{{ example.name | slugify | downcase }}" class="taxonomy__section">
+        <div class="github-project archive__subtitle">
+            <img src="/assets/images/github-mark.svg" alt="GitHub"/>
+            <div>
+                <a href="{{ example.url }}" title="{{ example.name }}" target="_blank">
+                    <h1>{{ example.description }}</h1>
+                    {{ example.name }}
+                </a>
             </div>
-            <a href="#page-title" class="back-to-top">{{ site.data.ui-text[site.locale].back_to_top | default: 'Back to Top' }} &uarr;</a>
-        </section>
-    {% endif %}
-{% endfor %}
+        </div>
 
-{% if example_webcomponents %}
-# Web Components
-{% for example in example_webcomponents %}
-    {% include github_project.html name=example.name url=example.url description=example.description type=example.type %}
+        <div class="entries-{{ entries_layout }}">
+            {% for post in site.posts %}
+                {% if post.examples contains example_field[0] %}
+                    {% include archive-single.html type=entries_layout %}
+                {% endif %}
+            {% endfor %}
+        </div>
+        <a href="#page-title" class="back-to-top">{{ site.data.ui-text[site.locale].back_to_top | default: 'Back to Top' }} &uarr;</a>
+    </section>
 {% endfor %}
-{% endif %}
