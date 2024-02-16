@@ -1,21 +1,17 @@
-{% assign homepage = include.homepage | replace: "https://stevenrskelton.github.io", "https://www.stevenskelton.ca" %}
-{% assign href = homepage | default include.html_url %}
-{% if href != "" %}
-<a href="{{ href }}" style="cursor:pointer;display:flex;" target="_blank">
-{% endif %}
 {% if include.language == "Scala" %}
-   {% assign lang-color = "#c22d40" %}
+{% assign lang-color = "#c22d40" %}
 {% elsif include.language == "HTML" %}
-   {% assign lang-color = "#e34c26" %}
+{% assign lang-color = "#e34c26" %}
 {% elsif include.language == "JavaScript" %}
-   {% assign lang-color = "#f1e05a" %}
+{% assign lang-color = "#f1e05a" %}
 {% elsif include.language == "Java" %}
-   {% assign lang-color = "#b07219" %}
+{% assign lang-color = "#b07219" %}
 {% elsif include.language == "Dart" %}
-   {% assign lang-color = "#00B4AB" %}
+{% assign lang-color = "#00B4AB" %}
 {% else %}
-   {% assign lang-color = "#000000" %}
+{% assign lang-color = "#000000" %}
 {% endif %}
+<a href="{{ include.html_url }}" style="cursor:pointer;display:flex;" target="_blank">
    <svg
       width="340"
       viewBox="0 0 350 140"
@@ -60,6 +56,14 @@
            }
          }
          * { animation-duration: 0s !important; animation-delay: 0s !important; }
+         .archive {
+            border-color:#9e6a03;
+            color:#d29922;
+            border-radius:2em;
+            line-height: 18px;
+            padding: 0 7px;
+            font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans",Helvetica,Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji";
+         }
       </style>
       <rect
          data-testid="card-bg"
@@ -101,6 +105,11 @@
          data-testid="main-card-body"
          transform="translate(0, 55)"
       >
+         {% if include.archive %}
+         <foreignObject x="25" y="-5" width="320" height="50">
+            <span class="archive">Archive</span>
+         </foreignObject>
+         {% endif %}
          <foreignObject x="25" y="-5" width="320" height="50">
            <div xmlns="http://www.w3.org/1999/xhtml" class="description">
                {{ include.description | escape }}
@@ -109,7 +118,7 @@
          <g transform="translate(30, 65)">
             <g transform="translate(0, 0)">
                <g data-testid="primary-lang">
-                  <circle data-testid="lang-color" cx="0" cy="-5" r="6" fill="{{ lang-color }}" />
+                  <circle data-testid="lang-color" cx="0" cy="-5" r="6" stroke="#848d97" stroke-width="1" fill="{{ lang-color }}" />
                   <text data-testid="lang-name" class="gray" x="15">{{ include.language }}</text>
                </g>
             </g>

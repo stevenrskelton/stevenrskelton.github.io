@@ -119,6 +119,7 @@ description=repository.description
 language=repository.language
 stargazers_count=repository.stargazers_count
 forks_count=repository.forks_count
+archived=repository.archived
 %}
 {% endfor %}
 
