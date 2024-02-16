@@ -160,6 +160,7 @@ html {
   border: 1px solid #343434;
   border-radius: 4px;
   padding: 30px;
+  line-height: 1.5;
 }
 
 .img-bg {
@@ -377,6 +378,11 @@ figure.postlogo figcaption {
 
 .html-bg h2.archive__item-title {
     padding-bottom: 0;
+}
+
+.html-bg .taxonomy__section {
+  margin-bottom: 0;
+  padding-bottom: 0;
 }
 
 .github-project {
