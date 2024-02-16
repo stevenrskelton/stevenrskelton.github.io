@@ -383,15 +383,13 @@ figure.postlogo figcaption {
   text-decoration: none;
 }
 .github-project > img {
-    width: 64px;
-    padding-right: 1em;
-    margin-top: 2px;
+  width: 3em;
+  margin-right: 0.75em;
 }
 @media(max-width: 720px) {
     .github-project > img {
-        width: 48px;
-        padding-right: 6px;
-        margin-top: 8px;
+        width: 2em;
+        margin-top: 0.5em;
     }
 }
 .github-project > div {
@@ -399,8 +397,7 @@ figure.postlogo figcaption {
     vertical-align: middle;
 }
 .github-project h2 {
-    margin-bottom: 0;
-    font-size: larger;
-    padding-bottom: 0;
+    margin: 0;
+    padding: 0;
     border-bottom: none;
 }
