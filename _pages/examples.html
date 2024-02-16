@@ -11,12 +11,7 @@ permalink: /examples/
         <h2 class="archive__subtitle">{{ example.name }}</h2>
         <div class="entries-{{ entries_layout }}">
             <div class="github-project">
-                <img src="/assets/images/github-mark.svg" alt="GitHub">
-                <div class="github-logo-text">
-                    <a href="{{ example.url }}" title="{{ example.name }}" target="_blank">
-                        {{ example.description }}
-                    </a>
-                </div>
+
             </div>
             {% for post in site.posts %}
                 {% if post.examples contains example_field[0] %}
