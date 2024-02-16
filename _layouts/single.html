@@ -66,6 +66,7 @@ layout: default
                     {% if related_posts %}
                         <h3>Related Posts</h3>
                         {% for post in related_posts %}
+                            {{ post | inspect }}
                             {% include archive-single.html type=entries_layout %}
                         {% endfor %}
                     {% endif %}
