@@ -11,7 +11,7 @@ author_profile: false
         {% assign example_webcomponents = example_webcomponents | push: example %}
     {% else %}
         {% for post in site.posts %}
-            {% if post.examples[example_name] %}
+            {% if post.examples contains example_name %}
                 {% include github_project.html name=example.name url=example.url description=example.description type=example.type %}
             {% endif %}
         {% endfor %}
