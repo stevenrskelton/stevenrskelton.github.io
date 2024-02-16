@@ -61,10 +61,10 @@ layout: default
                     {% assign example=site.examples[example_name] %}
                     {% include github_project.html name=example.name url=example.url description=example.description type=example.type %}
 
-                    {% assign related_posts = site.posts | where_exp:"item", "item.examples contains example_name" | where:"item", "item.name != post.name" %}
+                    {% assign related_posts = site.posts | where_exp:"item", "item.examples contains example_name" | where:"item", "item.name != page.name" %}
                     {{ related_posts | inspect }}
                     <h5>posts</h5>
-                    {{ post | inspect }}
+                    {{ page | inspect }}
                     {% if related_posts %}
                         <h3>Related Posts</h3>
                         {% for post in related_posts %}
