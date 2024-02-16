@@ -14,7 +14,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Steven Skelton
-subtitle: Scala, Flutter, Cloud Platform and occasionally hating on Javascript
+subtitle: Scala, Flutter, Cloud Platform and occasionally hating on JavaScript
 name: Steven Skelton
 email:
 url: "https://www.stevenskelton.ca"

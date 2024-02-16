@@ -79,16 +79,16 @@ triggering all executable code paths during the debugging cycle, making this (th
 
 # Motivations for Scala Native
 
-## ScalaJS, the Scala to Javascript Transcompiler
+## ScalaJS, the Scala to JavaScript Transcompiler
 
 The focus of Scala Native isn't explicitly native execution, it is in the removal of the restrictive JDK dependency.
 Scala Native has 2 supported outputs:
 
-- [ScalaJS](https://www.scala-js.org/) Javascript, and
+- [ScalaJS](https://www.scala-js.org/) JavaScript, and
 - [LLVM](https://llvm.org) executables.
 
-ScalaJS can realistically only transcompile to Javascript if it can remove any unused overhead imposed by the JDK.
-Typical Javascript use cases are web oriented, where code sizes dictate latency and observed performance.
+ScalaJS can realistically only transcompile to JavaScript if it can remove any unused overhead imposed by the JDK.
+Typical JavaScript use cases are web oriented, where code sizes dictate latency and observed performance.
 
 The JDK and Java bytecode are opinionated in their interactions with other native code. The
 [Java Native Interface (JNI)](https://en.wikipedia.org/wiki/Java_Native_Interface) is an unnecessary and in often a

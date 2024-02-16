@@ -2,7 +2,7 @@
 #layout: post
 title: "Advanced Uses of Polymer Templates"
 categories:
-  - Javascript
+  - JavaScript
 tags:
   - WebComponents
 examples:
@@ -82,7 +82,7 @@ While quite harmless looking, there are a few mysteries with the code. First, wh
 and `{{-"{{"-}}value}}`, and where do they come from? Another issue arises due to a feature of Web Components:
 the [Shadow DOM](http://www.w3.org/TR/components-intro/#shadow-dom-section). Simply specifying a template in the parent
 document doesn’t make it accessible within the component. This is solved simple enough, it is possible to copy an
-element from the parent document into a component using Javascript – in our case this task should be performed whenever
+element from the parent document into a component using JavaScript – in our case this task should be performed whenever
 the `columns` array is modified.
 
 ```js

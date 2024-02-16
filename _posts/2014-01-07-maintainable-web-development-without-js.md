@@ -1,9 +1,9 @@
 ---
 #layout: post
-title: "Maintainable Web Development without Javascript"
+title: "Maintainable Web Development without JavaScript"
 categories:
   - Dart
-  - Javascript
+  - JavaScript
 ---
 
 In the years 2002-2003, Internet Explorer captured 95% of world-wide browser market share. It was unfathomable to many
@@ -18,15 +18,15 @@ upgrade to maintain an up-to-date “evergreen” status, the barrier to change 
 
 ### Evolution Away From JavaScript
 
-Javascript is the only game in town. Even with all its design inadequacies and outright logical flaws, client-side
-programming can only be done in Javascript. An army of libraries attempt
+JavaScript is the only game in town. Even with all its design inadequacies and outright logical flaws, client-side
+programming can only be done in JavaScript. An army of libraries attempt
 to [monkey-patch](http://en.wikipedia.org/wiki/Monkey-patch) fixes, such
 as [jQuery](http://jquery.com/), [Underscore](http://underscorejs.org/), [FuncJS](http://funcjs.webege.com/), [Require](http://requirejs.org/).
 The diverse array of choices only muddy the picture as each address an overlapping portion of responsibility – users are
 often left sorting out conflicting combinations in an attempt to recreate a full-feature language.
 
 Other attempts to creating a workable veneer are [transpiled](http://en.wikipedia.org/wiki/Transpile) languages, tools
-generating Javascript from a purportedly cleaner source. They range from simple language augmentations fixing the
+generating JavaScript from a purportedly cleaner source. They range from simple language augmentations fixing the
 obvious: [Coffeescript](http://coffeescript.org/) and Microsoft [Typescript](http://www.typescriptlang.org/), to full
 language replacements: Google [Dart](https://www.dartlang.org/)
 and [emscripten](https://github.com/kripken/emscripten/wiki).
@@ -53,10 +53,10 @@ changing, [Web Components](http://stevenskelton.ca/web-components/) standard.
 
 {% include video id="74391396" provider="vimeo" %}
 
-### Scala-to-Javascript
+### Scala-to-JavaScript
 
-While efforts into the [emscripten](https://github.com/kripken/emscripten/wiki) Javascript transpiler allow
-all [LLVM](http://en.wikipedia.org/wiki/LLVM) languages (which includes Java and Scala) to compile to Javascript, there
+While efforts into the [emscripten](https://github.com/kripken/emscripten/wiki) JavaScript transpiler allow
+all [LLVM](http://en.wikipedia.org/wiki/LLVM) languages (which includes Java and Scala) to compile to JavaScript, there
 are two projects specifically designed to bring Scala to the browser. While both aren’t yet production ready like Dart,
 they offer a promising glimpse to a more diverse future.
 
@@ -67,6 +67,6 @@ they offer a promising glimpse to a more diverse future.
 Although no alternative has reached critical mass, the game is still early, and the future platform for web development
 is ripe for change. HTML5 and [WebGL](http://davidwalsh.name/webgl-demo) have raised the complexity of the modern web
 page to the point where the development environment is now a limiting factor. The single language option is having a
-meaningful effect on future web development. Javascript may represent 95% of the web today, but it would be naïve to
+meaningful effect on future web development. JavaScript may represent 95% of the web today, but it would be naïve to
 expect that not to change.
 

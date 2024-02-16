@@ -9,7 +9,7 @@ tags:
 ---
 
 GitHub Packages is a natural extension of a CI/CD pipeline created in GitHub Action. It currently offers repositories
-for Java (Maven), .Net (NuGet), Ruby (Gems), Javascript (npm), and Docker images.  
+for Java (Maven), .Net (NuGet), Ruby (Gems), JavaScript (npm), and Docker images.  
 For a lot of users this can be a free private service if you can squeeze under the size limitation and are okay using
 OAuth keys managed in GitHub.
 

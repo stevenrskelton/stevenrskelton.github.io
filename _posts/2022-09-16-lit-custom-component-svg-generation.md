@@ -1,7 +1,7 @@
 ---
 title: "Lit Custom Components for SVG Generation"
 categories:
-  - Javascript
+  - JavaScript
 tags:
   - Lit
   - WebComponents
@@ -102,7 +102,7 @@ function computePathData(slices){
 
 ## Direct DOM Manipulation
 
-The raw Javascript approach are straight-forward DOM operations called from a `pieChart` function:
+The raw JavaScript approach are straight-forward DOM operations called from a `pieChart` function:
 
 ```html
 <svg id="piechart" viewBox="..." style="..."/>

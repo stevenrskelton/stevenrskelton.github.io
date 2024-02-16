@@ -2,7 +2,7 @@
 #layout: post
 title: "DOM Manipulation using Web Components"
 categories:
-  - Javascript
+  - JavaScript
 tags:
   - WebComponents
 examples:
@@ -208,7 +208,7 @@ So we have shown that child nodes can be reordered, but how advanced can we make
 ordering based on the current runtime state? Since `<content>` relies on fixed CSS selectors, we need to look to
 JavaScript to gain flexibility.
 
-Sidestepping `content`, we can directly reference the inlined DOM of a Polymer web component using Javascript’s
+Sidestepping `content`, we can directly reference the inlined DOM of a Polymer web component using JavaScript’s
 new [this.querySelectorAll](https://developer.mozilla.org/en/docs/Web/API/Document.querySelectorAll), or simply
 using `this.children`. Any elements defined within the web component are in
 its [Shadow DOM](http://www.w3.org/TR/shadow-dom/), so are children of `this.shadowRoot`.
