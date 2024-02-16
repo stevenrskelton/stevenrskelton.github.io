@@ -9,11 +9,11 @@ permalink: /examples/
     {% assign example = example_field[1] %}
     <section id="{{ example.name | slugify | downcase }}" class="taxonomy__section">
         <h2 class="archive__subtitle">{{ example.name }}</h2>
-        <a href="{{ example.url }}" title="{{ example.name }}" class="github-project-link" target="_blank">
-            <img src="/assets/images/github-mark.svg" alt="GitHub">
-            {{ example.description }}
-        </a>
         <div class="entries-{{ entries_layout }}">
+            <a href="{{ example.url }}" title="{{ example.name }}" class="github-project-link" target="_blank">
+                <img src="/assets/images/github-mark.svg" alt="GitHub">
+                {{ example.description }}
+            </a>
             {% for post in site.posts %}
                 {% if post.examples contains example_field[0] %}
                     {% include archive-single.html type=entries_layout %}
