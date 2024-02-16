@@ -4,6 +4,7 @@ layout: archive
 
 {{ content }}
 
+{% assign entries_layout = page.entries_layout | default: 'list' %}
 {% for example_field in site.examples %}
     {% assign example = example_field[1] %}
     <section id="{{ example.name | slugify | downcase }}" class="taxonomy__section">
