@@ -143,6 +143,13 @@ defaults:
 category_archive:
   type: liquid
   path: /categories/
+
 tag_archive:
   type: liquid
   path: /tags/
+
+examples:
+  http-maven-receiver:
+    name: "HTTP Maven Receiver"
+    url: "https://github.com/stevenrskelton/http-maven-receiver"
+    description: "See the Complete Code on GitHub"

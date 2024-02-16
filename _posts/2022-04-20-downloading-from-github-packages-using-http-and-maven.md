@@ -7,36 +7,47 @@ tags:
   - GitHub
 ---
 
-GitHub Packages is a Maven compatible repository and is accessible independent of GitHub. This article expands on
-alternative access to these files through direct download URLs and HTTP browsing using Maven metadata, and how to
-effectively use the free tier for private repositories.
+*GitHub Packages* is a Maven compatible repository accessible outside of GitHub. Artifacts can be downloaded
+using Maven or directly through the GitHub web interface. There is no REST API available to search *GitHub Packages*
+so this article walks through the URLs exposed for Maven which can be used to create an API with only HTTP commands.
+The URLs to browse packages and download files will be covered, as well as steps to more effectivily use the free tier
+for private repositories.
 
 {% include table-of-contents.html height="200px" %}
 
-GitHub generally has separate pricing tiers (or caps) depending on a repo being set to public or private. Public 
-repos are generally free, and private repos have a minimal use which is free, and exceeding these limits requires 
-payment. The free tier is currently:
+## Private Repository Free-Tier Limits
 
-| Artifact Storage | Data Transfer Out within a GitHub Action | Data Transfer Out outside of a GitHub Action |
-|:----------------:|:----------------------------------------:|:--------------------------------------------:|
-|      500MB       |                Unlimited                 |                1GB per Month                 |
+GitHub has separate pricing tiers (or caps) for private repositories. Public repos are generally free for virtually all
+actions, while private repos generally have a free limited use, and beyond the limits requests are blocked unless paid
+for. The private tier limits are currently:
 
-Using GitHub Packages as a Maven repository is best done through a proxy (such as Artifactory or Nexus) to cache
-files and minimize external data transfer from GitHub Packages.
+| Artifact Storage | Data transfer within a GitHub Action | Maven traffic to GitHub Packages |
+|:----------------:|:------------------------------------:|:--------------------------------:|
+|      500MB       |              Unlimited               |          1GB per Month           |
 
-Files can be downloaded using Maven as part of the typical developer setup as well as through the GitHub website, 
-but in this article we will examine a third use-case, accessing files directly using `wget` or `curl`.
+Depending on the number of developers, it is usually best practice to run a local Maven repository proxy such as
+[JFrog Artifactory](https://jfrog.com/artifactory/)
+or [Sonotype Nexus](https://www.sonatype.com/products/sonatype-nexus-repository) which will download files once and
+cache subsequent requests. This will minimize the metered transfers, but it is still quite easy to exceed 1GB/month
+with frequent releases.
 
-### Bypassing GitHub Transfer Limits
+## Bypassing GitHub Transfer Limits
 
-This article examines how to read from GitHub Packages, which counts against data transfer out quotas.  A keen eye 
-will see that data transfer out within a GitHub Action is unmetered, this is investigated and practically applied 
-in a separate article [Data Transfers within a GitHub Action]({% post_url
+An objective to bypassing transfer limits would be to reduce Maven traffic to GitHub Packages in favour of traffic
+occurring during a GitHub Action. This is practically applied in a separate
+article [Data Transfers within a GitHub Action]({% post_url
 2024-01-24-data-transfers-github-actions %})
 
-## Browsing Available Versions in GitHub Packages
+# GitHub Packages Maven via URL
 
-The standard Maven packaging defines 3 key fields for every package:
+## Browsing Available Versions
+
+Maven operates through simple HTTP requests, and this article will document these calls such that they can be made
+without Maven installed, and directly made using `wget` or `curl`.
+
+_(All URLs in this document require an `Authorization: token GITHUB_TOKEN` HTTP header)_
+
+Maven packaging defines 3 fields for every package:
 
 ```xml
 <dependency>
@@ -46,19 +57,40 @@ The standard Maven packaging defines 3 key fields for every package:
 </dependency>
 ```
 
-These files are used in the paths for a Maven repository, on GitHub Packages the URL for artifacts has the form:
+Maven exposes XML files as REST URLs, and the GitHub Packages artifact URLs have the form:
 
 ```shell
 https://maven.pkg.github.com/{githubUser}/{githubRepository}/{groupId}/{artifactId}/maven-metadata.xml
 ```
 
-_(All URLs in this document require an `Authorization: token GITHUB_TOKEN` HTTP header)_
+For example, a groupId of *ca.stevenskelton* and artifactId of *http-maven-receiver-assembly* would result in the URL:
+```shell
+https://maven.pkg.github.com/stevenrskelton/http-maven-receiver/ca/stevenskelton/http-maven-receiver-assembly/maven-metadata.xml
+```
 
-These URL will return an XML document containing the Maven repository metadata for all available artifacts of this
-package, and it will be of the form:
+At these URLs is XML metadata which can be used to construct all other REST URLs for the repository artifacts. An 
+example of the XML is:
 
 ```xml
+<metadata>
+    <groupId>ca.stevenskelton</groupId>
+    <artifactId>http-maven-receiver-assembly</artifactId>
+    <versioning>
+        <latest>1.0.18</latest>
+        <versions>
+            <version>0.1.0-SNAPSHOT</version>
+            <version>1.0.0</version>
+            <version>1.0.1</version>
+            <version>1.0.18</version>
+        </versions>
+        <lastUpdated>20240213012802</lastUpdated>
+    </versioning>
+</metadata>
+```
 
+The schema defines key fields:
+
+```xml
 <metadata>
     <groupId>{groupId}</groupId>
     <artifactId>{artifactId}</artifactId>
@@ -66,93 +98,154 @@ package, and it will be of the form:
         <latest>{version}</latest>
         <versions>
             <version>{version}</version>
-            ...more..
         </versions>
-        <lastUpdated>20220419001636</lastUpdated>
+        <lastUpdated>{time}</lastUpdated>
     </versioning>
 </metadata>
 ```
 
-To generate the file URLs for a specific version there is another XML document available at:
+### SNAPSHOT releases
+
+There is a special case for release versions which are a
+[SNAPSHOT](https://maven.apache.org/guides/getting-started/index.html#what-is-a-snapshot-version). Maven has defined 
+this functionality to accommodate rapidly evolving code such that versions can be auto-incremented on each subsequent 
+publish into Maven. The *version* has the form `version-SNAPSHOT` such that `SNAPSHOT` is replaced by corresponding 
+timestamp/iteration numbers on the artifacts. To resolve these values, Maven exposes the URLs:
 
 ```shell
-https://maven.pkg.github.com/{githubUser}/{githubRepository}/{groupId}/{artifactId}/{version}/maven-metadata.xml
+https://maven.pkg.github.com/{githubUser}/{githubRepository}/{groupId}/{artifactId}/{version-SNAPSHOT}/maven-metadata.xml
 ```
 
-That will list all published builds, and be something like:
+So for version `0.1.0-SNAPSHOT` the URL would be:
+
+```shell
+https://maven.pkg.github.com/stevenrskelton/http-maven-receiver/ca/stevenskelton/http-maven-receiver-assembly/0.1.0-SNAPSHOT/maven-metadata.xml
+```
+
+An example of the XML document for this URL is:
 
 ```xml
-
 <metadata modelVersion="">
-    <groupId>{groupId}</groupId>
-    <artifactId>{artifactId}</artifactId>
-    <version>{version}</version>
+    <groupId>ca.stevenskelton</groupId>
+    <artifactId>http-maven-receiver-assembly</artifactId>
+    <version>0.1.0-SNAPSHOT</version>
     <versioning>
         <snapshot>
-            <timestamp>20220419.001622</timestamp>
-            <buildNumber>1</buildNumber>
+            <timestamp>20230330.234307</timestamp>
+            <buildNumber>29</buildNumber>
         </snapshot>
-        <lastUpdated>20220419001637</lastUpdated>
+        <lastUpdated>20230330234315</lastUpdated>
         <snapshotVersions>
             <snapshotVersion>
-                <extension>jar</extension>
-                <value>{value}</value>
-                <updated>20220419001630</updated>
-            </snapshotVersion>
-            <snapshotVersion>
-                <extension>jar.sha1</extension>
-                <value>{value}</value>
-                <updated>20220419001632</updated>
-            </snapshotVersion>
-            <snapshotVersion>
                 <extension>jar.md5</extension>
-                <value>{value}</value>
-                <updated>20220419001633</updated>
+                <value>0.1.0-20230329.004700-13</value>
+                <updated>20230329004708</updated>
             </snapshotVersion>
             <snapshotVersion>
                 <extension>pom</extension>
-                <value>{value}</value>
-                <updated>20220419001634</updated>
+                <value>0.1.0-20230329.004700-13</value>
+                <updated>20230329004709</updated>
             </snapshotVersion>
             <snapshotVersion>
                 <extension>pom.sha1</extension>
-                <value>{value}</value>
-                <updated>20220419001635</updated>
+                <value>0.1.0-20230329.004700-13</value>
+                <updated>20230329004710</updated>
             </snapshotVersion>
             <snapshotVersion>
                 <extension>pom.md5</extension>
-                <value>{value}</value>
-                <updated>20220419001637</updated>
+                <value>0.1.0-20230329.004700-13</value>
+                <updated>20230329004711</updated>
             </snapshotVersion>
-            ...more...
+            <snapshotVersion>
+                <extension>jar</extension>
+                <value>0.1.0-20230330.234307-29</value>
+                <updated>20230330234311</updated>
+            </snapshotVersion>
+            <snapshotVersion>
+                <extension>jar.sha1</extension>
+                <value>0.1.0-20230330.234307-29</value>
+                <updated>20230330234312</updated>
+            </snapshotVersion>
+            <snapshotVersion>
+                <extension>jar.md5</extension>
+                <value>0.1.0-20230330.234307-29</value>
+                <updated>20230330234313</updated>
+            </snapshotVersion>
+            <snapshotVersion>
+                <extension>pom</extension>
+                <value>0.1.0-20230330.234307-29</value>
+                <updated>20230330234314</updated>
+            </snapshotVersion>
+            <snapshotVersion>
+                <extension>pom.sha1</extension>
+                <value>0.1.0-20230330.234307-29</value>
+                <updated>20230330234315</updated>
+            </snapshotVersion>
+            <snapshotVersion>
+                <extension>pom.md5</extension>
+                <value>0.1.0-20230330.234307-29</value>
+                <updated>20230330234315</updated>
+            </snapshotVersion>
         </snapshotVersions>
     </versioning>
 </metadata>
 ```
 
+This example XML has two `0.1.0-SNAPSHOT` releases: `0.1.0-20230329.004700-13` and `0.1.0-20230330.234307-29`.
+These document schema expose the fields:
+
+```xml
+<metadata>
+    <groupId>{groupId}</groupId>
+    <artifactId>{artifactId}</artifactId>
+    <version>{version}</version>
+    <versioning>
+        <snapshot>
+            <timestamp>{YYYYmmDD.HHMMSS}</timestamp>
+            <buildNumber>{iteration}</buildNumber>
+        </snapshot>
+        <lastUpdated>{YYYYmmDDHHMMSS}</lastUpdated>
+        <snapshotVersions>
+            <snapshotVersion>
+                <extension>{extension}</extension>
+                <value>{version-wo-SNAPSHOT}-{YYYYmmDD.HHMMSS}-{iteration}</value>
+                <updated>{YYYYmmDDHHMMSS}</updated>
+            </snapshotVersion>
+        </snapshotVersions>
+    </versioning>
+</metadata>
+```
+
+For `SNAPSHOT` releases, the version number used to download file references the `value` from this file.
+
 ## Downloading Artifacts using wget
 
-Note the existance of a new field `value` in the GitHub Packages `maven-metadata.xml`. This field is different
-than `version` in the Maven publication. In Maven, a version can have multiple `value` representing each build.
+The direct download URL for all Maven artifacts (`jar`, `sha1`, `md5`, `pom`) are generated using the `version` field
+from `maven-metadata.xml`, or in the case of `SNAPSHOT` releases, the `value` field from `version/maven-metadata.xml`.
 
-The direct download URL for all Maven artifacts (`jar`, `sha1`, `md5`, `pom`) are generated using the `value` field in
-the _version/maven-metadata.xml_.
-
-It follows that a downloadable URL and `wget` command for a `jar` would be:
+The `wget` command for a `jar` would be of the form:
 
 ```shell
 wget -d --header="Authorization: token {GITHUB_TOKEN}" \
  https://maven.pkg.github.com/{githubUser}/{githubRepository}/{groupId}/{artifactId}/{version}/{artifactId}-{value}.jar
 ```
 
-This URL is also visible in the logs for the GitHub Action which initially uploaded the artifacts to GitHub Packages.
+So for a `1.0.18` release it would be:
+```shell
+wget -d --header="Authorization: token {GITHUB_TOKEN}" \
+ https://maven.pkg.github.com/stevenrskelton/http-maven-receiver/ca/stevenskelton/http-maven-receiver/1.0.18/http-maven-receiver-assembly-1.0.18.jar
+```
+
+These URLs are visible in GitHub Action logs when artifacts are published to GitHub Packages using Maven.
 
 ## GitHub API Does Not Expose Download URLs
 
-It would be ideal to avoid processing XML and use the more convinient JSON exposed by GitHub API. However GitHub API
-only expose a second GitHub Packages identifier called *version* and this is different than the Maven
-artifact `versionId`. This second *version* is generated by GitHub Packages as a unique identifier within GitHub
-Packages and while useful for interacting with packages within GitHub Actions it is not useful for determining URLs.
+It would be ideal to avoid processing XML and use the GitHub API JSON. This is not possible because the GitHub API
+only exposes a surrogate identifier (which it also calls *version*) which is different from the Maven
+artifact `version`.
+
+For example, the following GitHub API URL exposes only surrogate version identifiers, which are not helpful in accessing
+GitHub Packages via Maven URLs:
 
 ```shell
 https://api.github.com/users/{githubUser}/packages/maven/{groupId}/{artifactId}/versions
@@ -164,7 +257,7 @@ Returns:
 [
   {
     "id": 18648727,
-    "name": "{version}",
+    "name": "{version-different-from-github-packages}",
     "url": "https://api.github.com/users/{githubUser}/packages/maven/{groupId}/{artifactId}/versions/18648727",
     "package_html_url": "https://github.com/{githubUser}/{githubRepository}/packages/1371196",
     "created_at": "2022-04-19T00:16:27Z",
@@ -178,13 +271,13 @@ Returns:
 ```
 
 Here `18648727` is a GitHub Packages *version* and `1371196` is a GitHub Packages *package* identifier for use in GitHub
-Actions.
+Actions, both unused by Maven.
 
 ## Downloading Artifacts using Maven (mvn)
 
-There are a few `mvn` plugins that do not require a Maven project to be configured, and one
-is [mvn dependency:copy](https://maven.apache.org/plugins/maven-dependency-plugin/copy-mojo.html). This maven plugin can
-be used instead of `wget` or `curl` to download a jar file, an example command would be:
+There are a few `mvn` plugins that can be run outside of a configured project, directly from any command prompt. One is
+[mvn dependency:copy](https://maven.apache.org/plugins/maven-dependency-plugin/copy-mojo.html). This maven plugin
+command can be used instead of `wget` or `curl` to download a jar file:
 
 ```
 mvn dependency:copy \
@@ -194,10 +287,36 @@ mvn dependency:copy \
   --global-settings settings.xml
 ```
 
-The benefit here is that this will take advantage of a separate `settings.xml` containing the credentials to
-the `github` repository, useful if the `wget` or `curl` command won't have access to the `GITHUB_TOKEN` or if this
+The benefit here is the input parameter for a separate `settings.xml`. This file can be used to contain Maven 
+credentials to repository, useful if the `wget` or `curl` command won't have access to the `GITHUB_TOKEN` or if this
 command will be executed within a GitHub Action similiar to how [Scala SBT Publishing to GitHub Packages]({% post_url
 2022-04-17-scala-sbt-publishing-to-github-packages %}) publishes Maven artifacts using `mvn deploy:deploy-file`.
+
+```xml
+<settings>
+    <profiles>
+        <profile>
+            <id>github</id>
+            <repositories>
+                <repository>
+                    <id>github</id>
+                    <url>https://maven.pkg.github.com/${GITHUB_REPOSITORY}</url>
+                    <snapshots>
+                        <enabled>true</enabled>
+                    </snapshots>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+    <servers>
+      <server>
+        <id>github</id>
+        <username>${GITHUB_REPOSITORY_OWNER}</username>
+        <password>${GITHUB_TOKEN}</password>
+      </server>
+    </servers>
+</settings>
+```
 
 ## Private Repo Download Caps, what about MD5 files?
 
