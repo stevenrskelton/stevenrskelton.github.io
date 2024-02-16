@@ -1,16 +1,17 @@
 ---
 title: "Code Examples"
 permalink: /examples/
+layout: archive
 ---
 {% for example_field in site.examples %}
     {% assign example = example_field[1] %}
     <section id="{{ example.name | slugify | downcase }}" class="taxonomy__section">
         <div class="github-project archive__subtitle">
             <img src="/assets/images/github-mark.svg" alt="GitHub"/>
-            <div>
+            <div class="github-logo-text">
                 <a href="{{ example.url }}" title="{{ example.name }}" target="_blank">
-                    <h1>{{ example.description }}</h1>
-                    {{ example.name }}
+                    <h2 class="archive__subtitle">{{ example.name }}</h2>
+                    {{ example.description }}
                 </a>
             </div>
         </div>
