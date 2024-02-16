@@ -6,7 +6,8 @@ tags:
   - SBT
   - GitHub
 excerpt_separator: <!--more-->
-examples: site.examples.http-maven-receiver
+examples: 
+  - http-maven-receiver
 ---
 
 Scala Native is a compiler and JDK written in Scala with the goal of removing Scala's dependency on the JVM. This isn't
