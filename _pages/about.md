@@ -107,8 +107,7 @@ title: "About"
   padding-top: 0.75em;
 ">
 
-{% assign list = site.github.public_repositories | where: "archived", false | where: "fork", false | sort: 'updated_at' | reverse %}
-{% for repository in list %}
+{% assign list = site.github.public_repositories | where: "archived", false | where: "fork", false | sort: 'pushed_at' | reverse %}
 {{ repository | inspect }}
 {%
   include github_repository.html
