@@ -1,10 +1,9 @@
 package ca.stevenskelton.examples
 
-import zio.*
-
 import org.scalatest.*
 import org.scalatest.flatspec.*
 import org.scalatest.matchers.*
+import zio.*
 
 import java.util.concurrent.TimeUnit
 import scala.concurrent.Await

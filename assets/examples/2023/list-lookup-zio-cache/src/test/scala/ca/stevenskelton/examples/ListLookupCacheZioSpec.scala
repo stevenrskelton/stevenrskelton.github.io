@@ -1,5 +1,6 @@
 package ca.stevenskelton.examples
 
+import ca.stevenskelton.examples.ListLookupCacheZioSpec.{suite, test}
 import zio.*
 import zio.test.*
 

@@ -1,7 +1,7 @@
 package ca.stevenskelton.examples
 
-import zio.{IO, Trace, UIO, ZIO, Promise}
 import zio.cache.{Cache, Lookup}
+import zio.{IO, Promise, Trace, UIO, ZIO}
 
 import java.time.Duration
 import java.util.concurrent.ConcurrentHashMap
