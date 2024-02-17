@@ -108,7 +108,7 @@ title: "About"
 ">
 
 {% assign list = site.github.public_repositories | where: "archived", false | where: "fork", false | sort: 'pushed_at' | reverse %}
-{{ repository | inspect }}
+{% for repository in list %}
 {%
   include github_repository.html
   name=repository.name
