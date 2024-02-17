@@ -1,11 +1,9 @@
-<div class="github-project">
+<a class="github-project" href="{{ include.url }}" title="{{ include.name }}" target="_blank">
     <img src="/assets/images/github-mark.svg" alt="GitHub"/>
     <div>
-        <a href="{{ include.url }}" title="{{ include.name }}" target="_blank">
-            <h2>{{ include.name }}</h2>
-            {{ include.description }}
-        </a>
+        <h2>{{ include.name }}</h2>
+        {{ include.description }}
     </div>
-</div>
+</a>
 
 
