@@ -21,7 +21,7 @@ val dynamoDbClient = DynamoDbClient.builder
   .region(Region.US_EAST_1)
   .build
 
-class Handler extends RequestHandler[APIGatewayV2HTTPEvent, APIGatewayV2HTTPResponse] :
+class Handler extends RequestHandler[APIGatewayV2HTTPEvent, APIGatewayV2HTTPResponse]:
 
   override def handleRequest(event: APIGatewayV2HTTPEvent, context: Context): APIGatewayV2HTTPResponse =
     given lambdaLogger: LambdaLogger = context.getLogger

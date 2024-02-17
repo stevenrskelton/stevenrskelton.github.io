@@ -6,8 +6,9 @@ import scala.util.Using
 // https://scalameta.org/munit/docs/getting-started.html
 class MySuite extends munit.FunSuite {
 
-  given lambdaLogger:LambdaLogger = new LambdaLogger {
+  given lambdaLogger: LambdaLogger = new LambdaLogger {
     override def log(s: String): Unit = {}
+
     override def log(bytes: Array[Byte]): Unit = {}
   }
 
