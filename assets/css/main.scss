@@ -401,6 +401,9 @@ a.github-project {
   width: 3em;
   margin-right: 0.75em;
 }
+.github-project > img:hover {
+  box-shadow: none;
+}
 @media(max-width: 720px) {
     .github-project > img {
         margin-top: 0.25em;
