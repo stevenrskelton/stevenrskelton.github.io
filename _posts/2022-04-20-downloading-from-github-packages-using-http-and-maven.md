@@ -35,8 +35,8 @@ with frequent releases.
 
 An objective to bypassing transfer limits would be to reduce Maven traffic to GitHub Packages in favour of traffic
 occurring during a GitHub Action. This is practically applied in a separate
-article [Data Transfers within a GitHub Action]({% post_url
-2024-01-24-data-transfers-github-actions %})
+article [Data Transfers and Egress within a GitHub Action]({% post_url
+2024-01-24-data-transfers-egress-github-actions %})
 
 # GitHub Packages Maven via URL
 
