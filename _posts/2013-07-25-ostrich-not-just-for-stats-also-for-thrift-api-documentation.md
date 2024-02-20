@@ -12,7 +12,7 @@ Ostrich is a stats collector and reporter created by Twitter, and it is a welcom
 any [Finagle](http://twitter.github.io/finagle/) ([Apache Thrift](http://thrift.apache.org/)) implementation. At its
 core it uses an extremely lightweight `com.sun.net.httpserver.HttpServer` to handle JSON and HTML requests.
 
-Consider using the built in Ostrich stats server to host your Thrift API documentation.
+Consider using the built-in Ostrich stats server to host your Thrift API documentation.
 
 One easy way to publish your API is to publish you Thrift files. Under the JVM, it’s as easy as moving them to
 the `/resources` folder. Also included in the standard Thrift code generator is the ability to generate html – a
@@ -41,7 +41,6 @@ lazy val thriftJarEntries: Seq[String] = {
   val path = url.getPath
   val jarExt = ".jar"
   val jarPath = path.substring(0, path.indexOf(jarExt)+jarExt.length)
-  import java.util.
   val jarFile = new JarFile(new File(new URI(jarPath)))
  
   import scala.collection.JavaConversions._
@@ -61,7 +60,7 @@ def getJarResourceAsText(name: String): String = {
 ```
 
 With all the heavy lifting out of the way, we are left to wire up routes so our HttpServer can respond to file requests.
-By default the Ostrich service will respond to all browser requests with the `text/html` content type, which is perfect
+By default, the Ostrich service will respond to all browser requests with the `text/html` content type, which is perfect
 for any HTML documentation.
 
 ```scala
@@ -69,7 +68,7 @@ val ostrichService = new AdminHttpService(port, backlog, statsCollection, runtim
  
 thriftJarEntries.filter(_.endsWith(".html")).foreach(entry => {
   ostrichService.addContext("/thrift/" + entry){
-    () => getJarReferenceAsText("/" + entry))
+    () => getJarReferenceAsText("/" + entry)
   }
 })
 ```

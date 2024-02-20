@@ -22,7 +22,7 @@ Today shimmering graphical progress bars are the norm, designed to compel your f
 business isn't about dopamine drips and eyeballs the graphics might be less important and arguably a worse
 implementation than the older simplicity. A large use-case for a simple approach is in SaaS integrations. Workflows
 across multiple SaaS providers quickly run into issues of compatibility and portability. Simple ASCII implementations
-are user friendly, pleasant, and will always work.
+are user-friendly, pleasant, and will always work.
 
 My use-case is for a Slack bot to post status updates within Slack messages. The provided Block Kit has a lot of
 beautify components to choose from but is missing a progress bar. I found
@@ -64,7 +64,7 @@ TextProgressBar(Array(
 
 This could be useful if instead of numbers, we wanted `< 10%`, `< 50%`, `< 90%`, and `100%` segments. This
 implementation would easily separate jobs which have just started, are less than <sup>1</sup>/<sub>2</sub>, more
-than <sup>1</sup>/<sub>2</sub>, near complete, and done. In Slack we might want to use emojis:
+than <sup>1</sup>/<sub>2</sub>, near complete, and done. In Slack, we might want to use emojis:
 ![:sloth:](/assets/images/2022/04/slack_sloth.png), ![:working:](/assets/images/2022/04/slack_working.png), ![:working-on-it:](/assets/images/2022/04/slack_working-on-it.png), ![:firecracker:](/assets/images/2022/04/slack_firecracker.png), ![:done-slant:](/assets/images/2022/04/slack_done-slant.png)
 
 ```
@@ -90,7 +90,7 @@ def bar(progress: Float, width: Int): String = {
 }
 ```
 
-And now we have progress bar to use everywhere and can scale in width from from 1 to N characters.
+And now we have progress bar to use everywhere and can scale in width from 1 to N characters.
 
 ```
 Congratulations!

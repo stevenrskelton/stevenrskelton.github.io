@@ -42,7 +42,7 @@ The Python 3.9 implementation is available on GitHub at
 ## JVM versus Python Performance Comparison
 
 While [there is discussion](https://mikhail.io/serverless/coldstarts/aws/languages/) about first-call latency it tends
-to affect only a small number of usecases. AWS will keep most lambda code hot-loaded for hours so which the shock of
+to affect only a small number of use cases. AWS will keep most lambda code hot-loaded for hours so which the shock of
 even comparing a 20MB Java JAR to 60 lines of Python code boils down to nothing. There are optimizations that can be had
 both in aggregate resource cost of execution between using Python versus the JVM it would easily be outweighed by
 initial engineering costs by forcing developers to work outside their language of expertise.
@@ -112,7 +112,7 @@ dependencies.
 ## Minimizing JVM Artifact Size
 
 Maintaining lightweight resource usage is the key to keeping execution costs low. Unfortunately the overhead of the JVM
-already places it behind Python and NodeJS deployments, but less than a full containerized build. Library dependencies
+already places it behind Python and Node.js deployments, but less than a full containerized build. Library dependencies
 should be kept to the minimum since JVM artifacts do not perform tree-shaking code removal that Go or GraalVM will.
 
 |  Size   | Artifact Name                 | Use                                               |  
@@ -132,7 +132,7 @@ support read/write from S3 would be 3 MB, or `awsdsk-sns` to support Notificatio
 # Conclusion
 
 According to cloud monitoring SaaS
-Datadog [Python is the most popular language for Lambda](https://www.datadoghq.com/state-of-serverless/) with NodeJS
+Datadog [Python is the most popular language for Lambda](https://www.datadoghq.com/state-of-serverless/) with Node.js
 being a close second. This aligns with the lightweight market that Lambdas excel at. However, Datadog also indicates that
 over 60% of large organizations have deployed Lambda in 3 or more languages meaning that they are reaching into more
 structured languages such as Java, Go, or .Net for other, more likely complex, tasks.

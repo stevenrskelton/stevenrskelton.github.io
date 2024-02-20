@@ -1,7 +1,7 @@
 //https://www.stevenskelton.ca/scala-sbt-publishing-to-github-packages/
 
-lazy val publishAssemblyToGithubPackages = taskKey[Unit]("Publish Über Jar to Github Packages")
-publishAssemblyToGithubPackages := {
+lazy val publishAssemblyToGitHubPackages = taskKey[Unit]("Publish Über Jar to GitHub Packages")
+publishAssemblyToGitHubPackages := {
   val githubRepository = sys.env.get("GITHUB_REPOSITORY").getOrElse(throw new Exception("You must set environmental variable GITHUB_REPOSITORY, eg: owner/repository"))
   if(!sys.env.keySet.contains("GITHUB_REPOSITORY_OWNER")) throw new Exception("You must set environmental variable GITHUB_REPOSITORY_OWNER, eg: your username")
   if(!sys.env.keySet.contains("GITHUB_TOKEN")) throw new Exception("You must set environmental variable GITHUB_TOKEN")
@@ -56,5 +56,5 @@ publishAssemblyToGithubPackages := {
 
   println(s"Executing shell command $exe")
   import scala.sys.process._
-  if(exe.! != 0) throw new Exception("publishAssemblyToGithubPackages failed")
+  if(exe.! != 0) throw new Exception("publishAssemblyToGitHubPackages failed")
 }

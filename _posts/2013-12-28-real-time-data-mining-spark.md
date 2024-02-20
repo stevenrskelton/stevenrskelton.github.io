@@ -56,7 +56,7 @@ performance through horizontal scalability.
 ### Eclipse Setup
 
 As of Dec 2013, Spark is at version 0.8.1, and the master branch compiles to Scala 2.9.3. Users wishing to develop their
-applications in Scala 2.10 cannot cannot rely on Maven for pre-compiled artifacts; fortunately there is partial support
+applications in Scala 2.10 cannot rely on Maven for pre-compiled artifacts; fortunately there is partial support
 through a pre-production Scala-2.10 branch.
 
 ```
@@ -102,7 +102,7 @@ The SparkContext is used to create all RDDs, and RDD data is loaded line by line
 ### Data Models
 
 A good data set for demos is the freely distributable Stack Exchange data dump. It consists of a few tables with simple
-foreign key relationships, each dumped to a separate XML file. As Stack Exchange is a family of web sites, the full data
+foreign key relationships, each dumped to a separate XML file. As Stack Exchange is a family of websites, the full data
 dump contains multiple sets of varying sizes, each adhering to the same schema. Some of the less popular Stack Exchange
 sites have data sets only a few MB in size making them ideal for unit tests and development, while Stack Exchange’s
 premier site Stack Overflow can be used for deployment testing boasting 30GB of data.
@@ -132,7 +132,7 @@ case class Post(
 
 We’ll use companion objects to perform the XML load functionality. Each table will require an XML parser, but common
 behaviour, such as parsing Dates or iterating rows can be generalized in a parent class. Spark has its own mechanisms
-for loading files, line by line so we don’t need a separate stream parser, but we should still take advantage of Scala’s
+for loading files, line by line, so we don’t need a separate stream parser, but we should still take advantage of Scala’s
 XML functionality provided by the scala.xml package to parse our data rows.
 
 ```scala
@@ -235,7 +235,7 @@ documented on the Spark website, and let’s postpone an example until we get ou
 The general objective of this application is to be able to execute a variety of commands and measure their performance.
 This can easily be done by reading lines of the Console, and matching them to different RDD operations.
 
-In our Main class, let’s build an loop to handle our input.
+In our Main class, let’s build a loop to handle our input.
 
 ```scala
 println("Enter new command:")
@@ -303,7 +303,7 @@ RAM. When Spark initializes, you will see a line in the log:
 INFO storage.BlockManagerMasterActor$BlockManagerInfo: registering block manager localhost:49539 with 1194.6MB)
 ```
 
-If the RDD is large than the free memory (in this case 1194MB), it will be automatically paged to disk. When this occurs
+If the RDD is larger than the free memory (in this case 1194MB), it will be automatically paged to disk. When this occurs
 it will show as
 
 ```

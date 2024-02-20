@@ -8,12 +8,12 @@ tags:
   - Thrift
 ---
 
-In a Service Oriented Architecture, a service may be used by many different clients – each with with different usage
+In a Service Oriented Architecture, a service may be used by many different clients – each with different usage
 patterns and performance profiles. Behind a corporate firewall, without each client authenticating itself to our server,
 how can monitor a specific client if we can’t identify their requests?
 
-One way would be to track each client’s IP, but servers change and it may be impossible to coordinate across teams.
-Another would way is to push the logging and monitoring responsibility to each and every client. However the easiest way
+One way would be to track each client’s IP, but servers change, and it may be impossible to coordinate across teams.
+Another would way is to push the logging and monitoring responsibility to each and every client. However, the easiest way
 would be to watermark each thrift request with client information, but does the standard thrift protocol allow it? The
 answer is yes, a small amount client information can be transmitted unobtrusively dual-purposing the randomly
 generated `SeqId`.

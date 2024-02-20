@@ -22,7 +22,7 @@ using javascript; operations such as resizing, changing colors, adding/removing 
 based on user input or other external inputs.
 
 The example we will use in this article is a simple pie chart, dynamically created based on numerical input percentages.
-The final output will be similiar to this:
+The final output will be similar to this:
 
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 2 2" style="transform: rotate(-90deg);height:100px;float:left;margin-right:20px;">
   <path d="M 1 0 A 1 1 0 0 1 -0.9510565162951535 0.3090169943749475 L 0 0" fill="#900C3F"/>
@@ -32,7 +32,7 @@ The final output will be similiar to this:
 
 The `M`, `A`, `L` commands in the path data field are _moveto_, _arc_, and _lineto_; details on how they are used is in
 the [SVG documentation](https://www.w3.org/TR/SVG11/paths.html#PathDataEllipticalArcCommands) but beyond the scope of
-this article. The computation is basic trigonomity and hopefully the code provides an adequite explaination in itself,
+this article. The computation is basic trigonometry and hopefully the code provides an adequate explanation in itself,
 but the original calculation is covered by David Gilbertson in his
 blog [A simple pie chart in SVG](https://medium.com/hackernoon/a-simple-pie-chart-in-svg-dbdd653b6936).
 
@@ -47,7 +47,7 @@ The `viewBox` and `style` specify the render size, unlike static images SVG don'
 </svg>
 ```
 
-# Comparison of DOM manipultion and Lit Templates
+# Comparison of DOM manipulation and Lit Templates
 
 Let's assume we have a dynamic data specifying a variable number of slices with their percent and color:
 
@@ -60,7 +60,7 @@ Let's assume we have a dynamic data specifying a variable number of slices with 
 ```
 
 This data should be associated with the DOM element rendering rather than in global scope. In most cases, the best way
-to achieve that is using a HTML attribute, so that is how we will structure both examples.
+to achieve that is using an HTML attribute, so that is how we will structure both examples.
 
 The first step in the rendering process will be to convert the slice data percent into the `d` value used by SVG Path
 elements. For this we will use a `computePathData` function and a helper function, and these 2 functions will be common

@@ -9,9 +9,8 @@ tags:
 
 The Electric Frontier Foundation (EFF) has recommendations
 about [encrypting the web](https://www.eff.org/encrypt-the-web); there is no reason to be
-running servers over unencrypted HTTP any longer. It is irresponsible to your users and unnecessary, as such there is a
-a formal mechanism
-called [HTTP Strict Transport Security (HSTS)](https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) that
+running servers over unencrypted HTTP any longer. It is irresponsible to your users and unnecessary, as such there is a 
+formal mechanism called [HTTP Strict Transport Security (HSTS)](https://en.wikipedia.org/wiki/HTTP_Strict_Transport_Security) that
 enforces HTTPS for all requests at the domain level. Taking it further, modern browsers include a set of domains which
 can only work over HTTPS, it started with Google TLDs such as `.dev` and `.app`, but it is
 growing [https://hstspreload.org/](https://hstspreload.org/).
@@ -25,7 +24,7 @@ self-signed certs are used in non-production environments. In microservice setup
 services each with a separate certificate making it assured there is always one expiring at an inopportune moment.
 
 The Let's Encrypt Certbot tool automates renewal, and it is arguably better to use the Let's Encrypt practice of 90 day
-expiry even when offered the choice for more. DevOps rust without use and a brisk 90 day repeating process essentially
+expiry even when offered the choice for more. DevOps rust without use and a brisk 90-day repeating process essentially
 forces automation. Fortunately, it is a smooth process for anyone familiar with security practices, and if your
 organization lacks this talent you have much larger issues to worry about.
 
@@ -37,7 +36,7 @@ another password to manage), it is hardly extra work within an automated process
 
 ## Creating a PKCS12 file
 
-Setting up an running `certbot` is outside of the scope of this article; it really depends on your domain and
+Setting up a running `certbot` is outside the scope of this article; it really depends on your domain and
 environment setup. In the end, it will create the key files: `cert.pem`, `chain.pem`, `fullchain.pem` and `privkey.pem`
 in the `/etc/letsencrypt/live/[domain]` directory for your _[domain]_.
 
@@ -99,7 +98,7 @@ def serverHttpsContext(pkcs12File: File, pkcs12Password: String): Try[HttpsConne
 }
 ```
 
-If Akka starts without error it's good start but doesn't ensure full functionality. As mentioned above it is possible to
+If Akka starts without error it still doesn't ensure full functionality. As mentioned above it is possible to
 have incomplete chains due to self-signed certificates or misconfiguration, it is still important to ensure full
 functionality with a cryptographic tool such as OpenSSL:
 

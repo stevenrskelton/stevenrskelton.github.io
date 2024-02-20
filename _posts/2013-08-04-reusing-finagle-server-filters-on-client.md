@@ -66,12 +66,12 @@ class, we cannot take advantage of an implicit conversion, and since this cannot
 polymorphism also can’t bridge this divide. We need to rely on inheritance.
 
 The first step to a good application of inheritance is to identify and abstract away all differences. We can leave `Req`
-as an unspecified generic type parameter of SimpleFilter, and allow our child inheriance classes to define it. Each
+as an unspecified generic type parameter of SimpleFilter, and allow our child inheritance classes to define it. Each
 child class will need specify how to convert their `Req` type into our preferred type `Array[Byte]`. This is no work for
 a server filter, and short work for a client since the binary of a `ThriftClientRequest` instance is stored in its
 message field.
 
-Our abstract class will impliment our apply method, DRY.
+Our abstract class will implement our apply method, DRY.
 
 ```scala
 class AbstractMethodNameFilter[Req](action: String => Unit, requestToByte: Req => Array[Byte])

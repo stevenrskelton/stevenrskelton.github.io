@@ -45,7 +45,7 @@ only one request will be served from the database and both share the result.
 
 ## Making a Single Result Work
 
-A problem arises if the results are subtly different.  In the case of Thrift / Finagle, all results will have have the
+A problem arises if the results are subtly different.  In the case of Thrift / Finagle, all results will have the
 same identifier as the request, a mechanism that allows the client to match incoming responses to the async requests 
 that have been made.
 
@@ -75,13 +75,13 @@ trait GetAndSetSeqId {
   def badMsg(why: String) = Failure(new IllegalArgumentException(why))
 
   def getAndSetId(buf: Array[Byte], newId: Int): Try[Int] = {
-    if (buf.size < 4) return badMsg("short header")
+    if (buf.length < 4) return badMsg("short header")
     val header = get32(buf, 0)
     val off = if (header < 0)
       4 + 4 + get32(buf, 4)
     else 4 + header + 1
 
-    if (buf.size < off + 4) return badMsg("short buffer")
+    if (buf.length < off + 4) return badMsg("short buffer")
 
     val currentId = get32(buf, off)
     put32(buf, off, newId)

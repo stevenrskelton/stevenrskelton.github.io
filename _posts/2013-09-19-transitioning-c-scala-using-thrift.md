@@ -7,7 +7,7 @@ tags:
   - Thrift
 ---
 
-A 30 minute presentation on Sept 19th at the [Scala-Toronto Meetup](http://www.meetup.com/Scala/Toronto-CA/). The
+A 30-minute presentation on Sept 19th at the [Scala-Toronto Meetup](http://www.meetup.com/Scala/Toronto-CA/). The
 slides introduce a technical application of [Apache Thrift](http://thrift.apache.org/) and additional features offered by
 the [Twitter Finagle](http://twitter.github.io/finagle/).
 

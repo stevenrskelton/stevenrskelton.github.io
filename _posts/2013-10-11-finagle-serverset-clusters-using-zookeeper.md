@@ -10,7 +10,7 @@ tags:
 
 {% include postlogo.html title="Zookeeper" src="/assets/images/2013/10/zookeeper.png" %} The key to high availability is
 redundancy; it follows that if uptime matters, [Finagle](http://twitter.github.io/finagle/) needs to be deployed to
-multiple servers. This article walks through both the basic multi-host configuration using finagle-core, as well as a
+multiple servers. This article walks through both the basic multi-host configuration using finagle-core, and a
 more robust deployment scenario utilizing the finagle-serversets module.
 
 With proper architecture, server capacity will scale linearly with the number of servers, for <em>N</em> servers, each
@@ -72,9 +72,7 @@ During client construction, server sets are specified using `cluster` instead of
 ```scala
 val zookeeperHost: java.net.InetSocketAddress
 val zookeeperClient = new ZookeeperClient(sessionTimeout, zookeeperHost)
-val serverSet = new ServerSetImpl(zk.zookeeperClient, & quot;
-/ testservice & quot;
-)
+val serverSet = new ServerSetImpl(zk.zookeeperClient, "/testservice")
 val cluster = new ZookeeperServerSetCluster(serverSet)
 
 ClientBuilder()
@@ -92,9 +90,7 @@ val serverHost: java.net.InetSocketAddress
 
 val zookeeperHost: java.net.InetSocketAddress
 val zookeeperClient = new ZookeeperClient(sessionTimeout, zookeeperHost)
-val serverSet = new ServerSetImpl(zk.zookeeperClient, & quot;
-/ testservice & quot;
-)
+val serverSet = new ServerSetImpl(zk.zookeeperClient, "/testservice")
 val cluster = new ZookeeperServerSetCluster(serverSet)
 
 //publicize this server in Zookeeper
@@ -117,9 +113,9 @@ so its worth a brief inspection. Unless control over [ACL security](http://en.wi
 required, Zookeeper’s API is only 7 methods, so it is quickly usable following
 the [documentation on their wiki](https://cwiki.apache.org/confluence/display/ZOOKEEPER/Index).
 
-While the native Zookeeper client is exposed by the serversets implementation, expanded use cases of Zookeeper outside
-of Finagle will often benefit from the use of [Apache Curator](http://curator.incubator.apache.org/), which comes
-complete with precooked recipes for common tasks, as well as a wrapper client meant to alleviate the boiler-plate coding
+While the native Zookeeper client is exposed by the serversets implementation, expanded use cases of Zookeeper outside 
+Finagle will often benefit from the use of [Apache Curator](http://curator.incubator.apache.org/), which comes
+complete with precooked recipes for common tasks, as well as a wrapper client meant to alleviate the boilerplate coding
 necessary for issue free operation. However, for the purposes of Finagle’s use case, or simple CRUD operations for that
 matter, the standard Zookeeper client is quite sufficient.
 
@@ -153,14 +149,14 @@ val zkClient: com.twitter.common.zookeeper.ZookeeperClient
 val zk: org.apache.zookeeper.Zookeeper = zkClient.get
 
 val jsonCodec = ServerSetImpl.createJsonCodec
-val serverInstances: Seq[ServiceInstance] = for
-(zNode <- zk.getChildren("/testservice", false)) yield {
-
+val serverInstances: Seq[ServiceInstance] = for {
+  zNode <- zk.getChildren("/testservice", false)
+} yield {
     val serverData = zk.getData(s"/testservice/$zNode", false, null)
     //serverData is Array[Byte] of JSON
     //val json = new String(serverData, "UTF-8")
     ServerSets.deserializeServiceInstance(serverData, jsonCodec)
-  }
+}
 ```
 
 While the above code used Twitter `ServerSets` for JSON deserialization, any standard library could have been used,

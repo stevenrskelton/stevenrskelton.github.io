@@ -9,11 +9,11 @@ tags:
 ---
 
 Akka / [Apache Pekko](https://pekko.apache.org/) is a robust and popular Scala framework used to build concurrent
-production-grade software. One of the concurrency primatives it uses is the standard `scala.concurrent.Future` class.
+production-grade software. One of the concurrency primitives it uses is the standard `scala.concurrent.Future` class.
 Before these existed in Scala, there was
-the [Twitter `Future`](https://twitter.github.io/util/guide/util-cookbook/futures.html) offering similiar, but expanded
+the [Twitter `Future`](https://twitter.github.io/util/guide/util-cookbook/futures.html) offering similar, but expanded
 functionality including cancellation / interruptibility. Ignoring the functional coding style promoted
-by [ZIO](https://zio.dev/) for a second, the concurrency primative used by ZIO, known as `ZIO[R, E, A]` can be viewed as
+by [ZIO](https://zio.dev/) for a second, the concurrency primitive used by ZIO, known as `ZIO[R, E, A]` can be viewed as
 a more advanced `Future[A]`.
 
 {% include table-of-contents.html height="500px" %}
@@ -32,7 +32,7 @@ By including the dependencies as a type, it offers flexibility not offered by ot
 
 Java has pretty much abandoned [checked exceptions](https://www.baeldung.com/java-checked-unchecked-exceptions) because
 of a poor implementation, but the idea is sound. It is often helpful to track what, if any, exceptions can be thrown.
-This can be as open as all classes including non-throwables `ZIO[_, Any, _]`, narrowed to
+This can be as open as all classes including non-throwable `ZIO[_, Any, _]`, narrowed to
 exceptions (`ZIO[_, Exception, _]`, or as strict as not being able to throw exceptions `ZIO[_, Nothing, _]` without
 termination.
 
@@ -47,9 +47,9 @@ type Task[+A]   = ZIO[Any, Throwable, A] // Succeed with an `A`, may fail with `
 
 The `Task[A]` class can be viewed as a `Future[A]`.
 
-# How to Partially Migrate: ZIO and Future interoptability
+# How to Partially Migrate: ZIO and Future interoperability
 
-Being able to run `Future` and `ZIO` in the same project is straight-forward via conversion; similiar to how
+Being able to run `Future` and `ZIO` in the same project is straight-forward via conversion; similar to how
 Java `CompletableFuture`, Twitter `Future`, and Scala `Future` provide efficient transformations.
 
 To convert a `z: ZIO[Any, Any, A]` to a Future:
@@ -165,7 +165,7 @@ branches.
 Quill doesn't require ZIO, it supports 4 installs:
 
 - with ZIO,
-- with Cats/Monix (these are similiar to ZIO),
+- with Cats/Monix (these are similar to ZIO),
 - blocking JDBC without ZIO,
 - async JDBC without ZIO (legacy).
 
@@ -195,7 +195,7 @@ Compile times and compile optimizations are covered separately in
 
 ## Step 4: Scala 2 to 3
 
-The Scala 3 was a full rewrite based on Dotty, and is less mature than the Scala 2 compiler. It is noticably slower,
+The Scala 3 was a full rewrite based on Dotty, and is less mature than the Scala 2 compiler. It is noticeably slower,
 however over time this is expected to improve. The slowness of Quill is notable, outlined
 in [Step 1:Effect on Compile Time](#effect-on-compile-time). This is an understandable reason to use Slick over Quill
 until code can be refactored to maximize incremental compilation, or avoid SQL compilation by moving queries to their
@@ -218,7 +218,7 @@ inline def query = ...
 ```
 
 There are limitations to inlining, for example inline def cannot be nested. Swapping `inline def` for `val` was a minor
-change, restructuing code to single level def depth was a more significant refactor. Until this was complete those
+change, restructuring code to single level def depth was a more significant refactor. Until this was complete those
 queries used the dynamic runtime generation fallback.
 
 ### Akka to Pekko

@@ -8,7 +8,7 @@ tags:
 ---
 
 {% include postlogo.html title="Web Components" src="/assets/images/2014/02/webcomponents.png" %} As businesses now rely
-more heavily on web applications to perform daily operations, a user friendly datatable/spreadsheet is indispensable to
+more heavily on web applications to perform daily operations, a user-friendly datatable/spreadsheet is indispensable to
 all web developers. While individual requirements vary, the core staple is the sortable table. Using Polymer’s Templates
 and Data-Binding, one can be implemented in a remarkably concise way.
 
@@ -23,7 +23,7 @@ The sortable table has a few standard requirements:
 Consider a use-case of finding the maximum value contained within various
 columns: [Ostrich](https://github.com/twitter/ostrich) is a reporting library on the JVM that gathers performance
 statistics and query execution times, making them available as JSON. It is a realistic input, and a simple sortable
-table provides a measurable benefit the the user.
+table provides a measurable benefit the user.
 
 Using the Ostrich JSON dataset as reference, we should create another array to define the order, title, and any other
 properties for the columns we wish to be in the rendered table:
@@ -99,7 +99,7 @@ variables `sortColumn` and `sortDescending` are bound to the Polymer element, up
 re-render the entire table with the proper sort.
 
 Because user-defined parameters cannot be sent to event handlers we cannot send `changeSort` the clicked column as an
-argument. However each event handler is passed the source DOM element, so as long as the source element was rendered
+argument. However, each event handler is passed the source DOM element, so as long as the source element was rendered
 using a Polymer template it will expose a `model` property containing a reference to its template’s bound data model. If
 the element’s template was bound using a `repeat`, the `model` property will be a reference to the specific item of the
 collection corresponding to this element, in our case the item in the `columns` array.
@@ -158,7 +158,7 @@ PolymerExpressions.prototype.sortByKey = function(array, key, desc) {
 
 The `data` for the table is JSON meaning each row of data is a JSON object; we can reference a particular cell of the
 row by column name. This is much cleaner than dealing with a numerical index since the column’s displayed order may be
-different than its order within the row data.
+different from its order within the row data.
 
 ```html
 <template repeat="{{-"{{"-}}
@@ -174,7 +174,7 @@ different than its order within the row data.
 
 We have defined all the code for a sortable table, the only task left is to style. Alternating row background color is
 both appealing and simple using the `nth-of-type` CSS selector, more advanced conditional formatting will hopefully be
-the subject of a future article – although it is quite straightforward to implement by adding an additional formatting
+the subject of a future article – although it is quite straightforward to implement by adding a formatting
 function property to the `columns` array.
 
 The following live-demo takes advantage of `columns` data binding and the `window.resize` event to show/hide the number

@@ -28,8 +28,8 @@ you spot the magic invocation
 of [ThriftTracing.CanTraceMethodName](https://github.com/twitter/finagle/blob/master/finagle-thrift/src/main/scala/com/twitter/finagle/thrift/ThriftTracing.scala),
 a fire-and-forget call to a mysterious `__can__finagle__trace__v3__` method.
 
-The unexpecting multiplexed non-finagle service throws an exception upon receiving a call which it cannot route, as it
-doesn’t conform to the `Service.Method` format.
+The unsuspecting multiplexed non-finagle service throws an exception upon receiving a call which it cannot route, as it
+does not conform to the `Service.Method` format.
 
 Tracing is a great feature, and it makes sense Finagle does what it does (it uses this method upgrade the wire protocol
 to support more advanced features). A simple workaround is to disable this feature, inherit the codecs: in

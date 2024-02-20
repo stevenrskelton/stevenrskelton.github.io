@@ -35,8 +35,8 @@ def handleRequest(event: Event, context: Context): Response
 ```
 
 The source of the `event` will determine what it is, within AWS all events are JSON however AWS will automatically parse
-the JSON using an internal Jackson library to any POJO specified in the function. For convinience AWS has made
-a `aws-lambda-java-events` package that contains classes for all AWS events. Similarily, any class that can be
+the JSON using an internal Jackson library to any POJO specified in the function. For convenience AWS has made
+a `aws-lambda-java-events` package that contains classes for all AWS events. Similarly, any class that can be
 serialized by Jackson can be used as a `Response` output.
 
 When AWS Lambdas are configured as public Internet endpoints they will be accessible at

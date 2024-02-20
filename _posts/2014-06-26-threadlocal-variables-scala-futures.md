@@ -19,7 +19,7 @@ handing the request; which is extremely useful for logging or auditing purposes.
 Where TLS can fail is when the execution path is handled by multiple threads.
 Anywhere [Futures](http://docs.scala-lang.org/overviews/core/futures.html) parallelize code,
 execution is handled off to a different thread defined within the `Executor` thread-pool. This means that any use
-of Scala Futures or similiar async execution techniques will often lose TLS data. Since the `Future` is at the heart of
+of Scala Futures or similar async execution techniques will often lose TLS data. Since the `Future` is at the heart of
 [Reactive web frameworks](http://www.reactivemanifesto.org/) such as [Play! 2.0](http://www.playframework.com/)
 alternative techniques or code to handle TLS propagation is required.
 
@@ -138,7 +138,7 @@ Await.result(fut5, 1.second)
 ```
 
 This code encounters the problem that `DynamicVariable` will correctly pass on TLS to new threads, but if the thread has
-already been created and is being re-unsed from the pool the TLS won’t be copied.  The values will have the old value 
+already been created and is being reused from the pool the TLS won’t be copied.  The values will have the old value 
 assigned during its previous use.
 
 ## Modified ExecutionContext to propagate values

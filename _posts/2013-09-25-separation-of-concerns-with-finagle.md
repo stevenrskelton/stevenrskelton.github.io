@@ -10,7 +10,7 @@ tags:
 
 The [Separation of Concerns (SoC)](http://en.wikipedia.org/wiki/Separation_of_concerns) pattern is one of those software
 architectural choices that everyone is helpful. It increases clarity, shortens the amount of code in the working
-context, and minimizes the chance of side effects. For example, two concerns that shouldn’t require entanglement:
+context, and minimizes the chance of side effects. For example, two concerns that should not require entanglement:
 updating data and cache invalidation. Both are related, but one is concerned about business logic and database access,
 while the other deals with the cache servers. Finagle’s generated `FutureIface` can be used to keep these two separate.
 
@@ -18,7 +18,7 @@ Some techniques, such as [Type Class](http://en.wikipedia.org/wiki/Type_class) p
 Methods), or [Aspect-Oriented Programming (AOP)](http://en.wikipedia.org/wiki/Aspect-oriented_programming) necessitate a
 new way of thinking – and a lot of practice to be correctly applied. On the other hand, using files to separate code,
 such as with a Scala `trait` (or C# Partial Classes) is an approach intuitive to most developers. Our approach is
-similiar: create a separate class for each concern, and let Finagle wire them together for us.
+similar: create a separate class for each concern, and let Finagle wire them together for us.
 
 We know that Scrooge generates an interface for every service, let’s extend the interface for an arbitrary service `Foo`
 into two classes.
@@ -42,7 +42,7 @@ access to the exact same input parameters. For simplicity, let’s assume that o
 Right now all “post” methods return `Future.never`, which is ok since we will never try resolve it. The only point of
 the post class is to execute code, the original service implementation handles any return values. The `Future.never`
 satisfies Scala’s type checking, returning a `Future[Nothing]`, this matches any thrift return type. We could have also
-used null, but given null‘s stigma in Scala I think this is a better choice.
+used null, but within Scala I think this is a better choice.
 
 The only implementation necessary in the post class is for `updateFoo`, since we don’t expect a `get` method to trigger
 cache invalidation. Without loss of generality, we’ll call a method in an arbitrary external object
@@ -56,7 +56,7 @@ def updateFoo(foo: Foo): Future[Boolean] = {
 }
 ```
 
-All of the work coordinating calls and executing methods will be handled by Finagle.
+All the work coordinating calls and executing methods will be handled by Finagle.
 A [Finagle Filter](https://github.com/twitter/finagle/blob/master/finagle-core/src/main/scala/com/twitter/finagle/Filter.scala)
 is perfect for chaining together service calls, the code could not be any more succinct.
 

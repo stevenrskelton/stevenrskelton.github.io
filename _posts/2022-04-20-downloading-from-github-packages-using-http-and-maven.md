@@ -10,7 +10,7 @@ tags:
 *GitHub Packages* is a Maven compatible repository accessible outside of GitHub. Artifacts can be downloaded
 using Maven or directly through the GitHub web interface. There is no REST API available to search *GitHub Packages*
 so this article walks through the URLs exposed for Maven which can be used to create an API with only HTTP commands.
-The URLs to browse packages and download files will be covered, as well as steps to more effectivily use the free tier
+The URLs to browse packages and download files will be covered, as well as steps to more effectively use the free tier
 for private repositories.
 
 {% include table-of-contents.html height="200px" %}
@@ -275,7 +275,7 @@ Actions, both unused by Maven.
 
 ## Downloading Artifacts using Maven (mvn)
 
-There are a few `mvn` plugins that can be run outside of a configured project, directly from any command prompt. One is
+There are a few `mvn` plugins that can be run outside a configured project, directly from any command prompt. One is
 [mvn dependency:copy](https://maven.apache.org/plugins/maven-dependency-plugin/copy-mojo.html). This maven plugin
 command can be used instead of `wget` or `curl` to download a jar file:
 
@@ -289,7 +289,7 @@ mvn dependency:copy \
 
 The benefit here is the input parameter for a separate `settings.xml`. This file can be used to contain Maven 
 credentials to repository, useful if the `wget` or `curl` command won't have access to the `GITHUB_TOKEN` or if this
-command will be executed within a GitHub Action similiar to how [Scala SBT Publishing to GitHub Packages]({% post_url
+command will be executed within a GitHub Action similar to how [Scala SBT Publishing to GitHub Packages]({% post_url
 2022-04-17-scala-sbt-publishing-to-github-packages %}) publishes Maven artifacts using `mvn deploy:deploy-file`.
 
 ```xml
@@ -320,23 +320,23 @@ command will be executed within a GitHub Action similiar to how [Scala SBT Publi
 
 ## Private Repo Download Caps, what about MD5 files?
 
-There are costs associated with outbound traffic - either directly paid for Github Pro accounts or indirectly with 1GB
-transfer limits for private repos with free accounts. However use-cases exist for the external access of smaller files
+There are costs associated with outbound traffic - either directly paid for GitHub Pro accounts or indirectly with 1GB
+transfer limits for private repos with free accounts. However, use-cases exist for the external access of smaller files
 such as `pom`, `md5`, `sha1` and `maven-metadata.xml`.
 
 The `md5` and `sha1` are meant for use in integrity validation. In a multi-hop or cloud situation it is quite possible
 intermediate storage (such as S3) poses risks as an attack vector, opportunity for partial transfers, or file
-corruption. Even if Github servers and the final deployment server are secure, if artifacts pass though a layer with
-security administered by a separate authority mistakes can happen. A final `md5` comparision directly to the Github
+corruption. Even if GitHub servers and the final deployment server are secure, if artifacts pass though a layer with
+security administered by a separate authority mistakes can happen. A final `md5` comparison to the GitHub
 Packages hosted md5 file can ensure the correct artifacts were properly copied with little complexity or performance
 overhead.
 
 <img src="/assets/images/2022/04-20/md5validation.png" alt="MD5 Validation UML" title="MD5 Validation UML" style="text-align: center;"/>
 
 Another use is in version monitoring and publication. For Continuous Delivery pipelines that stop short of deployment
-upgrading, there can be a need for version publication and monitoring. Applications or tools can directly use Github
+upgrading, there can be a need for version publication and monitoring. Applications or tools can directly use GitHub
 Packages metadata to monitor release versions to provide update notification on projects that are not managed by a
 formal package manager.
 
-These are two practical uses of directly accessing Github Package files outside of a Github Action. Neither will incure
+These are two practical uses of directly accessing GitHub Package files outside a GitHub Action. Neither will incur
 significant use of external bandwidth, and both can provide flexibility in custom CI/CD pipelines. 

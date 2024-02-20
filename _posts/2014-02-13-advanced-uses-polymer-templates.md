@@ -69,7 +69,7 @@ the same. What is new is the ability to dynamically specify a template to use to
 specified a template for use or the default will be applied. This turns out to be rather easy
 as [Polymer Templates](http://www.polymer-project.org/platform/template.html) already support a `ref` attribute for this
 purpose. Simply binding the `ref` attribute to an `id` of another template will substitute its value, if `ref` is empty
-than the original content will be used.
+then the original content will be used.
 
 ```html
 
@@ -133,7 +133,7 @@ To apply a filter typically it is necessary to wrap the code within another temp
 </template>
 ```
 
-Thus the code to generate cell contents is complete. The two unresolved variables `row` and `column` must obviously come
+Thus, the code to generate cell contents is complete. The two unresolved variables `row` and `column` must obviously come
 from our two original templates repeating over the `data` and `columns` arrays. We have created a drop-in addition to
 the previous `simple-sorted-table` component.
 
@@ -170,7 +170,7 @@ be conditionally chosen based on the cell `{{-"{{"-}}value}}`:
 </template>
 ```
 
-Once the template is specified in the columns data,
+Once the template is specified in the _columns_ data,
 
 ```js
 var fruits = [

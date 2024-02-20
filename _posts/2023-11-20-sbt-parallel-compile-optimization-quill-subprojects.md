@@ -16,11 +16,9 @@ excerpt_separator: <!--more-->
 %}
 
 Advanced syntax constructs and a robust type system can increase developer productivity and runtime reliability but also
-create extra work for the compiler. Macro libraries such as [Quill](https://zio.dev/zio-quill/) are effectivily programs
+create extra work for the compiler. Macro libraries such as [Quill](https://zio.dev/zio-quill/) are effectively programs
 written for the compiler, and can represent an unbounded amount of work depending on what they are trying to accomplish.
-Are there ways to
-structure our Scala 3 code to ensure that we can embrace the rich macro ecosystem without excessively long compile
-times?
+Are there ways to structure our Scala 3 code to ensure that we can embrace the rich macro ecosystem without excessively long compile times?
 <!--more-->
 
 {% include table-of-contents.html height="600px" %}
@@ -84,7 +82,7 @@ Consider increasing the JVM heap using `-Xmx` or try a different collector, e.g.
 
 ### Macros Blocking Threads Preventing Multithreading
 
-Long running macros (taking over 1 minute) were observed to block compiler from running other threads.
+Long-running macros (taking over 1 minute) were observed to block compiler from running other threads.
 
 {%
     include figure image_path="/assets/images/2023/11/single_task_cpu.png"
@@ -94,7 +92,7 @@ Long running macros (taking over 1 minute) were observed to block compiler from 
 
 This wasn't observed to be an issue in all projects, it appeared to be specific to macros being forced to run
 sequentially within the same project. For SQL heavy projects, non-macro code is quickly compiled, resulting in idle
-cores. Ideally, the entire compile task should be multithreaded from start to finish.
+cores. Ideally, the entire compile task should use multithreading from start to finish.
 
 {%
     include figure image_path="/assets/images/2023/11/parallel_task_cpu.png"
@@ -112,8 +110,8 @@ Whether compiling locally or in a remote CI/CD the build should be optimized to 
 considerations are CPU and RAM.
 
 Most often it is optimal to match the number of threads to the number of cores to limit context switching. Depending on
-workload, for N cores, a N-1 thread limit can be used if there are heavy background/system threads running concurrently,
-aswell a N+1 thread limit can be used if thread tasks are short lived. After an optimal N is determined, an explicit
+workload, for N cores, an N-1 thread limit can be used if there are heavy background/system threads running concurrently,
+as well an N+1 thread limit can be used if thread tasks are short-lived. After an optimal N is determined, an explicit
 declaration in the _build.sbt_ can
 ensure [parallel execution in SBT](https://www.scala-sbt.org/1.x/docs/Parallel-Execution.html)
 matches our expectations.
@@ -206,8 +204,8 @@ $ tree
 
 The `build.properties` simply contains `sbt.version=1.9.6`
 
-SBT sub-projects will inherit properties from the root project so the `build.sbt` will only need to define
-project dependencies. Our typical `build.sbt` used for each Quill sub-project is similiar to:
+SBT subprojects will inherit properties from the root project so the `build.sbt` will only need to define
+project dependencies. Our typical `build.sbt` used for each Quill subproject is similar to:
 
 ```sbt
 name := "sqluser"

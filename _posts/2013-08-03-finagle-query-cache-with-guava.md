@@ -71,7 +71,7 @@ def binaryProtocolChangeSeqId(requestOrResponse: Array[Byte],
 }
 ```
 
-We can similarily discover the `SeqId` in any client request:
+We can similarly discover the `SeqId` in any client request:
 
 ```scala
 def binaryProtocolMethodNameSeqId(request: Array[Byte]): (String, Array[Byte]) = {
@@ -82,7 +82,7 @@ def binaryProtocolMethodNameSeqId(request: Array[Byte]): (String, Array[Byte]) =
 }
 ```
 
-We now have code to peek into request method names, and to set/zero-out uniquely identifing SeqIds. But before we can
+We now have code to peek into request method names, and to set/zero-out uniquely identifying SeqIds. But before we can
 write our caching code, we need to consider the case of Exceptions. It would be unwise to store exceptions into our
 cache, so let’s dig further into the Thrift protocol. Thrift allows exceptions to be sent back as part of a valid
 response, and any service methods allowing exception responses have a single byte _exit status_ field.
@@ -129,11 +129,11 @@ def apply(request: Array[Byte],
 ```
 
 With our abstract caching filter complete, let’s create some example implementations to illustrate how to handle
-different scenerios and put to use some of Guava’s features. Guava is well documented, and there is a set of slides for
+different scenarios and put to use some of Guava’s features. Guava is well documented, and there is a set of slides for
 the impatient.
 
 Most eventually consistent datasets will benefit from having their recent read queries cached without having to worry
-about cache invalidation, as long as their total expiry time is less than the eventual consistency guarentee.
+about cache invalidation, as long as their total expiry time is less than the eventual consistency guarantee.
 
 ```scala
 import com.google.common.cache.CacheBuilder
@@ -172,7 +172,7 @@ class FixedSizeCache(methodsToCache: Seq[String], val maxSizeMegabytes: Int = 10
 }
 ```
 
-As a final note, an assumption has been made that the `Array[Byte]` is encoded `TBinaryProtocol`. Alternativily,
+As a final note, an assumption has been made that the `Array[Byte]` is encoded `TBinaryProtocol`. Alternatively,
 a `TProtocolFactory` could have been supplied in the `AbstractCacheFilter` constructor, and fields such as `SeqId` could
 be obtained by calling `readMessageBegin`. This alternative approach is revisited later
 in [Thrift Client-Side Caching to Speed Up Unit Tests]({% post_url

@@ -1,5 +1,5 @@
 ---
-title: "Compiling Scala Native in a Github Action; Alternatives to GraalVM"
+title: "Compiling Scala Native in a GitHub Action; Alternatives to GraalVM"
 categories:
   - Scala
 tags:
@@ -56,7 +56,7 @@ code, resulting in smaller packages which boot quickly. Unfortunately the larges
 removal of any runtime performance optimization based on use. The AOT is able to optimize but without any visibility
 into common paths and hotspots it is from a strictly static perspective. In addition, the optimizations come from
 Java bytecode which has already removed some key ingredients for full static analysis. In real-world benchmarks,
-GraalVM performance typically lags behind JIT competitors for long running tasks.
+GraalVM performance typically lags behind JIT competitors for long-running tasks.
 
 Another breaking change in GraalVM use is the inability to use Java reflection and runtime code generation. This is
 more common in Java than in languages such as Scala, but any program can be affected. There are 2 approaches to work
@@ -233,7 +233,7 @@ synchronization primitives. The current recommendation is to import and use nece
 functionality libraries such as FS2 require an additional library to operate in Scala Native, such as the I/O runtime
 [epollcat](https://github.com/armanbilge/epollcat).
 
-Scala libraries are typically built around event-loops and/or monads, so the use of NodeJS's I/O event library
+Scala libraries are typically built around event-loops and/or monads, so the use of Node.js's I/O event library
 [libuv](https://libuv.org/) has been made available
 as [Scala Native Loop](https://github.com/scala-native/scala-native-loop).
 
@@ -316,7 +316,7 @@ The debug-mode Scala Native produced a 41.4MB linux executable.
 TODO: optimized release mode file size
 TODO: startup with Scala 3 Jar
 TODO: load benchmarks with Scala 3 Jar
-TODO: memory foot print with Scala 3 Jar
+TODO: memory footprint with Scala 3 Jar
 
 ## Unit Tests
 
@@ -327,7 +327,7 @@ TODO: running tests
 
 The debugging of native executables and libraries is not as developer friendly as JIT code. There is less debugging
 information available within the executables for IDEs to interpret. A typical debugging experience using
-[LLDB](https://lldb.llvm.org/) is dramatically different than JVM tooling; meaning cross compilation has practical
+[LLDB](https://lldb.llvm.org/) is dramatically different from JVM tooling; meaning cross compilation has practical
 utility within the entire software development lifecycle.
 {%
 include figure
@@ -355,8 +355,7 @@ caption="Debugging Scala Native LLVM code using LLDB Gui"
 Scala Native is a welcome addition to the C/C++ alternatives for Scala developers. This ecosystem has room to grow as
 performance and latency bottlenecks are no longer determined by hardware, but by the minuscule overheads determined
 at compile time. Latency can't be solved by more parallelism or faster CPUs, but by slimming the instruction and cache
-footprint of code. Rust and Go have taken off in popularity, and Scala Native, if done right has all of the same
-benefits.
+footprint of code. Rust and Go have taken off in popularity, and Scala Native, if done right has all the same benefits.
 
 But to make this a compelling choice, Scala Native shouldn't be confused with Scala's JVM presence. Longtime users of
 ScalaJS are familiar with the restrictions to the `lihaoyi` libraries, and Scala Native have the same burden. Projects

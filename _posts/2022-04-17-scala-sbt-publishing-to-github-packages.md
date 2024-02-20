@@ -37,7 +37,7 @@ looks like there are a lot of happy users, but sadly I couldn't get it to work.
 [error] 	at org.apache.ivy.util.url.URLHandlerDispatcher.upload(URLHandlerDispatcher.java:82)
 ```
 
-For an activily maintained GitHub project, I was sad to see an identical 4 month old open issue
+For an actively maintained GitHub project, I was sad to see an identical 4-month-old open issue
 [Without change the SBT file, I get a "java.io.IOException: Error writing to server" exception](https://github.com/djspiewak/sbt-github-packages/issues/48).
 Even manually configuring SBT without the plugin couldn't resolve the issues, there might be an incompatibility with how
 my project is named or versioned that I just couldn't resolve.
@@ -49,7 +49,7 @@ my project is named or versioned that I just couldn't resolve.
 _**Steps to publish regular library jars is [included as an appendix](#publishing-non-über-jars)**_
 
 To complicate the issue further, I didn't just want to privately publish my standard artifacts, I want to publish an
-über jar. Similar to how Docker creates an easy deploy with just 1 file, an über jar is similiar. It is also similar to
+über jar. Similar to how Docker creates an easy deploy with just 1 file, an über jar is similar. It is also similar to
 how a Java War file is a deployable package. Normal Jar files are lean, they only contain your compiled code and publish
 their dependencies in a POM file. This is great for libraries, but in the case where the jar is meant to be a standalone
 executable all dependencies will need to be included. This is an über jar, it is like a regular jar but includes
@@ -59,7 +59,7 @@ project.
 
 It does however to maintain a set of compiled releases, and here we will be using GitHub Packages.
 
-There is an SBT pluging called [sbt/sbt-assembly](https://github.com/sbt/sbt-assembly) that will create an über jar, and
+There is an SBT plugin called [sbt/sbt-assembly](https://github.com/sbt/sbt-assembly) that will create an über jar, and
 allow it to be published to Maven. It is a single-line add to `project/plugins.sbt` and takes zero configuration
 
 ```sbt
@@ -76,7 +76,7 @@ We have 2 tasks, _compile_ and _publish_.
 
 It looks like `sbt-assembly` compiles fine, but SBT is failing at publishing the artifacts.
 
-An alternative approach would be to setup Maven to compile, and also use it to publish the Scala project like it was
+An alternative approach would be to set up Maven to compile, and also use it to publish the Scala project like it was
 Java (which I would assume works fine since it is directly supported by GitHub).
 
 A second alternative approach would be to keep SBT, but create an SBT task to publish using an external Maven call.
@@ -117,13 +117,13 @@ We want to create a new task to:
 - create a `settings.xml` file
 - publish the jar using a call to an external `mvn`
 
-Since this is drop in task, put it either in `build.sbt` or its own file called `publishAssembyToGithubPackages.sbt`.
+Since this is drop in task, put it either in `build.sbt` or its own file called `publishAssembyToGitHubPackages.sbt`.
 Defining a manually executed task is pretty simple in SBT:
 
 ```sbt
-lazy val publishAssembyToGithubPackages = taskKey[Unit]("Publish Über Jar to Github Packages")
+lazy val publishAssembyToGitHubPackages = taskKey[Unit]("Publish Über Jar to GitHub Packages")
 
-publishAssembyToGithubPackages := {
+publishAssembyToGitHubPackages := {
   your scala code goes here
 }
 ```
@@ -222,13 +222,13 @@ println(s"Executing shell command $exe")
 
 import scala.sys.process._
 
-if (exe.! != 0) throw new Exception("publishAssembyToGithubPackages failed")
+if (exe.! != 0) throw new Exception("publishAssembyToGitHubPackages failed")
 ```
 
 # GitHub Workflow
 
-We have populated our `publishAssembyToGithubPackages` code added it to a `publishAssembyToGithubPackages.sbt` file in
-the base of our project. The next step is to create a new Action in Github Actions. It can be created through the
+We have populated our `publishAssembyToGitHubPackages` code added it to a `publishAssembyToGitHubPackages.sbt` file in
+the base of our project. The next step is to create a new Action in GitHub Actions. It can be created through the
 website, or manually by creating a new file `/.github/workflows/publish-uber-assembly-to-github.yml`.
 
 > ⚠️ You may need to adjust your Personal Access Token permissions to check in this file using git since it
@@ -258,7 +258,7 @@ permissions:
   packages: write
 ```
 
-The actual job is a simple setup of checkout, java, and then calling our `publishAssembyToGithubPackages` task in SBT.
+The actual job is a simple setup of checkout, java, and then calling our `publishAssembyToGitHubPackages` task in SBT.
 
 ```yaml
 jobs:
@@ -272,7 +272,7 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
       - name: Publish Über Jar to GitHub Packages
-        run: sbt publishAssembyToGithubPackages
+        run: sbt publishAssembyToGitHubPackages
 ```
 
 And now we have working GitHub Package publishing of an über jar by adding only 2 files to our project.
@@ -305,11 +305,11 @@ val exe =
 """.stripLineEnd
 ``` 
 
-For monolithic libraries include _publishToGithubPackages.sbt_ instead of _publishAssemblyToGithubPackages.sbt_ and call
-_publishToGithubPackages_ instead of _publishAssemblyToGithubPackages_ in your Github Action.
+For monolithic libraries include _publishToGitHubPackages.sbt_ instead of _publishAssemblyToGitHubPackages.sbt_ and call
+_publishToGitHubPackages_ instead of _publishAssemblyToGitHubPackages_ in your GitHub Action.
 
 {%
 include downloadsources.html
 src="/assets/images/2022/04-16/publish-uber-assembly-to-github.yml,
-/assets/images/2022/04-16/publishAssemblyToGithubPackages.sbt, /assets/images/2022/04-16/publishToGithubPackages.sbt"
+/assets/images/2022/04-16/publishAssemblyToGitHubPackages.sbt, /assets/images/2022/04-16/publishToGitHubPackages.sbt"
 %}

@@ -2,7 +2,7 @@
 
 AWS Lambda function written in both Scala3 and Python which handles URL POST requests to insert items into a DynamoDB table.
 
-Github Action to automatically push new builds to AWS as part of a CI/CD pipeline.
+GitHub Action to automatically push new builds to AWS as part of a CI/CD pipeline.
 
 ## AWS Lambda with interaction to other AWS services and CI/CD
 ### https://www.stevenskelton.ca/scala-3-aws-lambda-functions/

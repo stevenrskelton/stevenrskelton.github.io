@@ -100,11 +100,11 @@ def changeSeqId(
   // we need first struct to add it.  Try writing a new empty
   // struct and see if anything is added.
   outputProtocol.writeStructBegin(null)
-  val jsonCommaFix = if (outputTransport.length > requestOrResponse0.length)
+  val jsonCommaFix = if (outputTransport.length > requestOrResponse0.length) {
     //this is a complete hack, we only want the first byte added
     val l = requestOrResponse.length - remainingBytes
     requestOrResponse.slice(l - 1, l)
-  else Array[Byte]()
+  } else Array[Byte]()
  
   (inputMessage.seqid, requestOrResponse0 ++ jsonCommaFix ++ remainingInputMessage)
 }
@@ -126,12 +126,12 @@ lazy val requestResponses: Map[String, Array[Byte]] = jsonLog.map {
 ```
 
 This code reads in our `TJSONProtocol` log data and populates a request/response dictionary. The keys are JSON – since
-it might be helpful to developers to know what’s in the map, but we are choosing to reencode all responses to
+it might be helpful to developers to know what’s in the map, but we are choosing to re-encode all responses to
 TBinaryProtocol since that’s what the client expects to be returned.
 
-With the `requestResponses` “cache” prepopulated on initialization, all we need to do is map incoming requests to its
+With the `requestResponses` “cache” pre-populated on initialization, all we need to do is map incoming requests to its
 entries.
-Each request gets its `SeqID` zero’d out, reencoded to JSON, and then compared to what is in the `requestResponses` map.
+Each request gets its `SeqID` zero’d out, re-encoded to JSON, and then compared to what is in the `requestResponses` map.
 
 ```scala
 def apply(request: ThriftClientRequest, service: Service[ThriftClientRequest, Array[Byte]])
@@ -157,14 +157,10 @@ That’s it. A sample usage, using a hard-coded log, would be
  *  getOrderIds(1) => (3)
  *  getOrderIds(2) => (8,9)
  */
-val log = Seq((
-"""[1,"getOrderIds",1,0,{"1":{"i32":1}}]""",
-"""[1,"getOrderIds",2,0,{"0":{"lst":["rec",1,{"1":{"i32":3}}]}}]""")
-),
-(
-"""[1,"getOrderIds",1,0,{"1":{"i32":2}}]""",
-"""[1,"getOrderIds",2,0,{"0":{"lst":["rec",2,{"1":{"i32":8}},{"1":{"i32":9}}]}}]""")
-))
+val log = Seq(
+  ("""[1,"getOrderIds",1,0,{"1":{"i32":1}}]""","""[1,"getOrderIds",2,0,{"0":{"lst":["rec",1,{"1":{"i32":3}}]}}]"""),
+  ("""[1,"getOrderIds",1,0,{"1":{"i32":2}}]""","""[1,"getOrderIds",2,0,{"0":{"lst":["rec",2,{"1":{"i32":8}},{"1":{"i32":9}}]}}]""")
+)
      
 val mockedData = new MockJSONDataFilter(TestApi, log)
 val service = ClientBuilder()

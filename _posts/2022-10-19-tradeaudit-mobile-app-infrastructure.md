@@ -101,7 +101,7 @@ While a lot of mobile apps can get by without a separate website, there are many
 In the case of Trade Audit, the URL [https://tradeaudit.app](https://tradeaudit.app) is hosted from a GitHub Pages
 repository. GitHub Pages can be a simple and free option for static sites. Dynamic data for this site loads from CORS
 JSON requests to the main Trade Audit mobile API server, and the data is highly cacheable. There are many free (or low
-cost) IaaS solutions providing highly configurable caching and DDOS protection such a AWS CloudFront or CloudFlare that
+cost) IaaS solutions providing highly configurable caching and DDOS protection such an AWS CloudFront or CloudFlare that
 will protect your API layer without a separate Nginx install.
 
 

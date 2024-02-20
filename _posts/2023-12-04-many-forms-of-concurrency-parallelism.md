@@ -203,7 +203,7 @@ of instances. Cloud platforms expose this as [Autoscaling](https://cloud.google.
 
 ### Distributed Concurrency
 
-The concurrency required to take advantage of multiple instances is different than the currency required to take
+The concurrency required to take advantage of multiple instances is different from the currency required to take
 advantage of multiple cores. `Distributed Concurrency` introduces many new concerns that are not present when designing
 around `Local Concurrency`.
 

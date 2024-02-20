@@ -14,7 +14,7 @@ and [Polymer](http://www.polymer-project.org/) don’t require a single line of 
 
 2-way data-binding is the ability to keep two data sources in sync: if either changes the other will be automatically
 updated with the same value. More complicated use cases involve conditional statements or formula to define the
-relationship of the first and second values. Polymer Filters allow bi-directional binding even in these scenarios.
+relationship of the first and second values. Polymer Filters allow bidirectional binding even in these scenarios.
 
 _The code in this post references Polymer 0.1.4, and may change in subsequent releases._
 <script src="/assets/images/2014/02/platform-0.1.4.js"></script>

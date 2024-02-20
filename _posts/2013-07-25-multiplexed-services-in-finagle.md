@@ -124,28 +124,26 @@ right after the `Int32` version number. All strings are serialized as an `Int32`
 bytes – no null terminated strings or escape characters to worry about here.
 
 ```scala
-def mapBinaryProtocolRequestToNewMethod (request: Array[Byte],
- originalMethodName: String, newMethodName: String): Array[Byte] = {
- 
- val versionLength = 4 //first byte
- val stringLength = 4 //second byte
- val version = request.take(versionLength)
- val body = request.seq.drop(versionLength +
-  stringLength + originalMethodName.size)
- 
- val newMethodNameBytes = new MethodName.getBytes("UTF-8")
- val newStringLength = int32ToBytes(newMethodNameBytes.size)
- 
- val response = new Array[Byte](versionLength + stringLength +
-  newMethodNameBytes.size + body.size)
- 
- version.copyToArray(response, 0)
- newStringLength.copyToArray(response, versionLength)
- newMthodNameBytes.copyToArray(response, versionLength + stringLength)
- body.copyToArray(response, versionLength + stringLength +
-  newMethodNameBytes.size)
- 
- response
+def mapBinaryProtocolRequestToNewMethod(request: Array[Byte],
+                                        originalMethodName: String, newMethodName: String): Array[Byte] = {
+
+  val versionLength = 4 //first byte
+  val stringLength = 4 //second byte
+  val version = request.take(versionLength)
+  val body = request.seq.drop(versionLength +
+    stringLength + originalMethodName.length)
+
+  val newMethodNameBytes = new MethodName.getBytes("UTF-8")
+  val newStringLength = int32ToBytes(newMethodNameBytes.size)
+
+  val response = new Array[Byte](versionLength + stringLength + newMethodNameBytes.size + body.size)
+
+  version.copyToArray(response, 0)
+  newStringLength.copyToArray(response, versionLength)
+  newMthodNameBytes.copyToArray(response, versionLength + stringLength)
+  body.copyToArray(response, versionLength + stringLength + newMethodNameBytes.size)
+
+  response
 }
 ```
 

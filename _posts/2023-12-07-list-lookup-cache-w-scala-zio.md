@@ -9,8 +9,8 @@ excerpt_separator: <!--more-->
 examples:
   - list-lookup-zio-cache
 ---
-In-memory caches mapping `Key => Value` are a simple and versitile tool to reduce number of calls to an origin 
-datasource.  There are many use-cases requiring multiple cache calls, prefering `Seq[Key] => Seq[Value]`. Can a standard
+In-memory caches mapping `Key => Value` are a simple and versatile tool to reduce number of calls to an origin 
+datasource.  There are many use-cases requiring multiple cache calls, preferring `Seq[Key] => Seq[Value]`. Can a standard
 cache implementation be expanded to efficiently handle this scenario?<!--more-->
 
 {% include table-of-contents.html height="100px" %}
@@ -19,7 +19,7 @@ cache implementation be expanded to efficiently handle this scenario?<!--more-->
 
 ## Example Use-Case
 
-A use-case prefering `Seq[Key] => Seq[Value]` is a social media user's friend list, reading profiles from cache.
+A use-case preferring `Seq[Key] => Seq[Value]` is a social media user's friend list, reading profiles from cache.
 Different users will have different friends but popular users will appear in many friend lists. These popular users 
 should be loaded from cache and not the origin, however this complicates our cache implementation. Each `Seq[Key]` 
 request needs to be broken down into individual keys, sending each `Key` to cache when it exists, and then fetching
