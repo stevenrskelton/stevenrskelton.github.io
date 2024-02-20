@@ -19,15 +19,16 @@ lazy val root = (project in file("."))
       "-deprecation",
       "-feature",
       "-unchecked",
-      "-language:experimental.macros",
-      "-language:higherKinds",
-      "-language:implicitConversions",
-      "-Ykind-projector",
+      "-indent", //"-rewrite",
       //        "-Yexplicit-nulls",
       "-Ysafe-init",
+      "-Wunused:all",
       "-Wvalue-discard",
-//        "-source:3.0-migration",
-       "-Xfatal-warnings"
+      "-Wnonunit-statement",
+      "-Xfatal-warnings",
+    ),
+    Test / scalacOptions --= Seq(
+      "-Wnonunit-statement",
     ),
     javacOptions ++= Seq("-source", javaVersion, "-target", javaVersion),
   )
