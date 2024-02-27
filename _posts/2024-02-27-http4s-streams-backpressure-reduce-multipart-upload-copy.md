@@ -48,9 +48,9 @@ encountered is to fully buffer a file upload within a proxy.  In the following e
 a file within the Salesforce UI, with the destination of the file to be stored in SharePoint.
 
 {%
-include figure image_path="/assets/images/2024/02/salesforce-upload.png"
+include figure image_path="/assets/images/2024/02/salesforce-upload.svg"
 caption="File Upload from Salesforce to SharePoint"
-img_style="padding: 20px; background-color: white; height: 250px;"
+img_style="padding: 0 10px 10px 10px; background-color: white; height: 250px;"
 %}
 
 There are 3 different approaches to this:
@@ -81,9 +81,9 @@ upload to SharePoint `B` doesn't complete, we don't benefit from `A` completing 
 The standard 
 
 {%
-include figure image_path="/assets/images/2024/02/multipart-request.png"
-caption="Multipart HTTP Request"
-img_style="padding: 20px; background-color: white; height: 250px;"
+include figure image_path="/assets/images/2024/02/multipart-request.svg"
+caption="Multipart HTTP Request with 2 parts"
+img_style="padding: 10px; background-color: white; height: 600px;"
 %}
 
 . . Efficient proxies will act as a router holding on to the smallest amount of data possible, and 
