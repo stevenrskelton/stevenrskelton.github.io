@@ -44,6 +44,10 @@ providing batch/windowing.
 
 A common scenario where streaming is required, rather than optional, is handling file uploads.
 
+{%
+include figure image_path="/assets/images/2024/02/salesforce-upload.png"
+caption="File Upload from Salesforce to SharePoint"
+%}
 
 . . Efficient proxies will act as a router holding on to the smallest amount of data possible, and 
 copying this data internally the least number of times.  Buffering is . This
