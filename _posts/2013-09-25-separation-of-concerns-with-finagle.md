@@ -2,7 +2,7 @@
 #layout: post
 title: "Separation of Concerns with Finagle"
 categories:
-  - DevOps-Platform
+  - DevOps/Platform
   - Scala
 tags:
   - Thrift

@@ -2,7 +2,7 @@
 #layout: post
 title: "Finagled Client and Multiplexed C# Thrift Server Bug"
 categories:
-  - DevOps-Platform
+  - DevOps/Platform
   - Scala
 tags:
   - Thrift

@@ -1,7 +1,7 @@
 ---
 title: "GitHub Actions Written in Scala SBT, or Ruby, or Python, or Go, or .Net, or..."
 categories:
-  - DevOps-Platform
+  - DevOps/Platform
   - Scala
 tags:
   - GitHub

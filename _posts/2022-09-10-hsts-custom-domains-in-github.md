@@ -1,7 +1,7 @@
 ---
 title: "HTTP Strict Transport Security (HSTS) Domains on GitHub Pages"
 categories:
-  - DevOps-Platform
+  - DevOps/Platform
 tags:
   - GitHub
 ---

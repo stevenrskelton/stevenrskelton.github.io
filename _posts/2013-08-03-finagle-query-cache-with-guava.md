@@ -2,7 +2,7 @@
 #layout: post
 title: "Finagle Query Cache with Guava"
 categories:
-  - DevOps-Platform
+  - DevOps/Platform
   - Scala
 tags:
   - Thrift

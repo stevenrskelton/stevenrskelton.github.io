@@ -2,7 +2,7 @@
 #layout: post
 title: "Thrift Client Side Caching to Speed Up Unit Tests"
 categories:
-  - DevOps-Platform
+  - DevOps/Platform
   - Scala
 tags:
   - Thrift

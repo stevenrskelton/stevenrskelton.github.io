@@ -2,7 +2,7 @@
 #layout: post
 title: "Ostrich. Not just for stats, also for documentation."
 categories:
-  - DevOps-Platform
+  - DevOps/Platform
   - Scala
 tags:
   - Thrift

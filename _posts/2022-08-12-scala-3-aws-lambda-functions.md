@@ -1,7 +1,7 @@
 ---
 title: "Scala 3 and AWS Lambda Functions"
 categories:
-  - DevOps-Platform
+  - DevOps/Platform
   - Scala
 tags:
   - AWS

@@ -2,7 +2,7 @@
 #layout: post
 title: "Finagle ServerSet Clusters using Zookeeper"
 categories:
-  - DevOps-Platform
+  - DevOps/Platform
   - Scala
 tags:
   - Thrift

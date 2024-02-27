@@ -2,7 +2,7 @@
 #layout: post
 title: "Tracking Clients with Finagle"
 categories:
-  - DevOps-Platform
+  - DevOps/Platform
   - Scala
 tags:
   - Thrift

@@ -1,7 +1,7 @@
 ---
 title: "Scala SBT Publishing to GitHub Packages"
 categories:
-  - DevOps-Platform
+  - DevOps/Platform
   - Scala
 tags:
   - SBT

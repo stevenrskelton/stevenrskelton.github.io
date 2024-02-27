@@ -2,7 +2,7 @@
 #layout: post
 title: "Reusing Finagle Server Filters on the Client"
 categories:
-  - DevOps-Platform
+  - DevOps/Platform
   - Scala
 tags:
   - Thrift
