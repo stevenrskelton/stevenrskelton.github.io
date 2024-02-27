@@ -3,7 +3,7 @@ title: "ZIO Migration from Akka and Scala Futures"
 categories:
   - Scala
 tags:
-  - Akka-Pekko
+  - Akka/Pekko
   - ZIO
   - Trade_Audit
 ---

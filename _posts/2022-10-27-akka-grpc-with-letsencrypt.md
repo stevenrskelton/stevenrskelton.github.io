@@ -4,7 +4,7 @@ categories:
   - DevOps-Platform
   - Scala
 tags:
-  - Akka-Pekko
+  - Akka/Pekko
 ---
 
 The Electric Frontier Foundation (EFF) has recommendations

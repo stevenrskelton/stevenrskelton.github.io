@@ -3,7 +3,7 @@ title: "ZIO Http Client"
 categories:
   - Scala
 tags:
-  - Akka-Pekko
+  - Akka/Pekko
   - ZIO
 ---
 
