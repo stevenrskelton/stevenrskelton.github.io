@@ -4,7 +4,7 @@ title: "ThreadLocal Variables and Scala Futures"
 categories:
   - Scala
 tags:
-  - NonBlocking-Concurrency
+  - Non-Blocking/Concurrency
 excerpt_separator: <!--more-->
 ---
 

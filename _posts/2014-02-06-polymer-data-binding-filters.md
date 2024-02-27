@@ -4,7 +4,7 @@ title: "Polymer Data-Binding Filters"
 categories:
   - JavaScript
 tags:
-  - WebComponents
+  - Web_Components
 ---
 
 {% include postlogo.html title="Web Components" src="/assets/images/2014/02/webcomponents.png" %} One useful feature of

@@ -3,7 +3,7 @@ title: "The Many Different Forms of Concurrency and Parallelism"
 categories:
   - DevOps-Platform
 tags:
-  - NonBlocking-Concurrency
+  - Non-Blocking/Concurrency
   - Serverless
 excerpt_separator: <!--more-->
 ---

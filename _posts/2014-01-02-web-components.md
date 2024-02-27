@@ -4,7 +4,7 @@ title: "Web Components"
 categories:
   - JavaScript
 tags:
-  - WebComponents
+  - Web_Components
 ---
 
 {% include postlogo.html title="Web Components" src="/assets/images/2014/01/webcomponents.png" %} At the heart of a web

@@ -4,7 +4,7 @@ title: "Sortable Table with Polymer Web Components"
 categories:
   - JavaScript
 tags:
-  - WebComponents
+  - Web_Components
 ---
 
 {% include postlogo.html title="Web Components" src="/assets/images/2014/02/webcomponents.png" %} As businesses now rely

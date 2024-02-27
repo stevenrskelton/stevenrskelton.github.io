@@ -4,7 +4,7 @@ title: "Binary Semaphore Filter"
 categories:
   - Scala
 tags:
-  - NonBlocking-Concurrency
+  - Non-Blocking/Concurrency
   - Thrift
 excerpt_separator: <!--more-->
 ---

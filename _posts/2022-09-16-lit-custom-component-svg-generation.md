@@ -4,7 +4,7 @@ categories:
   - JavaScript
 tags:
   - Lit
-  - WebComponents
+  - Web_Components
 ---
 
 SVG markup is very similar to HTML, and the [Lit Web Components](https://lit.dev/) library can be used to not only

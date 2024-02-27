@@ -4,7 +4,7 @@ title: "Reactive Front-End with Web Components"
 categories:
   - JavaScript
 tags:
-  - WebComponents
+  - Web_Components
 ---
 
 The [Reactive Manifesto](http://www.reactivemanifesto.org/) puts together the ideal architecture for today’s system

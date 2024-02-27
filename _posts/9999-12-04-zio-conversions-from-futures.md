@@ -3,7 +3,7 @@ title: "The Many Different Forms of Parallelism and Concurrency"
 categories:
   - Scala
 tags:
-  - NonBlocking-Concurrency
+  - Non-Blocking/Concurrency
   - ZIO
 excerpt_separator: <!--more-->
 ---

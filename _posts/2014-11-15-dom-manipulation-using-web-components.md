@@ -4,7 +4,7 @@ title: "DOM Manipulation using Web Components"
 categories:
   - JavaScript
 tags:
-  - WebComponents
+  - Web_Components
 examples:
   - ordered-columns
 ---

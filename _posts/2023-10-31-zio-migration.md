@@ -5,7 +5,7 @@ categories:
 tags:
   - Akka-Pekko
   - ZIO
-  - TradeAudit
+  - Trade_Audit
 ---
 
 Akka / [Apache Pekko](https://pekko.apache.org/) is a robust and popular Scala framework used to build concurrent

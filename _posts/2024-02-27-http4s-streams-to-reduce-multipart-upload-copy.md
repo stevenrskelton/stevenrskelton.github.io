@@ -4,7 +4,7 @@ categories:
   - Scala
 tags:
   - Typelevel-Cats
-  - NonBlocking-Concurrency
+  - Non-Blocking/Concurrency
 excerpt_separator: <!--more-->
 examples: 
   - http-maven-receiver

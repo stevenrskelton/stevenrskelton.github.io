@@ -4,7 +4,7 @@ title: "Advanced Uses of Polymer Templates"
 categories:
   - JavaScript
 tags:
-  - WebComponents
+  - Web_Components
 examples:
   - sortable-table
 ---
