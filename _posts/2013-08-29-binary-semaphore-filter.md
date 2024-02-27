@@ -4,7 +4,7 @@ title: "Binary Semaphore Filter"
 categories:
   - Scala
 tags:
-  - AsyncExecution
+  - NonBlocking-Concurrency
   - Thrift
 excerpt_separator: <!--more-->
 ---

@@ -1,7 +1,7 @@
 ---
 title: "Value in the Cloud Requires Change or Spreadsheets"
 categories:
-  - Platform
+  - DevOps-Platform
 tags:
   - AWS
 published: false

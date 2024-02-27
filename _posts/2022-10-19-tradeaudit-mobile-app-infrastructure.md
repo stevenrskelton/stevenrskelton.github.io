@@ -1,7 +1,7 @@
 ---
 title: "Trade Audit Mobile App Infrastructure"
 categories:
-  - Platform
+  - DevOps-Platform
   - Scala
   - Dart
 tags:

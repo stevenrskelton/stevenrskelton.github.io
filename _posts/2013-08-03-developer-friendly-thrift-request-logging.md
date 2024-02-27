@@ -2,7 +2,7 @@
 #layout: post
 title: "Developer Friendly Thrift Request Logging"
 categories:
-  - Platform
+  - DevOps-Platform
   - Scala
 tags:
   - Thrift

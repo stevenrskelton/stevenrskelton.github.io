@@ -3,7 +3,7 @@
 published: false
 title: "GitHub Action to Submit Flutter Android Apps to Play"
 categories:
-  - Platform
+  - DevOps-Platform
 tags:
   - Flutter
 ---

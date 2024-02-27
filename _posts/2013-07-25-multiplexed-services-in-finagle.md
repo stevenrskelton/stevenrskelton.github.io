@@ -2,7 +2,7 @@
 #layout: post
 title: "Multiplexed Services in Finagle"
 categories:
-  - Platform
+  - DevOps-Platform
   - Scala
 tags:
   - Thrift

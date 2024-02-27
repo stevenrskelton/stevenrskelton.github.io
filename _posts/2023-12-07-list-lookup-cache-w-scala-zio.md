@@ -4,7 +4,7 @@ categories:
   - Scala
 tags:
   - ZIO
-  - AsyncExecution
+  - NonBlocking-Concurrency
 excerpt_separator: <!--more-->
 examples:
   - list-lookup-zio-cache

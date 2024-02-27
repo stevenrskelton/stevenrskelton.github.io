@@ -1,7 +1,7 @@
 ---
 title: "Data Transfers and Egress within a GitHub Action"
 categories:
-  - Platform
+  - DevOps-Platform
 tags:
   - SBT
   - GitHub

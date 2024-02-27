@@ -4,7 +4,7 @@ title: "ThreadLocal Variables and Scala Futures"
 categories:
   - Scala
 tags:
-  - AsyncExecution
+  - NonBlocking-Concurrency
 excerpt_separator: <!--more-->
 ---
 

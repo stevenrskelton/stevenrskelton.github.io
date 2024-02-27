@@ -1,7 +1,7 @@
 ---
 title: "SLF4J Application Logging to Slack"
 categories:
-  - Platform
+  - DevOps-Platform
   - Scala
 tags:
   - Slack

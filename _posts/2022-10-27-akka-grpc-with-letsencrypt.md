@@ -1,7 +1,7 @@
 ---
 title: "Akka gRPC with Let's Encrypt"
 categories:
-  - Platform
+  - DevOps-Platform
   - Scala
 tags:
   - Akka-Pekko
