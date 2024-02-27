@@ -24,7 +24,8 @@ Pragmatic programming moved complexity from projects to external libraries and f
 improvements in libraries to have over-sized benefit scaling proportionally to their popularity. However, this has the 
 unintended consequence of developers never learning underlying concepts, both limiting their work within project 
 implementations directly and through misusing or under-using available libraries. From personal observation, streams 
-falls into this category, their performance benefits often passed-over until it is absolutely required to function.
+falls into this category, their performance benefits often passed-over until they are absolutely required by software
+to function correctly.
 
 # File Transfers
 
@@ -42,11 +43,47 @@ providing batch/windowing.
 
 ### File Uploads without Streams
 
-A common scenario where streaming is required, rather than optional, is handling file uploads.
+A common scenario where streaming is required, rather than optional, is handling file uploads. An typical example 
+encountered is to fully buffer a file upload within a proxy.  In the following example, the user is allowed to upload
+a file within the Salesforce UI, with the destination of the file to be stored in SharePoint.
 
 {%
 include figure image_path="/assets/images/2024/02/salesforce-upload.png"
 caption="File Upload from Salesforce to SharePoint"
+img_style="padding: 20px; background-color: white; height: 250px;"
+%}
+
+There are 3 different approaches to this:
+* File is uploaded to Salesforce, then copied to SharePoint
+* File is buffered in Salesforce memory, then copied to SharePoint
+* File streams to SharePoint, either directly or proxies through Salesforce servers 
+
+The first 2 are without streaming and suffer from transfers `A` and `B` being sequential rather than concurrent. The 
+user must wait for `B` after `A` has completed. This also allows new modes of failure: what happens when `B` fails, 
+will `A` have to be repeated? Will the user know `B` will fail before starting `A`?
+
+Not only is the streaming solution faster, it has fewer modes of failure.
+
+### Backpressure
+
+The idea of backpressure is that consumers can dictate throughput to the producer. The consumer essentially applies 
+pressure backwards against the path of flow towards the producer. Streams have different implementations and not all
+streams allow for backpressure. Naive buffering can prevent backpressure signals from traveling back towards the source.
+But when buffering is limited or non-existent, if the consumer is slower than the producer then there is nowhere for the 
+data to build up.  For file transfers, the backpressure solution is obvious such that the producer isn't allowed to 
+upload faster than the consumer can process. 
+
+This is ideal for file transfers because we want the outcome of the consumer to be relayed to the producer. If the file
+upload to SharePoint `B` doesn't complete, we don't benefit from `A` completing successfully.
+
+## HTTP Multipart Requests
+
+The standard 
+
+{%
+include figure image_path="/assets/images/2024/02/multipart-request.png"
+caption="Multipart HTTP Request"
+img_style="padding: 20px; background-color: white; height: 250px;"
 %}
 
 . . Efficient proxies will act as a router holding on to the smallest amount of data possible, and 
