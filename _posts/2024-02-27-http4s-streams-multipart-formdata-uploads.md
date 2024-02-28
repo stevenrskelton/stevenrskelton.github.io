@@ -149,10 +149,16 @@ There are multiple reasons this is unsuited to transferring large files:
 
 The multipart form-data request should be considered a strictly worse version of putting the file content within the
 request body. The cost to support multiple files within the request introduces the overhead of the data comparison
-against the boundary. While [algorithms](https://en.wikipedia.org/wiki/String-searching_algorithm) exist to minimize
-this overhead, it should generally be considered to be _O(n)_ where _n_ is the file contents. Expansions of HTTP with
+against the boundary. While [algorithms](https://en.wikipedia.org/wiki/String-searching_algorithm) exist to minimize 
+overhead, it should generally be considered to be _O(n)_ where _n_ is the file content length. Expansions of HTTP with
 HTTP/2 and HTTP/3 have removed request overhead so there is reason to use form-data to transfer anything but trivially
 small files.
+
+There are niche operations, such as 
+[Amazon Alexa](https://developer.amazon.com/en-US/docs/alexa/alexa-voice-service/structure-http2-request.html) requests
+where the multipart form-data format might be used. In this example it allows for JSON event meta-data and binary 
+audio data to be captured within a single request. This is likely used to decrease parsing complexity on the server, 
+and only arises because of the inefficiency of base64 encoding binary data within JSON. 
 
 # Http4s EntityDecoder
 
