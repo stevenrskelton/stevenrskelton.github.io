@@ -144,7 +144,7 @@ within the `Content-Type` header.
 There are multiple reasons this is unsuited to transferring large files:
 
 * Content needs to be inspected for `boundary` occurrences,
-* Unable to know name or content type of parts without parsing previous parts,
+* Unable to know name, count, or content-type of parts without parsing previous parts,
 * No additional features supporting large files beyond those of the single request format.
 
 The multipart form-data request should be considered a strictly worse version of putting the file content within the
@@ -154,11 +154,24 @@ overhead, it should generally be considered to be _O(n)_ where _n_ is the file c
 HTTP/2 and HTTP/3 have removed request overhead so there is reason to use form-data to transfer anything but trivially
 small files.
 
-There are niche operations, such as 
-[Amazon Alexa](https://developer.amazon.com/en-US/docs/alexa/alexa-voice-service/structure-http2-request.html) requests
-where the multipart form-data format might be used. In this example it allows for JSON event meta-data and binary 
-audio data to be captured within a single request. This is likely used to decrease parsing complexity on the server, 
-and only arises because of the inefficiency of base64 encoding binary data within JSON. 
+#### Real-World Examples: Amazon Alexa
+
+The [Amazon Alexa](https://developer.amazon.com/en-US/docs/alexa/alexa-voice-service/structure-http2-request.html) 
+device makes use of multipart form-data requests to communicate with the Alexa Voice Service (AVS) servers. Every 
+request includes JSON metadata and binary audio data as separate parts. There is an inherent incompatibility between
+JSON and binary data: there are no efficient ways to embed binary data into the text format, and embedding JSON into
+binary data requires an additional encoding mechanism. 
+
+The binary encoding selected was multipart form-data, which would reduce complexity by being a well-supported part of 
+HTTP and requiring no additional dependencies. While more efficient, binary encodings such as gRPC/protobuf, Thrift, 
+and JSONB are often overlooked because of the need to add library dependencies for parsing, inspection, and debugging
+of the over-the-wire data.
+
+As mentioned earlier, the `boundary` mechanic creates a CPU bottleneck working against higher throughput. It should be 
+noted that this inefficient processing can be omitted when the multipart format is of a particular type. When the only
+binary part is at the end of the request, there would be no need to inspect the binary data for boundaries. With this
+relaxation of the format, the multipart form-data encoding is just as performant as the binary encodings mentioned 
+while retaining the human-readable over-the-write representation of the JSON part.
 
 # Http4s EntityDecoder
 
@@ -172,9 +185,9 @@ It is also readily apparent from the `org.http4s.multipart.Multipart` implementa
 
 ```scala
 final case class Multipart[+F[_]](
-                                   parts: Vector[Part[F]],
-                                   boundary: Boundary,
-                                 )
+       parts: Vector[Part[F]],
+       boundary: Boundary,
+     )
 ```
 
 As mentioned earlier, multipart form-data requests are not a good mechanism to handle large file uploads. There has 
@@ -189,33 +202,58 @@ implicits can be explicitly created to modify default values for this mechanism,
 
 ```scala
 def mixedMultipartResource[F[_] : Concurrent : Files](
-                                                       headerLimit: Int = 1024,
-                                                       maxSizeBeforeWrite: Int = 52428800,
-                                                       maxParts: Int = 50,
-                                                       failOnLimit: Boolean = false,
-                                                       chunkSize: Int = 8192,
-                                                     ): Resource[F, EntityDecoder[F, Multipart[F]]]
+       headerLimit: Int = 1024,
+       maxSizeBeforeWrite: Int = 52428800,
+       maxParts: Int = 50,
+       failOnLimit: Boolean = false,
+       chunkSize: Int = 8192,
+     ): Resource[F, EntityDecoder[F, Multipart[F]]]
 ``` 
 
 # Streaming Multipart File Uploads with Http4s
 
-There is no problem directly using the `Stream[F, Byte]` exposed as `request.body`. This is a clean, direct and
-recommended approach to streaming request data. Supplemental text fields from multipart requests could be moved to
-HTTP headers avoiding the multipart request altogether. But for the stubborn, how could multipart request streaming be
-properly implemented? With HTTP2 multiplexing, is there even a plausible use-case to send multiple fields in a single
-request?
+There is no streaming issues when directly using the `request.body` exposed by Http4s. It is a `Stream[F, Byte]`, the 
+issues mentioned in this post are concerning the included body decoders breaking streaming semantics. This shouldn't
+be seen as criticism or oversight, as the direct parsing of the body is a cleaner, more direct and the recommended 
+approach to handle streaming request data. Instead of the inefficient use of multipart form-data, the same effect is
+better achieved by moving all text-based form-data to HTTP headers. But for the stubborn and niche use-cases such as
+with Alexa above, can the Http4s multipart decoder be implemented to support streaming?
 
-## Stream to Stream-of-Streams is Not Possible
+## Problems converting a Stream to Stream-of-Streams
 
-An HTTP request body is a single stream, how can a multipart body be represented using a stream? Conceptually it maps
+An HTTP request body should be viewed as a single stream. 
+
+//TODO: finish
+
+a single stream, how can a multipart body be represented using a stream? Conceptually it maps
 to a `Stream[Part]` since parts will need to be accessed sequentially. But pragmatically, each part could represent
 a large file which would also need to be a stream. A single `Stream` cannot map to a `Stream[Stream[_]]` since this
 wouldn't allow each part, which can represent a large file, ecause we need to , but then what is a `Part`? It cannot be a s
-
+to be as efficient as possible?  multipart request streaming be
+properly implemented? With HTTP/2 multiplexing, is there even a plausible use-case to send multiple fields in a single
+request?
 //TODO: implementation details for streaming Multipart decoder
 
 ## Testing Memory Use
 
+Streams are programming abstractions which are difficult to test directly, as their output is identical to their 
+collection counterparts. It is insufficient to test the final output is being streamed, since any intermediate 
+transformation could have easily buffered results only to stream them again. The absolute test would be to measure 
+memory use of the system, as any buffering will have a measurable effect on heap use. For the purpose of our testing, 
+restricting the running JVM to a heapsize smaller than the stream data would indicate no intermediate buffering.
+(This cannot detect buffering to the filesystem, which would require code inspection instead).
+but that is beyond our with 
+
+Running the JVM with a 128Mb memory allocation can use the `Xmx` parameter:
+
 ```shell
 java -Xmx128m -jar http-maven-receiver-assembly-1.0.25.jar 
 ```
+
+## Implementation
+
+//TODO: Scala implementation 
+
+# Conclusion
+
+//TODO: conclusion
