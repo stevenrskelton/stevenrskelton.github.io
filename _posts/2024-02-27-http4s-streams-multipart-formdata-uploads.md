@@ -17,7 +17,7 @@ can be handled by MBs of server RAM. However, enforcing streaming in software co
 incompatible method implementations will lead to breaking stream semantics, and ultimately to OOM exceptions. This 
 article focuses on streams within the context of file uploads, using the Http4s library for examples.<!--more-->
 
-{% include table-of-contents.html height="300px" %}
+{% include table-of-contents.html height="600px" %}
 
 # Collections versus Streams
 
@@ -234,15 +234,14 @@ properly implemented? With HTTP/2 multiplexing, is there even a plausible use-ca
 request?
 //TODO: implementation details for streaming Multipart decoder
 
-## Testing Memory Use
+## Testing Streams: Memory Use
 
 Streams are programming abstractions which are difficult to test directly, as their output is identical to their 
 collection counterparts. It is insufficient to test the final output is being streamed, since any intermediate 
 transformation could have easily buffered results only to stream them again. The absolute test would be to measure 
 memory use of the system, as any buffering will have a measurable effect on heap use. For the purpose of our testing, 
-restricting the running JVM to a heapsize smaller than the stream data would indicate no intermediate buffering.
-(This cannot detect buffering to the filesystem, which would require code inspection instead).
-but that is beyond our with 
+restricting the JVM heap size to be smaller than the stream data would indicate no intermediate buffering.
+(This cannot detect buffering to the filesystem, which would require additional code inspection).
 
 Running the JVM with a 128Mb memory allocation can use the `Xmx` parameter:
 

@@ -212,7 +212,7 @@ name := "sqluser"
 version := "0.1.0-SNAPSHOT"
 organization := "app.tradeaudit.tradeauditserver.sqldb"
 
-scalaVersion := "3.3.1"
+scalaVersion := "3.4.0"
 
 val javaVersion = "17"
 

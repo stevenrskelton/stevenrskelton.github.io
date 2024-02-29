@@ -3,7 +3,7 @@ name := "examples"
 version := "0.1.0-SNAPSHOT"
 organization := "ca.stevenskelton"
 
-scalaVersion := "3.3.1"
+scalaVersion := "3.4.0"
 
 val javaVersion = "21"
 
