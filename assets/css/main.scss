@@ -232,16 +232,17 @@ tr:last-of-type td {
 }
 
 .page__taxonomy-item img:hover {
-  box-shadow: none;
+  box-shadow: none !important;
 }
 
 .post__taxonomy-item div {
   min-width: 1.5em;
   text-align: center;
+}
+.post__taxonomy-item a {
   background-color: #f3f3f3;
 }
-
-.post__taxonomy-item div:hover {
+.post__taxonomy-item a:hover {
   background-color: white;
 }
 
