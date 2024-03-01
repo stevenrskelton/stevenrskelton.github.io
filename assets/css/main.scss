@@ -231,10 +231,9 @@ tr:last-of-type td {
   max-height: 2em;
 }
 
-.page__taxonomy-item img:hover {
-  box-shadow: none !important;
+.post__taxonomy-item img:hover {
+  box-shadow: none;
 }
-
 .post__taxonomy-item div {
   min-width: 1.5em;
   text-align: center;
@@ -242,7 +241,7 @@ tr:last-of-type td {
 .post__taxonomy-item a {
   background-color: #f3f3f3;
 }
-.post__taxonomy-item a:hover {
+.post__taxonomy-item a:hover, .page__taxonomy-item a:hover {
   background-color: white;
 }
 
@@ -251,11 +250,7 @@ tr:last-of-type td {
   text-align: center;
 }
 
-.post__taxonomy-item:hover {
-  border: 1px solid #343434;
-}
-
-.page__taxonomy-item:hover {
+.post__taxonomy-item:hover, .page__taxonomy-item:hover {
   border: 1px solid #343434;
 }
 
