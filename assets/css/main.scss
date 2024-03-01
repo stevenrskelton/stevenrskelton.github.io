@@ -231,9 +231,18 @@ tr:last-of-type td {
   max-height: 2em;
 }
 
+.page__taxonomy-item img:hover {
+  box-shadow: none;
+}
+
 .post__taxonomy-item div {
   min-width: 1.5em;
   text-align: center;
+  background-color: #f3f3f3;
+}
+
+.post__taxonomy-item div:hover {
+  background-color: white;
 }
 
 .page__taxonomy-item div {
