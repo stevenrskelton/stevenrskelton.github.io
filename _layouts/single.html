@@ -36,7 +36,8 @@ layout: default
                 {% include page__meta.html %}
                 {% if site.tag_archive.type and page.tags[0] %}
                 <div class="page__meta" style="margin-top: 0;margin-bottom: 1em;">
-                {% include tag-list.html %}
+                    {% include category-list.html %}
+                    {% include tag-list.html %}
                 </div>
                 {% endif %}
             </header>
