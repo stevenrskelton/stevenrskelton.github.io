@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="186px"
+     height="186px" viewBox="-0.5 -0.5 186 186">
+    <defs/>
+    <g>
+        <g>
+            <rect x="40" y="0" width="130" height="25" rx="3.75" ry="3.75" fill="#e51400" stroke="#b20000"
+                  pointer-events="all"/>
+        </g>
+        <g>
+            <rect x="0" y="40" width="130" height="25" rx="3.75" ry="3.75" fill="#f0a30a" stroke="#bd7000"
+                  pointer-events="all"/>
+        </g>
+        <g>
+            <rect x="60" y="80" width="120" height="25" rx="3.75" ry="3.75" fill="#76608a" stroke="#432d57"
+                  pointer-events="all"/>
+        </g>
+        <g>
+            <rect x="35" y="120" width="60" height="25" rx="3.75" ry="3.75" fill="#e3c800" stroke="#b09500"
+                  pointer-events="all"/>
+        </g>
+        <g>
+            <rect x="10" y="160" width="130" height="25" rx="3.75" ry="3.75" fill="#6d8764" stroke="#3a5431"
+                  pointer-events="all"/>
+        </g>
+    </g>
+</svg>
