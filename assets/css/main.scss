@@ -286,7 +286,8 @@ header .text_tag_category {
 }
 
 .page__date {
-  padding-top: 2em;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 // TABLE OF CONTENTS
