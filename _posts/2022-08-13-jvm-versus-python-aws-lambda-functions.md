@@ -4,7 +4,7 @@ categories:
   - Scala
 tags:
   - AWS
-  - Serverless
+  - Cloud/Serverless
 examples:
   - scala3-aws-lambda-dynamodb-importer
 ---

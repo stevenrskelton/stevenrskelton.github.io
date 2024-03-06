@@ -6,7 +6,7 @@ categories:
 tags:
   - AWS
   - GitHub
-  - Serverless
+  - Cloud/Serverless
 excerpt_separator: <!--more-->
 examples:
   - scala3-aws-lambda-dynamodb-importer

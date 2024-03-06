@@ -4,7 +4,7 @@ categories:
   - DevOps/Platform
 tags:
   - Non-Blocking/Concurrency
-  - Serverless
+  - Cloud/Serverless
 excerpt_separator: <!--more-->
 ---
 
