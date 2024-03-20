@@ -173,6 +173,13 @@ There is [more information available](https://www.baeldung.com/jvm-garbage-colle
 collector has multiple configuration options and focuses on throughput over latency making it an interesting choice to
 experiment with.
 
+All 4 garbage collectors serve different purposes, none are antiquated or only exist for legacy purposes. The default 
+_G1_ implementation has most general applicability, we will see that for our use-case the _Parallel_ implementation 
+has the best performance. While the _Serial_ implementation may target smaller systems, it is still considered a 
+generic throughput oriented implementation and is the default choice for the Java 21 GraalVM compiler from Oracle. The 
+_Z_ implementation is still in development tuning, and targets large-scale heap sizes and cores available in the top
+end hardware available today. 
+
 ## Forced Parallelized Builds using Sub-Projects
 
 SBT will concurrently compilation and many projects won't require intrusive refactoring to allow compiler multithreading.
@@ -304,7 +311,7 @@ The end result is a **30% reduction in compile time** from 13:39 to 9:18.
 
 ## Compile Times With and Without Sub-Projects
 
-We find that by breaking down our monolithic Quill project into sub-projects, the resulting parallelization allowed for
+We find that by breaking down our monolithic Quill project into subprojects, the resulting parallelization allowed for
 faster compilation with lower Heap memory requirements.
 
 | Sub-Projects | Minimum Heap Required | Serial GC | Parallel GC | G1 GC |  Z GC |
