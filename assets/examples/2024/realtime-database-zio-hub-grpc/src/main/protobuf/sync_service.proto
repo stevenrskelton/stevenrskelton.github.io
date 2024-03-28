@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "ca.stevenskelton.examples.realtimeziohubgrpc";
+option java_outer_classname = "SyncServiceProto";
+option objc_class_prefix = "HLW";
+
+package grpc;
+
+service SyncService {
+  rpc SyncBidirectionalStream (stream SyncRequest) returns (stream SyncResponse) {}
+}
+
+message SyncRequest {
+
+  message Subscribe {
+    string class = 1;
+    string id = 2;
+    uint64 last_update = 3;
+  }
+
+  message Unsubscribe {
+    string class = 1;
+    string id = 2;
+  }
+
+  oneof action {
+    Subscribe subscribe = 1;
+    Unsubscribe unsubscribe = 2;
+  }
+}
+
+message Data {
+  uint32 id = 1;
+  string name = 2;
+  uint64 last_update = 3;
+}
+
+message SyncResponse {
+  Data data = 1;
+}

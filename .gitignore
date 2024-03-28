@@ -7,7 +7,7 @@ Gemfile.lock
 *.iml
 
 .attach_pid*
-/.bsp/
+.bsp
 
 #
 # JARs aren't checked in, they are fetched by sbt

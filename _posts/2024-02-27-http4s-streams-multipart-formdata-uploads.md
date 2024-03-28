@@ -221,9 +221,9 @@ with Alexa above, can the Http4s multipart decoder be implemented to support str
 
 ## Problems converting a Stream to Stream-of-Streams
 
-An HTTP request body should be viewed as a single stream. 
+An HTTP request body should be viewed as a single stream.  
 
-//TODO: finish
+//TODO: finish  
 
 a single stream, how can a multipart body be represented using a stream? Conceptually it maps
 to a `Stream[Part]` since parts will need to be accessed sequentially. But pragmatically, each part could represent
@@ -232,7 +232,8 @@ wouldn't allow each part, which can represent a large file, ecause we need to , 
 to be as efficient as possible?  multipart request streaming be
 properly implemented? With HTTP/2 multiplexing, is there even a plausible use-case to send multiple fields in a single
 request?
-//TODO: implementation details for streaming Multipart decoder
+
+//TODO: implementation details for streaming Multipart decoder  
 
 ## Testing Streams: Memory Use
 
@@ -251,7 +252,7 @@ java -Xmx128m -jar http-maven-receiver-assembly-1.0.25.jar
 
 ## Implementation
 
-//TODO: Scala implementation 
+//TODO: Scala implementation  
 
 # Conclusion
 
