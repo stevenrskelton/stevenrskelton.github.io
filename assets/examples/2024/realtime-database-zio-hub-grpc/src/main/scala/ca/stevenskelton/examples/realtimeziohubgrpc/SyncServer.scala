@@ -4,9 +4,15 @@ import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.*
 import io.grpc.protobuf.services.ProtoReflectionService
 import io.grpc.{Metadata, ServerBuilder, Status, StatusException}
 import scalapb.zio_grpc.{RequestContext, ServerLayer, ServiceList}
-import zio.{Cause, ExitCode, IO, URIO, ZIO, ZIOAppDefault}
+import zio.{Cause, ExitCode, Hub, IO, Ref, URIO, ZIO, ZIOAppDefault}
+
+import scala.collection.mutable
 
 object SyncServer extends ZIOAppDefault:
+
+  val HubCapacity = 1000
+  val HubMaxChunkSize = 1000
+  val GRPCServerPort = 9000
 
   private def authenticatedUserContext(requestContext: RequestContext): IO[StatusException, AuthenticatedUser] =
     requestContext.metadata.get(Metadata.Key.of("user-id", Metadata.ASCII_STRING_MARSHALLER)).flatMap:
@@ -18,10 +24,15 @@ object SyncServer extends ZIOAppDefault:
             *> ZIO.fail(StatusException(Status.UNAUTHENTICATED))
 
   override def run: URIO[Any, ExitCode] =
-    ServerLayer.fromServiceList(
-        ServerBuilder.forPort(9000).addService(ProtoReflectionService.newInstance()),
-        ServiceList.add(SyncServiceImpl().transformContextZIO(authenticatedUserContext)),
-      )
-      .launch
-      .forever
-      .exitCode
+    val app = for
+      hub <- Hub.sliding[DataInstant](HubCapacity)
+      database <- Ref.make[mutable.Map[Int, DataInstant]](mutable.Map.empty)
+      streamFilters <- Ref.make[mutable.Map[AuthenticatedUser, DataStreamFilter]](mutable.Map.empty)
+      grpcServer <- ServerLayer.fromServiceList(
+        ServerBuilder.forPort(GRPCServerPort).addService(ProtoReflectionService.newInstance()),
+        ServiceList.add(SyncServiceImpl(hub, database, streamFilters).transformContextZIO(authenticatedUserContext)),
+      ).launch
+    yield {
+      grpcServer
+    }
+    app.forever.exitCode

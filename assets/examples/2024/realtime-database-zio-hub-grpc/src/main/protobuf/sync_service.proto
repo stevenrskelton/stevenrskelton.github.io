@@ -7,35 +7,45 @@ option objc_class_prefix = "HLW";
 
 package grpc;
 
+message Data {
+  uint32 id = 1;
+  string field1 = 2;
+}
+
 service SyncService {
-  rpc SyncBidirectionalStream (stream SyncRequest) returns (stream SyncResponse) {}
+  rpc BidirectionalStream (stream SyncRequest) returns (stream SyncResponse) {}
 }
 
 message SyncRequest {
 
+  message Connect {
+  }
+
   message Subscribe {
-    string class = 1;
-    string id = 2;
-    uint64 last_update = 3;
+    message DataSnapshots {
+      uint32 id = 1;
+      uint64 last_update = 2;
+    }
+    repeated DataSnapshots dataSnapshots = 1;
   }
 
   message Unsubscribe {
-    string class = 1;
-    string id = 2;
+    repeated uint32 ids = 1;
+  }
+
+  message Update {
+    repeated Data data = 1;
   }
 
   oneof action {
-    Subscribe subscribe = 1;
-    Unsubscribe unsubscribe = 2;
+    Connect connect = 1;
+    Subscribe subscribe = 2;
+    Unsubscribe unsubscribe = 3;
+    Update update = 4;
   }
-}
-
-message Data {
-  uint32 id = 1;
-  string name = 2;
-  uint64 last_update = 3;
 }
 
 message SyncResponse {
   Data data = 1;
+  uint64 last_update = 2;
 }
