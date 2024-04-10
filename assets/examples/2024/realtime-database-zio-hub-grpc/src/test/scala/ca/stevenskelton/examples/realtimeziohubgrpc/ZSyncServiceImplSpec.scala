@@ -1,11 +1,10 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc
 
-import ca.stevenskelton.examples.realtimeziohubgrpc.AuthenticatedUser.UserId
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.SyncRequest.Subscribe.DataSnapshots
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse}
+import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest}
 import zio.stream.ZStream
+import zio.test.assertTrue
 import zio.test.junit.JUnitRunnableSpec
-import zio.test.{assertTrue, test}
 
 class ZSyncServiceImplSpec extends JUnitRunnableSpec {
 
@@ -101,7 +100,7 @@ class ZSyncServiceImplSpec extends JUnitRunnableSpec {
   ) @@ zio.test.TestAspect.sequential
 }
 
-object ZSyncServiceImplSpec {
+object ZSyncServiceImplSpec:
   def createData(batch: Int): Seq[Data] = Seq(
     Data.of(id = 1, field1 = s"id1-batch$batch"),
     Data.of(id = 2, field1 = s"id2-batch$batch"),
@@ -109,5 +108,3 @@ object ZSyncServiceImplSpec {
     Data.of(id = 4, field1 = s"id4-batch$batch"),
     Data.of(id = 5, field1 = s"id5-batch$batch"),
   )
-
-}
