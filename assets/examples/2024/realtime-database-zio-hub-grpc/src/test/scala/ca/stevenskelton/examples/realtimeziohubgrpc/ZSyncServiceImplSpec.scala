@@ -4,7 +4,6 @@ import ca.stevenskelton.examples.realtimeziohubgrpc.AuthenticatedUser.UserId
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.SyncRequest.Subscribe.DataSnapshots
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse}
 import zio.stream.ZStream
-import zio.test.TestAspect.sequential
 import zio.test.junit.JUnitRunnableSpec
 import zio.test.{assertTrue, test}
 
@@ -99,7 +98,7 @@ class ZSyncServiceImplSpec extends JUnitRunnableSpec {
 
         assertTrue(userResponses.count(_._1 == 1) == 2) //Client 1
     }
-  ) @@ sequential
+  ) @@ zio.test.TestAspect.sequential
 }
 
 object ZSyncServiceImplSpec {
