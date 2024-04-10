@@ -24,7 +24,7 @@ class SyncServiceImpl(
         val requestStreams = request.flatMap {
           syncRequest =>
             ZStream.unwrap {
-              ZIO.log(s"Request: ${syncRequest} for user-${context.id}") *> ZIO.succeed {
+              ZIO.log(s"User${context.id} Request: $syncRequest") *> ZIO.succeed {
                 val stream = syncRequest.action match {
                   case SyncRequest.Action.Subscribe(subscribe) => handleSubscribe(subscribe, dataStreamFilterRef)
                   case SyncRequest.Action.Unsubscribe(unsubscribe) => handleUnsubscribe(unsubscribe, dataStreamFilterRef)
@@ -50,7 +50,7 @@ class SyncServiceImpl(
             _ => SyncResponse.of(data = None, lastUpdate = 0)
           }
 
-        hubStream.merge(requestStreams, strategy = HaltStrategy.Both) ++ endOfRequestStream
+        hubStream.merge(requestStreams ++ endOfRequestStream, strategy = HaltStrategy.Right)
       }
     }
   }

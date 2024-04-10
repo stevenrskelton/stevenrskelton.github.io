@@ -8,11 +8,9 @@ import io.grpc.protobuf.services.ProtoReflectionService
 import io.grpc.{CallOptions, ManagedChannelBuilder, ServerBuilder, StatusException}
 import scalapb.zio_grpc.{SafeMetadata, ServerLayer, ServiceList, ZManagedChannel}
 import zio.*
-import zio.stream.ZStream
-import zio.stream.Stream
+import zio.stream.{Stream, ZStream}
 
 import scala.collection.mutable
-import scala.collection.mutable.ListBuffer
 
 object GrpcClient extends ZIOAppDefault {
 
@@ -48,8 +46,6 @@ object GrpcClient extends ZIOAppDefault {
       (1, SyncRequest.of(SyncRequest.Action.Update(SyncRequest.Update.of(data = createData(2))))),
       (1, SyncRequest.of(SyncRequest.Action.Update(SyncRequest.Update.of(data = createData(3))))),
     )
-    val actionStream = ZStream.fromIterable(streamActions)
-    val client = Clients(actionStream)
 
     val zioBlock = for
       _ <- ZIO.log("Starting")
@@ -59,65 +55,65 @@ object GrpcClient extends ZIOAppDefault {
         ServerBuilder.forPort(GRPCServerPort).addService(ProtoReflectionService.newInstance()),
         ServiceList.add(SyncServiceImpl(hub, database).transformContextZIO(SyncServer.authenticatedUserContext)),
       ).launch.fork
-      _ <- client.output
-        .runForeach {
-          syncResponse => ZIO.log(s"Response: ${syncResponse.toString}")
-        }
-      _ <- ZIO.log("End requests")
-      _ <- grpcServer.interruptFork.exit
-      _ <- ZIO.log("End GRPC server")
-      _ <- ZIO.log(client.client1Responses.map(_.toString).mkString("Client1: ", "\n", ""))
-      _ <- ZIO.log(client.client2Responses.map(_.toString).mkString("Client2: ", "\n", ""))
-      _ <- ZIO.log(client.client3Responses.map(_.toString).mkString("Client3: ", "\n", ""))
-    yield {
 
+      streamClosePromise <- Promise.make[StatusException, SyncRequest]
+      client = Clients(ZStream.fromIterable(streamActions), streamClosePromise)
+
+      userResponsesRef <- Ref.make[Seq[(Int, SyncResponse)]](Nil)
+      _ <- client.output
+        .runFoldZIO(1) {
+          case (responseCount, userResponse) =>
+            ZIO.log(s"Response: ${userResponse._2.toString}") *>
+              userResponsesRef.update {
+                userResponses => userResponses :+ userResponse
+              } *> {
+              if (responseCount >= 15) {
+                ZIO.log(s"Finalizing client streams") *>
+                  streamClosePromise.succeed(SyncRequest.defaultInstance).as(-1)
+              } else {
+                ZIO.succeed(responseCount + 1)
+              }
+            }
+        }
+      userResponses <- userResponsesRef.get
+      _ <- hub.shutdown
+      _ <- grpcServer.interruptFork
+    yield {
+      println(s"Total responses: ${userResponses.length}")
+      println(s" - user 1: ${userResponses.count(_._1 == 1)}")
+      println(s" - user 2: ${userResponses.count(_._1 == 2)}")
+      println(s" - user 3: ${userResponses.count(_._1 == 3)}")
+      Seq(1, 2, 3).foreach {
+        userId =>
+          println()
+          println(s"User $userId:")
+          userResponses.filter(_._1 == userId).foreach {
+            (_, response) => println(response.toString)
+          }
+      }
+      ExitCode.success
     }
     zioBlock.exitCode
   }
 
 }
 
-class Clients(stream: Stream[StatusException, (Int, SyncRequest)]) {
+class Clients(
+               stream: Stream[StatusException, (Int, SyncRequest)],
+               streamClosePromise: Promise[StatusException, SyncRequest],
+             )(implicit trace: Trace) {
 
-  val client1Responses: ListBuffer[SyncResponse] = ListBuffer[SyncResponse]()
-  val client2Responses: ListBuffer[SyncResponse] = ListBuffer[SyncResponse]()
-  val client3Responses: ListBuffer[SyncResponse] = ListBuffer[SyncResponse]()
-
-  def clientLayer(userId: Int): Layer[Throwable, SyncServiceClient] =
-    SyncServiceClient.live(
+  def buildClient(userId: Int): Stream[Throwable, (Int, SyncResponse)] = {
+    val layer = SyncServiceClient.live(
       ZManagedChannel(ManagedChannelBuilder.forAddress("localhost", SyncServer.GRPCServerPort).usePlaintext()),
       options = CallOptions.DEFAULT,
       metadata = SafeMetadata.make(("user-id", userId.toString)),
     )
+    SyncServiceClient.bidirectionalStream(stream.filter(_._1 == userId).map(_._2) ++ ZStream.fromZIO(ZIO.infinity))
+      .interruptWhen(streamClosePromise)
+      .provideLayer(layer)
+      .map(syncResponse => (userId, syncResponse))
+  }
 
-  val client1 = SyncServiceClient.bidirectionalStream(stream.filter(_._1 == 1).map(_._2)).provideLayer(clientLayer(1))
-    //    .debug("client1")
-    //    .runForeach {
-    //        syncResponse => ZIO.log(s"Client 1 Response: ${syncResponse.toString}")
-    //      }
-    .tap(syncResponse => ZIO.succeed(client1Responses.addOne(syncResponse)))
-    .onError {
-      ex => ZIO.log(s"Client 1 Error: ${ex.toString}")
-    }
-  val client2 = SyncServiceClient.bidirectionalStream(stream.filter(_._1 == 2).map(_._2)).provideLayer(clientLayer(2))
-    //    .runForeach {
-    //        syncResponse => ZIO.log(s"Client 2 Response: ${syncResponse.toString}")
-    //      }
-    .tap(syncResponse => ZIO.succeed(client2Responses.addOne(syncResponse)))
-    .onError {
-      ex => ZIO.log(s"Client 2 Error: ${ex.toString}")
-    }
-  val client3 = SyncServiceClient.bidirectionalStream(stream.filter(_._1 == 3).map(_._2)).provideLayer(clientLayer(3))
-    //    .debug("client3")
-    //    .runForeach {
-    //        syncResponse => ZIO.log(s"Client 3 Response: ${syncResponse.toString}")
-    //      }
-    .tap(syncResponse => ZIO.succeed(client3Responses.addOne(syncResponse)))
-    .onError {
-      ex => ZIO.log(s"Client 3 Error: ${ex.toString}")
-    }
-
-  //    }
-
-  val output: Stream[Throwable, SyncResponse] = client1.merge(client2).merge(client3)
+  val output: Stream[Throwable, (Int, SyncResponse)] = buildClient(1).merge(buildClient(2)).merge(buildClient(3))
 }
