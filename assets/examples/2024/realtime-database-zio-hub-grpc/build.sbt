@@ -24,13 +24,13 @@ lazy val realtimeziohubgrpc = project
     version := "0.1.0",
     scalaVersion := "3.4.0",
     libraryDependencies ++= Seq(
-      "io.grpc" %  "grpc-netty"         % "1.62.2",
       "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion,
+      "io.grpc" %  "grpc-netty"         % "1.62.2",
       "dev.zio" %% "zio-cache"          % "0.2.3",
-//      "dev.zio" %% "zio-test"           % "2.1-RC1" % Test,
-//      "dev.zio" %% "zio-test-sbt"       % "2.1-RC1" % Test,
-//      "dev.zio" %% "zio-test-magnolia"  % "2.1-RC1" % Test,
-      "org.scalatest" %% "scalatest"    % "3.2.17"  % Test,
+      "dev.zio" %% "zio-test"           % "2.1-RC1" % Test,
+      "dev.zio" %% "zio-test-sbt"       % "2.1-RC1" % Test,
+      "dev.zio" %% "zio-test-magnolia"  % "2.1-RC1" % Test,
+      "dev.zio" %% "zio-test-junit"     % "2.1-RC1" % Test,
     ),
     javacOptions ++= Seq("-source", "11", "-target", "11"),
     scalacOptions ++= Seq(

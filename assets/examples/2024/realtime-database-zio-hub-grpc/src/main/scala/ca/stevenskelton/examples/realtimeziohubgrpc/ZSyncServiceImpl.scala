@@ -10,10 +10,10 @@ import zio.{Hub, IO, Ref, Scope, ZIO}
 import java.time.Instant
 import scala.collection.mutable
 
-class SyncServiceImpl(
-                       hub: Hub[DataInstant],
-                       database: Ref[mutable.Map[Int, DataInstant]],
-                     ) extends ZioSyncService.ZSyncService[AuthenticatedUser] {
+class ZSyncServiceImpl(
+                        hub: Hub[DataInstant],
+                        database: Ref[mutable.Map[Int, DataInstant]],
+                      ) extends ZioSyncService.ZSyncService[AuthenticatedUser] {
 
   override def bidirectionalStream(request: Stream[StatusException, SyncRequest], context: AuthenticatedUser): Stream[StatusException, SyncResponse] = {
     ZStream.unwrapScoped {
@@ -24,7 +24,7 @@ class SyncServiceImpl(
         val requestStreams = request.flatMap {
           syncRequest =>
             ZStream.unwrap {
-              ZIO.log(s"User${context.id} Request: $syncRequest") *> ZIO.succeed {
+              ZIO.log(s"User${context.userId} Request: $syncRequest") *> ZIO.succeed {
                 val stream = syncRequest.action match {
                   case SyncRequest.Action.Subscribe(subscribe) => handleSubscribe(subscribe, dataStreamFilterRef)
                   case SyncRequest.Action.Unsubscribe(unsubscribe) => handleUnsubscribe(unsubscribe, dataStreamFilterRef)
@@ -32,23 +32,21 @@ class SyncServiceImpl(
                   case SyncRequest.Action.Empty => ZStream.empty
                 }
                 stream.onError {
-                  ex => ZIO.log(s"Exception on request ${syncRequest} for user-${context.id}: ${ex.prettyPrint}")
+                  ex => ZIO.log(s"Exception on request ${syncRequest} for user-${context.userId}: ${ex.prettyPrint}")
                 }
               }.map {
-                t =>
-                  t.tap {
-                    o => ZIO.log(s"Stream user-${context.id}: ${o}")
-                  }
+                _.tap {
+                  syncResponse => ZIO.log(s"Stream user-${context.userId}: $syncResponse")
+                }
               }
             }
         }
 
-        val endOfRequestStream = ZStream.finalizer {
-            ZIO.log(s"Finalizing user-${context.id}")
+        val endOfRequestStream = ZStream
+          .finalizer {
+            ZIO.log(s"Finalizing user-${context.userId}")
           }
-          .map {
-            _ => SyncResponse.of(data = None, lastUpdate = 0)
-          }
+          .drain
 
         hubStream.merge(requestStreams ++ endOfRequestStream, strategy = HaltStrategy.Right)
       }
@@ -100,12 +98,14 @@ class SyncServiceImpl(
   }
 
   private def handleUnsubscribe(unsubscribe: Unsubscribe, dataStreamFilterRef: Ref[DataStreamFilter]): Stream[StatusException, SyncResponse] = {
-    ZStream.fromZIO {
-      dataStreamFilterRef.update {
-        dataStreamFilter =>
-          val _ = dataStreamFilter.unsubscribeAll(unsubscribe.ids)
-          dataStreamFilter
-      }.as(SyncResponse.defaultInstance)
+    ZStream.fromIterableZIO {
+      dataStreamFilterRef
+        .update {
+          dataStreamFilter =>
+            val _ = dataStreamFilter.unsubscribeAll(unsubscribe.ids)
+            dataStreamFilter
+        }
+        .as(Nil)
     }
   }
 

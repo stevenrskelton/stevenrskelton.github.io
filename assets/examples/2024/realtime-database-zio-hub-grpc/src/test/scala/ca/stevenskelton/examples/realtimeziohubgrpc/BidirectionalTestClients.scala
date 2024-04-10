@@ -1,0 +1,70 @@
+package ca.stevenskelton.examples.realtimeziohubgrpc
+
+import ca.stevenskelton.examples.realtimeziohubgrpc.AuthenticatedUser.UserId
+import ca.stevenskelton.examples.realtimeziohubgrpc.SyncServer.{GRPCServerPort, HubCapacity}
+import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.ZioSyncService.SyncServiceClient
+import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{SyncRequest, SyncResponse}
+import io.grpc.protobuf.services.ProtoReflectionService
+import io.grpc.{CallOptions, ManagedChannelBuilder, ServerBuilder, StatusException}
+import scalapb.zio_grpc.{SafeMetadata, ServerLayer, ServiceList, ZManagedChannel}
+import zio.stream.{Stream, ZStream}
+import zio.{Hub, IO, Promise, Ref, Trace, ZIO}
+
+import scala.collection.mutable
+
+class BidirectionalTestClients(
+                               stream: Stream[StatusException, (UserId, SyncRequest)],
+                               closeAfterResponseCount: Int,
+                               clients: Seq[UserId] = Seq(1, 2, 3),
+                             )(implicit trace: Trace) {
+
+  def responses: IO[Throwable, Seq[(UserId, SyncResponse)]] = {
+    for {
+      hub <- Hub.sliding[DataInstant](HubCapacity)
+      database <- Ref.make[mutable.Map[Int, DataInstant]](mutable.Map.empty)
+      grpcServer <- ServerLayer.fromServiceList(
+        ServerBuilder.forPort(GRPCServerPort).addService(ProtoReflectionService.newInstance()),
+        ServiceList.add(ZSyncServiceImpl(hub, database).transformContextZIO(SyncServer.authenticatedUserContext)),
+      ).launch.fork
+      
+      streamClosePromise <- Promise.make[StatusException, SyncRequest]
+      userResponsesRef <- Ref.make[Seq[(UserId, SyncResponse)]](Nil)
+      _ <- clients.foldLeft(ZStream.empty) {
+        (r, userId) => r.merge(buildClient(userId, streamClosePromise))
+      }.runFoldZIO(1) {
+        case (responseCount, userResponse) =>
+          ZIO.log(s"Response: ${userResponse._2.toString}") *>
+            userResponsesRef.update {
+              userResponses => userResponses :+ userResponse
+            } *> {
+            if (responseCount >= closeAfterResponseCount) {
+              ZIO.log(s"Finalizing client streams") *>
+                streamClosePromise.succeed(SyncRequest.defaultInstance).as(-1)
+            } else {
+              ZIO.succeed(responseCount + 1)
+            }
+          }
+      }
+      userResponses <- userResponsesRef.get
+
+      _ <- hub.shutdown
+      _ <- grpcServer.interruptFork
+    } yield {
+      userResponses
+    }
+  }
+  private def buildClient(
+                           userId: UserId,
+                           closePromise: Promise[StatusException, SyncRequest],
+                         ): Stream[Throwable, (UserId, SyncResponse)] = {
+    val layer = SyncServiceClient.live(
+      ZManagedChannel(ManagedChannelBuilder.forAddress("localhost", SyncServer.GRPCServerPort).usePlaintext()),
+      options = CallOptions.DEFAULT,
+      metadata = SafeMetadata.make((SyncServer.MetadataUserIdKey, userId.toString)),
+    )
+    SyncServiceClient.bidirectionalStream(stream.filter(_._1 == userId).map(_._2) ++ ZStream.fromZIO(ZIO.infinity))
+      .interruptWhen(closePromise)
+      .provideLayer(layer)
+      .map(syncResponse => (userId, syncResponse))
+  }
+}
