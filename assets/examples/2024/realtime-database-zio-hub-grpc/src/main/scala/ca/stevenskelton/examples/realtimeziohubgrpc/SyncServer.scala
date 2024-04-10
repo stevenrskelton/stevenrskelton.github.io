@@ -11,8 +11,9 @@ object SyncServer extends ZIOAppDefault:
 
   val HubCapacity = 1000
   val HubMaxChunkSize = 1000
-  val GRPCServerPort = 9000
   val MetadataUserIdKey = "user-id"
+
+  private val GRPCServerPort = 9000
 
   def authenticatedUserContext(requestContext: RequestContext): IO[StatusException, AuthenticatedUser] =
     requestContext.metadata.get(Metadata.Key.of(MetadataUserIdKey, Metadata.ASCII_STRING_MARSHALLER)).flatMap:
