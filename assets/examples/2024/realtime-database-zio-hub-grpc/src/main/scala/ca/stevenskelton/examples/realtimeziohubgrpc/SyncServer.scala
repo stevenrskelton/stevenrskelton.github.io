@@ -14,23 +14,22 @@ object SyncServer extends ZIOAppDefault:
   val HubMaxChunkSize = 1000
   val GRPCServerPort = 9000
 
-  private def authenticatedUserContext(requestContext: RequestContext): IO[StatusException, AuthenticatedUser] =
+  def authenticatedUserContext(requestContext: RequestContext): IO[StatusException, AuthenticatedUser] =
     requestContext.metadata.get(Metadata.Key.of("user-id", Metadata.ASCII_STRING_MARSHALLER)).flatMap:
       _.filterNot(_.isBlank)
         .flatMap(_.toIntOption)
         .map(id => ZIO.succeed(AuthenticatedUser(id)))
         .getOrElse:
-          ZIO.logCause(Cause.fail(Exception("Missing or empty user id")))
+          ZIO.logCause("authenticatedUserContext", Cause.fail(Exception("Missing or empty user id")))
             *> ZIO.fail(StatusException(Status.UNAUTHENTICATED))
 
   override def run: URIO[Any, ExitCode] =
     val app = for
       hub <- Hub.sliding[DataInstant](HubCapacity)
       database <- Ref.make[mutable.Map[Int, DataInstant]](mutable.Map.empty)
-      streamFilters <- Ref.make[mutable.Map[AuthenticatedUser, DataStreamFilter]](mutable.Map.empty)
       grpcServer <- ServerLayer.fromServiceList(
         ServerBuilder.forPort(GRPCServerPort).addService(ProtoReflectionService.newInstance()),
-        ServiceList.add(SyncServiceImpl(hub, database, streamFilters).transformContextZIO(authenticatedUserContext)),
+        ServiceList.add(SyncServiceImpl(hub, database).transformContextZIO(authenticatedUserContext)),
       ).launch
     yield {
       grpcServer

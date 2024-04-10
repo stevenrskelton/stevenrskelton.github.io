@@ -4,12 +4,6 @@ import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.Data
 
 import scala.collection.mutable
 
-object DataStreamFilter {
-  val Empty: DataStreamFilter = new DataStreamFilter {
-    override def isWatching(data: Data): Boolean = false
-  }
-}
-
 class DataStreamFilter {
 
   private val watching = new mutable.HashSet[Int]

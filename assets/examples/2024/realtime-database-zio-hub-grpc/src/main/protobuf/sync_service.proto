@@ -18,9 +18,6 @@ service SyncService {
 
 message SyncRequest {
 
-  message Connect {
-  }
-
   message Subscribe {
     message DataSnapshots {
       uint32 id = 1;
@@ -38,10 +35,9 @@ message SyncRequest {
   }
 
   oneof action {
-    Connect connect = 1;
-    Subscribe subscribe = 2;
-    Unsubscribe unsubscribe = 3;
-    Update update = 4;
+    Subscribe subscribe = 1;
+    Unsubscribe unsubscribe = 2;
+    Update update = 3;
   }
 }
 
