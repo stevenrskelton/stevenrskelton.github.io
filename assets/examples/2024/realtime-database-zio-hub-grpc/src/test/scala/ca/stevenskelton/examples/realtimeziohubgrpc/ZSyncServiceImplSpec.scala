@@ -6,27 +6,23 @@ import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequ
 import zio.stream.ZStream
 import zio.test.TestAspect.sequential
 import zio.test.junit.JUnitRunnableSpec
-import zio.test.{test, *}
+import zio.test.{assertTrue, test}
 
 class ZSyncServiceImplSpec extends JUnitRunnableSpec {
 
-  val Batch1Time = 1000000L
-  val Batch2Time = 2000000L
-  val Batch3Time = 3000000L
-
   // Client 1:
   //  - watch 1
-  //  - update 1,2,3,4 (Time 1000000)
-  //  - update 1,2,3,4 (Time 2000000)
-  //  - update 1,2,3,4 (Time 3000000)
+  //  - update 1,2,3,4 (Time 1000)
+  //  - update 1,2,3,4 (Time 2000)
+  //  - update 1,2,3,4 (Time 3000)
   // Client 2:
   //  - watch 1,2
   // Client 3:
   //  - watch 1,3
   val SubscribeActions = Seq(
     (1, SyncRequest.of(SyncRequest.Action.Subscribe(SyncRequest.Subscribe.of(Seq(DataSnapshots.of(1, 0)))))),
-    (2, SyncRequest.of(SyncRequest.Action.Subscribe(SyncRequest.Subscribe.of(Seq(DataSnapshots.of(1, 0), DataSnapshots.of(2, Batch2Time)))))),
-    (3, SyncRequest.of(SyncRequest.Action.Subscribe(SyncRequest.Subscribe.of(Seq(DataSnapshots.of(1, 0), DataSnapshots.of(3, Batch3Time)))))),
+    (2, SyncRequest.of(SyncRequest.Action.Subscribe(SyncRequest.Subscribe.of(Seq(DataSnapshots.of(1, 0), DataSnapshots.of(2, 0)))))),
+    (3, SyncRequest.of(SyncRequest.Action.Subscribe(SyncRequest.Subscribe.of(Seq(DataSnapshots.of(1, 0), DataSnapshots.of(3, 0)))))),
   )
 
   override def spec = suite("multiple client listeners")(
@@ -74,7 +70,7 @@ class ZSyncServiceImplSpec extends JUnitRunnableSpec {
         assertTrue(userResponses.count(_._1 == 3) == 6) //Client 3
     },
     test("Unsubscribe All") {
-      val ExpectedResponseCount = 10
+      val ExpectedResponseCount = 12
       val streamActions = SubscribeActions ++ Seq(
         (1, SyncRequest.of(SyncRequest.Action.Update(SyncRequest.Update.of(data = ZSyncServiceImplSpec.createData(1))))),
         (2, SyncRequest.of(SyncRequest.Action.Unsubscribe(SyncRequest.Unsubscribe.of(ids = Nil)))),
@@ -88,6 +84,20 @@ class ZSyncServiceImplSpec extends JUnitRunnableSpec {
         assertTrue(userResponses.count(_._1 == 1) == 3) //Client 1
         assertTrue(userResponses.count(_._1 == 2) == 1) //Client 2
         assertTrue(userResponses.count(_._1 == 3) == 6) //Client 3
+    },
+    test("Limit Subscribe Response to before lastUpdate") {
+      val ExpectedResponseCount = 2
+      val streamActions = Seq(
+        (1, SyncRequest.of(SyncRequest.Action.Update(SyncRequest.Update.of(data = ZSyncServiceImplSpec.createData(1))))),
+        (1, SyncRequest.of(SyncRequest.Action.Subscribe(SyncRequest.Subscribe.of(Seq(DataSnapshots.of(1, 2000000000L), DataSnapshots.of(2, 0)))))),
+        (1, SyncRequest.of(SyncRequest.Action.Update(SyncRequest.Update.of(data = ZSyncServiceImplSpec.createData(2))))),
+      )
+      for
+        userResponses <- BidirectionalTestClients(ZStream.fromIterable(streamActions), ExpectedResponseCount).responses
+      yield
+        assertTrue(userResponses.length == ExpectedResponseCount)
+
+        assertTrue(userResponses.count(_._1 == 1) == 2) //Client 1
     }
   ) @@ sequential
 }
