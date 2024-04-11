@@ -1,18 +1,20 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc
 
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.SyncRequest.{Subscribe, Unsubscribe, Update}
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{SyncRequest, SyncResponse, ZioSyncService}
+import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.SyncRequest.{DataUpdate, Subscribe}
+import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse, ZioSyncService}
 import io.grpc.StatusException
 import zio.stream.ZStream.HaltStrategy
 import zio.stream.{Stream, ZStream}
-import zio.{Hub, IO, Ref, Scope, ZIO}
+import zio.{Hub, IO, Ref, Scope, UIO, ZIO}
 
-import java.time.Instant
 import scala.collection.mutable
 
+object ZSyncServiceImpl:
+  def calculateEtag(data: Data): DataRecord.ETag = data.id.toString + data.field1
+
 class ZSyncServiceImpl(
-                        hub: Hub[DataInstant],
-                        databaseRef: Ref[mutable.Map[Int, DataInstant]],
+                        hub: Hub[DataRecord],
+                        databaseRef: Ref[mutable.Map[Int, DataRecord]],
                       ) extends ZioSyncService.ZSyncService[AuthenticatedUser]:
 
   override def bidirectionalStream(request: Stream[StatusException, SyncRequest], context: AuthenticatedUser): Stream[StatusException, SyncResponse] =
@@ -27,94 +29,99 @@ class ZSyncServiceImpl(
               ZIO.log(s"User${context.userId} Request: $syncRequest") *>
                 ZIO.succeed:
 
-                  val stream = syncRequest.action match
-                    case SyncRequest.Action.Subscribe(subscribe) => handleSubscribe(subscribe, dataStreamFilterRef)
-                    case SyncRequest.Action.Unsubscribe(unsubscribe) => handleUnsubscribe(unsubscribe, dataStreamFilterRef)
-                    case SyncRequest.Action.Update(update) => handleUpdate(update)
-                    case SyncRequest.Action.Empty => ZStream.empty
+                  val subscribeStream =
+                    if (syncRequest.subscribes.nonEmpty) handleSubscribe(syncRequest.subscribes, dataStreamFilterRef)
+                    else ZStream.empty
 
-                  stream.onError:
-                    ex => ZIO.log(s"Exception on request ${syncRequest} for user-${context.userId}: ${ex.prettyPrint}")
+                  val unsubscribeStream =
+                    if (syncRequest.unsubscribeAll) handleUnsubscribe(Nil, dataStreamFilterRef)
+                    else if (syncRequest.unsubscribeIds.nonEmpty) handleUnsubscribe(syncRequest.unsubscribeIds, dataStreamFilterRef)
+                    else ZIO.unit
+
+                  val updateStream = 
+                    if (syncRequest.updates.nonEmpty) handleUpdate(syncRequest.updates) 
+                    else ZStream.empty
+
+                  (subscribeStream ++ ZStream.fromZIO(unsubscribeStream).drain ++ updateStream).onError:
+                    ex => ZIO.log(s"Exception on request $syncRequest for user-${context.userId}: ${ex.prettyPrint}")
 
                 .map:
                   _.tap:
                     syncResponse => ZIO.log(s"Stream user-${context.userId}: $syncResponse")
 
-        val endOfRequestStream = ZStream
+        val endOfAllRequestsStream = ZStream
           .finalizer:
             ZIO.log(s"Finalizing user-${context.userId}")
           .drain
 
-        hubStream.merge(requestStreams ++ endOfRequestStream, strategy = HaltStrategy.Right)
+        hubStream.merge(requestStreams ++ endOfAllRequestsStream, strategy = HaltStrategy.Right)
 
   end bidirectionalStream
+
 
   private def initializeUser(context: AuthenticatedUser): IO[StatusException, Ref[DataStreamFilter]] =
     Ref.make(DataStreamFilter())
 
+
   private def createHubStream(dataStreamFilterRef: Ref[DataStreamFilter]): ZIO[Scope, Nothing, Stream[StatusException, SyncResponse]] =
     ZStream.fromHubScoped(hub, SyncServer.HubMaxChunkSize).map:
       _.filterZIO:
-        dataInstant =>
+        dataRecord =>
           dataStreamFilterRef.get.map:
-            _.isWatching(dataInstant.data)
+            _.isWatching(dataRecord.data)
       .map:
-        dataInstant =>
-          SyncResponse.of(
-            data = Some(dataInstant.data),
-            lastUpdate = dataInstant.lastUpdate.getEpochSecond,
-          )
+        dataRecord => SyncResponse.of(Some(dataRecord.data), dataRecord.etag)
 
-  private def handleSubscribe(subscribe: Subscribe, dataStreamFilterRef: Ref[DataStreamFilter]): Stream[StatusException, SyncResponse] =
+
+  private def handleSubscribe(subscribes: Seq[Subscribe], dataStreamFilterRef: Ref[DataStreamFilter]): Stream[StatusException, SyncResponse] =
     ZStream.fromIterableZIO:
       for
         dataMap <- databaseRef.get
-        sinceLastUpdate <- dataStreamFilterRef.get.map:
+        recordsWithNewEtags <- dataStreamFilterRef.get.map:
           dataStreamFilter =>
-            subscribe.dataSnapshots.flatMap:
-              dataSnapshot =>
-                val _ = dataStreamFilter.subscribe(dataSnapshot.id)
-                dataMap.get(dataSnapshot.id).filterNot(_.lastUpdate.isBefore(Instant.ofEpochSecond(dataSnapshot.lastUpdate)))
-
+            subscribes.flatMap:
+              subscribe =>
+                val _ = dataStreamFilter.subscribe(subscribe.id)
+                dataMap.get(subscribe.id).filterNot(_.etag == subscribe.previousEtag)
       yield
-        sinceLastUpdate.map:
-          dataInstant => SyncResponse.of(data = Some(dataInstant.data), lastUpdate = dataInstant.lastUpdate.getEpochSecond)
+        recordsWithNewEtags.map:
+          dataRecord => SyncResponse.of(Some(dataRecord.data), dataRecord.etag)
 
-  end handleSubscribe
 
-  private def handleUnsubscribe(unsubscribe: Unsubscribe, dataStreamFilterRef: Ref[DataStreamFilter]): Stream[StatusException, SyncResponse] =
-    ZStream.fromIterableZIO:
-      dataStreamFilterRef
-        .update:
-          dataStreamFilter =>
-            val _ = dataStreamFilter.unsubscribeAll(unsubscribe.ids)
-            dataStreamFilter
-        .as(Nil)
+  private def handleUnsubscribe(unsubscribeIds: Seq[Int], dataStreamFilterRef: Ref[DataStreamFilter]): UIO[Unit] =
+    dataStreamFilterRef
+      .update:
+        dataStreamFilter =>
+          val _ = dataStreamFilter.unsubscribeAll(unsubscribeIds)
+          dataStreamFilter
 
-  private def handleUpdate(update: Update): Stream[StatusException, SyncResponse] =
+  private def handleUpdate(updates: Seq[DataUpdate]): Stream[StatusException, SyncResponse] =
     ZStream.fromIterableZIO:
       for
         now <- zio.Clock.instant
-        areUpdateConflicts <- databaseRef.modify:
+        updatesFlaggedConflict <- databaseRef.modify:
           database =>
-            val updateConflicts = update.data.map:
-              data =>
-                database.get(data.id) match
-                  case Some(existing) if existing.lastUpdate.isAfter(now) => (existing, true)
-                  case _ =>
-                    val dataInstant = DataInstant(data, now)
-                    val _ = database.update(data.id, dataInstant)
-                    (dataInstant, false)
+            val updateConflicts = updates
+              .flatMap:
+                dataUpdate => dataUpdate.data.map((_, dataUpdate.previousEtag))
+              .flatMap:
+                (data, previousEtag) =>
+                  val updateETag = ZSyncServiceImpl.calculateEtag(data)
+                  database.get(data.id) match
+                    case Some(existing) if existing.etag == updateETag => None
+                    case Some(existing) if existing.etag != previousEtag => Some(existing, true)
+                    case _ =>
+                      val dataRecord = DataRecord(data, now, updateETag)
+                      val _ = database.update(data.id, dataRecord)
+                      Some(dataRecord, false)
 
             (updateConflicts, database)
 
-        conflicts <- ZIO.collectAll:
-          areUpdateConflicts.map:
-            case (dataInstant, true) => ZIO.succeed(Some(dataInstant))
-            case (dataInstant, false) => hub.publish(dataInstant).as(None)
+        dataRecordConflicts <- ZIO.collectAll:
+          updatesFlaggedConflict.map:
+            case (dataRecord, true) => ZIO.succeed(Some(dataRecord))
+            case (dataRecord, false) => hub.publish(dataRecord).as(None)
 
       yield
-        conflicts.flatten.map:
-          conflict => SyncResponse.of(data = Some(conflict.data), lastUpdate = conflict.lastUpdate.getEpochSecond)
-
-  end handleUpdate
+        dataRecordConflicts.flatten.map:
+          dataRecord => SyncResponse.of(Some(dataRecord.data), dataRecord.etag)

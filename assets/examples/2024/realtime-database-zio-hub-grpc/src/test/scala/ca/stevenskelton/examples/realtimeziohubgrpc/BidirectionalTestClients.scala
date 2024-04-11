@@ -3,7 +3,7 @@ package ca.stevenskelton.examples.realtimeziohubgrpc
 import ca.stevenskelton.examples.realtimeziohubgrpc.AuthenticatedUser.UserId
 import ca.stevenskelton.examples.realtimeziohubgrpc.SyncServer.HubCapacity
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.ZioSyncService.SyncServiceClient
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{SyncRequest, SyncResponse}
+import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse}
 import io.grpc.protobuf.services.ProtoReflectionService
 import io.grpc.{CallOptions, ManagedChannelBuilder, ServerBuilder, StatusException}
 import scalapb.zio_grpc.{SafeMetadata, ServerLayer, ServiceList, ZManagedChannel}
@@ -20,13 +20,15 @@ class BidirectionalTestClients(
                                 clients: Seq[UserId] = Seq(1, 2, 3),
                               )(implicit trace: Trace):
 
+  def calculateEtag(data: Data): DataRecord.ETag = data.id.toString + data.field1
+  
   def responses: IO[Throwable, Seq[(UserId, SyncResponse)]] =
 
     val serverPort = Using(new ServerSocket(0))(_.getLocalPort).get
 
     for
-      hub <- Hub.sliding[DataInstant](HubCapacity)
-      database <- Ref.make[mutable.Map[Int, DataInstant]](mutable.Map.empty)
+      hub <- Hub.sliding[DataRecord](HubCapacity)
+      database <- Ref.make[mutable.Map[Int, DataRecord]](mutable.Map.empty)
       grpcServer <- ServerLayer
         .fromServiceList(
           ServerBuilder.forPort(serverPort).addService(ProtoReflectionService.newInstance()),

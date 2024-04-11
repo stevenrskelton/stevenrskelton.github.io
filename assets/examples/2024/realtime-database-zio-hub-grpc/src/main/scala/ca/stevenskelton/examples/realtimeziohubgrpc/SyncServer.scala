@@ -1,5 +1,6 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc
 
+import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.Data
 import io.grpc.protobuf.services.ProtoReflectionService
 import io.grpc.{Metadata, ServerBuilder, Status, StatusException}
 import scalapb.zio_grpc.{RequestContext, ServerLayer, ServiceList}
@@ -14,7 +15,7 @@ object SyncServer extends ZIOAppDefault:
   val MetadataUserIdKey = "user-id"
 
   private val GRPCServerPort = 9000
-
+  
   def authenticatedUserContext(requestContext: RequestContext): IO[StatusException, AuthenticatedUser] =
     requestContext.metadata.get(Metadata.Key.of(MetadataUserIdKey, Metadata.ASCII_STRING_MARSHALLER)).flatMap:
       _.filterNot(_.isBlank)
@@ -26,8 +27,8 @@ object SyncServer extends ZIOAppDefault:
 
   override def run: URIO[Any, ExitCode] =
     val app = for
-      hub <- Hub.sliding[DataInstant](HubCapacity)
-      database <- Ref.make[mutable.Map[Int, DataInstant]](mutable.Map.empty)
+      hub <- Hub.sliding[DataRecord](HubCapacity)
+      database <- Ref.make[mutable.Map[Int, DataRecord]](mutable.Map.empty)
       grpcServer <- ServerLayer
         .fromServiceList(
           ServerBuilder.forPort(GRPCServerPort).addService(ProtoReflectionService.newInstance()),

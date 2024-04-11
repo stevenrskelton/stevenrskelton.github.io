@@ -10,7 +10,10 @@ class DataStreamFilter:
 
   def subscribe(id: Int): Boolean = watching.add(id)
 
-  def unsubscribeAll(ids: IterableOnce[Int]): Unit = ids.iterator.foreach(watching.remove)
+  def unsubscribeAll(ids: Seq[Int]): Unit = {
+    if (ids.isEmpty) watching.clear()
+    else ids.foreach(watching.remove)
+  }
 
   def isWatching(data: Data): Boolean = watching.contains(data.id)
 
