@@ -1,6 +1,5 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc
 
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.Data
 import io.grpc.protobuf.services.ProtoReflectionService
 import io.grpc.{Metadata, ServerBuilder, Status, StatusException}
 import scalapb.zio_grpc.{RequestContext, ServerLayer, ServiceList}

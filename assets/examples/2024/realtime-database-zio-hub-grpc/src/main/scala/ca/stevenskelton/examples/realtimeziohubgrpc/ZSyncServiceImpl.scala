@@ -12,7 +12,7 @@ import scala.collection.mutable
 object ZSyncServiceImpl:
   def calculateEtag(data: Data): DataRecord.ETag = data.id.toString + data.field1
 
-class ZSyncServiceImpl(
+case class ZSyncServiceImpl(
                         hub: Hub[DataRecord],
                         databaseRef: Ref[mutable.Map[Int, DataRecord]],
                       ) extends ZioSyncService.ZSyncService[AuthenticatedUser]:
@@ -101,7 +101,7 @@ class ZSyncServiceImpl(
         now <- zio.Clock.instant
         updatesFlaggedConflict <- databaseRef.modify:
           database =>
-            val updateConflicts = updates
+            val updateIsConflict = updates
               .flatMap:
                 dataUpdate => dataUpdate.data.map((_, dataUpdate.previousEtag))
               .flatMap:
@@ -115,7 +115,7 @@ class ZSyncServiceImpl(
                       val _ = database.update(data.id, dataRecord)
                       Some(dataRecord, false)
 
-            (updateConflicts, database)
+            (updateIsConflict, database)
 
         dataRecordConflicts <- ZIO.collectAll:
           updatesFlaggedConflict.map:
