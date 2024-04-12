@@ -7,7 +7,6 @@ import zio.{Cause, ExitCode, IO, URIO, ZIO, ZIOAppDefault}
 
 object SyncServer extends ZIOAppDefault:
   
-  val HubMaxChunkSize = 1000
   val MetadataUserIdKey = "user-id"
 
   private val GRPCServerPort = 9000

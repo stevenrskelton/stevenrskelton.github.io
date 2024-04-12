@@ -10,16 +10,12 @@ import zio.test.assertTrue
 import zio.test.junit.JUnitRunnableSpec
 
 class ZSyncServiceImplSpec extends JUnitRunnableSpec {
-
-  // Client 1:
-  //  - watch 1
-  //  - update 1,2,3,4 (Time 1000)
-  //  - update 1,2,3,4 (Time 2000)
-  //  - update 1,2,3,4 (Time 3000)
-  // Client 2:
-  //  - watch 1,2
-  // Client 3:
-  //  - watch 1,3
+  
+  /**
+   * Client 1: watch 1
+   * Client 2: watch 1,2
+   * Client 3: watch 1,3
+   */
   val SubscribeActions: Seq[(UserId, SyncRequest)] = Seq(
     (1, SyncRequest(subscribes = Seq(SyncRequest.Subscribe(id = 1)))),
     (2, SyncRequest(subscribes = Seq(SyncRequest.Subscribe(id = 1), SyncRequest.Subscribe(id = 2)))),
@@ -137,7 +133,7 @@ object ZSyncServiceImplSpec {
     }.flatMap(_._2.data)
 
   extension (dataUpdates: Seq[DataUpdate])
-    def etag(id: Int): ETag = ZSyncServiceImpl.calculateEtag(dataUpdates.find(_.data.exists(_.id == id)).get.data.get)
+    def etag(id: Int): ETag = DataRecord.calculateEtag(dataUpdates.find(_.data.exists(_.id == id)).get.data.get)
 
   extension (streamActions: Seq[(UserId, SyncRequest)])
     def stream: UStream[(UserId, SyncRequest)] = ZStream.fromIterable(streamActions, 1) //.throttleShape(1, 1.milliseconds)(_.size)
@@ -151,6 +147,6 @@ object ZSyncServiceImplSpec {
   )
 
   def createDataUpdates(batch: Int): Seq[DataUpdate] = createData(batch).zip(createData(batch - 1)).map:
-    (data, previousData) => DataUpdate.of(Some(data), ZSyncServiceImpl.calculateEtag(previousData))
+    (data, previousData) => DataUpdate.of(Some(data), DataRecord.calculateEtag(previousData))
 
 }

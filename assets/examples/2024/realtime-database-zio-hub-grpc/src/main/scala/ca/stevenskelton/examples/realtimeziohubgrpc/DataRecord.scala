@@ -9,3 +9,5 @@ case class DataRecord(data: Data, lastUpdate: Instant, etag: ETag)
 
 object DataRecord:
   type ETag = String
+
+  def calculateEtag(data: Data): DataRecord.ETag = data.id.toString + data.field1

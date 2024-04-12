@@ -10,18 +10,17 @@ import zio.{Hub, IO, Ref, Scope, UIO, ZIO}
 import scala.collection.mutable
 
 object ZSyncServiceImpl:
-  
+
   private val HubCapacity = 1000
-  
-  def calculateEtag(data: Data): DataRecord.ETag = data.id.toString + data.field1
-  
-  def launch: UIO[ZSyncServiceImpl] = 
+  private val HubMaxChunkSize = 1000
+
+  def launch: UIO[ZSyncServiceImpl] =
     for
       hub <- Hub.sliding[DataRecord](HubCapacity)
       database <- Ref.make[mutable.Map[Int, DataRecord]](mutable.Map.empty)
     yield
       ZSyncServiceImpl(hub, database)
-  
+
 
 case class ZSyncServiceImpl(
                         hub: Hub[DataRecord],
@@ -75,7 +74,7 @@ case class ZSyncServiceImpl(
 
 
   private def createHubStream(dataStreamFilterRef: Ref[DataStreamFilter]): ZIO[Scope, Nothing, Stream[StatusException, SyncResponse]] =
-    ZStream.fromHubScoped(hub, SyncServer.HubMaxChunkSize).map:
+    ZStream.fromHubScoped(hub, ZSyncServiceImpl.HubMaxChunkSize).map:
       _.filterZIO:
         dataRecord =>
           dataStreamFilterRef.get.map:
@@ -117,7 +116,7 @@ case class ZSyncServiceImpl(
                 dataUpdate => dataUpdate.data.map((_, dataUpdate.previousEtag))
               .flatMap:
                 (data, previousEtag) =>
-                  val updateETag = ZSyncServiceImpl.calculateEtag(data)
+                  val updateETag = DataRecord.calculateEtag(data)
                   database.get(data.id) match
                     case Some(existing) if existing.etag == updateETag => None
                     case Some(existing) if existing.etag != previousEtag => Some(existing, true)
