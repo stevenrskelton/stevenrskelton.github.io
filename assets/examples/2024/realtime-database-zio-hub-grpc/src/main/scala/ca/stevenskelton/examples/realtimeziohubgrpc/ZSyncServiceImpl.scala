@@ -15,7 +15,7 @@ object ZSyncServiceImpl:
   
   def calculateEtag(data: Data): DataRecord.ETag = data.id.toString + data.field1
   
-  def launch: ZIO[Any, Nothing, ZSyncServiceImpl] = 
+  def launch: UIO[ZSyncServiceImpl] = 
     for
       hub <- Hub.sliding[DataRecord](HubCapacity)
       database <- Ref.make[mutable.Map[Int, DataRecord]](mutable.Map.empty)
