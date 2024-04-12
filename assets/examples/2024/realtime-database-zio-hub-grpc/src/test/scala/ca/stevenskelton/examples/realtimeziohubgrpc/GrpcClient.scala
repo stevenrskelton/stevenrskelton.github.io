@@ -15,7 +15,7 @@ case class GrpcClient(
                      )
 
 object GrpcClient:
-  def build(
+  def launch(
              userId: UserId,
              serverPort: Int,
            ): ZIO[Scope, Nothing, GrpcClient] = ZIO.scoped(Queue.unbounded[SyncRequest]).map:

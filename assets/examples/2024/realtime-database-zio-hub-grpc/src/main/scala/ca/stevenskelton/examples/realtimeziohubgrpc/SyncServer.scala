@@ -3,13 +3,10 @@ package ca.stevenskelton.examples.realtimeziohubgrpc
 import io.grpc.protobuf.services.ProtoReflectionService
 import io.grpc.{Metadata, ServerBuilder, Status, StatusException}
 import scalapb.zio_grpc.{RequestContext, ServerLayer, ServiceList}
-import zio.{Cause, ExitCode, Hub, IO, Ref, URIO, ZIO, ZIOAppDefault}
-
-import scala.collection.mutable
+import zio.{Cause, ExitCode, IO, URIO, ZIO, ZIOAppDefault}
 
 object SyncServer extends ZIOAppDefault:
-
-  val HubCapacity = 1000
+  
   val HubMaxChunkSize = 1000
   val MetadataUserIdKey = "user-id"
 
@@ -26,12 +23,11 @@ object SyncServer extends ZIOAppDefault:
 
   override def run: URIO[Any, ExitCode] =
     val app = for
-      hub <- Hub.sliding[DataRecord](HubCapacity)
-      database <- Ref.make[mutable.Map[Int, DataRecord]](mutable.Map.empty)
+      zSyncServiceImpl <- ZSyncServiceImpl.launch
       grpcServer <- ServerLayer
         .fromServiceList(
           ServerBuilder.forPort(GRPCServerPort).addService(ProtoReflectionService.newInstance()),
-          ServiceList.add(ZSyncServiceImpl(hub, database).transformContextZIO(authenticatedUserContext)),
+          ServiceList.add(zSyncServiceImpl.transformContextZIO(authenticatedUserContext)),
         )
         .launch
     yield

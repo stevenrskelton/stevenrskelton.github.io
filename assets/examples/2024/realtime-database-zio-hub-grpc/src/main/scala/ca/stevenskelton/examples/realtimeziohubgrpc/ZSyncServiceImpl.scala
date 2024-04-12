@@ -10,7 +10,18 @@ import zio.{Hub, IO, Ref, Scope, UIO, ZIO}
 import scala.collection.mutable
 
 object ZSyncServiceImpl:
+  
+  private val HubCapacity = 1000
+  
   def calculateEtag(data: Data): DataRecord.ETag = data.id.toString + data.field1
+  
+  def launch: ZIO[Any, Nothing, ZSyncServiceImpl] = 
+    for
+      hub <- Hub.sliding[DataRecord](HubCapacity)
+      database <- Ref.make[mutable.Map[Int, DataRecord]](mutable.Map.empty)
+    yield
+      ZSyncServiceImpl(hub, database)
+  
 
 case class ZSyncServiceImpl(
                         hub: Hub[DataRecord],
