@@ -14,6 +14,8 @@ message Data {
 
 service SyncService {
   rpc BidirectionalStream (stream SyncRequest) returns (stream SyncResponse) {}
+
+  rpc Update(UpdateRequest) returns (UpdateResponse) {}
 }
 
 message SyncRequest {
@@ -23,18 +25,31 @@ message SyncRequest {
     string previous_etag = 3;
   }
 
+  repeated Subscribe subscribes = 1;
+  repeated uint32 unsubscribe_ids = 2;
+  bool unsubscribe_all = 3;
+}
+
+message SyncResponse {
+  uint32 id = 1;
+  string etag = 2;
+  Data data = 3;
+  bool unsubscribed = 4;
+}
+
+message UpdateRequest {
   message DataUpdate {
     Data data = 1;
     string previous_etag = 2;
   }
-
-  repeated Subscribe subscribes = 1;
-  repeated uint32 unsubscribeIds = 2;
-  bool unsubscribeAll = 3;
   repeated DataUpdate updates = 4;
 }
 
-message SyncResponse {
-  Data data = 1;
-  string etag = 2;
+message UpdateResponse {
+  message DataUpdateStatus {
+    uint32 id = 1;
+    string etag = 2;
+    Data conflict = 3;
+  }
+  repeated DataUpdateStatus update_statuses = 1;
 }

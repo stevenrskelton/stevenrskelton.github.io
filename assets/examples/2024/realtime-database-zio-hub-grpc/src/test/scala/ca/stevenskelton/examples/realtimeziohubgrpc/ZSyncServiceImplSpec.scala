@@ -3,14 +3,14 @@ package ca.stevenskelton.examples.realtimeziohubgrpc
 import ca.stevenskelton.examples.realtimeziohubgrpc.AuthenticatedUser.UserId
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.ETag
 import ca.stevenskelton.examples.realtimeziohubgrpc.ZSyncServiceImplSpec.*
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.SyncRequest.DataUpdate
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse}
+import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateRequest.DataUpdate
+import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse, UpdateRequest}
 import zio.stream.{UStream, ZStream}
 import zio.test.assertTrue
 import zio.test.junit.JUnitRunnableSpec
 
 class ZSyncServiceImplSpec extends JUnitRunnableSpec {
-  
+
   /**
    * Client 1: watch 1
    * Client 2: watch 1,2
@@ -25,22 +25,12 @@ class ZSyncServiceImplSpec extends JUnitRunnableSpec {
   override def spec = suite("multiple client listeners")(
     test("All updated") {
       for
-        client <- BidirectionalTestClients.launch
-
-        responses <- client.responses(15, SubscribeActions ++ Seq(
-          (1, SyncRequest(updates = ZSyncServiceImplSpec.createDataUpdates(1))),
-          (1, SyncRequest(updates = ZSyncServiceImplSpec.createDataUpdates(2))),
-          (1, SyncRequest(updates = ZSyncServiceImplSpec.createDataUpdates(3))),
-        ))
-
-        user1_id1_size = responses.idRecords(1, userId = 1).size
-
-        user2_id1_size = responses.idRecords(1, userId = 2).size
-        user2_id2_size = responses.idRecords(2, userId = 2).size
-
-        user3_id1_size = responses.idRecords(1, userId = 3).size
-        user3_id3_size = responses.idRecords(3, userId = 3).size
-
+        clients <- BidirectionalTestClients.launch
+        _ <- clients.responses(5, SubscribeActions*)
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(2))
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(3))
+        responses <- clients.responses(15)
       yield
 
         //Client 1
@@ -56,67 +46,61 @@ class ZSyncServiceImplSpec extends JUnitRunnableSpec {
         client3Responses.foreach(o => println(o.toString))
 
         assertTrue:
+
           responses.size == 15 &&
-            user1_id1_size == 3 &&
-            user2_id1_size == 3 &&
-            user2_id2_size == 3 &&
-            user3_id1_size == 3 &&
-            user3_id3_size == 3
+            responses.idRecords(1, userId = 1).size == 3 &&
+            responses.idRecords(1, userId = 2).size == 3 &&
+            responses.idRecords(2, userId = 2).size == 3 &&
+            responses.idRecords(1, userId = 3).size == 3 &&
+            responses.idRecords(3, userId = 3).size == 3
     },
     test("Unsubscribe by Id") {
       for
-        client <- BidirectionalTestClients.launch
-        responses0 <- client.responses(5, SubscribeActions :+ (1, SyncRequest(updates = ZSyncServiceImplSpec.createDataUpdates(1))))
-        responses1 <- client.responses(8, Seq(
-          (2, SyncRequest(unsubscribeIds = Seq(1))),
-          (1, SyncRequest(updates = ZSyncServiceImplSpec.createDataUpdates(2))),
-          (1, SyncRequest(updates = ZSyncServiceImplSpec.createDataUpdates(3))),
-        ))
+        clients <- BidirectionalTestClients.launch
+        _ <- clients.responses(5, SubscribeActions*)
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
+        _ <- clients.responses(1, (2, SyncRequest(unsubscribeIds = Seq(1))))
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(2))
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(3))
+        responses <- clients.responses(14)
       yield assertTrue:
-        responses0.length == 5 &&
-          responses0.idRecords(1, userId = 1).size == 1 &&
-          responses0.idRecords(1, userId = 2).size == 1 &&
-          responses0.idRecords(2, userId = 2).size == 1 &&
-          responses0.idRecords(1, userId = 3).size == 1 &&
-          responses0.idRecords(3, userId = 3).size == 1 &&
-          responses1.length == 8 &&
-          responses1.idRecords(1, userId = 1).size == 2 &&
-          responses1.idRecords(1, userId = 2).isEmpty &&
-          responses1.idRecords(2, userId = 2).size == 2 &&
-          responses1.idRecords(1, userId = 3).size == 2 &&
-          responses1.idRecords(3, userId = 3).size == 2
+        responses.length == 15 &&
+          responses.idRecords(1, userId = 1).size == 3 &&
+          responses.idRecords(1, userId = 2).size == 1 &&
+          responses.idRecords(2, userId = 2).size == 3 &&
+          responses.idRecords(1, userId = 3).size == 3 &&
+          responses.idRecords(3, userId = 3).size == 3
     },
     test("Unsubscribe All") {
-      val streamActions = Seq(
-        (2, SyncRequest(unsubscribeAll = true)),
-        (1, SyncRequest(updates = ZSyncServiceImplSpec.createDataUpdates(2))),
-        (1, SyncRequest(updates = ZSyncServiceImplSpec.createDataUpdates(3))),
-      )
       for
-        client <- BidirectionalTestClients.launch
-        _ <- client.responses(5, SubscribeActions :+ (1, SyncRequest(updates = ZSyncServiceImplSpec.createDataUpdates(1))))
-        responses <- client.responses(6, streamActions)
+        clients <- BidirectionalTestClients.launch
+        _ <- clients.responses(5, SubscribeActions*)
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
+        _ <- clients.responses(2, (2, SyncRequest(unsubscribeAll = true)))
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(2))
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(3))
+        responses <- clients.responses(11)
       yield assertTrue:
-        responses.length == 6 &&
-          responses.idRecords(1, userId = 1).size == 2 &&
-          responses.idRecords(1, userId = 2).isEmpty &&
-          responses.idRecords(2, userId = 2).isEmpty &&
-          responses.idRecords(1, userId = 3).size == 2 &&
-          responses.idRecords(3, userId = 3).size == 2
+        responses.length == 11 &&
+          responses.idRecords(1, userId = 1).size == 3 &&
+          responses.idRecords(1, userId = 2).size == 1 &&
+          responses.idRecords(2, userId = 2).size == 1 &&
+          responses.idRecords(1, userId = 3).size == 3 &&
+          responses.idRecords(3, userId = 3).size == 3
     },
-    test("Limit Subscribe Response when previous_etag matches") {
-      val initialData = ZSyncServiceImplSpec.createDataUpdates(1)
-      val streamActions = Seq(
-        (1, SyncRequest(updates = initialData)),
-        (1, SyncRequest(subscribes = Seq(
-          SyncRequest.Subscribe.of(id = 1, previousEtag = initialData.etag(1)),
-          SyncRequest.Subscribe(id = 2),
-        ))),
-        (1, SyncRequest(updates = ZSyncServiceImplSpec.createDataUpdates(2))),
-      )
+    test("Subscribe Response when previous_etag matches") {
+      val initialData = ZSyncServiceImplSpec.createUpdateRequest(1)
       for
-        client <- BidirectionalTestClients.launch
-        responses <- client.responses(3, streamActions)
+        clients <- BidirectionalTestClients.launch
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
+        subcribe1Response <- clients.responses(1, (1, SyncRequest(subscribes = Seq(SyncRequest.Subscribe(id = 1)))))
+        subscribe2Response <- clients.responses(2, (2, SyncRequest(
+          subscribes = Seq(
+          SyncRequest.Subscribe.of(id = 1, previousEtag = initialData.updates.etag(1)),
+          SyncRequest.Subscribe(id = 2),
+        ))))
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(2))
+        responses <- clients.responses(3)
       yield assertTrue:
         responses.length == 3 &&
           responses.idRecords(1).size == 1 &&
@@ -129,7 +113,7 @@ object ZSyncServiceImplSpec {
 
   extension (userResponses: Seq[(UserId, SyncResponse)])
     def idRecords(id: Int, userId: UserId = 1): Seq[Data] = userResponses.filter {
-      t => t._1 == userId && t._2.data.get.id == id
+      t => t._1 == userId && t._2.data.exists(_.id == id)
     }.flatMap(_._2.data)
 
   extension (dataUpdates: Seq[DataUpdate])
@@ -146,7 +130,10 @@ object ZSyncServiceImplSpec {
     Data.of(id = 5, field1 = s"batch-$batch"),
   )
 
-  def createDataUpdates(batch: Int): Seq[DataUpdate] = createData(batch).zip(createData(batch - 1)).map:
-    (data, previousData) => DataUpdate.of(Some(data), DataRecord.calculateEtag(previousData))
-
+  def createUpdateRequest(batch: Int): UpdateRequest = {
+    val dataUpdates = createData(batch).zip(createData(batch - 1)).map {
+      (data, previousData) => DataUpdate.of(Some(data), DataRecord.calculateEtag(previousData))
+    }
+    UpdateRequest.of(updates = dataUpdates)
+  }
 }

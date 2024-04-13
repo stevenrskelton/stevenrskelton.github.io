@@ -40,7 +40,7 @@ object BidirectionalTestClients {
 case class BidirectionalTestClients(
                                      grpcServer: Fiber.Runtime[Throwable, ?],
                                      zSyncServiceImpl: ZSyncServiceImpl,
-                                     responses: Dequeue[Take[Throwable, (UserId, SyncResponse)]],
+                                     responseDequeue: Dequeue[Take[Throwable, (UserId, SyncResponse)]],
                                      client1: GrpcClient,
                                      client2: GrpcClient,
                                      client3: GrpcClient,
@@ -48,7 +48,7 @@ case class BidirectionalTestClients(
 
   def responses(
                  count: Int,
-                 requests: Seq[(UserId, SyncRequest)],
+                 requests: (UserId, SyncRequest)*,
                ): UIO[Seq[(UserId, SyncResponse)]] =
     ZIO.collectAll:
       requests.map:
@@ -57,8 +57,20 @@ case class BidirectionalTestClients(
         case (3, syncRequest) => client3.requests.offer(syncRequest)
     *> pullNresponses(count)
 
+//  def init(requests: Seq[(UserId, SyncRequest)]): UIO[Unit] = {
+//    ZIO.collectAll {
+//      requests.map {
+//        case (1, syncRequest) => client1.requests.offer(syncRequest)
+//        case (2, syncRequest) => client2.requests.offer(syncRequest)
+//        case (3, syncRequest) => client3.requests.offer(syncRequest)
+//      }
+//    } *> responseDequeue.takeN(3).map {
+//      chunk => if (chunk.nonEmpty) Take.dieMessage("Should be empty") else ()
+//    }
+//  }
+
   private def pullNresponses(i: Int): UIO[Seq[(UserId, SyncResponse)]] =
-    responses.takeBetween(i, Int.MaxValue).flatMap:
+    responseDequeue.takeBetween(i, Int.MaxValue).flatMap:
       chunk =>
         ZIO.collectAll:
           chunk.map(_.done.catchAll {
