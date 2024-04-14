@@ -23,88 +23,93 @@ class ZSyncServiceImplSpec extends JUnitRunnableSpec {
   )
 
   override def spec = suite("multiple client listeners")(
-    test("All updated") {
-      for
-        clients <- BidirectionalTestClients.launch
-        _ <- clients.responses(5, SubscribeActions*)
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(2))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(3))
-        responses <- clients.responses(15)
-      yield
+        test("All updated") {
+          for
+            clients <- BidirectionalTestClients.launch
+            _ <- clients.responses(5, SubscribeActions*)
+            _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
+            _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(2))
+            _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(3))
+            responses <- clients.responses(15)
+          yield
 
-        //Client 1
-        val client1Responses = responses.withFilter(_._1 == 1).map(_._2)
-        client1Responses.foreach(o => println(o.toString))
+            //Client 1
+            val client1Responses = responses.withFilter(_._1 == 1).map(_._2)
+            client1Responses.foreach(o => println(o.toString))
 
-        //Client 2
-        val client2Responses = responses.withFilter(_._1 == 2).map(_._2)
-        client2Responses.foreach(o => println(o.toString))
+            //Client 2
+            val client2Responses = responses.withFilter(_._1 == 2).map(_._2)
+            client2Responses.foreach(o => println(o.toString))
 
-        //Client 3
-        val client3Responses = responses.withFilter(_._1 == 3).map(_._2)
-        client3Responses.foreach(o => println(o.toString))
+            //Client 3
+            val client3Responses = responses.withFilter(_._1 == 3).map(_._2)
+            client3Responses.foreach(o => println(o.toString))
 
-        assertTrue:
+            assertTrue:
 
-          responses.size == 15 &&
-            responses.idRecords(1, userId = 1).size == 3 &&
-            responses.idRecords(1, userId = 2).size == 3 &&
-            responses.idRecords(2, userId = 2).size == 3 &&
-            responses.idRecords(1, userId = 3).size == 3 &&
-            responses.idRecords(3, userId = 3).size == 3
-    },
-    test("Unsubscribe by Id") {
-      for
-        clients <- BidirectionalTestClients.launch
-        _ <- clients.responses(5, SubscribeActions*)
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
-        _ <- clients.responses(1, (2, SyncRequest(unsubscribeIds = Seq(1))))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(2))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(3))
-        responses <- clients.responses(14)
-      yield assertTrue:
-        responses.length == 15 &&
-          responses.idRecords(1, userId = 1).size == 3 &&
-          responses.idRecords(1, userId = 2).size == 1 &&
-          responses.idRecords(2, userId = 2).size == 3 &&
-          responses.idRecords(1, userId = 3).size == 3 &&
-          responses.idRecords(3, userId = 3).size == 3
-    },
-    test("Unsubscribe All") {
-      for
-        clients <- BidirectionalTestClients.launch
-        _ <- clients.responses(5, SubscribeActions*)
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
-        _ <- clients.responses(2, (2, SyncRequest(unsubscribeAll = true)))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(2))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(3))
-        responses <- clients.responses(11)
-      yield assertTrue:
-        responses.length == 11 &&
-          responses.idRecords(1, userId = 1).size == 3 &&
-          responses.idRecords(1, userId = 2).size == 1 &&
-          responses.idRecords(2, userId = 2).size == 1 &&
-          responses.idRecords(1, userId = 3).size == 3 &&
-          responses.idRecords(3, userId = 3).size == 3
-    },
+              responses.size == 15 &&
+                responses.idRecords(1, userId = 1).size == 3 &&
+                responses.idRecords(1, userId = 2).size == 3 &&
+                responses.idRecords(2, userId = 2).size == 3 &&
+                responses.idRecords(1, userId = 3).size == 3 &&
+                responses.idRecords(3, userId = 3).size == 3
+        },
+        test("Unsubscribe by Id") {
+          for
+            clients <- BidirectionalTestClients.launch
+            _ <- clients.responses(5, SubscribeActions*)
+            _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
+            _ <- clients.responses(6, (2, SyncRequest(unsubscribeIds = Seq(1))))
+            _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(2))
+            _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(3))
+            responses <- clients.responses(8)
+          yield assertTrue:
+            responses.length == 8 &&
+              responses.idRecords(1, userId = 1).size == 2 &&
+              responses.idRecords(1, userId = 2).isEmpty &&
+              responses.idRecords(2, userId = 2).size == 2 &&
+              responses.idRecords(1, userId = 3).size == 2 &&
+              responses.idRecords(3, userId = 3).size == 2
+        },
+        test("Unsubscribe All") {
+          for
+            clients <- BidirectionalTestClients.launch
+            _ <- clients.responses(5, SubscribeActions*)
+            _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
+            _ <- clients.responses(7, (2, SyncRequest(unsubscribeAll = true)))
+            _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(2))
+            _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(3))
+            responses <- clients.responses(6)
+          yield assertTrue:
+            responses.length == 6 &&
+              responses.idRecords(1, userId = 1).size == 2 &&
+              responses.idRecords(1, userId = 2).isEmpty &&
+              responses.idRecords(2, userId = 2).isEmpty &&
+              responses.idRecords(1, userId = 3).size == 2 &&
+              responses.idRecords(3, userId = 3).size == 2
+        },
     test("Subscribe Response when previous_etag matches") {
       val initialData = ZSyncServiceImplSpec.createUpdateRequest(1)
       for
         clients <- BidirectionalTestClients.launch
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
-        subcribe1Response <- clients.responses(1, (1, SyncRequest(subscribes = Seq(SyncRequest.Subscribe(id = 1)))))
+        subscribe1Response <- clients.responses(1, (1, SyncRequest(subscribes = Seq(SyncRequest.Subscribe(id = 1)))))
         subscribe2Response <- clients.responses(2, (2, SyncRequest(
           subscribes = Seq(
-          SyncRequest.Subscribe.of(id = 1, previousEtag = initialData.updates.etag(1)),
-          SyncRequest.Subscribe(id = 2),
-        ))))
+            SyncRequest.Subscribe.of(id = 1, previousEtag = initialData.updates.etag(1)),
+            SyncRequest.Subscribe(id = 2),
+          ))))
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(2))
         responses <- clients.responses(3)
       yield assertTrue:
-        responses.length == 3 &&
-          responses.idRecords(1).size == 1 &&
-          responses.idRecords(2).size == 2
+        subscribe1Response.head._2.data.isDefined &&
+          subscribe2Response.find(_._2.id == 1).get._2.data.isEmpty &&
+          subscribe2Response.find(_._2.id == 2).get._2.data.isDefined &&
+          responses.length == 3 &&
+          subscribe2Response.size == 2 &&
+          responses.idRecords(1, userId = 1).size == 1 &&
+          responses.idRecords(1, userId = 2).size == 1 &&
+          responses.idRecords(2, userId = 2).size == 1
     }
   ) @@ zio.test.TestAspect.sequential //@@ zio.test.TestAspect.timeout(5.seconds)
 }

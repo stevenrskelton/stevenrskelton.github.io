@@ -17,10 +17,6 @@ case class GrpcClient(
   
   def update(request: UpdateRequest): IO[Throwable, UpdateResponse] = 
     SyncServiceClient.update(request).provideLayer(grpcLayer)
-    
-//  def sync(count: Int, request: SyncRequest): IO[Throwable, Seq[SyncResponse]] = {
-//    requests.offer(request) *> responses.take(count).map(_._2)
-//  }
 
 object GrpcClient:
   def launch(

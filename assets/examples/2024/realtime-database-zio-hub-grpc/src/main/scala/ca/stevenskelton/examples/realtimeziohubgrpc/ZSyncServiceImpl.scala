@@ -90,7 +90,7 @@ case class ZSyncServiceImpl(
                     SyncResponse.of(subscribe.id, existing.etag, None, false)
                   case Some(existing) =>
                     SyncResponse.of(subscribe.id, existing.etag, Some(existing.data), false)
-                  case None => 
+                  case None =>
                     SyncResponse.of(subscribe.id, "", None, false)
       yield
         syncResponses
