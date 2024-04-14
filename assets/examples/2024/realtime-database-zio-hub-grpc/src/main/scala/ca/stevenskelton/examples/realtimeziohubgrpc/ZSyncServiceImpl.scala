@@ -95,6 +95,7 @@ case class ZSyncServiceImpl(
                     SyncResponse.of(subscribe.id, "", None, LOADING)
       yield
         syncResponses
+  end handleSubscribe
 
 
   private def handleUnsubscribe(unsubscribeIds: Seq[Int], dataStreamFilterRef: Ref[DataStreamFilter]): UStream[SyncResponse] =
@@ -103,6 +104,7 @@ case class ZSyncServiceImpl(
         dataStreamFilter => (dataStreamFilter.removeSubscription(unsubscribeIds), dataStreamFilter)
       .map:
         _.map((id, removed) => SyncResponse.of(id, "", None, SyncResponse.State.UNSUBSCRIBED))
+
 
   override def update(request: UpdateRequest, context: AuthenticatedUser): IO[StatusException, UpdateResponse] =
     import UpdateResponse.State.{CONFLICT, UNCHANGED, UPDATED}
@@ -136,3 +138,5 @@ case class ZSyncServiceImpl(
             hub.publish(dataRecord).as(DataUpdateStatus.of(dataRecord.data.id, dataRecord.etag, UPDATED, None))
     yield
       UpdateResponse.of(updateStatuses = dataUpdateStatuses)
+
+  end update
