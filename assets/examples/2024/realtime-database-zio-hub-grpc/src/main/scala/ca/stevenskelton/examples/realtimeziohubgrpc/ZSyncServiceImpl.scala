@@ -1,8 +1,8 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.SyncRequest.Subscribe
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateResponse.DataUpdateStatus
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse, UpdateRequest, UpdateResponse, ZioSyncService}
+import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateResponse.{DataUpdateStatus, UpdateState}
+import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{SyncRequest, SyncResponse, UpdateRequest, UpdateResponse, ZioSyncService}
 import io.grpc.StatusException
 import zio.stream.ZStream.HaltStrategy
 import zio.stream.{Stream, UStream, ZStream}
@@ -24,9 +24,9 @@ object ZSyncServiceImpl:
 
 
 case class ZSyncServiceImpl(
-                        hub: Hub[DataRecord],
-                        databaseRef: Ref[mutable.Map[Int, DataRecord]],
-                      ) extends ZioSyncService.ZSyncService[AuthenticatedUser]:
+                             hub: Hub[DataRecord],
+                             databaseRef: Ref[mutable.Map[Int, DataRecord]],
+                           ) extends ZioSyncService.ZSyncService[AuthenticatedUser]:
 
   override def bidirectionalStream(request: Stream[StatusException, SyncRequest], context: AuthenticatedUser): Stream[StatusException, SyncResponse] =
     ZStream.unwrapScoped:
@@ -103,10 +103,6 @@ case class ZSyncServiceImpl(
       .map:
         _.map((id, removed) => SyncResponse.of(id, "", None, removed))
 
-
-  private enum UpdateStatus:
-    case Unchanged, Updated, Conflict
-
   override def update(request: UpdateRequest, context: AuthenticatedUser): IO[StatusException, UpdateResponse] =
     for
       now <- zio.Clock.instant
@@ -119,22 +115,24 @@ case class ZSyncServiceImpl(
               (data, previousEtag) =>
                 val updateETag = DataRecord.calculateEtag(data)
                 database.get(data.id) match
-                  case Some(existing) if existing.etag == updateETag => (existing, UpdateStatus.Unchanged)
-                  case Some(existing) if existing.etag != previousEtag => (existing, UpdateStatus.Conflict)
+                  case Some(existing) if existing.etag == updateETag =>
+                    (existing, UpdateState.UNCHANGED)
+                  case Some(existing) if existing.etag != previousEtag =>
+                    (existing, UpdateState.CONFLICT)
                   case _ =>
                     val dataRecord = DataRecord(data, now, updateETag)
                     val _ = database.update(data.id, dataRecord)
-                    (dataRecord, UpdateStatus.Updated)
+                    (dataRecord, UpdateState.UPDATED)
 
           (updateIsConflict, database)
 
       dataUpdateStatuses <- ZIO.collectAll:
         updatesFlaggedConflict.map:
-          case (dataRecord, UpdateStatus.Unchanged) =>
-            ZIO.succeed(DataUpdateStatus.of(id = dataRecord.data.id, etag = dataRecord.etag, conflict = None))
-          case (dataRecord, UpdateStatus.Conflict) =>
-            ZIO.succeed(DataUpdateStatus.of(id = dataRecord.data.id, etag = dataRecord.etag, conflict = Some(dataRecord.data)))
-          case (dataRecord, UpdateStatus.Updated) =>
-            hub.publish(dataRecord).as(DataUpdateStatus.of(id = dataRecord.data.id, etag = dataRecord.etag, conflict = None))
+          case (dataRecord, UpdateState.UNCHANGED) =>
+            ZIO.succeed(DataUpdateStatus.of(dataRecord.data.id, dataRecord.etag, UpdateState.UNCHANGED, None))
+          case (dataRecord, UpdateState.CONFLICT) =>
+            ZIO.succeed(DataUpdateStatus.of(dataRecord.data.id, dataRecord.etag, UpdateState.CONFLICT, Some(dataRecord.data)))
+          case (dataRecord, UpdateState.UPDATED) =>
+            hub.publish(dataRecord).as(DataUpdateStatus.of(dataRecord.data.id, dataRecord.etag, UpdateState.UPDATED, None))
     yield
       UpdateResponse.of(updateStatuses = dataUpdateStatuses)

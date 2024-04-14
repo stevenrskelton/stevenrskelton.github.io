@@ -46,10 +46,16 @@ message UpdateRequest {
 }
 
 message UpdateResponse {
+  enum UpdateState {
+    UNCHANGED = 0;
+    UPDATED = 1;
+    CONFLICT = 2;
+  }
   message DataUpdateStatus {
     uint32 id = 1;
     string etag = 2;
-    Data conflict = 3;
+    UpdateState state = 3;
+    Data conflict = 4;
   }
   repeated DataUpdateStatus update_statuses = 1;
 }
