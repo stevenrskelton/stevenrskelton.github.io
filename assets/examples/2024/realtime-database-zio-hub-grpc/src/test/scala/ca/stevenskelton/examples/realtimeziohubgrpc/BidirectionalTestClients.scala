@@ -57,17 +57,17 @@ case class BidirectionalTestClients(
         case (3, syncRequest) => client3.requests.offer(syncRequest)
     *> pullNresponses(count)
 
-//  def init(requests: Seq[(UserId, SyncRequest)]): UIO[Unit] = {
-//    ZIO.collectAll {
-//      requests.map {
-//        case (1, syncRequest) => client1.requests.offer(syncRequest)
-//        case (2, syncRequest) => client2.requests.offer(syncRequest)
-//        case (3, syncRequest) => client3.requests.offer(syncRequest)
-//      }
-//    } *> responseDequeue.takeN(3).map {
-//      chunk => if (chunk.nonEmpty) Take.dieMessage("Should be empty") else ()
-//    }
-//  }
+  //  def init(requests: Seq[(UserId, SyncRequest)]): UIO[Unit] = {
+  //    ZIO.collectAll {
+  //      requests.map {
+  //        case (1, syncRequest) => client1.requests.offer(syncRequest)
+  //        case (2, syncRequest) => client2.requests.offer(syncRequest)
+  //        case (3, syncRequest) => client3.requests.offer(syncRequest)
+  //      }
+  //    } *> responseDequeue.takeN(3).map {
+  //      chunk => if (chunk.nonEmpty) Take.dieMessage("Should be empty") else ()
+  //    }
+  //  }
 
   private def pullNresponses(i: Int): UIO[Seq[(UserId, SyncResponse)]] =
     responseDequeue.takeBetween(i, Int.MaxValue).flatMap:

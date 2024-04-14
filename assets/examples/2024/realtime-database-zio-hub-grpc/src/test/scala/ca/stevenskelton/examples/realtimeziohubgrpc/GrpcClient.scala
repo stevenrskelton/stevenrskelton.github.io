@@ -14,15 +14,15 @@ case class GrpcClient(
                        responses: Stream[Throwable, (UserId, SyncResponse)],
                        grpcLayer: ZLayer[Any, Throwable, SyncServiceClient],
                      ):
-  
-  def update(request: UpdateRequest): IO[Throwable, UpdateResponse] = 
+
+  def update(request: UpdateRequest): IO[Throwable, UpdateResponse] =
     SyncServiceClient.update(request).provideLayer(grpcLayer)
 
 object GrpcClient:
   def launch(
-             userId: UserId,
-             serverPort: Int,
-           ): ZIO[Scope, Nothing, GrpcClient] = ZIO.scoped(Queue.unbounded[SyncRequest]).map:
+              userId: UserId,
+              serverPort: Int,
+            ): ZIO[Scope, Nothing, GrpcClient] = ZIO.scoped(Queue.unbounded[SyncRequest]).map:
 
     requests =>
 
