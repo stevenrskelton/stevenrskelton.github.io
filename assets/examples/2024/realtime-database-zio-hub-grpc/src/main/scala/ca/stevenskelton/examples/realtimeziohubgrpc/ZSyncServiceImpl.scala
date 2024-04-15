@@ -50,10 +50,9 @@ class ZSyncServiceImpl private(
 
                   import SyncResponse.State.{LOADING, NOT_SUBSCRIBED, UNCHANGED, UNSUBSCRIBED, UPDATED}
 
-                  val unsubscribedIds =
-                    if syncRequest.unsubscribeAll then subscriptionManager.removeSubscription(Nil)
-                    else if syncRequest.unsubscribeIds.nonEmpty then subscriptionManager.removeSubscription(syncRequest.unsubscribeIds)
-                    else Nil
+                  val unsubscribedIds = if syncRequest.unsubscribes.isEmpty then Nil else
+                    if syncRequest.unsubscribes.headOption.exists(_.all) then subscriptionManager.removeSubscription(Nil)
+                    else subscriptionManager.removeSubscription(syncRequest.unsubscribes.map(_.id))
 
                   val unsubscribedStream = ZStream.fromIterable:
                     unsubscribedIds

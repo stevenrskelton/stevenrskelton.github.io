@@ -13,9 +13,9 @@ message Data {
 }
 
 service SyncService {
-  rpc BidirectionalStream (stream SyncRequest) returns (stream SyncResponse) {}
+  rpc BidirectionalStream (stream SyncRequest) returns (stream SyncResponse);
 
-  rpc Update(UpdateRequest) returns (UpdateResponse) {}
+  rpc Update(UpdateRequest) returns (UpdateResponse);
 }
 
 message SyncRequest {
@@ -25,9 +25,13 @@ message SyncRequest {
     string previous_etag = 3;
   }
 
+  message Unsubscribe {
+    uint32 id = 1;
+    bool all = 2;
+  }
+
   repeated Subscribe subscribes = 1;
-  repeated uint32 unsubscribe_ids = 2;
-  bool unsubscribe_all = 3;
+  repeated Unsubscribe unsubscribes = 2;
 }
 
 message SyncResponse {

@@ -21,35 +21,20 @@ class ZSyncServiceImplSpec extends JUnitRunnableSpec {
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id2))
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id3))
         responses <- clients.responses(15)
-      yield
-
-        //Client 1
-        val client1Responses = responses.withFilter(_._1 == User1).map(_._2)
-        client1Responses.foreach(o => println(o.toString))
-
-        //Client 2
-        val client2Responses = responses.withFilter(_._1 == User2).map(_._2)
-        client2Responses.foreach(o => println(o.toString))
-
-        //Client 3
-        val client3Responses = responses.withFilter(_._1 == User3).map(_._2)
-        client3Responses.foreach(o => println(o.toString))
-
-        assertTrue:
-
-          responses.size == 15 &&
-            responses.idRecords(Id1, User1).size == 3 &&
-            responses.idRecords(Id1, User2).size == 3 &&
-            responses.idRecords(Id2, User2).size == 3 &&
-            responses.idRecords(Id1, User3).size == 3 &&
-            responses.idRecords(Id3, User3).size == 3
+      yield assertTrue:
+        responses.size == 15 &&
+          responses.idRecords(Id1, User1).size == 3 &&
+          responses.idRecords(Id1, User2).size == 3 &&
+          responses.idRecords(Id2, User2).size == 3 &&
+          responses.idRecords(Id1, User3).size == 3 &&
+          responses.idRecords(Id3, User3).size == 3
     },
     test("Unsubscribe by Id") {
       for
         clients <- BidirectionalTestClients.launch
         _ <- clients.responses(5, SubscribeActions *)
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
-        _ <- clients.responses(6, (User2, SyncRequest(unsubscribeIds = Seq(Id1))))
+        _ <- clients.responses(6, (User2, SyncRequest(unsubscribes = Seq(SyncRequest.Unsubscribe(Id1)))))
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id2))
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id3))
         responses <- clients.responses(8)
@@ -66,7 +51,7 @@ class ZSyncServiceImplSpec extends JUnitRunnableSpec {
         clients <- BidirectionalTestClients.launch
         _ <- clients.responses(5, SubscribeActions *)
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
-        _ <- clients.responses(7, (User2, SyncRequest(unsubscribeAll = true)))
+        _ <- clients.responses(7, (User2, SyncRequest(unsubscribes = Seq(SyncRequest.Unsubscribe(all = true)))))
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id2))
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id3))
         responses <- clients.responses(6)
@@ -140,9 +125,9 @@ object ZSyncServiceImplSpec {
   )
 
   extension (userResponses: Seq[(UserId, SyncResponse)])
-    def idRecords(id: Int, userId: UserId): Seq[Data] = userResponses.filter {
-      t => t._1 == userId && t._2.data.exists(_.id == id)
-    }.flatMap(_._2.data)
+    def idRecords(id: Int, userId: UserId): Seq[Data] = userResponses
+      .filter((uId, dataRecord) => uId == userId && dataRecord.data.exists(_.id == id))
+      .flatMap(_._2.data)
 
   extension (dataUpdates: Seq[DataUpdate])
     def etag(id: Int): ETag = DataRecord.calculateEtag(dataUpdates.find(_.data.exists(_.id == id)).get.data.get)
@@ -158,10 +143,9 @@ object ZSyncServiceImplSpec {
     Data.of(id = Id5, field1 = s"batch-$batch"),
   )
 
-  def createUpdateRequest(batch: Int): UpdateRequest = {
-    val dataUpdates = createData(batch).zip(createData(batch - 1)).map {
-      (data, previousData) => DataUpdate.of(Some(data), DataRecord.calculateEtag(previousData))
-    }
-    UpdateRequest.of(updates = dataUpdates)
-  }
+  def createUpdateRequest(batch: Int): UpdateRequest = UpdateRequest.of(
+    updates = createData(batch)
+      .zip(createData(batch - 1))
+      .map((data, previousData) => DataUpdate.of(Some(data), DataRecord.calculateEtag(previousData)))
+  )
 }
