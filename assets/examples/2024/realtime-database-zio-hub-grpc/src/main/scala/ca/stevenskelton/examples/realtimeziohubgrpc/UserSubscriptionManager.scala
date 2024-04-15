@@ -1,10 +1,16 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.Data
+import io.grpc.StatusException
+import zio.{IO, ZIO}
 
 import scala.collection.mutable
 
-case class UserSubscriptionManager(authenticatedUser: AuthenticatedUser):
+object UserSubscriptionManager:
+  def create(authenticatedUser: AuthenticatedUser): IO[StatusException, UserSubscriptionManager] =
+    ZIO.succeed(UserSubscriptionManager(authenticatedUser))
+
+case class UserSubscriptionManager private(authenticatedUser: AuthenticatedUser):
 
   private val watching = new mutable.HashSet[Int]
 

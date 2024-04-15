@@ -5,15 +5,14 @@ import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.ETag
 import ca.stevenskelton.examples.realtimeziohubgrpc.ZSyncServiceImplSpec.*
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateRequest.DataUpdate
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse, UpdateRequest}
-import zio.{Clock, ZIO}
-import zio.durationInt
 import zio.stream.{UStream, ZStream}
-import zio.test.{Live, assertTrue, live}
 import zio.test.junit.JUnitRunnableSpec
+import zio.test.{Live, Spec, TestEnvironment, assertTrue}
+import zio.{Scope, ZIO, durationInt}
 
 class ZSyncServiceImplSpec extends JUnitRunnableSpec {
 
-  override def spec = suite("multiple client listeners")(
+  override def spec: Spec[TestEnvironment & Scope, Any] = suite("multiple client listeners")(
     test("All updated") {
       for
         clients <- BidirectionalTestClients.launch
@@ -108,7 +107,7 @@ class ZSyncServiceImplSpec extends JUnitRunnableSpec {
         responses <- clients.responses(5, SubscribeActions *)
         subscribedIds1 <- clients.zSyncServiceImpl.subscribedIds
         _ <- clients.client3.requests.shutdown
-        _ <- Live.live(ZIO.attempt("pause for shutdown").delay(1.second))
+        _ <- Live.live(ZIO.attempt("pause for shutdown").delay(100.milliseconds))
         subscribedIds2 <- clients.zSyncServiceImpl.subscribedIds
       yield assertTrue:
         subscribedIds0.isEmpty &&

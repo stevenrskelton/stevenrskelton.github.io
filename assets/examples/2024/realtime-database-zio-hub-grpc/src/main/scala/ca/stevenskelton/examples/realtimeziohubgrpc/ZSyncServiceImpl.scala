@@ -1,11 +1,10 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc
 
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.SyncRequest.Subscribe
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateResponse.DataUpdateStatus
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{SyncRequest, SyncResponse, UpdateRequest, UpdateResponse, ZioSyncService}
 import io.grpc.StatusException
 import zio.stream.ZStream.HaltStrategy
-import zio.stream.{Stream, UStream, ZStream}
+import zio.stream.{Stream, ZStream}
 import zio.{Hub, IO, Ref, Scope, UIO, ZIO}
 
 object ZSyncServiceImpl:
@@ -38,7 +37,8 @@ class ZSyncServiceImpl private(
   override def bidirectionalStream(request: Stream[StatusException, SyncRequest], context: AuthenticatedUser): Stream[StatusException, SyncResponse] =
     ZStream.unwrapScoped:
       for
-        subscriptionManagerRef <- createSubscriptionManager(context)
+        subscriptionManager <- UserSubscriptionManager.create(context)
+        subscriptionManagerRef <- Ref.make(subscriptionManager)
         updateStream <- createSubscriptionStream(subscriptionManagerRef)
         _ <- activeSubscribersRef.update(_ :+ subscriptionManagerRef)
       yield
@@ -48,18 +48,36 @@ class ZSyncServiceImpl private(
               subscriptionManagerRef.modify:
                 subscriptionManager =>
 
-                  val unsubscribeStream =
-                    if syncRequest.unsubscribeAll then handleUnsubscribe(Nil, subscriptionManager)
-                    else if syncRequest.unsubscribeIds.nonEmpty then handleUnsubscribe(syncRequest.unsubscribeIds, subscriptionManager)
-                    else ZStream.empty
+                  import SyncResponse.State.{LOADING, NOT_SUBSCRIBED, UNCHANGED, UNSUBSCRIBED, UPDATED}
 
-                  val subscribeStream =
-                    if syncRequest.subscribes.nonEmpty then handleSubscribe(syncRequest.subscribes, subscriptionManager)
-                    else ZStream.empty
+                  val unsubscribedIds =
+                    if syncRequest.unsubscribeAll then subscriptionManager.removeSubscription(Nil)
+                    else if syncRequest.unsubscribeIds.nonEmpty then subscriptionManager.removeSubscription(syncRequest.unsubscribeIds)
+                    else Nil
 
-                  val stream = (unsubscribeStream ++ subscribeStream).onError:
-                    ex => ZIO.log(s"Exception on request $syncRequest for user-${context.userId}: ${ex.prettyPrint}")
-                  (stream, subscriptionManager)
+                  val unsubscribedStream = ZStream.fromIterable:
+                    unsubscribedIds
+                      .withFilter((id, _) => syncRequest.subscribes.forall(_.id != id))
+                      .map:
+                        case (id, true) => SyncResponse.of(id, "", None, UNSUBSCRIBED)
+                        case (id, false) => SyncResponse.of(id, "", None, NOT_SUBSCRIBED)
+
+                  val subscribedStream = if syncRequest.subscribes.isEmpty then ZStream.empty else ZStream.fromIterableZIO:
+                    for
+                      dataMap <- databaseRef.get
+                    yield
+                      syncRequest.subscribes.map:
+                        subscribe =>
+                          val _ = subscriptionManager.subscribe(subscribe.id)
+                          dataMap.get(subscribe.id) match
+                            case Some(existing) if existing.etag == subscribe.previousEtag =>
+                              SyncResponse.of(subscribe.id, existing.etag, None, UNCHANGED)
+                            case Some(existing) =>
+                              SyncResponse.of(subscribe.id, existing.etag, Some(existing.data), UPDATED)
+                            case None =>
+                              SyncResponse.of(subscribe.id, "", None, LOADING)
+
+                  (unsubscribedStream ++ subscribedStream, subscriptionManager)
 
         val endOfAllRequestsStream = ZStream
           .finalizer:
@@ -73,14 +91,6 @@ class ZSyncServiceImpl private(
   end bidirectionalStream
 
 
-  private def createSubscriptionManager(context: AuthenticatedUser): UIO[Ref[UserSubscriptionManager]] =
-    for
-      userSubscriptionManager <- ZIO.succeed(UserSubscriptionManager(context))
-      userSubscriptionManagerRef <- Ref.make(userSubscriptionManager)
-    yield
-      userSubscriptionManagerRef
-
-
   private def createSubscriptionStream(subscriptionManagerRef: Ref[UserSubscriptionManager]): ZIO[Scope, Nothing, Stream[StatusException, SyncResponse]] =
     ZStream.fromHubScoped(journal, ZSyncServiceImpl.HubMaxChunkSize).map:
       _.filterZIO:
@@ -89,31 +99,6 @@ class ZSyncServiceImpl private(
             _.isWatching(dataRecord.data)
       .map:
         dataRecord => SyncResponse.of(dataRecord.data.id, dataRecord.etag, Some(dataRecord.data), SyncResponse.State.UPDATED)
-
-
-  private def handleSubscribe(subscribes: Seq[Subscribe], subscriptionManager: UserSubscriptionManager): UStream[SyncResponse] =
-    ZStream.fromIterableZIO:
-      for
-        dataMap <- databaseRef.get
-      yield
-        subscribes.map:
-          subscribe =>
-            val _ = subscriptionManager.subscribe(subscribe.id)
-            import SyncResponse.State.{LOADING, UNCHANGED, UPDATED}
-            dataMap.get(subscribe.id) match
-              case Some(existing) if existing.etag == subscribe.previousEtag =>
-                SyncResponse.of(subscribe.id, existing.etag, None, UNCHANGED)
-              case Some(existing) =>
-                SyncResponse.of(subscribe.id, existing.etag, Some(existing.data), UPDATED)
-              case None =>
-                SyncResponse.of(subscribe.id, "", None, LOADING)
-
-
-  private def handleUnsubscribe(unsubscribeIds: Seq[Int], subscriptionManager: UserSubscriptionManager): UStream[SyncResponse] =
-    ZStream.fromIterable:
-      subscriptionManager.removeSubscription(unsubscribeIds).map:
-        (id, removed) => SyncResponse.of(id, "", None, SyncResponse.State.UNSUBSCRIBED)
-
 
   override def update(request: UpdateRequest, context: AuthenticatedUser): IO[StatusException, UpdateResponse] =
     import UpdateResponse.State.{CONFLICT, UNCHANGED, UPDATED}

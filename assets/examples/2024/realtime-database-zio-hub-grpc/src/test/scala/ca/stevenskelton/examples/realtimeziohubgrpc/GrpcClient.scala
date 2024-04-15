@@ -6,7 +6,7 @@ import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{SyncRequest, S
 import io.grpc.{CallOptions, ManagedChannelBuilder}
 import scalapb.zio_grpc.{SafeMetadata, ZManagedChannel}
 import zio.stream.{Stream, ZStream}
-import zio.{IO, Queue, Scope, UIO, ZIO, ZLayer}
+import zio.{IO, Queue, Scope, ZIO, ZLayer}
 
 case class GrpcClient(
                        userId: UserId,
