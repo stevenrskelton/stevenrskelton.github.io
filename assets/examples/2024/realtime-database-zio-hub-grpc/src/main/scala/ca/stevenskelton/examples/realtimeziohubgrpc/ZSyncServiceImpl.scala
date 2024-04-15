@@ -22,11 +22,18 @@ object ZSyncServiceImpl:
       ZSyncServiceImpl(dataJournal, databaseRef, activeSubscribersRef)
 
 
-case class ZSyncServiceImpl private(
-                                     journal: Hub[DataRecord],
-                                     databaseRef: Ref[Map[Int, DataRecord]],
-                                     activeSubscribersRef: Ref[List[Ref[UserSubscriptionManager]]],
-                                   ) extends ZioSyncService.ZSyncService[AuthenticatedUser]:
+class ZSyncServiceImpl private(
+                                journal: Hub[DataRecord],
+                                databaseRef: Ref[Map[Int, DataRecord]],
+                                activeSubscribersRef: Ref[List[Ref[UserSubscriptionManager]]],
+                              ) extends ZioSyncService.ZSyncService[AuthenticatedUser]:
+
+  def subscribedIds: UIO[Set[Int]] =
+    for
+      managerRefList <- activeSubscribersRef.get
+      managerList <- ZIO.collectAll(managerRefList.map(_.get))
+    yield
+      managerList.foldLeft(Set.empty)(_ ++ _.getSubscriptions)
 
   override def bidirectionalStream(request: Stream[StatusException, SyncRequest], context: AuthenticatedUser): Stream[StatusException, SyncResponse] =
     ZStream.unwrapScoped:
@@ -52,7 +59,9 @@ case class ZSyncServiceImpl private(
 
         val endOfAllRequestsStream = ZStream
           .finalizer:
-            ZIO.log(s"Finalizing user-${context.userId}")
+            activeSubscribersRef.update:
+              _.filter(_ != subscriptionManagerRef)
+            *> ZIO.log(s"Finalizing user-${context.userId}")
           .drain
 
         updateStream.merge(requestStreams ++ endOfAllRequestsStream, strategy = HaltStrategy.Right)

@@ -5,9 +5,10 @@ import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.ETag
 import ca.stevenskelton.examples.realtimeziohubgrpc.ZSyncServiceImplSpec.*
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateRequest.DataUpdate
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse, UpdateRequest}
-import zio.ZIO
+import zio.{Clock, ZIO}
+import zio.durationInt
 import zio.stream.{UStream, ZStream}
-import zio.test.assertTrue
+import zio.test.{Live, assertTrue, live}
 import zio.test.junit.JUnitRunnableSpec
 
 class ZSyncServiceImplSpec extends JUnitRunnableSpec {
@@ -92,7 +93,7 @@ class ZSyncServiceImplSpec extends JUnitRunnableSpec {
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(2))
         responses <- clients.responses(3)
       yield assertTrue:
-          subscribe2Response.find(_._2.id == Id1).get._2.data.isEmpty &&
+        subscribe2Response.find(_._2.id == Id1).get._2.data.isEmpty &&
           subscribe2Response.find(_._2.id == Id2).get._2.data.isDefined &&
           responses.length == 3 &&
           subscribe2Response.size == 2 &&
@@ -103,19 +104,17 @@ class ZSyncServiceImplSpec extends JUnitRunnableSpec {
     test("Iterate active subscriptions") {
       for
         clients <- BidirectionalTestClients.launch
-        activeSubscribers0 <- clients.zSyncServiceImpl.activeSubscribersRef.get
+        subscribedIds0 <- clients.zSyncServiceImpl.subscribedIds
         responses <- clients.responses(5, SubscribeActions *)
-        activeSubscribers1 <- clients.zSyncServiceImpl.activeSubscribersRef.get
-        subscriptionCount <- ZIO.collectAll {
-          activeSubscribers1.map {
-            _.get.map(manager => (manager.authenticatedUser.userId, manager.getSubscriptions.toSeq))
-          }
-        }
+        subscribedIds1 <- clients.zSyncServiceImpl.subscribedIds
+        _ <- clients.client3.requests.shutdown
+        _ <- Live.live(ZIO.attempt("pause for shutdown").delay(1.second))
+        subscribedIds2 <- clients.zSyncServiceImpl.subscribedIds
       yield assertTrue:
-        activeSubscribers0.isEmpty &&
+        subscribedIds0.isEmpty &&
           responses.size == 5 &&
-          activeSubscribers1.size == 3 &&
-          subscriptionCount.flatMap(_._2).size == 5
+          subscribedIds1 == Set(1, 2, 3) &&
+          subscribedIds2 == Set(1, 2)
     },
   ) @@ zio.test.TestAspect.sequential //@@ zio.test.TestAspect.timeout(5.seconds)
 }
