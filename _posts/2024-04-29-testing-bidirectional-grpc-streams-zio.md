@@ -7,6 +7,6 @@ tags:
   - Non-Blocking/Concurrency
 excerpt_separator: <!--more-->
 examples:
-  - http-maven-receiver
+  - realtime-database-zio-hub-grpc
 ---
 TODO:
