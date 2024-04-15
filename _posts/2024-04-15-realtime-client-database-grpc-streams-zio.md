@@ -49,5 +49,5 @@ better for abstraction libraries such as gRPC to directly support HTTP/2 instead
 {%
 include figure image_path="/assets/images/2024/04/realtime_database.svg"
 caption="Realtime Database pushing updates to Clients using Bidirectional gRPC Streams"
-img_style="padding: 0 20px 10px 20px; background-color: white; height: 250px;"
+img_style="padding: 10px; background-color: white; height: 320px;"
 %}
