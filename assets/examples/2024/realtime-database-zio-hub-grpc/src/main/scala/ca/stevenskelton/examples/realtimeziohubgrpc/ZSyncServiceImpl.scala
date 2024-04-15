@@ -44,18 +44,22 @@ class ZSyncServiceImpl private(
       yield
         val requestStreams = request.flatMap:
           syncRequest =>
+            ZStream.unwrap:
+              subscriptionManagerRef.modify:
+                subscriptionManager =>
 
-            val subscribeStream =
-              if syncRequest.subscribes.nonEmpty then handleSubscribe(syncRequest.subscribes, subscriptionManagerRef)
-              else ZStream.empty
+                  val unsubscribeStream =
+                    if syncRequest.unsubscribeAll then handleUnsubscribe(Nil, subscriptionManager)
+                    else if syncRequest.unsubscribeIds.nonEmpty then handleUnsubscribe(syncRequest.unsubscribeIds, subscriptionManager)
+                    else ZStream.empty
 
-            val unsubscribeStream =
-              if syncRequest.unsubscribeAll then handleUnsubscribe(Nil, subscriptionManagerRef)
-              else if syncRequest.unsubscribeIds.nonEmpty then handleUnsubscribe(syncRequest.unsubscribeIds, subscriptionManagerRef)
-              else ZStream.empty
+                  val subscribeStream =
+                    if syncRequest.subscribes.nonEmpty then handleSubscribe(syncRequest.subscribes, subscriptionManager)
+                    else ZStream.empty
 
-            (subscribeStream ++ unsubscribeStream).onError:
-              ex => ZIO.log(s"Exception on request $syncRequest for user-${context.userId}: ${ex.prettyPrint}")
+                  val stream = (unsubscribeStream ++ subscribeStream).onError:
+                    ex => ZIO.log(s"Exception on request $syncRequest for user-${context.userId}: ${ex.prettyPrint}")
+                  (stream, subscriptionManager)
 
         val endOfAllRequestsStream = ZStream
           .finalizer:
@@ -87,35 +91,28 @@ class ZSyncServiceImpl private(
         dataRecord => SyncResponse.of(dataRecord.data.id, dataRecord.etag, Some(dataRecord.data), SyncResponse.State.UPDATED)
 
 
-  private def handleSubscribe(subscribes: Seq[Subscribe], subscriptionManagerRef: Ref[UserSubscriptionManager]): UStream[SyncResponse] =
+  private def handleSubscribe(subscribes: Seq[Subscribe], subscriptionManager: UserSubscriptionManager): UStream[SyncResponse] =
     ZStream.fromIterableZIO:
       for
         dataMap <- databaseRef.get
-        syncResponses <- subscriptionManagerRef.get.map:
-          subscriptionManager =>
-            subscribes.map:
-              subscribe =>
-                val _ = subscriptionManager.subscribe(subscribe.id)
-                import SyncResponse.State.{LOADING, UNCHANGED, UPDATED}
-                dataMap.get(subscribe.id) match
-                  case Some(existing) if existing.etag == subscribe.previousEtag =>
-                    SyncResponse.of(subscribe.id, existing.etag, None, UNCHANGED)
-                  case Some(existing) =>
-                    SyncResponse.of(subscribe.id, existing.etag, Some(existing.data), UPDATED)
-                  case None =>
-                    SyncResponse.of(subscribe.id, "", None, LOADING)
       yield
-        syncResponses
+        subscribes.map:
+          subscribe =>
+            val _ = subscriptionManager.subscribe(subscribe.id)
+            import SyncResponse.State.{LOADING, UNCHANGED, UPDATED}
+            dataMap.get(subscribe.id) match
+              case Some(existing) if existing.etag == subscribe.previousEtag =>
+                SyncResponse.of(subscribe.id, existing.etag, None, UNCHANGED)
+              case Some(existing) =>
+                SyncResponse.of(subscribe.id, existing.etag, Some(existing.data), UPDATED)
+              case None =>
+                SyncResponse.of(subscribe.id, "", None, LOADING)
 
-  end handleSubscribe
 
-
-  private def handleUnsubscribe(unsubscribeIds: Seq[Int], subscriptionManagerRef: Ref[UserSubscriptionManager]): UStream[SyncResponse] =
-    ZStream.fromIterableZIO:
-      subscriptionManagerRef.modify:
-        subscriptionManager => (subscriptionManager.removeSubscription(unsubscribeIds), subscriptionManager)
-      .map:
-        _.map((id, removed) => SyncResponse.of(id, "", None, SyncResponse.State.UNSUBSCRIBED))
+  private def handleUnsubscribe(unsubscribeIds: Seq[Int], subscriptionManager: UserSubscriptionManager): UStream[SyncResponse] =
+    ZStream.fromIterable:
+      subscriptionManager.removeSubscription(unsubscribeIds).map:
+        (id, removed) => SyncResponse.of(id, "", None, SyncResponse.State.UNSUBSCRIBED)
 
 
   override def update(request: UpdateRequest, context: AuthenticatedUser): IO[StatusException, UpdateResponse] =
