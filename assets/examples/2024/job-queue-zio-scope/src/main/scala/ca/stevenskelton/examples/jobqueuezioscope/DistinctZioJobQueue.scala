@@ -1,7 +1,7 @@
 package ca.stevenskelton.examples.jobqueuezioscope
 
 import ca.stevenskelton.examples.jobqueuezioscope.DistinctZioJobQueue.{JobStatus, Status}
-import zio.{Chunk, Promise, Ref, Scope, UIO, ZIO}
+import zio.{Chunk, Promise, Ref, Scope, UIO, Unsafe, ZIO}
 
 import scala.collection.mutable
 
@@ -79,7 +79,8 @@ class DistinctZioJobQueue[A] private(
           reset =>
             activityRef.modify:
               promise =>
-                promise.succeed(())
+                val _ = Unsafe.unsafe:
+                  implicit unsafe => zio.Runtime.default.unsafe.run(promise.succeed(()))
                 (chunk, reset)
 
 

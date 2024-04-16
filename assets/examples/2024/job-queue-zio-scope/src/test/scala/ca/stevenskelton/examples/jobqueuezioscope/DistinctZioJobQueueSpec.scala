@@ -1,6 +1,5 @@
 package ca.stevenskelton.examples.jobqueuezioscope
 
-import ca.stevenskelton.examples.jobqueuezioscope.ZSyncServiceImplSpec.*
 import zio.stream.ZStream
 import zio.test.junit.JUnitRunnableSpec
 import zio.test.{Spec, TestEnvironment, assertTrue}
