@@ -61,6 +61,29 @@ class DistinctZioJobQueueSpec extends JUnitRunnableSpec {
           queued2 == Seq(4, 3) &&
           inprogress2.isEmpty
     },
+    test("Release back on Scope failure") {
+      for
+        queue <- DistinctZioJobQueue.create[Int]
+        _ <- queue.addAll(Seq(1, 5, 2, 6, 4, 3))
+        takeUpTo0 <- ZIO.scoped {
+          for
+            takeUpTo <- queue.takeUpToNQueued(3)
+            _ <- ZIO.fail(new Exception(takeUpTo.map(_.toString).mkString(",")))
+          yield ""
+        }.catchAll {
+          ex => ZIO.succeed(ex.getMessage)
+        }
+        queued1 <- queue.queued
+        inprogress1 <- queue.inProgress
+        takeUpTo1 <- ZIO.scoped(queue.takeUpToNQueued(3))
+        queued2 <- queue.queued
+      yield assertTrue:
+        takeUpTo0 == "1,5,2" &&
+          queued1 == Seq(1, 5, 2, 6, 4, 3) &&
+          inprogress1.isEmpty &&
+          takeUpTo1 == Seq(1, 5, 2) &&
+          queued2 == Seq(6, 4, 3)
+    },
     test("Distinct values include inprogress") {
       for
         queue <- DistinctZioJobQueue.create[Int]
