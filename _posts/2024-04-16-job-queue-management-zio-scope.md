@@ -47,18 +47,23 @@ This allows work in-progress to count towards the item uniqueness. Re-adding wor
 
 ```scala
 class DistinctZioJobQueue[A] {
-  //Jobs waiting in queue for execution.
+  //Jobs queued for execution.
   def queued: ZIO[Any, Nothing, Seq[A]]
-  //Jobs in queue that are currently executing.
+  
+  //Jobs currently executing.
   def inProgress: ZIO[Any, Nothing, Seq[A]]
-  //Add job to queue, will return true if successful. Jobs already in queue will return false.
+  
+  //Add job to queue, will return `true` if successful. Jobs already in queue will return `false`.
   def add(elem: A): ZIO[Any, Nothing, Boolean]
+  
   //Add jobs to queue. Will return all jobs that failed to be added.
   def addAll(elems: Seq[A]): ZIO[Any, Nothing, Seq[A]]
+  
   //Blocks until returning a queued job.
   def takeQueued[E]: ZIO[Scope, Nothing, A]
-  //Blocks until returns at least one, but no more than N, queued jobs.
-  def takeUpToNQueued(max: Int): ZIO[Scope, Nothing, Chunk[A]]
+  
+  //Blocks until returning at least one, but no more than N, queued jobs.
+  def takeUpToNQueued(max: Int): ZIO[Scope, Nothing, Seq[A]]
 }
 ```
 //TODO:

@@ -150,9 +150,9 @@ tag_archive:
 
 examples:
   job-queue-zio-scope:
-    name: "Job Queue"
+    name: "Job Queue using ZIO Resource Scope"
     url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2024/job-queue-zio-scope"
-    description: "Job Queue using ZIO Scope to manage removal."
+    description: "Queue using ZIO Scope to manage queue removal after external execution."
   realtime-database-zio-hub-grpc:
     name: "Realtime Push Database"
     url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2024/realtime-database-zio-hub-grpc"

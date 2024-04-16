@@ -34,12 +34,18 @@ class DistinctZioJobQueue[A] private(
   /**
    * Jobs waiting in queue for execution.
    */
-  def queued: UIO[Seq[A]] = linkedHashSetRef.get.map(_.iterator.withFilter(_.status == Status.Queued).map(_.a).toSeq)
+  def queued: UIO[Chunk[A]] = linkedHashSetRef.get.map:
+    linkedHashSet =>
+      Chunk.from:
+        linkedHashSet.iterator.withFilter(_.status == Status.Queued).map(_.a)
 
   /**
    * Jobs in queue that are currently executing.
    */
-  def inProgress: UIO[Seq[A]] = linkedHashSetRef.get.map(_.iterator.withFilter(_.status == Status.InProgress).map(_.a).toSeq)
+  def inProgress: UIO[Chunk[A]] = linkedHashSetRef.get.map:
+    linkedHashSet =>
+      Chunk.from:
+        linkedHashSet.iterator.withFilter(_.status == Status.InProgress).map(_.a)
 
   /**
    * Add job to queue, will return true if successful. Jobs already in queue will return false.
