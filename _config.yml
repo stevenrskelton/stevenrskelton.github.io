@@ -149,6 +149,10 @@ tag_archive:
   path: /tags/
 
 examples:
+  job-queue-zio-scope:
+    name: "Job Queue"
+    url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2024/job-queue-zio-scope"
+    description: "Job Queue using ZIO Scope to manage removal."
   realtime-database-zio-hub-grpc:
     name: "Realtime Push Database"
     url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2024/realtime-database-zio-hub-grpc"

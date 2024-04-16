@@ -1,6 +1,6 @@
-package ca.stevenskelton.examples.distinctjobqueue
+package ca.stevenskelton.examples.jobqueuezioscope
 
-import ca.stevenskelton.examples.distinctjobqueue.DistinctZioJobQueue.{JobStatus, Status}
+import ca.stevenskelton.examples.jobqueuezioscope.DistinctZioJobQueue.{JobStatus, Status}
 import zio.{Chunk, Promise, Ref, Scope, UIO, ZIO}
 
 import scala.collection.mutable
