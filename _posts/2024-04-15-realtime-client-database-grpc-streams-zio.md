@@ -1,5 +1,5 @@
 ---
-title: "Realtime Client Database using gRPC Bidirectional Streams and ZIO Hub"
+title: "Realtime Client Database using gRPC Bi-Directional Streams and ZIO Hub"
 categories:
   - Scala
 tags:
@@ -28,12 +28,12 @@ and hardware capacities have increased, user expectations have increased to expe
 data without the friction of manually requesting data updates. The typical client-server communication is slowly 
 evolving into the stream of data in both directions between the client and server.
 
-# gRPC Server Bidirectional Streaming using HTTP/2
+# gRPC Server Bi-Directional Streaming using HTTP/2
 
-The evolution of technology has resulted in 2 technology standards for web-based bidirectional communications:  
+The evolution of technology has resulted in 2 technology standards for web-based bi-directional communications:  
 [WebSockets](https://en.wikipedia.org/wiki/WebSocket) and HTTP/2 streams.
 
-WebSockets were created first as the ability for a standard HTTP/1.1 connection to upgrade to support bidirectional 
+WebSockets were created first as the ability for a standard HTTP/1.1 connection to upgrade to support bi-directional 
 client-server streaming. This is still the best approach for browser-server communications because of its clear 
 JavaScript APIs within all browsers, backwards compatibility for HTTP/1.1-only clients, and its ability to take 
 advantage of performance improvements offered by HTTP/2 and beyond.
@@ -48,6 +48,6 @@ better for abstraction libraries such as gRPC to directly support HTTP/2 instead
 
 {%
 include figure image_path="/assets/images/2024/04/realtime_database.svg"
-caption="Realtime Database pushing updates to Clients using Bidirectional gRPC Streams"
+caption="Realtime database pushing updates to clients using bi-directional gRPC Streams"
 img_style="padding: 10px; background-color: white; height: 320px;"
 %}
