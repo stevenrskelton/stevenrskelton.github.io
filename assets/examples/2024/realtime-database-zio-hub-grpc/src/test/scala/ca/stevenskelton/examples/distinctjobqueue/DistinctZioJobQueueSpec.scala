@@ -1,9 +1,10 @@
 package ca.stevenskelton.examples.distinctjobqueue
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.ZSyncServiceImplSpec.*
+import zio.stream.ZStream
 import zio.test.junit.JUnitRunnableSpec
 import zio.test.{Spec, TestEnvironment, assertTrue}
-import zio.{Scope, ZIO}
+import zio.{Chunk, Scope, ZIO}
 
 class DistinctZioJobQueueSpec extends JUnitRunnableSpec {
 
@@ -88,6 +89,38 @@ class DistinctZioJobQueueSpec extends JUnitRunnableSpec {
           innerInProgress == Seq(1, 5, 2) &&
           queued == Seq(6, 4, 3, 8, 7) &&
           inprogress.isEmpty
+    },
+    test("Block on take, takeUpTo") {
+      for
+        queue <- DistinctZioJobQueue.create[Int]
+        takeUpToFork <- ZIO.scoped(queue.takeUpToQueued(3)).fork
+        takeFork <- ZIO.scoped(queue.takeQueued).fork
+        _ <- queue.addAll(Seq(1, 5, 2, 6, 4, 3))
+        takeUpTo <- takeUpToFork.join
+        take <- takeFork.join
+        queued0 <- queue.queued
+      yield assertTrue:
+        takeUpTo.size == 3 &&
+          take.isDefined &&
+          (takeUpTo :+ take.get).sorted == Seq(1, 2, 5, 6) &&
+          queued0 == Seq(4, 3)
+    },
+    test("Stream") {
+      for
+        queue <- DistinctZioJobQueue.create[Int]
+        streamOfSums = ZStream.repeatZIO {
+          ZIO.scoped {
+            queue.takeUpToQueued(3).map {
+              chunk => chunk.sum
+            }
+          }
+        }
+        _ <- queue.addAll(Seq(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13))
+        chunksOfSums <- streamOfSums.take(4).runCollect
+        queued0 <- queue.queued
+      yield assertTrue:
+        chunksOfSums == Seq(6, 15, 24, 33) &&
+          queued0 == Seq(13)
     },
   )
 }
