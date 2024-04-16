@@ -49,7 +49,7 @@ class DistinctZioJobQueue[A] private(
     .tap:
       allRejected => if (allRejected.size < elems.size) activityRef.get.map(_.succeed(())) else ZIO.unit
 
-  def takeQueued[E]: ZIO[Scope, E, Option[A]] = takeUpToQueued(1).map(_.headOption)
+  def takeQueued[E]: ZIO[Scope, E, A] = takeUpToNQueued(1).map(_.head)
 
   private def takeUpToQueuedAllowEmpty(max: Int): ZIO[Scope, Nothing, Chunk[A]] = ZIO.acquireRelease(
     for
@@ -71,10 +71,10 @@ class DistinctZioJobQueue[A] private(
         a => linkedHashSet.remove(JobStatus(a, Status.Queued))
   )
 
-  def takeUpToQueued(max: Int): ZIO[Scope, Nothing, Chunk[A]] =
+  def takeUpToNQueued(max: Int): ZIO[Scope, Nothing, Chunk[A]] =
     takeUpToQueuedAllowEmpty(max).flatMap:
       chunk =>
-        if (chunk.isEmpty) activityRef.get.flatMap(_.await.flatMap(_ => takeUpToQueued(max)))
+        if (chunk.isEmpty) activityRef.get.flatMap(_.await.flatMap(_ => takeUpToNQueued(max)))
         else Promise.make[Nothing, Unit].flatMap:
           reset =>
             activityRef.modify:

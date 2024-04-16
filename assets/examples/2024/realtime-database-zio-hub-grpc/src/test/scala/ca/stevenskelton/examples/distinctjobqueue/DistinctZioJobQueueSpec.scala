@@ -35,7 +35,7 @@ class DistinctZioJobQueueSpec extends JUnitRunnableSpec {
         takeUpTo0 <- ZIO.scoped {
           for
             inprogressBefore <- queue.inProgress
-            takeUpTo <- queue.takeUpToQueued(3)
+            takeUpTo <- queue.takeUpToNQueued(3)
             inprogressAfter <- queue.inProgress
           yield
             (takeUpTo, inprogressBefore.isEmpty, takeUpTo == inprogressAfter)
@@ -48,7 +48,7 @@ class DistinctZioJobQueueSpec extends JUnitRunnableSpec {
             take <- queue.takeQueued
             inprogressAfter <- queue.inProgress
           yield
-            (take, inprogressBefore.isEmpty, take.toSeq == inprogressAfter)
+            (take, inprogressBefore.isEmpty, Seq(take) == inprogressAfter)
         }
         queued2 <- queue.queued
         inprogress2 <- queue.inProgress
@@ -58,7 +58,7 @@ class DistinctZioJobQueueSpec extends JUnitRunnableSpec {
           takeUpTo0 == (Seq(1, 5, 2), true, true) &&
           queued1 == Seq(6, 4, 3) &&
           inprogress1.isEmpty &&
-          take1 == (Some(6), true, true) &&
+          take1 == (6, true, true) &&
           queued2 == Seq(4, 3) &&
           inprogress2.isEmpty
     },
@@ -68,7 +68,7 @@ class DistinctZioJobQueueSpec extends JUnitRunnableSpec {
         _ <- queue.addAll(Seq(1, 5, 2, 6, 4, 3))
         work <- ZIO.scoped {
           for
-            taken <- queue.takeUpToQueued(3)
+            taken <- queue.takeUpToNQueued(3)
             addY <- queue.add(8)
             addN <- queue.add(2)
             addAll <- queue.addAll(Seq(2, 7))
@@ -93,7 +93,7 @@ class DistinctZioJobQueueSpec extends JUnitRunnableSpec {
     test("Block on take, takeUpTo") {
       for
         queue <- DistinctZioJobQueue.create[Int]
-        takeUpToFork <- ZIO.scoped(queue.takeUpToQueued(3)).fork
+        takeUpToFork <- ZIO.scoped(queue.takeUpToNQueued(3)).fork
         takeFork <- ZIO.scoped(queue.takeQueued).fork
         _ <- queue.addAll(Seq(1, 5, 2, 6, 4, 3))
         takeUpTo <- takeUpToFork.join
@@ -101,8 +101,7 @@ class DistinctZioJobQueueSpec extends JUnitRunnableSpec {
         queued0 <- queue.queued
       yield assertTrue:
         takeUpTo.size == 3 &&
-          take.isDefined &&
-          (takeUpTo :+ take.get).sorted == Seq(1, 2, 5, 6) &&
+          (takeUpTo :+ take).sorted == Seq(1, 2, 5, 6) &&
           queued0 == Seq(4, 3)
     },
     test("Stream") {
@@ -110,7 +109,7 @@ class DistinctZioJobQueueSpec extends JUnitRunnableSpec {
         queue <- DistinctZioJobQueue.create[Int]
         streamOfSums = ZStream.repeatZIO {
           ZIO.scoped {
-            queue.takeUpToQueued(3).map {
+            queue.takeUpToNQueued(3).map {
               chunk => chunk.sum
             }
           }
