@@ -8,12 +8,12 @@ permalink: /examples/
 {% for example_field in site.examples %}
     <section id="{{ example_field[1].name | slugify | downcase }}" class="taxonomy__section">
         <div class="archive__subtitle" style="padding-bottom:1em;">
-            {% assign example_name=example_field[0] %}
-            {% include github_example_project.html name=example_name %}
+            {% assign example_id=example_field[0] %}
+            {% include github_example_project.html id=example_id %}
         </div>
         <div class="entries-{{ entries_layout }}">
             {% for post in site.posts %}
-                {% if post.examples contains example_field[0] %}
+                {% if post.examples contains example_id %}
                     {% include archive-single.html type=entries_layout %}
                 {% endif %}
             {% endfor %}

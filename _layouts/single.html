@@ -59,10 +59,10 @@ layout: default
                 <h1>Sources</h1>
                 <div class="html-bg" style="margin-bottom:0.5em;">
                 {% assign entries_layout = page.entries_layout | default: 'list' %}
-                {% for example_name in page.examples %}
-                    <section id="{{ site.examples[example_name].name | slugify | downcase }}" class="taxonomy__section">
-                    {% include github_example_project.html name=example_name %}
-                    {% assign related_posts = site.posts | where_exp:"item", "item.examples contains example_name" | where_exp:"item", "item != page" %}
+                {% for example_id in page.examples %}
+                    <section id="{{ site.examples[example_id].name | slugify | downcase }}" class="taxonomy__section">
+                    {% include github_example_project.html id=example_id %}
+                    {% assign related_posts = site.posts | where_exp:"item", "item.examples contains example_id" | where_exp:"item", "item != page" %}
                     {% if related_posts %}
                         <div class="entries-{{ entries_layout }}">
                         {% for post in related_posts %}
