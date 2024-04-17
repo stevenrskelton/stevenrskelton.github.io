@@ -415,7 +415,7 @@ a.github-project {
   width: 3em;
   margin-right: 0.75em;
 }
-.github-project > img:hover {
+.page__content a.github-project:not(.btn):hover img {
   box-shadow: none;
 }
 @media(max-width: 720px) {
