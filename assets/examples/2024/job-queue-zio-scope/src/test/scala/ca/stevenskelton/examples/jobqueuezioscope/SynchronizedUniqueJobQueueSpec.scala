@@ -5,12 +5,15 @@ import zio.test.junit.JUnitRunnableSpec
 import zio.test.{Spec, TestEnvironment, assertTrue}
 import zio.{Chunk, Scope, ZIO}
 
-object UniqueJobQueueSpec extends JUnitRunnableSpec {
+class SynchronizedUniqueJobQueueSpec extends JUnitRunnableSpec:
+  override def spec = SynchronizedUniqueJobQueueSpec.spec
+
+object SynchronizedUniqueJobQueueSpec extends JUnitRunnableSpec {
 
   override def spec: Spec[TestEnvironment & Scope, Any] = suite("operations")(
     test("Distinct values on add, addAll") {
       for
-        queue <- UniqueJobQueue.create[Int]
+        queue <- SynchronizedUniqueJobQueue.create[Int]
         noConflictAddAll0 <- queue.addAll(Seq(1, 5))
         noConflictAddAll1 <- queue.addAll(Seq(2, 6))
         noConflictAdd <- queue.add(4)
@@ -27,7 +30,7 @@ object UniqueJobQueueSpec extends JUnitRunnableSpec {
     },
     test("Scope on takeUpTo") {
       for
-        queue <- UniqueJobQueue.create[Int]
+        queue <- SynchronizedUniqueJobQueue.create[Int]
         _ <- queue.addAll(Seq(1, 5, 2, 6, 4, 3))
         queued0 <- queue.queued
         inprogress0 <- queue.inProgress
@@ -63,7 +66,7 @@ object UniqueJobQueueSpec extends JUnitRunnableSpec {
     },
     test("Release back on Scope failure") {
       for
-        queue <- UniqueJobQueue.create[Int]
+        queue <- SynchronizedUniqueJobQueue.create[Int]
         _ <- queue.addAll(Seq(1, 5, 2, 6, 4, 3))
         takeUpTo0 <- ZIO.scoped {
           for
@@ -86,7 +89,7 @@ object UniqueJobQueueSpec extends JUnitRunnableSpec {
     },
     test("Distinct values include inprogress") {
       for
-        queue <- UniqueJobQueue.create[Int]
+        queue <- SynchronizedUniqueJobQueue.create[Int]
         _ <- queue.addAll(Seq(1, 5, 2, 6, 4, 3))
         work <- ZIO.scoped {
           for
@@ -114,7 +117,7 @@ object UniqueJobQueueSpec extends JUnitRunnableSpec {
     },
     test("Block on take, takeUpTo") {
       for
-        queue <- UniqueJobQueue.create[Int]
+        queue <- SynchronizedUniqueJobQueue.create[Int]
         takeUpToFork3 <- ZIO.scoped(queue.takeUpToNQueued(3)).fork
         takeUpToFork2 <- ZIO.scoped(queue.takeUpToNQueued(2)).fork
         _ <- queue.addAll(Seq(1, 5, 2, 6, 4, 3))
@@ -129,7 +132,7 @@ object UniqueJobQueueSpec extends JUnitRunnableSpec {
     },
     test("Stream") {
       for
-        queue <- UniqueJobQueue.create[Int]
+        queue <- SynchronizedUniqueJobQueue.create[Int]
         streamOfSums = ZStream.repeatZIO {
           ZIO.scoped {
             queue.takeUpToNQueued(3).map {

@@ -154,8 +154,8 @@ examples:
     url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2024/job-queue-zio-scope"
     description: "Queue using ZIO Scope to manage queue removal after external execution."
     sources:
-      - "/src/main/scala/ca/stevenskelton/examples/jobqueuezioscope/UniqueJobQueue.scala"
-      - "/src/test/scala/ca/stevenskelton/examples/jobqueuezioscope/UniqueJobQueueSpec.scala"
+      - "/src/main/scala/ca/stevenskelton/examples/jobqueuezioscope/SynchronizedUniqueJobQueue.scala"
+      - "/src/test/scala/ca/stevenskelton/examples/jobqueuezioscope/SynchronizedUniqueJobQueueSpec.scala"
   realtime-database-zio-hub-grpc:
     name: "Realtime Push Database"
     url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2024/realtime-database-zio-hub-grpc"

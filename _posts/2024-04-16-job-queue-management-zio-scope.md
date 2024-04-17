@@ -63,7 +63,6 @@ class DistinctZioJobQueue[A]:
 
   //Blocks until returning at least one, but no more than N, queued jobs.
   def takeUpToNQueued(max: Int): ZIO[Scope, Nothing, Seq[A]]
-
 ```
 
 ### Blocking in ZIO
