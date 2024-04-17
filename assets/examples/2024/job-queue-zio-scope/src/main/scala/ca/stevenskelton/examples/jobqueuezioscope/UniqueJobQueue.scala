@@ -1,7 +1,7 @@
 package ca.stevenskelton.examples.jobqueuezioscope
 
 import ca.stevenskelton.examples.jobqueuezioscope.UniqueJobQueue.{JobStatus, Status}
-import zio.{Chunk, Exit, NonEmptyChunk, Promise, RIO, Ref, Scope, UIO, Unsafe, ZIO}
+import zio.{Chunk, Exit, NonEmptyChunk, Promise, RIO, Ref, Scope, UIO, ZIO}
 
 import scala.collection.mutable
 
@@ -27,9 +27,9 @@ object UniqueJobQueue:
 
 
 class UniqueJobQueue[A] private(
-                                      private val linkedHashSetRef: Ref[mutable.LinkedHashSet[JobStatus[A]]],
-                                      private val activityRef: Ref[Promise[Nothing, Unit]]
-                                    ):
+                                 private val linkedHashSetRef: Ref[mutable.LinkedHashSet[JobStatus[A]]],
+                                 private val activityRef: Ref[Promise[Nothing, Unit]]
+                               ):
 
   /**
    * Jobs waiting in queue for execution.
@@ -54,7 +54,7 @@ class UniqueJobQueue[A] private(
     .map:
       _.add(JobStatus(elem, Status.Queued))
     .tap:
-      added => if added then activityRef.get.map(_.succeed(())) else ZIO.unit
+      added => if added then triggerActivity else ZIO.unit
 
   /**
    * Add jobs to queue. Will return all jobs that failed to be added.
@@ -65,8 +65,8 @@ class UniqueJobQueue[A] private(
         elems.foldLeft(Nil):
           (rejected, a) => if linkedHashSet.add(JobStatus(a, Status.Queued)) then rejected else rejected :+ a
     .tap:
-      allRejected => if allRejected.size < elems.size then activityRef.get.map(_.succeed(())) else ZIO.unit
-  
+      allRejected => if allRejected.size < elems.size then triggerActivity else ZIO.unit
+
   /**
    * Non-interruptible creator of scope
    */
@@ -83,16 +83,19 @@ class UniqueJobQueue[A] private(
               jobStatus.status = Status.InProgress
               jobStatus.a
   )((taken, exit) =>
-    for
-      linkedHashSet <- linkedHashSetRef.get
-    yield
-      taken.foreach:
-        a =>
-          exit match
-            case Exit.Success(_) =>
-              linkedHashSet.remove(JobStatus(a, Status.InProgress))
-            case Exit.Failure(_) =>
-              linkedHashSet.find(_.a == a).foreach(_.status = Status.Queued)
+    linkedHashSetRef.get.map:
+      linkedHashSet =>
+        taken.map:
+          a =>
+            exit match
+              case Exit.Success(_) =>
+                val _ = linkedHashSet.remove(JobStatus(a, Status.InProgress))
+                false
+              case Exit.Failure(_) =>
+                val _ = linkedHashSet.find(_.a == a).foreach(_.status = Status.Queued)
+                true
+    .flatMap:
+      wasRequeued => if wasRequeued.exists(identity) then triggerActivity else ZIO.unit
   )
 
   /**
@@ -101,10 +104,18 @@ class UniqueJobQueue[A] private(
   def takeUpToNQueued(max: Int): RIO[Scope, NonEmptyChunk[A]] =
     takeUpToQueuedAllowEmpty(max).flatMap:
       chunk =>
-        if chunk.isEmpty then activityRef.get.flatMap(_.await.flatMap(_ => takeUpToNQueued(max)))
-        else Promise.make[Nothing, Unit].flatMap:
-          reset =>
-            activityRef.modify:
-              promise =>
-                val _ = Unsafe.unsafe(implicit unsafe => zio.Runtime.default.unsafe.run(promise.succeed(())))
-                (NonEmptyChunk.fromChunk(chunk).get, reset)
+        NonEmptyChunk.fromChunk(chunk)
+          .map:
+            nonEmptyChunk => triggerActivity.as(nonEmptyChunk)
+          .getOrElse:
+            activityRef.get.flatMap(_.await.flatMap(_ => takeUpToNQueued(max)))
+
+  /**
+   * Signal all consumers to check for queued elements
+   */
+  private def triggerActivity: UIO[Unit] =
+    for
+      resetPromise <- Promise.make[Nothing, Unit]
+      oldPromise <- activityRef.getAndSet(resetPromise)
+      _ <- oldPromise.succeed(())
+    yield ()

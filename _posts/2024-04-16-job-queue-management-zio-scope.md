@@ -38,7 +38,10 @@ this well-defined mechanism finally remove the object from the queue after the S
 If objects are added multiple times the queue will only contain the first object, in its correct queue position. 
 - Automatically remove popped queue items after their work has been completed
 This allows work in-progress to count towards the item uniqueness. Re-adding work that is already in-progress will be rejected by the queue.
-- Popping from the queue is a blocking operation; there is no need to poll the queue for new items, consumers can stream items and fetch batches using thread-safe operations.
+- Popping from the queue is a blocking operation
+There is no need to poll the queue for new items, consumers can stream items and fetch batches using thread-safe operations.
+- There is no [dead-letter output](https://en.wikipedia.org/wiki/Dead_letter_queue)
+Items which cannot be processed are returned to the queue by the Scope exception finalizer.
 
 ### Class Interface
 
@@ -61,6 +64,48 @@ class DistinctZioJobQueue[A] {
   def takeUpToNQueued(max: Int): ZIO[Scope, Nothing, Seq[A]]
 }
 ```
+
+### Blocking in ZIO
+
+The primary mechanism to block ZIO fibers is by mapping from `await` on a `Promise`. A second fiber should be used to
+complete the promise using `succeed`. Within our queue, all consumers can await the same activity promise. Whenever
+the queue state changes making queued elements available we will call `triggerActivity` to complete the promise.
+
+```scala
+/**
+ * Signal all consumers to check for queued elements
+ */
+private def triggerActivity: UIO[Unit] =
+  for {
+    resetPromise <- Promise.make[Nothing, Unit]
+    oldPromise <- activityRef.getAndSet(resetPromise)
+    _ <- oldPromise.succeed(())
+  } yield ()
+```
+
+The `triggerActivity` method will atomically complete the current promise, and replace it with a new uncompleted 
+promise. It is important to replace the `Ref` before completing the promise to avoid another thread from requesting
+the same completed promise from the ref. An unbounded cycle would be possible if another fiber is triggered by the 
+promise completion, finds no elements, then awaits on the completed promise a second time. This cycle could continue
+until the ref is replaced, which if the fiber never relinquishes control could be infinite.
+
+The queue can contain new queued elements whenever items are added, or when they are made available from a scope 
+closing unsuccessfully. 
+
+```scala
+def add(elem: A):
+  //- try to add to queue
+  //- if added successfully call triggerActivity
+
+def addAll(elems: Seq[A]):
+  //- try to add all to queue
+  //- if any added successfully call triggerActivity
+
+def takeUpToNQueued(max: Int):
+  //- return items with Scope
+  //- Scope finalizer returns items to queue on exception then calls triggerActivity
+```
+
 //TODO:
 
 {%
