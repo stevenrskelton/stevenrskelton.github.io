@@ -3,12 +3,33 @@ title: "Code Examples with Solutioning Documentation"
 layout: archive
 permalink: /examples/
 ---
-
+<div class="toc-container">
+    <aside class="sidebar__right">
+        <nav class="toc">
+            <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Documentation Table of Contents</h4></header>
+            <ul class="toc__menu" id="markdown-toc">
+            {% for example_field in site.examples %}
+                {% assign example_id=example_field[0] %}
+                {% assign example=example_field[1] %}
+                <li><a href="#{{ example_id }}" id="markdown-toc-{{ example_id }}">{{ example.name }}</a></li>
+            {% endfor %}
+            </ul>
+        </nav>
+    </aside>
+    <div class="toc-ad"><ins
+        class="adsbygoogle multiplex_responsive_1"
+        style="display:block"
+        data-ad-client="ca-pub-5000348308466945"
+        data-ad-slot="5418078712"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script></div>
+</div>
 {% assign entries_layout = page.entries_layout | default: 'list' %}
 {% for example_field in site.examples %}
-    <section id="{{ example_field[1].name | slugify | downcase }}" class="taxonomy__section">
+    {% assign example_id=example_field[0] %}
+    <section id="{{ example_id }}" class="taxonomy__section">
         <div class="archive__subtitle" style="padding-bottom:1em;">
-            {% assign example_id=example_field[0] %}
             {% include github_example_project.html id=example_id %}
         </div>
         <div class="entries-{{ entries_layout }}">
