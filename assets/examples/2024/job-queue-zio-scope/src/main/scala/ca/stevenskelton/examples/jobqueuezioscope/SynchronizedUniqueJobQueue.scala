@@ -1,7 +1,7 @@
 package ca.stevenskelton.examples.jobqueuezioscope
 
 import ca.stevenskelton.examples.jobqueuezioscope.SynchronizedUniqueJobQueue.{JobStatus, Status}
-import zio.{Chunk, Exit, NonEmptyChunk, Promise, RIO, Ref, Scope, Semaphore, UIO, ZIO}
+import zio.{Chunk, Exit, NonEmptyChunk, Promise, RIO, Scope, Semaphore, UIO, ZIO}
 
 import scala.collection.mutable
 
@@ -21,14 +21,21 @@ object SynchronizedUniqueJobQueue:
     for
       semaphore <- Semaphore.make(1)
       promise <- Promise.make[Nothing, Unit]
-      promiseRef <- Ref.make(promise)
     yield
-      SynchronizedUniqueJobQueue(semaphore, promiseRef)
+      SynchronizedUniqueJobQueue(semaphore, promise)
 
-
+/**
+ * Allows for unique entries in the queue, using Object.hashCode
+ * Entries remain in the queue while externally processed, uses ZIO Scope
+ *  to determine the processing outcome.  Successfully closed Scope will
+ *  remove those entries from the queue, Unsuccessfully closed Scope will
+ *  release the entries back into the queue to be taken again.
+ * @param semaphore Synchronization for the LinkedHashSet
+ * @param promise All access to this is within the semaphore
+ */
 class SynchronizedUniqueJobQueue[A] private(
                                  private val semaphore: Semaphore,
-                                 private val activityRef: Ref[Promise[Nothing, Unit]]
+                                 private var promise: Promise[Nothing, Unit],
                                ):
   /**
    * Not thread-safe, accessed behind semaphore
@@ -54,52 +61,57 @@ class SynchronizedUniqueJobQueue[A] private(
   /**
    * Add job to queue, will return true if successful. Jobs already in queue will return false.
    */
-  def add(elem: A): UIO[Boolean] =
-    semaphore.withPermit:
-      ZIO.succeed:
-        linkedHashSet.add(JobStatus(elem, Status.Queued))
+  def add(elem: A): UIO[Boolean] = semaphore.withPermit:
+    ZIO.succeed:
+      linkedHashSet.add(JobStatus(elem, Status.Queued))
     .tap:
-      added => if added then triggerActivity else ZIO.unit
+      added => if added then notifyActivity else ZIO.unit
 
   /**
    * Add jobs to queue. Will return all jobs that failed to be added.
    */
-  def addAll(elems: Seq[A]): UIO[Seq[A]] =
-    semaphore.withPermit:
-      ZIO.succeed:
-        elems.foldLeft(Nil):
-          (rejected, a) => if linkedHashSet.add(JobStatus(a, Status.Queued)) then rejected else rejected :+ a
+  def addAll(elems: Seq[A]): UIO[Seq[A]] = semaphore.withPermit:
+    ZIO.succeed:
+      elems.foldLeft(Nil):
+        (rejected, a) => if linkedHashSet.add(JobStatus(a, Status.Queued)) then rejected else rejected :+ a
     .tap:
-      rejected => if rejected.size < elems.size then triggerActivity else ZIO.unit
+      rejected => if rejected.size < elems.size then notifyActivity else ZIO.unit
 
   /**
    * Non-interruptible creator of scope
    */
-  private def takeUpToQueuedAllowEmpty(max: Int): RIO[Scope, Chunk[A]] = ZIO.acquireReleaseExit(
+  private def takeUpToQueuedAllowEmpty(max: Int): RIO[Scope, Option[NonEmptyChunk[A]]] = ZIO.acquireReleaseExit(
     semaphore.withPermit:
       ZIO.succeed:
-        Chunk.from:
-          linkedHashSet.iterator
-            .filter(_.status == Status.Queued)
-            .take(max)
-            .map:
-              jobStatus =>
-                jobStatus.status = Status.InProgress
-                jobStatus.a
+        NonEmptyChunk.fromChunk:
+          Chunk.from:
+            linkedHashSet.iterator
+              .filter(_.status == Status.Queued)
+              .take(max)
+              .map:
+                jobStatus =>
+                  jobStatus.status = Status.InProgress
+                  jobStatus.a
+      .tap:
+        opt => if opt.isDefined then notifyActivity else ZIO.unit
   )((taken, exit) =>
-    semaphore.withPermit:
-      ZIO.succeed:
-        taken.foldLeft(false):
-          (requeued, a) =>
-            exit match
-              case Exit.Success(_) =>
-                val _ = linkedHashSet.remove(JobStatus(a, Status.InProgress))
-                requeued
-              case Exit.Failure(_) =>
-                val _ = linkedHashSet.find(_.a == a).foreach(_.status = Status.Queued)
-                true
+    taken.map:
+      chunk =>
+        semaphore.withPermit:
+          ZIO.succeed:
+            chunk.foldLeft(false):
+              (hasActivity, a) =>
+                exit match
+                  case Exit.Success(_) =>
+                    val _ = linkedHashSet.remove(JobStatus(a, Status.InProgress))
+                    hasActivity
+                  case Exit.Failure(_) =>
+                    val _ = linkedHashSet.find(_.a == a).foreach(_.status = Status.Queued)
+                    true
+    .getOrElse:
+      ZIO.succeed(false)
     .flatMap:
-      wasRequeued => if wasRequeued then triggerActivity else ZIO.unit
+      activity => if activity then notifyActivity else ZIO.unit
   )
 
   /**
@@ -107,19 +119,15 @@ class SynchronizedUniqueJobQueue[A] private(
    */
   def takeUpToNQueued(max: Int): RIO[Scope, NonEmptyChunk[A]] =
     takeUpToQueuedAllowEmpty(max).flatMap:
-      chunk =>
-        NonEmptyChunk.fromChunk(chunk)
-          .map:
-            nonEmptyChunk => triggerActivity.as(nonEmptyChunk)
-          .getOrElse:
-            activityRef.get.flatMap(_.await.flatMap(_ => takeUpToNQueued(max)))
+      _.map(ZIO.succeed).getOrElse:
+        promise.await.flatMap(_ => takeUpToNQueued(max))
 
   /**
-   * Signal all consumers to check for queued elements
+   * Signal all consumers to recheck the queue
    */
-  private def triggerActivity: UIO[Unit] =
+  private def notifyActivity: UIO[Unit] =
     for
       resetPromise <- Promise.make[Nothing, Unit]
-      oldPromise <- activityRef.getAndSet(resetPromise)
-      _ <- oldPromise.succeed(())
-    yield ()
+      _ <- promise.succeed(())
+    yield
+      promise = resetPromise
