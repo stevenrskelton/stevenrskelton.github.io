@@ -1,0 +1,10 @@
+{% assign example=site.examples[include.name] %}
+<a class="github-project" href="{{ example.url }}" title="{{ example.name }}" target="_blank">
+    <img src="/assets/images/github-mark.svg" alt="GitHub"/>
+    <div>
+        <h2>{{ example.name }}</h2>
+        {{ example.description }}
+    </div>
+</a>
+
+

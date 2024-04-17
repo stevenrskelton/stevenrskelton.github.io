@@ -6,10 +6,9 @@ permalink: /examples/
 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
 {% for example_field in site.examples %}
-    {% assign example = example_field[1] %}
-    <section id="{{ example.name | slugify | downcase }}" class="taxonomy__section">
+    <section id="{{ example_field[1].name | slugify | downcase }}" class="taxonomy__section">
         <div class="archive__subtitle" style="padding-bottom:1em;">
-            {% include github_project.html name=example.name url=example.url description=example.description type=example.type %}
+            {% include github_example_project.html name=example_field[0] %}
         </div>
         <div class="entries-{{ entries_layout }}">
             {% for post in site.posts %}

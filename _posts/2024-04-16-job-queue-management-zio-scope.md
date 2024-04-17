@@ -8,9 +8,6 @@ tags:
 excerpt_separator: <!--more-->
 examples:
   - job-queue-zio-scope
-examples-sources:
-  - /src/main/scala/ca/stevenskelton/examples/jobqueuezioscope/UniqueJobQueue.scala
-  - /src/test/scala/ca/stevenskelton/examples/jobqueuezioscope/UniqueJobQueueSpec.scala
 ---
 
 Job Queues are critical parts of Enterprise workloads. Complex queues use distributed nodes, state machines, and
