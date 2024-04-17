@@ -10,7 +10,51 @@ import zio.test.junit.JUnitRunnableSpec
 import zio.test.{Live, Spec, TestEnvironment, assertTrue}
 import zio.{Scope, ZIO, durationInt}
 
-class ZSyncServiceImplSpec extends JUnitRunnableSpec {
+object ZSyncServiceImplSpec extends JUnitRunnableSpec:
+
+  private val User1: UserId = 1
+  private val User2: UserId = 2
+  private val User3: UserId = 3
+
+  private val Id1 = 1
+  private val Id2 = 2
+  private val Id3 = 3
+  private val Id4 = 4
+  private val Id5 = 5
+
+  val SubscribeActions: Seq[(UserId, SyncRequest)] = Seq(
+    //watch 1
+    (User1, SyncRequest(subscribes = Seq(SyncRequest.Subscribe(id = Id1)))),
+    //watch 1,2
+    (User2, SyncRequest(subscribes = Seq(SyncRequest.Subscribe(id = Id1), SyncRequest.Subscribe(id = Id2)))),
+    //watch 1,3
+    (User3, SyncRequest(subscribes = Seq(SyncRequest.Subscribe(id = Id1), SyncRequest.Subscribe(id = Id3)))),
+  )
+
+  extension (userResponses: Seq[(UserId, SyncResponse)])
+    def idRecords(id: Int, userId: UserId): Seq[Data] = userResponses
+      .filter((uId, dataRecord) => uId == userId && dataRecord.data.exists(_.id == id))
+      .flatMap(_._2.data)
+
+  extension (dataUpdates: Seq[DataUpdate])
+    def etag(id: Int): ETag = DataRecord.calculateEtag(dataUpdates.find(_.data.exists(_.id == id)).get.data.get)
+
+  extension (streamActions: Seq[(UserId, SyncRequest)])
+    def stream: UStream[(UserId, SyncRequest)] = ZStream.fromIterable(streamActions, 1) //.throttleShape(1, 1.milliseconds)(_.size)
+
+  private def createData(batch: Int): Seq[Data] = Seq(
+    Data.of(id = Id1, field1 = s"batch-$batch"),
+    Data.of(id = Id2, field1 = s"batch-$batch"),
+    Data.of(id = Id3, field1 = s"batch-$batch"),
+    Data.of(id = Id4, field1 = s"batch-$batch"),
+    Data.of(id = Id5, field1 = s"batch-$batch"),
+  )
+
+  def createUpdateRequest(batch: Int): UpdateRequest = UpdateRequest.of(
+    updates = createData(batch)
+      .zip(createData(batch - 1))
+      .map((data, previousData) => DataUpdate.of(Some(data), DataRecord.calculateEtag(previousData)))
+  )
 
   override def spec: Spec[TestEnvironment & Scope, Any] = suite("multiple client listeners")(
     test("All updated") {
@@ -101,51 +145,5 @@ class ZSyncServiceImplSpec extends JUnitRunnableSpec {
           subscribedIds2 == Set(1, 2)
     },
   ) @@ zio.test.TestAspect.sequential //@@ zio.test.TestAspect.timeout(5.seconds)
-}
 
-object ZSyncServiceImplSpec {
 
-  private val User1: UserId = 1
-  private val User2: UserId = 2
-  private val User3: UserId = 3
-
-  private val Id1 = 1
-  private val Id2 = 2
-  private val Id3 = 3
-  private val Id4 = 4
-  private val Id5 = 5
-
-  val SubscribeActions: Seq[(UserId, SyncRequest)] = Seq(
-    //watch 1
-    (User1, SyncRequest(subscribes = Seq(SyncRequest.Subscribe(id = Id1)))),
-    //watch 1,2
-    (User2, SyncRequest(subscribes = Seq(SyncRequest.Subscribe(id = Id1), SyncRequest.Subscribe(id = Id2)))),
-    //watch 1,3
-    (User3, SyncRequest(subscribes = Seq(SyncRequest.Subscribe(id = Id1), SyncRequest.Subscribe(id = Id3)))),
-  )
-
-  extension (userResponses: Seq[(UserId, SyncResponse)])
-    def idRecords(id: Int, userId: UserId): Seq[Data] = userResponses
-      .filter((uId, dataRecord) => uId == userId && dataRecord.data.exists(_.id == id))
-      .flatMap(_._2.data)
-
-  extension (dataUpdates: Seq[DataUpdate])
-    def etag(id: Int): ETag = DataRecord.calculateEtag(dataUpdates.find(_.data.exists(_.id == id)).get.data.get)
-
-  extension (streamActions: Seq[(UserId, SyncRequest)])
-    def stream: UStream[(UserId, SyncRequest)] = ZStream.fromIterable(streamActions, 1) //.throttleShape(1, 1.milliseconds)(_.size)
-
-  private def createData(batch: Int): Seq[Data] = Seq(
-    Data.of(id = Id1, field1 = s"batch-$batch"),
-    Data.of(id = Id2, field1 = s"batch-$batch"),
-    Data.of(id = Id3, field1 = s"batch-$batch"),
-    Data.of(id = Id4, field1 = s"batch-$batch"),
-    Data.of(id = Id5, field1 = s"batch-$batch"),
-  )
-
-  def createUpdateRequest(batch: Int): UpdateRequest = UpdateRequest.of(
-    updates = createData(batch)
-      .zip(createData(batch - 1))
-      .map((data, previousData) => DataUpdate.of(Some(data), DataRecord.calculateEtag(previousData)))
-  )
-}

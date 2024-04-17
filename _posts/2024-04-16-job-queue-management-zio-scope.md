@@ -9,8 +9,8 @@ excerpt_separator: <!--more-->
 examples:
   - job-queue-zio-scope
 examples-sources:
-  - /src/main/scala/ca/stevenskelton/examples/jobqueuezioscope/DistinctZioJobQueue.scala
-  - /src/test/scala/ca/stevenskelton/examples/jobqueuezioscope/DistinctZioJobQueueSpec.scala
+  - /src/main/scala/ca/stevenskelton/examples/jobqueuezioscope/UniqueJobQueue.scala
+  - /src/test/scala/ca/stevenskelton/examples/jobqueuezioscope/UniqueJobQueueSpec.scala
 ---
 
 Job Queues are critical parts of Enterprise workloads. Complex queues use distributed nodes, state machines, and
@@ -47,6 +47,7 @@ This allows work in-progress to count towards the item uniqueness. Re-adding wor
 
 ```scala
 class DistinctZioJobQueue[A] {
+  
   //Jobs queued for execution.
   def queued: ZIO[Any, Nothing, Seq[A]]
   
@@ -59,9 +60,6 @@ class DistinctZioJobQueue[A] {
   //Add jobs to queue. Will return all jobs that failed to be added.
   def addAll(elems: Seq[A]): ZIO[Any, Nothing, Seq[A]]
   
-  //Blocks until returning a queued job.
-  def takeQueued[E]: ZIO[Scope, Nothing, A]
-  
   //Blocks until returning at least one, but no more than N, queued jobs.
   def takeUpToNQueued(max: Int): ZIO[Scope, Nothing, Seq[A]]
 }
@@ -69,7 +67,7 @@ class DistinctZioJobQueue[A] {
 //TODO:
 
 {%
-include figure image_path="/assets/images/2024/04/distinct_job_queue.svg"
+include figure image_path="/assets/images/2024/04/unique_job_queue.svg"
 caption="Job queue using ListHashSet and ZIO Scopes to manage queue removal"
 img_style="padding: 10px; background-color: white; height: 320px;"
 %}

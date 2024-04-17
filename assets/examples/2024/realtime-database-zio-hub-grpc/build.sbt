@@ -49,7 +49,3 @@ lazy val realtimeziohubgrpc = project
       "-Wnonunit-statement",
     ),
   )
-
-//testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework")
-
-logLevel := Level.Error

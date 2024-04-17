@@ -1,11 +1,11 @@
 package ca.stevenskelton.examples.jobqueuezioscope
 
-import ca.stevenskelton.examples.jobqueuezioscope.DistinctZioJobQueue.{JobStatus, Status}
-import zio.{Chunk, Exit, Promise, RIO, Ref, Scope, UIO, Unsafe, ZIO}
+import ca.stevenskelton.examples.jobqueuezioscope.UniqueJobQueue.{JobStatus, Status}
+import zio.{Chunk, Exit, NonEmptyChunk, Promise, RIO, Ref, Scope, UIO, Unsafe, ZIO}
 
 import scala.collection.mutable
 
-object DistinctZioJobQueue:
+object UniqueJobQueue:
 
   private enum Status:
     case Queued, InProgress
@@ -17,16 +17,16 @@ object DistinctZioJobQueue:
       case o: JobStatus[?] => o.a.equals(a)
       case _ => false
 
-  def create[A]: UIO[DistinctZioJobQueue[A]] =
+  def create[A]: UIO[UniqueJobQueue[A]] =
     for
       linkedHashSetRef <- Ref.make(new mutable.LinkedHashSet[JobStatus[A]])
       promise <- Promise.make[Nothing, Unit]
       promiseRef <- Ref.make(promise)
     yield
-      DistinctZioJobQueue(linkedHashSetRef, promiseRef)
+      UniqueJobQueue(linkedHashSetRef, promiseRef)
 
 
-class DistinctZioJobQueue[A] private(
+class UniqueJobQueue[A] private(
                                       private val linkedHashSetRef: Ref[mutable.LinkedHashSet[JobStatus[A]]],
                                       private val activityRef: Ref[Promise[Nothing, Unit]]
                                     ):
@@ -66,12 +66,10 @@ class DistinctZioJobQueue[A] private(
           (rejected, a) => if linkedHashSet.add(JobStatus(a, Status.Queued)) then rejected else rejected :+ a
     .tap:
       allRejected => if allRejected.size < elems.size then activityRef.get.map(_.succeed(())) else ZIO.unit
-
+  
   /**
-   * Blocks until returning a queued job.
+   * Non-interruptible creator of scope
    */
-  def takeQueued[E]: RIO[Scope, A] = takeUpToNQueued(1).map(_.head)
-
   private def takeUpToQueuedAllowEmpty(max: Int): RIO[Scope, Chunk[A]] = ZIO.acquireReleaseExit(
     for
       linkedHashSet <- linkedHashSetRef.get
@@ -100,7 +98,7 @@ class DistinctZioJobQueue[A] private(
   /**
    * Blocks until returns at least one, but no more than N, queued jobs.
    */
-  def takeUpToNQueued(max: Int): RIO[Scope, Chunk[A]] =
+  def takeUpToNQueued(max: Int): RIO[Scope, NonEmptyChunk[A]] =
     takeUpToQueuedAllowEmpty(max).flatMap:
       chunk =>
         if chunk.isEmpty then activityRef.get.flatMap(_.await.flatMap(_ => takeUpToNQueued(max)))
@@ -109,4 +107,4 @@ class DistinctZioJobQueue[A] private(
             activityRef.modify:
               promise =>
                 val _ = Unsafe.unsafe(implicit unsafe => zio.Runtime.default.unsafe.run(promise.succeed(())))
-                (chunk, reset)
+                (NonEmptyChunk.fromChunk(chunk).get, reset)

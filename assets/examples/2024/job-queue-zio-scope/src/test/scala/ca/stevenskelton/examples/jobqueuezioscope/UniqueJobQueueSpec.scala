@@ -5,12 +5,12 @@ import zio.test.junit.JUnitRunnableSpec
 import zio.test.{Spec, TestEnvironment, assertTrue}
 import zio.{Chunk, Scope, ZIO}
 
-class DistinctZioJobQueueSpec extends JUnitRunnableSpec {
+object UniqueJobQueueSpec extends JUnitRunnableSpec {
 
   override def spec: Spec[TestEnvironment & Scope, Any] = suite("operations")(
     test("Distinct values on add, addAll") {
       for
-        queue <- DistinctZioJobQueue.create[Int]
+        queue <- UniqueJobQueue.create[Int]
         noConflictAddAll0 <- queue.addAll(Seq(1, 5))
         noConflictAddAll1 <- queue.addAll(Seq(2, 6))
         noConflictAdd <- queue.add(4)
@@ -25,45 +25,45 @@ class DistinctZioJobQueueSpec extends JUnitRunnableSpec {
           conflictAddAll == Seq(4, 5) &&
           queued == Seq(1, 5, 2, 6, 4, 3)
     },
-    test("Scope on take, takeUpTo") {
+    test("Scope on takeUpTo") {
       for
-        queue <- DistinctZioJobQueue.create[Int]
+        queue <- UniqueJobQueue.create[Int]
         _ <- queue.addAll(Seq(1, 5, 2, 6, 4, 3))
         queued0 <- queue.queued
         inprogress0 <- queue.inProgress
-        takeUpTo0 <- ZIO.scoped {
+        take0 <- ZIO.scoped {
           for
             inprogressBefore <- queue.inProgress
-            takeUpTo <- queue.takeUpToNQueued(3)
+            takeUpTo0 <- queue.takeUpToNQueued(3)
             inprogressAfter <- queue.inProgress
           yield
-            (takeUpTo, inprogressBefore.isEmpty, takeUpTo == inprogressAfter)
+            (takeUpTo0.toChunk, inprogressBefore.isEmpty, takeUpTo0.toChunk == inprogressAfter)
         }
         queued1 <- queue.queued
         inprogress1 <- queue.inProgress
         take1 <- ZIO.scoped {
           for
             inprogressBefore <- queue.inProgress
-            take <- queue.takeQueued
+            takeUpTo1 <- queue.takeUpToNQueued(1)
             inprogressAfter <- queue.inProgress
           yield
-            (take, inprogressBefore.isEmpty, Seq(take) == inprogressAfter)
+            (takeUpTo1.toChunk, inprogressBefore.isEmpty, takeUpTo1.toChunk == inprogressAfter)
         }
         queued2 <- queue.queued
         inprogress2 <- queue.inProgress
       yield assertTrue:
         queued0 == Seq(1, 5, 2, 6, 4, 3) &&
           inprogress0.isEmpty &&
-          takeUpTo0 == (Seq(1, 5, 2), true, true) &&
+          take0 == (Seq(1, 5, 2), true, true) &&
           queued1 == Seq(6, 4, 3) &&
           inprogress1.isEmpty &&
-          take1 == (6, true, true) &&
+          take1 == (Seq(6), true, true) &&
           queued2 == Seq(4, 3) &&
           inprogress2.isEmpty
     },
     test("Release back on Scope failure") {
       for
-        queue <- DistinctZioJobQueue.create[Int]
+        queue <- UniqueJobQueue.create[Int]
         _ <- queue.addAll(Seq(1, 5, 2, 6, 4, 3))
         takeUpTo0 <- ZIO.scoped {
           for
@@ -81,12 +81,12 @@ class DistinctZioJobQueueSpec extends JUnitRunnableSpec {
         takeUpTo0 == "1,5,2" &&
           queued1 == Seq(1, 5, 2, 6, 4, 3) &&
           inprogress1.isEmpty &&
-          takeUpTo1 == Seq(1, 5, 2) &&
+          takeUpTo1.toChunk == Seq(1, 5, 2) &&
           queued2 == Seq(6, 4, 3)
     },
     test("Distinct values include inprogress") {
       for
-        queue <- DistinctZioJobQueue.create[Int]
+        queue <- UniqueJobQueue.create[Int]
         _ <- queue.addAll(Seq(1, 5, 2, 6, 4, 3))
         work <- ZIO.scoped {
           for
@@ -107,28 +107,29 @@ class DistinctZioJobQueueSpec extends JUnitRunnableSpec {
           !innerAddN &&
           innerAddAll == Seq(2) &&
           innerQueued == Seq(6, 4, 3, 8, 7) &&
-          innerTaken == Seq(1, 5, 2) &&
+          innerTaken.toChunk == Seq(1, 5, 2) &&
           innerInProgress == Seq(1, 5, 2) &&
           queued == Seq(6, 4, 3, 8, 7) &&
           inprogress.isEmpty
     },
     test("Block on take, takeUpTo") {
       for
-        queue <- DistinctZioJobQueue.create[Int]
-        takeUpToFork <- ZIO.scoped(queue.takeUpToNQueued(3)).fork
-        takeFork <- ZIO.scoped(queue.takeQueued).fork
+        queue <- UniqueJobQueue.create[Int]
+        takeUpToFork3 <- ZIO.scoped(queue.takeUpToNQueued(3)).fork
+        takeUpToFork2 <- ZIO.scoped(queue.takeUpToNQueued(2)).fork
         _ <- queue.addAll(Seq(1, 5, 2, 6, 4, 3))
-        takeUpTo <- takeUpToFork.join
-        take <- takeFork.join
+        takeUpTo3 <- takeUpToFork3.join
+        takeUpTo2 <- takeUpToFork2.join
         queued0 <- queue.queued
       yield assertTrue:
-        takeUpTo.size == 3 &&
-          (takeUpTo :+ take).sorted == Seq(1, 2, 5, 6) &&
-          queued0 == Seq(4, 3)
+        takeUpTo3.size == 3 &&
+          takeUpTo2.size == 2 &&
+          (takeUpTo3 ++ takeUpTo2).sorted == Seq(1, 2, 4, 5, 6) &&
+          queued0 == Seq(3)
     },
     test("Stream") {
       for
-        queue <- DistinctZioJobQueue.create[Int]
+        queue <- UniqueJobQueue.create[Int]
         streamOfSums = ZStream.repeatZIO {
           ZIO.scoped {
             queue.takeUpToNQueued(3).map {

@@ -19,7 +19,7 @@ lazy val jobqueuezioscope = project
       "-deprecation",
       "-feature",
       "-unchecked",
-      //      "-new-syntax", "-rewrite",
+      "-new-syntax", "-rewrite",
       "-Ysafe-init",
       "-Wunused:all",
       "-Wvalue-discard",
