@@ -6,15 +6,15 @@ title: "About"
   <h1> 🇨🇦&nbsp;Toronto, Canada</h1>
 
   <p>
-    <strong>Honours Bachelor of Mathematics</strong><br>
-    Double major in Pure and Applied Mathematics from the University of Waterloo
-  </p>
-  
-  <p>
     <strong>Principal Engineer</strong><br>
     Currently at a global digital-transformation consulting company
   </p>
-  
+
+  <p>
+    <strong>Honours Bachelor of Mathematics</strong><br>
+    Double major in Pure and Applied Mathematics from the University of Waterloo
+  </p>
+
   <h2 id="work-summary">Work Summary</h2>
 
   <p>
