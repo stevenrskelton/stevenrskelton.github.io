@@ -65,9 +65,9 @@ layout: default
                     {% include github_example_project.html id=example_id %}
                     {% if example.sources %}
                         <ul>
-                        {% for source in example.sources %}
-                            {% assign source_name = source | split: "/" | last %}
-                            <li><a href="{{ source }}" title="{{ source_name }}" target="_blank">{{ source_name }}</a></li>
+                        {% for source_url in example.sources %}
+                            {% assign source_name = source_url | split: "/" | last %}
+                            <li><a href="{{ example.url }}{{ source_url }}" title="{{ source_name }}" target="_blank">{{ source_name }}</a></li>
                         {% endfor %}
                         </ul>
                     {% endif %}
