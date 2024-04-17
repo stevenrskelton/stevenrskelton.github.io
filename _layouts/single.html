@@ -60,8 +60,17 @@ layout: default
                 <div class="html-bg" style="margin-bottom:0.5em;">
                 {% assign entries_layout = page.entries_layout | default: 'list' %}
                 {% for example_id in page.examples %}
-                    <section id="{{ site.examples[example_id].name | slugify | downcase }}" class="taxonomy__section">
+                    {% assign example = site.examples[example_id] %}
+                    <section id="{{ example.name | slugify | downcase }}" class="taxonomy__section">
                     {% include github_example_project.html id=example_id %}
+                    {% if example.sources %}
+                        <ul>
+                        {% for source in example.sources %}
+                            {% assign source_name = source | split: "/" | last %}
+                            <li><a href="{{ source }}" title="{{ source_name }}" target="_blank">{{ source_name }}</a></li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
                     {% assign related_posts = site.posts | where_exp:"item", "item.examples contains example_id" | where_exp:"item", "item != page" %}
                     {% if related_posts %}
                         <div class="entries-{{ entries_layout }}">
