@@ -1,7 +1,7 @@
 package ca.stevenskelton.examples.jobqueuezioscope
 
 import ca.stevenskelton.examples.jobqueuezioscope.SynchronizedUniqueJobQueue.{JobStatus, MaxReadFibers, Status}
-import zio.{Chunk, Exit, NonEmptyChunk, Promise, RIO, Scope, Semaphore, UIO, ZIO}
+import zio.{Chunk, Exit, NonEmptyChunk, Promise, Scope, Semaphore, UIO, URIO, ZIO}
 
 import scala.collection.mutable
 
@@ -27,12 +27,12 @@ object SynchronizedUniqueJobQueue:
       SynchronizedUniqueJobQueue(semaphore, promise)
 
 /**
- * Allows for unique entries in the queue, using Object.hashCode
+ * Allows for unique entries in the queue, using [[Object.hashCode]]
  * Entries remain in the queue while externally processed, uses ZIO Scope
  *  to determine the processing outcome.  Successfully closed Scope will
  *  remove those entries from the queue, Unsuccessfully closed Scope will
  *  release the entries back into the queue to be taken again.
- * @param semaphore Synchronization for the LinkedHashSet
+ * @param semaphore Synchronization for the [[scala.collection.mutable.LinkedHashSet]]
  * @param promise All access to this is within the semaphore
  */
 class SynchronizedUniqueJobQueue[A] private(
@@ -82,7 +82,7 @@ class SynchronizedUniqueJobQueue[A] private(
   /**
    * Non-interruptible creator of scope
    */
-  private def takeUpToQueuedAllowEmpty(max: Int): RIO[Scope, Option[NonEmptyChunk[A]]] = ZIO.acquireReleaseExit(
+  private def takeUpToQueuedAllowEmpty(max: Int): URIO[Scope, Option[NonEmptyChunk[A]]] = ZIO.acquireReleaseExit(
     semaphore.withPermits(MaxReadFibers):
       ZIO.succeed:
         NonEmptyChunk.fromChunk:
@@ -117,7 +117,7 @@ class SynchronizedUniqueJobQueue[A] private(
   /**
    * Blocks until returns at least one, but no more than N, queued jobs.
    */
-  def takeUpToNQueued(max: Int): RIO[Scope, NonEmptyChunk[A]] =
+  def takeUpToNQueued(max: Int): URIO[Scope, NonEmptyChunk[A]] =
     takeUpToQueuedAllowEmpty(max).flatMap:
       _.map(ZIO.succeed).getOrElse:
         promise.await.flatMap(_ => takeUpToNQueued(max))

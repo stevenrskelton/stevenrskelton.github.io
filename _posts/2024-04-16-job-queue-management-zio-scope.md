@@ -326,7 +326,7 @@ _environment_ type:
 ZIO.scope(zio: ZIO[Scope, ?, ?]): ZIO[?, ?, ?]
 ```
 
-## Streaming Consumers
+### Streaming Consumers
 
 Typical consumers would adopt a stream pattern. As the queue releases `NonEmptyChunk` elements within a `Scope`,
 consumers should opt to complete the scope as soon as possible, however long-running scope have very minimal impact on
@@ -378,14 +378,43 @@ private class JobStatus[A](val a: A, var status: Status) {
 
 # Queue Class and Private Members
 
+There are 3 private variables in the queue (these are constructor params to avoid `Unsafe` construction). They are all
+intended to be internal references only.
+
 ```scala
 class UniqueJobQueue[A](
-                         semaphore: Semaphore,
-                         promise: Promise[Nothing, Unit],
+                         private val semaphore: Semaphore,
+                         private var promise: Promise[Nothing, Unit],
                        ) {
   val linkedHashSet = new mutable.LinkedHashSet[JobStatus[A]]
 }
 ```
+The `semaphore` will be the read/write synchronization for the `linkedHashSet`.  The `promise` will be used to signal 
+consumers to retry the queue because elements have been added. The `promise` is a mutable _var_ but will only be 
+modified behind the `semaphore` write guard, ensuring no write conflicts.
 
-//TODO:
+# Conclusion: Putting It All Together
+
+The example code utilizes type alias, such as `type URIO[-R, +A] = ZIO[R, Nothing, A]`, as well as using
+`Chunk` and `NonEmptyChunk` instead of `Seq`.
+
+```scala
+class SynchronizedUniqueJobQueue[A](
+                         private val semaphore: Semaphore,
+                         private var promise: Promise[Nothing, Unit],
+                       ) {
+  
+  private val linkedHashSet = new mutable.LinkedHashSet[JobStatus[A]]
+
+  def add(elem: A): ZIO[Any, Nothing, Boolean]
+
+  def addAll(elems: Seq[A]): ZIO[Any, Nothing, Seq[A]]
+
+  def takeUpToNQueued(max: Int): ZIO[Scope, Nothing, Seq[A]]
+  
+  private def takeUpToQueuedAllowEmpty(max: Int): ZIO[Scope, Nothing, Option[Seq[A]]]
+
+  private def notifyActivity: ZIO[Any, Nothing, Unit]
+}
+```
 
