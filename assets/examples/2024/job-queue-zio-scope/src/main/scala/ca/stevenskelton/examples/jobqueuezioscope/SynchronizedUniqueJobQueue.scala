@@ -100,20 +100,18 @@ class SynchronizedUniqueJobQueue[A] private(
     taken.map:
       chunk =>
         semaphore.withPermits(MaxReadFibers):
-          ZIO.succeed:
-            chunk.foldLeft(false):
-              (hasActivity, a) =>
-                exit match
-                  case Exit.Success(_) =>
-                    val _ = linkedHashSet.remove(JobStatus(a, Status.InProgress))
-                    hasActivity
-                  case Exit.Failure(_) =>
-                    val _ = linkedHashSet.find(_.a == a).foreach(_.status = Status.Queued)
-                    true
+          val activity = chunk.foldLeft(false):
+            (hasActivity, a) =>
+              exit match
+                case Exit.Success(_) =>
+                  val _ = linkedHashSet.remove(JobStatus(a, Status.InProgress))
+                  hasActivity
+                case Exit.Failure(_) =>
+                  val _ = linkedHashSet.find(_.a == a).foreach(_.status = Status.Queued)
+                  true
+          if activity then notifyActivity else ZIO.unit
     .getOrElse:
       ZIO.succeed(false)
-    .flatMap:
-      activity => if activity then semaphore.withPermits(MaxReadFibers)(notifyActivity) else ZIO.unit
   )
 
   /**

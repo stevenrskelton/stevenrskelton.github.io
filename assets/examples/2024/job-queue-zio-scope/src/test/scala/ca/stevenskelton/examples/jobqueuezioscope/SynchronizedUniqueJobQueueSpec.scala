@@ -3,7 +3,7 @@ package ca.stevenskelton.examples.jobqueuezioscope
 import zio.stream.ZStream
 import zio.test.junit.JUnitRunnableSpec
 import zio.test.{Spec, TestEnvironment, assertTrue}
-import zio.{Chunk, Scope, ZIO}
+import zio.{Chunk, Promise, Scope, ZIO}
 
 class SynchronizedUniqueJobQueueSpec extends JUnitRunnableSpec:
   override def spec = SynchronizedUniqueJobQueueSpec.spec
@@ -28,7 +28,7 @@ object SynchronizedUniqueJobQueueSpec extends JUnitRunnableSpec {
           conflictAddAll == Seq(4, 5) &&
           queued == Seq(1, 5, 2, 6, 4, 3)
     },
-    test("Scope on takeUpTo") {
+    test("Remove on Scope success") {
       for
         queue <- SynchronizedUniqueJobQueue.create[Int]
         _ <- queue.addAll(Seq(1, 5, 2, 6, 4, 3))
@@ -87,6 +87,32 @@ object SynchronizedUniqueJobQueueSpec extends JUnitRunnableSpec {
           takeUpTo1.toChunk == Seq(1, 5, 2) &&
           queued2 == Seq(6, 4, 3)
     },
+    test("Release back on Scope interrupt") {
+      for
+        queue <- SynchronizedUniqueJobQueue.create[Int]
+        _ <- queue.addAll(Seq(1, 5, 2, 6, 4, 3))
+        takenCompleted <- Promise.make[Any, Boolean]
+        takeUpTo0Fiber <- ZIO.scoped {
+          for
+            promise <- Promise.make[Any, Unit]
+            _ <- queue.takeUpToNQueued(3)
+            _ <- takenCompleted.succeed(true)
+            _ <- promise.await
+          yield ()
+        }.fork
+        _ <- takenCompleted.await
+        queued1 <- queue.queued
+        inprogress1 <- queue.inProgress
+        exit <- takeUpTo0Fiber.interrupt
+        queued2 <- queue.queued
+        inprogress2 <- queue.inProgress
+      yield assertTrue:
+        queued1 == Seq(6, 4, 3) &&
+          inprogress1 == Seq(1, 5, 2) &&
+          exit.isFailure &&
+          queued2 == Seq(1, 5, 2, 6, 4, 3) &&
+          inprogress2.isEmpty
+    },
     test("Distinct values include inprogress") {
       for
         queue <- SynchronizedUniqueJobQueue.create[Int]
@@ -115,7 +141,7 @@ object SynchronizedUniqueJobQueueSpec extends JUnitRunnableSpec {
           queued == Seq(6, 4, 3, 8, 7) &&
           inprogress.isEmpty
     },
-    test("Block on take, takeUpTo") {
+    test("Block on takeUpTo") {
       for
         queue <- SynchronizedUniqueJobQueue.create[Int]
         takeUpToFork3 <- ZIO.scoped(queue.takeUpToNQueued(3)).fork
@@ -130,14 +156,12 @@ object SynchronizedUniqueJobQueueSpec extends JUnitRunnableSpec {
           (takeUpTo3 ++ takeUpTo2).sorted == Seq(1, 2, 4, 5, 6) &&
           queued0 == Seq(3)
     },
-    test("Stream") {
+    test("Example consumer stream") {
       for
         queue <- SynchronizedUniqueJobQueue.create[Int]
         streamOfSums = ZStream.repeatZIO {
           ZIO.scoped {
-            queue.takeUpToNQueued(3).map {
-              chunk => chunk.sum
-            }
+            queue.takeUpToNQueued(3).map(_.sum)
           }
         }
         _ <- queue.addAll(Seq(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13))

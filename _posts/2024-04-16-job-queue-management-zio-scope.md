@@ -160,6 +160,15 @@ def takeUpToNQueued(max: Int):
 
 #### Creating Scope using acquireReleaseExit
 
+Creating `ZIO[Scope, ?, ?]` removal of the `Scope` from the environment requires explicitly defining the boundary of the
+scope. This is commonly done using `ZIO.scope`, which is basically:
+
+#### Closing Scope
+```scala
+def scope(zio: => ZIO[Scope with R, E, A]): ZIO[R, E, A]
+```
+
+
 //TODO:
 
 `acquireRelease`

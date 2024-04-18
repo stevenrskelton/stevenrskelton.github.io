@@ -42,7 +42,32 @@ For non-browser communications, such as with mobile apps or inter-server communi
 layer. As WebSockets runs over HTTP, because HTTP/2 has directly integrated multiplexed streaming capabilities it is 
 better for abstraction libraries such as gRPC to directly support HTTP/2 instead of the higher-level WebSocket layer.
 
+```protobuf
+service SyncService {
+  rpc Bidirectional (stream Request) returns (stream Response);
+}
+```
+
+```scala
+def bidirectional(request: Stream[StatusException, Request]): Stream[StatusException, Response] =
+  //request.flatMap:
+  //  Request => Stream[StatusException, Response]
+```
+
+
 ## ZIO Hub for Concurrency and Subscriptions
+
+
+
+```protobuf
+message SyncRequest {
+  repeated Subscribe subscribes = 1;
+  repeated Unsubscribe unsubscribes = 2;
+}
+message SyncResponse {
+  Data data = 1;
+}
+```
 
 //TODO:
 
