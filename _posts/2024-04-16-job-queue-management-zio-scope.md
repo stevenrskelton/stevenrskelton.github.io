@@ -19,7 +19,7 @@ queue, with ZIO fibers performing work and ZIO [Resource Management](https://zio
 forming the scheduling and supervision backbone. An efficient job queue can be written using ZIO constructs using
 surprisingly minimal amount of code.
 
-{% include table-of-contents.html height="400px" %}
+{% include table-of-contents.html height="500px" %}
 
 # ZIO Resources and Scope
 
@@ -45,10 +45,10 @@ img_style="padding: 10px; background-color: white; height: 320px;"
   This allows work in-progress to count towards the item uniqueness. Re-adding work that is already in-progress will be
   rejected by the queue.
 - Popping from the queue is a blocking operation
-  There is no need to poll the queue for new items, consumers can stream items and fetch batches using thread-safe
+  There is no need to poll the queue for new items, all consumers can stream items and fetch batches using thread-safe
   operations.
 - There is no [dead-letter output](https://en.wikipedia.org/wiki/Dead_letter_queue)
-  Items which cannot be processed are returned to the queue by the Scope exception finalizer.
+  Items which cannot be processed are returned to the queue by the Scope finalizer.
 
 ### Class Interface
 
@@ -72,38 +72,40 @@ class DistinctZioJobQueue[A] {
 
 }
 ```
+
 # ZIO Concurrency uses Fibers, Not Threads
 
 ## Using Semaphore for Concurrency
 
 The common approach to create concurrent collections in Java is using the JDK provided
 wrapper `Collections.synchronizedSet()`. This is a great mechanism for handling thread-safety, however ZIO concurrency
-operates with ZIO fibers making this approach untenable. It is incorrect to block threads at any time in ZIO outside of
+operates with ZIO fibers making this approach untenable. It is incorrect to block threads at any time in ZIO outside
 a `ZIO.blocking` scope because this will block all fibers using that thread. Fibers are the independent workers in ZIO,
 not threads, and blocking the system thread will cause performance degradation and possible deadlocks.
 
-The [ZIO Semaphore](https://zio.dev/reference/concurrency/semaphore/) is the ZIO equivalent mechanism to provide 
-synchronization. It operates on the fiber level making it distinctly different from a JDK semaphore. The same 
+The ZIO [Semaphore](https://zio.dev/reference/concurrency/semaphore/) is the ZIO equivalent mechanism to provide
+synchronization. It operates on the fiber level making it distinctly different from a JDK semaphore. The same
 concurrency concerns are still valid while using fibers to access `LinkedHashSet` methods. All write operations
 must be synchronized, and all read operations can only parallelize with other read operations. Any read operation
-occurring during a write operation is vulnerable to a `ConcurrentModificationException` if it its `iterator` encounters 
+occurring during a write operation is vulnerable to a `ConcurrentModificationException` if it its `iterator` encounters
 stale state.
 
 ## Ref and Ref.Synchronized
 
-In addition to semaphore, ZIO provides other concurrency mechanisms such as `Ref` and `STM`. 
-[Software Transactional Memory](https://zio.dev/reference/stm/) is a powerful construct however requiring specialized 
-implementations of common classes, making it worthy of its own external discussion. The `Ref` construct is a very 
-accessible mechanism in ZIO comparable to the `Atomic*` classes in the JDK, but at a higher level. A noticeable downside
+In addition to semaphore, ZIO provides other concurrency mechanisms such as `Ref` and `STM`.
+[Software Transactional Memory](https://zio.dev/reference/stm/) is a powerful construct however requiring specialized
+implementations of common classes, making it worthy of its own external discussion. The `Ref` construct is a very
+accessible mechanism in ZIO comparable to the `AtomicReference` class in the JDK, but at a higher level. A noticeable
+downside
 is it is only suitable for immutable references. Our implementation uses a mutable `LinkedHashSet`.
 
-### Ref and HashCodes 
+### Ref and HashCodes
 
-There are fundamental differences between the Java and Scala library implementations of `LinkedHashSet`.  
+There are fundamental differences between the Java and Scala library implementations of `LinkedHashSet`.
 
 #### java.util.LinkedHashSet
 
-The Java implementation of LinkedHashSet is a mutable implementation, and modifying it will not change its hashCode. 
+The Java implementation of LinkedHashSet is a mutable implementation, and modifying it will not change its hashCode.
 This means that wrapping it within either a `Ref` or `Synchronized` will cause all atomic guarantees to brake. The
 atomicity is implemented using hashCode verification to detect write conflicts rather than thread synchronization to
 the memory address. This is better for performance, but in this case it will effectivily behave as if there were no
@@ -112,7 +114,8 @@ write management at all.
 #### scala.collection.mutable.LinkedHashSet
 
 The Scala implementation of LinkedHashSet is a mutable implementation, however it has a dynamically computed hashCode.
-This will allow it to function correctly within a Ref, but will incur a performance overhead during any writes.
+This will allow it to function correctly within a Ref under certain conditions. By incurring a performance overhead
+during all writes it will allow the `AtomicReference.compareAndSet` method to work correctly.
 
 ```scala
 override def hashCode: Int = {
@@ -121,7 +124,9 @@ override def hashCode: Int = {
     if (setIterator.isEmpty) setIterator
     else new HashSetIterator[Any] {
       var hash: Int = 0
+
       override def hashCode: Int = hash
+
       override protected[this] def extract(nd: Node[A]): Any = {
         hash = unimproveHash(nd.hash)
         this
@@ -131,18 +136,25 @@ override def hashCode: Int = {
 }
 ```
 
-To align with immutable variants, the Scala Collections Library dynamically computes hashCode to allow equivalence based 
-on internal elements rather than by the parent class reference. Two iterables, represented using different class 
-implementations will be equal if they contain the same elements. This also means that they will be unequal if their 
-elements are different. This may be ideal for smaller number of elements, but it will begin to be more performant to 
-use a semaphore rather than a ref if the hashCode is slow.
+There still remains the inability of LinkedHashSet to handle reads during writes. The primary benefit of immutability
+is data never changes preventing all data instability during a read operations.
+
+The motivation of the dynamic hashCode for the mutable LinkedHashSet in the Scala Collections Library is to allow
+equality between immutable/mutable variants. Comparing a mutable Set to a immutable Set with the same internal elements
+will be successful, creating a more powerful `Set` interface abstraction.
+
+To allow the Scala LinkedHashSet to work within a `Ref` we will need to accept a hashCode calculation penalty on all
+writes, as well as implement a gate around simultaneous read/write operations. This may be suitable in some situations,
+but optimizing for fast reads is a more generally acceptable approach, and for these reasons our queue implementation
+is better off using a semaphore directly.
 
 ### Blocking in ZIO
 
 The primary mechanism to block ZIO fibers is by mapping from `await` on a `Promise`. When a second fiber completes
 the promise using `succeed` the first fiber will unblock and resume execution. Within our queue, all consumers can await
 the same activity promise. Whenever the queue state changes making queued elements available we will
-call `notifyActivity` to complete the promise.
+call `notifyActivity` to complete the promise. The unblocked consumers are in a FIFO priority and will execute in order
+until the queue is empty, initiating another blocked state.
 
 ```scala
 /**
@@ -155,45 +167,81 @@ private def notifyActivity: UIO[Unit] =
   } yield promise = resetPromise
 ```
 
-The `notifyActivity` method will atomically complete the current promise, and replace it with a new uncompleted
-promise. It is important to replace the `Ref` before completing the promise to avoid another thread from requesting
-the same completed promise from the ref. An unbounded cycle would be possible if another fiber is triggered by the
-promise completion, finds no elements, then awaits on the completed promise a second time. This cycle could continue
-until the ref is replaced, which if the fiber never relinquishes control could be infinite.
+The `notifyActivity` method will complete the current promise, and replace it with a new uncompleted promise. All calls
+to `notifyActivity` are within the `semaphore` write permit so access is guaranteed to be exclusive to the fiber,
+allowing this to be a simple `var` instead of a `Ref`.
 
-The queue can contain new queued elements whenever items are added, or when they are made available from a scope
-closing unsuccessfully.
+### Queue Write Operations
+
+The queue can be modified in 3 ways: elements added, elements removed, and elements undergoing status change. These map
+to `add`/`addAll` calls and `Scope` creation / finalization. Exclusive access to the queue is enforced by reserving all
+permits via `semaphore.withPermits(MaxReadFibers)`. This call will block until any outstanding permits reserved by
+read-only operations have been returned, and will block any new read-only permits from being obtained.
 
 ```scala
 def add(elem: A):
-//- obtain permit to LinkedHashSet
+//- obtain permits to LinkedHashSet
 //- try to add to queue
 //- if added successfully call notifyActivity
-//- release permit
+//- release permits
 
 def addAll(elems: Seq[A]):
-//- obtain permit to LinkedHashSet
+//- obtain permits to LinkedHashSet
 //- try to add all to queue
 //- if any added successfully call notifyActivity
-//- release permit
+//- release permits
 
 def takeUpToNQueued(max: Int):
-//- obtain permit to LinkedHashSet
+//- obtain permits to LinkedHashSet
 //- return items with Scope
-//- release permit
-//- Scope finalizer returns items to queue on exception then calls notifyActivity
+//- release permits
+//- Scope finalizer:
+//    - obtain permits to LinkedHashSet
+//    - returns items to queue on exception
+//    - calls notifyActivity
+//    - release permits
+//  or
+//    - obtain permits to LinkedHashSet
+//    - remove items from queue
+//    - calls notifyActivity
+//    - release permits
 ```
 
-#### Creating Scope using acquireReleaseExit
+Implementation details of `add` / `addAll` are straight-forward queue enqueue operations. The return values of these
+may be immaterial for many use-cases. The example code emits enqueue outcomes to the server➤client stream, but for 
+network efficiency these can be omitted.
 
-Creating `ZIO[Scope, ?, ?]` removal of the `Scope` from the environment requires explicitly defining the boundary of the
-scope. This is commonly done using `ZIO.scope`, which is basically:
+The `takeUpToNQueue` implementation is best examined in 3 parts:
 
-#### Closing Scope
+#### Reading from queue
+
+//TODO:
+
+#### Handling zero queue elements
+
+//TODO:
+
+#### Creating Scope with Finalizer
+
+This is covered in the [Creating Scope using acquireReleaseExit](#creating-scope-using-acquirereleaseexit) section below.
+
+### Streaming Consumers
+
+Typical consumers would adopt a stream pattern. As the queue releases `NonEmptyChunk` elements within a `Scope`,
+consumers should opt to complete the scope as soon as possible, however long-running scope have very minimal impact on
+the queue as it is already optimized minimal memory consumption and internal iteration performance.
+
 ```scala
-def scope(zio: => ZIO[Scope with R, E, A]): ZIO[R, E, A]
+val consumer: ZStream[Any, Throwable, A] = ZStream.repeatZIO {
+  ZIO.scoped {
+    queue.takeUpToNQueued(?).map {
+      nonEmptyChunk => a
+    }
+  }
+}
 ```
 
+## Creating Scope using acquireReleaseExit
 
 //TODO:
 
@@ -201,7 +249,21 @@ def scope(zio: => ZIO[Scope with R, E, A]): ZIO[R, E, A]
 `acquireReleaseExit`
 `acquireReleaseInterruptible` `acquireReleaseInterruptibleExit`
 
-### Job Uniqueness using equals / hashCode
+#### Closing Scope
+
+Creating `ZIO[Scope, ?, ?]` removal of the `Scope` from the environment requires explicitly defining the boundary of the
+scope. This is commonly done using `ZIO.scope`, which is basically:
+
+```scala
+def scope(zio: => ZIO[Scope with R, E, A]): ZIO[R, E, A]
+```
+
+ZIO `Exit` is the functional equivalent of the Scala `Try`, resolving into either a `Success` or `Failure`. Failures
+can be the result of either exceptions or interruptions.
+
+//TODO:
+
+## Element Uniqueness using equals / hashCode
 
 The basic requirement for this queue will be able to flag entries as either queued, or having been released within a
 scope by a consumer.
