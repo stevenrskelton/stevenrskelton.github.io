@@ -73,7 +73,7 @@ class DistinctZioJobQueue[A] {
 }
 ```
 
-## Ref and Synchronization
+## Using Semaphore for Concurrency
 
 The common approach to create concurrent collections in Java is using the JDK provided
 wrapper `Collections.synchronizedSet()`. This is a great mechanism for handling thread-safety, however ZIO concurrency
@@ -81,24 +81,45 @@ operates with ZIO fibers, making this approach untenable. It is incorrect to blo
 all fibers on that thread, causing performance degradation and possible deadlocks.
 
 The [ZIO Semaphore](https://zio.dev/reference/concurrency/semaphore/) is the recommended mechanism to provide method
-synchronization. 
+synchronization. Blocking execution is required even for read operations, as the `linkedHashSet.iterator` has a
+fail-fast approach should any of the underlying data be modified during iteration. While concurrent read operations 
+are possible, practically speaking there is rarely a reason to call `queued` or `inProgress`. The primary methods all
+require write operations, either producers writing new elements to the queue, or consumers modifying/removing elements.
 
 ### Ref and Ref.Synchronized
 
-These are ZIO synchronization mechanisms, but are only suitable for immutable values. Our implementation uses a 
-`mutable.LinkedHashSet` and there is no immutable collection available to us. A downside of most immutable collections 
-is their hashCode computation. Typical immutable collections maintain equals/hashCode equivalence between two instances 
-containing the same elements, and this is done by hashing the iteration over all elements' individual hashCodes. From
-a performance perspective this can be slower than method synchronizations when element counts are large.
+These are ZIO synchronization mechanisms, but are only suitable for immutable values. Our implementation uses a
+`mutable.LinkedHashSet` and there is no immutable collection available to us. A downside of most immutable collections
+is their hashCode computation. Typical immutable collections maintain equals/hashCode equivalence between two instances
+containing the same elements, and this is done by hashing the iteration over all elements' individual hashCodes. 
+
+```scala
+override def hashCode: Int = {
+  val setIterator = this.iterator
+  val hashIterator: Iterator[Any] =
+    if (setIterator.isEmpty) setIterator
+    else new HashSetIterator[Any] {
+      var hash: Int = 0
+      override def hashCode: Int = hash
+      override protected[this] def extract(nd: Node[A]): Any = {
+        hash = unimproveHash(nd.hash)
+        this
+      }
+    }
+  MurmurHash3.unorderedHash(hashIterator, MurmurHash3.setSeed)
+}
+```
+From a performance perspective this can be slower than fiber synchronizations when element counts are large.
 
 ### Blocking in ZIO
 
-The primary mechanism to block ZIO fibers is by mapping from `await` on a `Promise`. A second fiber should be used to
-complete the promise using `succeed`. Within our queue, all consumers can await the same activity promise. Whenever
-the queue state changes making queued elements available we will call `notifyActivity` to complete the promise.
+The primary mechanism to block ZIO fibers is by mapping from `await` on a `Promise`. When a second fiber completes
+the promise using `succeed` the first fiber will unblock and resume execution. Within our queue, all consumers can await
+the same activity promise. Whenever the queue state changes making queued elements available we will
+call `notifyActivity` to complete the promise.
 
 ```scala
-  /**
+/**
  * Signal all consumers to recheck the queue
  */
 private def notifyActivity: UIO[Unit] =

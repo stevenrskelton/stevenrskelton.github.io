@@ -1,6 +1,6 @@
 package ca.stevenskelton.examples.jobqueuezioscope
 
-import ca.stevenskelton.examples.jobqueuezioscope.SynchronizedUniqueJobQueue.{JobStatus, Status}
+import ca.stevenskelton.examples.jobqueuezioscope.SynchronizedUniqueJobQueue.{JobStatus, MaxReadFibers, Status}
 import zio.{Chunk, Exit, NonEmptyChunk, Promise, RIO, Scope, Semaphore, UIO, ZIO}
 
 import scala.collection.mutable
@@ -17,9 +17,11 @@ object SynchronizedUniqueJobQueue:
       case o: JobStatus[?] => o.a.equals(a)
       case _ => false
 
+  private val MaxReadFibers = Int.MaxValue.toLong
+
   def create[A]: UIO[SynchronizedUniqueJobQueue[A]] =
     for
-      semaphore <- Semaphore.make(1)
+      semaphore <- Semaphore.make(MaxReadFibers)
       promise <- Promise.make[Nothing, Unit]
     yield
       SynchronizedUniqueJobQueue(semaphore, promise)
@@ -61,7 +63,7 @@ class SynchronizedUniqueJobQueue[A] private(
   /**
    * Add job to queue, will return true if successful. Jobs already in queue will return false.
    */
-  def add(elem: A): UIO[Boolean] = semaphore.withPermit:
+  def add(elem: A): UIO[Boolean] = semaphore.withPermits(MaxReadFibers):
     ZIO.succeed:
       linkedHashSet.add(JobStatus(elem, Status.Queued))
     .tap:
@@ -70,7 +72,7 @@ class SynchronizedUniqueJobQueue[A] private(
   /**
    * Add jobs to queue. Will return all jobs that failed to be added.
    */
-  def addAll(elems: Seq[A]): UIO[Seq[A]] = semaphore.withPermit:
+  def addAll(elems: Seq[A]): UIO[Seq[A]] = semaphore.withPermits(MaxReadFibers):
     ZIO.succeed:
       elems.foldLeft(Nil):
         (rejected, a) => if linkedHashSet.add(JobStatus(a, Status.Queued)) then rejected else rejected :+ a
@@ -81,7 +83,7 @@ class SynchronizedUniqueJobQueue[A] private(
    * Non-interruptible creator of scope
    */
   private def takeUpToQueuedAllowEmpty(max: Int): RIO[Scope, Option[NonEmptyChunk[A]]] = ZIO.acquireReleaseExit(
-    semaphore.withPermit:
+    semaphore.withPermits(MaxReadFibers):
       ZIO.succeed:
         NonEmptyChunk.fromChunk:
           Chunk.from:
@@ -97,7 +99,7 @@ class SynchronizedUniqueJobQueue[A] private(
   )((taken, exit) =>
     taken.map:
       chunk =>
-        semaphore.withPermit:
+        semaphore.withPermits(MaxReadFibers):
           ZIO.succeed:
             chunk.foldLeft(false):
               (hasActivity, a) =>
@@ -111,7 +113,7 @@ class SynchronizedUniqueJobQueue[A] private(
     .getOrElse:
       ZIO.succeed(false)
     .flatMap:
-      activity => if activity then notifyActivity else ZIO.unit
+      activity => if activity then semaphore.withPermits(MaxReadFibers)(notifyActivity) else ZIO.unit
   )
 
   /**

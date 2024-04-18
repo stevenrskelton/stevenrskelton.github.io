@@ -6,7 +6,7 @@ import scalapb.zio_grpc.{RequestContext, ServerLayer, ServiceList}
 import zio.{Cause, ExitCode, IO, URIO, ZIO, ZIOAppDefault}
 
 object SyncServer extends ZIOAppDefault:
-  
+
   val MetadataUserIdKey = "user-id"
 
   private val GRPCServerPort = 9000

@@ -7,6 +7,8 @@ import zio.stream.ZStream.HaltStrategy
 import zio.stream.{Stream, ZStream}
 import zio.{Hub, IO, Ref, Scope, UIO, ZIO}
 
+import scala.collection.immutable.HashSet
+
 object ZSyncServiceImpl:
 
   private val HubCapacity = 1000
@@ -16,72 +18,45 @@ object ZSyncServiceImpl:
     for
       dataJournal <- Hub.sliding[DataRecord](HubCapacity)
       databaseRef <- Ref.make[Map[Int, DataRecord]](Map.empty)
-      activeSubscribersRef <- Ref.make[List[Ref[UserSubscriptionManager]]](List.empty)
+      globalSubscribersRef <- Ref.make[Set[Ref[HashSet[Int]]]](Set.empty)
+      externalData <- ExternalData.create(dataJournal, databaseRef)
     yield
-      ZSyncServiceImpl(dataJournal, databaseRef, activeSubscribersRef)
+      ZSyncServiceImpl(dataJournal, databaseRef, globalSubscribersRef, externalData)
 
 
 class ZSyncServiceImpl private(
                                 journal: Hub[DataRecord],
                                 databaseRef: Ref[Map[Int, DataRecord]],
-                                activeSubscribersRef: Ref[List[Ref[UserSubscriptionManager]]],
+                                globalSubscribersRef: Ref[Set[Ref[HashSet[Int]]]],
+                                externalData: ExternalData,
                               ) extends ZioSyncService.ZSyncService[AuthenticatedUser]:
 
   def subscribedIds: UIO[Set[Int]] =
     for
-      managerRefList <- activeSubscribersRef.get
-      managerList <- ZIO.collectAll(managerRefList.map(_.get))
+      globalSubscribers <- globalSubscribersRef.get
+      subscribedIdSets <- ZIO.collectAll(globalSubscribers.map(_.get))
     yield
-      managerList.foldLeft(Set.empty)(_ ++ _.getSubscriptions)
+      subscribedIdSets.flatten
 
   override def bidirectionalStream(request: Stream[StatusException, SyncRequest], context: AuthenticatedUser): Stream[StatusException, SyncResponse] =
     ZStream.unwrapScoped:
       for
-        subscriptionManager <- UserSubscriptionManager.create(context)
-        subscriptionManagerRef <- Ref.make(subscriptionManager)
-        updateStream <- createSubscriptionStream(subscriptionManagerRef)
-        _ <- activeSubscribersRef.update(_ :+ subscriptionManagerRef)
+        userSubscriptionsRef <- Ref.make(HashSet.empty[Int])
+        updateStream <- createUserSubscriptionStream(userSubscriptionsRef)
+        _ <- globalSubscribersRef.update(_ + userSubscriptionsRef)
       yield
         val requestStreams = request.flatMap:
           syncRequest =>
-            ZStream.unwrap:
-              subscriptionManagerRef.modify:
-                subscriptionManager =>
-
-                  import SyncResponse.State.{LOADING, NOT_SUBSCRIBED, UNCHANGED, UNSUBSCRIBED, UPDATED}
-
-                  val unsubscribedIds = if syncRequest.unsubscribes.isEmpty then Nil else
-                    if syncRequest.unsubscribes.headOption.exists(_.all) then subscriptionManager.removeSubscription(Nil)
-                    else subscriptionManager.removeSubscription(syncRequest.unsubscribes.map(_.id))
-
-                  val unsubscribedStream = ZStream.fromIterable:
-                    unsubscribedIds
-                      .withFilter((id, _) => syncRequest.subscribes.forall(_.id != id))
-                      .map:
-                        case (id, true) => SyncResponse.of(id, "", None, UNSUBSCRIBED)
-                        case (id, false) => SyncResponse.of(id, "", None, NOT_SUBSCRIBED)
-
-                  val subscribedStream = if syncRequest.subscribes.isEmpty then ZStream.empty else ZStream.fromIterableZIO:
-                    for
-                      dataMap <- databaseRef.get
-                    yield
-                      syncRequest.subscribes.map:
-                        subscribe =>
-                          val _ = subscriptionManager.subscribe(subscribe.id)
-                          dataMap.get(subscribe.id) match
-                            case Some(existing) if existing.etag == subscribe.previousEtag =>
-                              SyncResponse.of(subscribe.id, existing.etag, None, UNCHANGED)
-                            case Some(existing) =>
-                              SyncResponse.of(subscribe.id, existing.etag, Some(existing.data), UPDATED)
-                            case None =>
-                              SyncResponse.of(subscribe.id, "", None, LOADING)
-
-                  (unsubscribedStream ++ subscribedStream, subscriptionManager)
+            ZStream.fromIterableZIO:
+              databaseRef.get.flatMap:
+                dataMap => modifyUserSubscriptionsRef(syncRequest, userSubscriptionsRef, dataMap)
+              .tap:
+                responses => externalData.queueFetchAll(responses.withFilter(_.state == SyncResponse.State.LOADING).map(_.id))
 
         val endOfAllRequestsStream = ZStream
           .finalizer:
-            activeSubscribersRef.update:
-              _.filter(_ != subscriptionManagerRef)
+            globalSubscribersRef.update:
+              _.filter(_ != userSubscriptionsRef)
             *> ZIO.log(s"Finalizing user-${context.userId}")
           .drain
 
@@ -89,13 +64,50 @@ class ZSyncServiceImpl private(
 
   end bidirectionalStream
 
+  private def modifyUserSubscriptionsRef(syncRequest: SyncRequest, userSubscriptionsRef: Ref[HashSet[Int]], dataMap: Map[Int, DataRecord]): UIO[Seq[SyncResponse]] = {
+    userSubscriptionsRef.modify:
+      originalSubscribedIds =>
 
-  private def createSubscriptionStream(subscriptionManagerRef: Ref[UserSubscriptionManager]): ZIO[Scope, Nothing, Stream[StatusException, SyncResponse]] =
+        var varSubscribedIds: HashSet[Int] = originalSubscribedIds
+
+        import SyncResponse.State.{LOADING, NOT_SUBSCRIBED, UNCHANGED, UNSUBSCRIBED, UPDATED}
+
+        val unsubscribedIds =
+          if syncRequest.unsubscribes.isEmpty then Nil
+          else if syncRequest.unsubscribes.headOption.exists(_.all) then
+            varSubscribedIds = HashSet.empty
+            originalSubscribedIds.toSeq.map((_, true))
+          else
+            val (removed, remaining) = originalSubscribedIds.partition(id => syncRequest.unsubscribes.exists(_.id == id))
+            varSubscribedIds = remaining
+            removed.toSeq.map((_, true)) ++ syncRequest.unsubscribes.withFilter(o => !removed.contains(o.id)).map(o => (o.id, false))
+
+        val unsubscribedResponses = unsubscribedIds
+          .withFilter((id, _) => syncRequest.subscribes.forall(_.id != id))
+          .map:
+            case (id, true) => SyncResponse.of(id, "", None, UNSUBSCRIBED)
+            case (id, false) => SyncResponse.of(id, "", None, NOT_SUBSCRIBED)
+
+        val subscribedResponses = if syncRequest.subscribes.isEmpty then Nil else
+          syncRequest.subscribes.map:
+            subscribe =>
+              varSubscribedIds = varSubscribedIds.incl(subscribe.id)
+              dataMap.get(subscribe.id) match
+                case Some(existing) if existing.etag == subscribe.previousEtag =>
+                  SyncResponse.of(subscribe.id, existing.etag, None, UNCHANGED)
+                case Some(existing) =>
+                  SyncResponse.of(subscribe.id, existing.etag, Some(existing.data), UPDATED)
+                case None =>
+                  SyncResponse.of(subscribe.id, "", None, LOADING)
+
+        (unsubscribedResponses ++ subscribedResponses, varSubscribedIds)
+  }
+
+  private def createUserSubscriptionStream(userSubscriptionsRef: Ref[HashSet[Int]]): ZIO[Scope, Nothing, Stream[StatusException, SyncResponse]] =
     ZStream.fromHubScoped(journal, ZSyncServiceImpl.HubMaxChunkSize).map:
       _.filterZIO:
         dataRecord =>
-          subscriptionManagerRef.get.map:
-            _.isWatching(dataRecord.data)
+          userSubscriptionsRef.get.map(_.contains(dataRecord.data.id))
       .map:
         dataRecord => SyncResponse.of(dataRecord.data.id, dataRecord.etag, Some(dataRecord.data), SyncResponse.State.UPDATED)
 

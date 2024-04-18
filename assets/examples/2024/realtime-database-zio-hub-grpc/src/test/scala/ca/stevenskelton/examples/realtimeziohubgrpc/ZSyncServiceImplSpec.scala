@@ -10,6 +10,9 @@ import zio.test.junit.JUnitRunnableSpec
 import zio.test.{Live, Spec, TestEnvironment, assertTrue}
 import zio.{Scope, ZIO, durationInt}
 
+class ZSyncServiceImplSpec extends JUnitRunnableSpec:
+  override def spec = ZSyncServiceImplSpec.spec
+
 object ZSyncServiceImplSpec extends JUnitRunnableSpec:
 
   private val User1: UserId = 1
