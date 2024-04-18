@@ -135,12 +135,12 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     test("Iterate active subscriptions") {
       for
         clients <- BidirectionalTestClients.launch
-        subscribedIds0 <- clients.zSyncServiceImpl.subscribedIds
+        subscribedIds0 <- clients.zSyncServiceImpl.externalData.subscribedIds
         responses <- clients.responses(5, SubscribeActions *)
-        subscribedIds1 <- clients.zSyncServiceImpl.subscribedIds
+        subscribedIds1 <- clients.zSyncServiceImpl.externalData.subscribedIds
         _ <- clients.client3.requests.shutdown
         _ <- Live.live(ZIO.attempt("pause for shutdown").delay(100.milliseconds))
-        subscribedIds2 <- clients.zSyncServiceImpl.subscribedIds
+        subscribedIds2 <- clients.zSyncServiceImpl.externalData.subscribedIds
       yield assertTrue:
         subscribedIds0.isEmpty &&
           responses.size == 5 &&
