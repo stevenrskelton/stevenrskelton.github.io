@@ -19,7 +19,7 @@ queue, with ZIO fibers performing work and ZIO [Resource Management](https://zio
 forming the scheduling and supervision backbone. An efficient job queue can be written using ZIO constructs using
 surprisingly minimal amount of code.
 
-{% include table-of-contents.html height="100px" %}
+{% include table-of-contents.html height="400px" %}
 
 # ZIO Resources and Scope
 
@@ -72,26 +72,47 @@ class DistinctZioJobQueue[A] {
 
 }
 ```
+# ZIO Concurrency uses Fibers, Not Threads
 
 ## Using Semaphore for Concurrency
 
 The common approach to create concurrent collections in Java is using the JDK provided
 wrapper `Collections.synchronizedSet()`. This is a great mechanism for handling thread-safety, however ZIO concurrency
-operates with ZIO fibers, making this approach untenable. It is incorrect to block threads because this will block
-all fibers on that thread, causing performance degradation and possible deadlocks.
+operates with ZIO fibers making this approach untenable. It is incorrect to block threads at any time in ZIO outside of
+a `ZIO.blocking` scope because this will block all fibers using that thread. Fibers are the independent workers in ZIO,
+not threads, and blocking the system thread will cause performance degradation and possible deadlocks.
 
-The [ZIO Semaphore](https://zio.dev/reference/concurrency/semaphore/) is the recommended mechanism to provide method
-synchronization. Blocking execution is required even for read operations, as the `linkedHashSet.iterator` has a
-fail-fast approach should any of the underlying data be modified during iteration. While concurrent read operations 
-are possible, practically speaking there is rarely a reason to call `queued` or `inProgress`. The primary methods all
-require write operations, either producers writing new elements to the queue, or consumers modifying/removing elements.
+The [ZIO Semaphore](https://zio.dev/reference/concurrency/semaphore/) is the ZIO equivalent mechanism to provide 
+synchronization. It operates on the fiber level making it distinctly different from a JDK semaphore. The same 
+concurrency concerns are still valid while using fibers to access `LinkedHashSet` methods. All write operations
+must be synchronized, and all read operations can only parallelize with other read operations. Any read operation
+occurring during a write operation is vulnerable to a `ConcurrentModificationException` if it its `iterator` encounters 
+stale state.
 
-### Ref and Ref.Synchronized
+## Ref and Ref.Synchronized
 
-These are ZIO synchronization mechanisms, but are only suitable for immutable values. Our implementation uses a
-`mutable.LinkedHashSet` and there is no immutable collection available to us. A downside of most immutable collections
-is their hashCode computation. Typical immutable collections maintain equals/hashCode equivalence between two instances
-containing the same elements, and this is done by hashing the iteration over all elements' individual hashCodes. 
+In addition to semaphore, ZIO provides other concurrency mechanisms such as `Ref` and `STM`. 
+[Software Transactional Memory](https://zio.dev/reference/stm/) is a powerful construct however requiring specialized 
+implementations of common classes, making it worthy of its own external discussion. The `Ref` construct is a very 
+accessible mechanism in ZIO comparable to the `Atomic*` classes in the JDK, but at a higher level. A noticeable downside
+is it is only suitable for immutable references. Our implementation uses a mutable `LinkedHashSet`.
+
+### Ref and HashCodes 
+
+There are fundamental differences between the Java and Scala library implementations of `LinkedHashSet`.  
+
+#### java.util.LinkedHashSet
+
+The Java implementation of LinkedHashSet is a mutable implementation, and modifying it will not change its hashCode. 
+This means that wrapping it within either a `Ref` or `Synchronized` will cause all atomic guarantees to brake. The
+atomicity is implemented using hashCode verification to detect write conflicts rather than thread synchronization to
+the memory address. This is better for performance, but in this case it will effectivily behave as if there were no
+write management at all.
+
+#### scala.collection.mutable.LinkedHashSet
+
+The Scala implementation of LinkedHashSet is a mutable implementation, however it has a dynamically computed hashCode.
+This will allow it to function correctly within a Ref, but will incur a performance overhead during any writes.
 
 ```scala
 override def hashCode: Int = {
@@ -109,7 +130,12 @@ override def hashCode: Int = {
   MurmurHash3.unorderedHash(hashIterator, MurmurHash3.setSeed)
 }
 ```
-From a performance perspective this can be slower than fiber synchronizations when element counts are large.
+
+To align with immutable variants, the Scala Collections Library dynamically computes hashCode to allow equivalence based 
+on internal elements rather than by the parent class reference. Two iterables, represented using different class 
+implementations will be equal if they contain the same elements. This also means that they will be unequal if their 
+elements are different. This may be ideal for smaller number of elements, but it will begin to be more performant to 
+use a semaphore rather than a ref if the hashCode is slow.
 
 ### Blocking in ZIO
 
