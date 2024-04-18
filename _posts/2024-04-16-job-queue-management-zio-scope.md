@@ -47,7 +47,7 @@ img_style="padding: 10px; background-color: white; height: 320px;"
 - Popping from the queue is a blocking operation
   There is no need to poll the queue for new items, all consumers can stream items and fetch batches using thread-safe
   operations.
-- There is no [dead-letter output](https://en.wikipedia.org/wiki/Dead_letter_queue)
+- For simplicity, there is no [dead-letter output](https://en.wikipedia.org/wiki/Dead_letter_queue)
   Items which cannot be processed are returned to the queue by the Scope finalizer.
 
 ### Class Interface
@@ -90,7 +90,7 @@ must be synchronized, and all read operations can only parallelize with other re
 occurring during a write operation is vulnerable to a `ConcurrentModificationException` if it its `iterator` encounters
 stale state.
 
-## Ref and Ref.Synchronized
+## `Ref` and `Ref.Synchronized`
 
 In addition to semaphore, ZIO provides other concurrency mechanisms such as `Ref` and `STM`.
 [Software Transactional Memory](https://zio.dev/reference/stm/) is a powerful construct however requiring specialized
@@ -103,7 +103,7 @@ is it is only suitable for immutable references. Our implementation uses a mutab
 
 There are fundamental differences between the Java and Scala library implementations of `LinkedHashSet`.
 
-#### java.util.LinkedHashSet
+#### `java.util.LinkedHashSet`
 
 The Java implementation of LinkedHashSet is a mutable implementation, and modifying it will not change its hashCode.
 This means that wrapping it within either a `Ref` or `Synchronized` will cause all atomic guarantees to brake. The
@@ -111,7 +111,7 @@ atomicity is implemented using hashCode verification to detect write conflicts r
 the memory address. This is better for performance, but in this case it will effectivily behave as if there were no
 write management at all.
 
-#### scala.collection.mutable.LinkedHashSet
+#### `scala.collection.mutable.LinkedHashSet`
 
 The Scala implementation of LinkedHashSet is a mutable implementation, however it has a dynamically computed hashCode.
 This will allow it to function correctly within a Ref under certain conditions. By incurring a performance overhead
@@ -208,22 +208,123 @@ def takeUpToNQueued(max: Int):
 ```
 
 Implementation details of `add` / `addAll` are straight-forward queue enqueue operations. The return values of these
-may be immaterial for many use-cases. The example code emits enqueue outcomes to the server➤client stream, but for 
+may be immaterial for many use-cases. The example code emits enqueue outcomes to the server➤client stream, but for
 network efficiency these can be omitted.
 
 The `takeUpToNQueue` implementation is best examined in 3 parts:
+- taking from the queue
+- handling zero queue elements
+- creating a scope with finalizer
 
-### Taking from Queue
+
+# Creating Scope using `acquireReleaseExit`
+
+The `Scope` is a _trait_ and not typically defined as a named class. It should normally be anonymously constructed using
+one of the `acquireRelease` methods. There are variations, the simplest being `acquireRelease` where the _acquire_ is
+an action to get an `A` and _release_ is an action to perform on `A` to close it.
+
+This queue will require the more advanced `acquireReleaseExit` method, which has the same _acquire_ but
+the `A` as well as `Exit` are available to the _release_ as a tuple. ZIO `Exit` is the functional equivalent of the
+Scala `Try`, resolving into either a `Success` or `Failure`. Failures can be the result of either exceptions or
+interruptions.
+
+## Scope Interruption
+
+The other `Scope` creators `acquireReleaseInterruptible` and `acquireReleaseInterruptibleExit` need to be avoided here.
+They lack the ability to determine the queue elements which were part of the scope being closed. This ability is 
+critical in the correct operation of this queue (without very advanced logic being added). Because of this reason, the 
+`takeUpToNQueue` has been broken into 3 stages:
+
+
+### Taking N from Queue
 
 //TODO:
 
 ### Handling Zero Queue Elements
 
-//TODO:
+This is separated
 
 ### Creating Scope with Finalizer
 
-This is covered in the [Creating Scope using acquireReleaseExit](#creating-scope-using-acquirereleaseexit) section below.
+This is covered in the [Creating Scope using acquireReleaseExit](#creating-scope-using-acquirereleaseexit) section
+below.
+
+
+
+
+## Defining Scope `acquire` and `release` Finalizer
+
+```scala
+def acquire: ZIO[?, ?, Seq]
+//- obtain permits to LinkedHashSet
+//- iterate elements in queue collecting up to N unflagged
+//- flag elements as being taken
+//- if any elements unflagged call notifyActivity
+//- release permits
+```
+
+A line-by-line implementation of the Scope _acquire_ would be:
+
+```scala
+semaphore.withPermits(MaxReadFibers) {
+  val flagged = linkedHashSet.iterator
+    .filter(_.status == Status.Queued)
+    .take(max)
+    .map {
+      jobStatus =>
+        jobStatus.status = Status.InProgress
+        jobStatus.a
+    }
+  if (flagged.nonEmpty) notifyActivity.as(flagged) else ZIO.unit
+}
+```
+
+The finalizer will be outcome dependent, with a path for successful Scope closure and one for failure.
+
+```scala
+def release: (Seq, Exit[Any, Any]) => ZIO[?, Nothing, Any] = {
+  //if Seq has elements from the Queue:
+  //- obtain permits to LinkedHashSet
+  //- loop through all elements in Seq
+  //- if Exit was success:
+  //  - remove element from Queue
+  //- if Exit was failure:
+  //  - unflag element as taken in Queue
+  //- if any elements unflagged call notifyActivity
+  //- release permits
+}
+```
+
+A line-by-line implementation of the Scope _release_ finalizer would be:
+
+```scala
+(takeUpToNOption, exit) =>
+  takeUpToNOption.fold(false)(seq =>
+    semaphore.withPermits(MaxReadFibers) {
+      val activity = seq.foldLeft(false)((hasActivity, a) =>
+        exit match {
+          case Exit.Success(_) =>
+            val _ = linkedHashSet.remove(JobStatus(a, Status.InProgress))
+            hasActivity
+          case Exit.Failure(_) =>
+            val _ = linkedHashSet.find(_.a == a).foreach(_.status = Status.Queued)
+            true
+        })
+      if (activity) notifyActivity else ZIO.unit
+    }
+  )
+```
+
+## Closing Scope
+
+The mechanism to close the scope will depend on the actions performed by the consumer. The `Scope` is part of the ZIO
+effect's _environment_ and appears in the type signature until it is removed. Explicitly defining a scope boundary can
+be done using the `ZIO.scope` partial function. This is a closure around effect code, and drops it from the
+_environment_ type:
+
+```scala
+ZIO.scope(zio: ZIO[Scope, ?, ?]): ZIO[?, ?, ?]
+```
 
 ## Streaming Consumers
 
@@ -241,26 +342,6 @@ val consumer: ZStream[Any, Throwable, A] = ZStream.repeatZIO {
 }
 ```
 
-# Creating Scope using acquireReleaseExit
-
-//TODO:
-
-`acquireRelease`
-`acquireReleaseExit`
-`acquireReleaseInterruptible` `acquireReleaseInterruptibleExit`
-
-## Closing Scope
-
-Creating `ZIO[Scope, ?, ?]` removal of the `Scope` from the environment requires explicitly defining the boundary of the
-scope. This is commonly done using `ZIO.scope`, which is basically:
-
-```scala
-def scope(zio: => ZIO[Scope with R, E, A]): ZIO[R, E, A]
-```
-
-ZIO `Exit` is the functional equivalent of the Scala `Try`, resolving into either a `Success` or `Failure`. Failures
-can be the result of either exceptions or interruptions.
-
 //TODO:
 
 # Element Uniqueness using equals / hashCode
@@ -277,6 +358,8 @@ private enum Status {
 To attach a `status` field to each entry, we can wrap entries with a `JobStatus` class, but overwrite the
 `equals` and `hashCode` fields such that they will only consider the queued item, and not the current status. This
 ensures that trying to add a duplicate entry will be blocked regardless of the existing item's status.
+
+## Feature Extensions using JobStatus Fields
 
 The `JobStatus` class could be expanded to support additional queue functionality. Queue extensions typically include
 performance metrics: queued time, in-progress time, and operational metrics: add-collision count and failure-count from
