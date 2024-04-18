@@ -148,7 +148,7 @@ writes, as well as implement a gate around simultaneous read/write operations. T
 but optimizing for fast reads is a more generally acceptable approach, and for these reasons our queue implementation
 is better off using a semaphore directly.
 
-### Blocking in ZIO
+# Blocking in ZIO
 
 The primary mechanism to block ZIO fibers is by mapping from `await` on a `Promise`. When a second fiber completes
 the promise using `succeed` the first fiber will unblock and resume execution. Within our queue, all consumers can await
@@ -171,7 +171,7 @@ The `notifyActivity` method will complete the current promise, and replace it wi
 to `notifyActivity` are within the `semaphore` write permit so access is guaranteed to be exclusive to the fiber,
 allowing this to be a simple `var` instead of a `Ref`.
 
-### Queue Write Operations
+## Queue Write Operations
 
 The queue can be modified in 3 ways: elements added, elements removed, and elements undergoing status change. These map
 to `add`/`addAll` calls and `Scope` creation / finalization. Exclusive access to the queue is enforced by reserving all
@@ -213,19 +213,19 @@ network efficiency these can be omitted.
 
 The `takeUpToNQueue` implementation is best examined in 3 parts:
 
-#### Reading from queue
+### Taking from Queue
 
 //TODO:
 
-#### Handling zero queue elements
+### Handling Zero Queue Elements
 
 //TODO:
 
-#### Creating Scope with Finalizer
+### Creating Scope with Finalizer
 
 This is covered in the [Creating Scope using acquireReleaseExit](#creating-scope-using-acquirereleaseexit) section below.
 
-### Streaming Consumers
+## Streaming Consumers
 
 Typical consumers would adopt a stream pattern. As the queue releases `NonEmptyChunk` elements within a `Scope`,
 consumers should opt to complete the scope as soon as possible, however long-running scope have very minimal impact on
@@ -241,7 +241,7 @@ val consumer: ZStream[Any, Throwable, A] = ZStream.repeatZIO {
 }
 ```
 
-## Creating Scope using acquireReleaseExit
+# Creating Scope using acquireReleaseExit
 
 //TODO:
 
@@ -249,7 +249,7 @@ val consumer: ZStream[Any, Throwable, A] = ZStream.repeatZIO {
 `acquireReleaseExit`
 `acquireReleaseInterruptible` `acquireReleaseInterruptibleExit`
 
-#### Closing Scope
+## Closing Scope
 
 Creating `ZIO[Scope, ?, ?]` removal of the `Scope` from the environment requires explicitly defining the boundary of the
 scope. This is commonly done using `ZIO.scope`, which is basically:
@@ -263,7 +263,7 @@ can be the result of either exceptions or interruptions.
 
 //TODO:
 
-## Element Uniqueness using equals / hashCode
+# Element Uniqueness using equals / hashCode
 
 The basic requirement for this queue will be able to flag entries as either queued, or having been released within a
 scope by a consumer.
@@ -293,7 +293,7 @@ private class JobStatus[A](val a: A, var status: Status) {
 }
 ```
 
-### Queue Class and Private Members
+# Queue Class and Private Members
 
 ```scala
 class UniqueJobQueue[A](
