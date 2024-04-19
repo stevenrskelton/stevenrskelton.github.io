@@ -40,6 +40,11 @@ within a GitHub Action, so transferring files during CI/CD is a practical workar
 article [Data Transfers and Egress within a GitHub Action]({% post_url
 2024-01-24-data-transfers-egress-github-actions %})  
 
+{%
+include figure image_path="/assets/images/2022/04-20/github_egress.svg"
+caption="Egress alternatives with GitHub CI/CD using GitHub Actions and GitHub Packages"
+img_style="padding: 10px; background-color: white; height: 320px;"
+%}
 
 # GitHub Packages Maven via URL
 
@@ -48,7 +53,7 @@ article [Data Transfers and Egress within a GitHub Action]({% post_url
 Maven operates through simple HTTP requests, and this article will document these calls such that they can be made
 without Maven installed, and directly made using `wget` or `curl`.
 
-_(All URLs in this document require an `Authorization: token GITHUB_TOKEN` HTTP header)_
+_All URLs in this document require an `Authorization: token GITHUB_TOKEN` HTTP header_
 
 Maven packaging defines 3 fields for every package:
 
