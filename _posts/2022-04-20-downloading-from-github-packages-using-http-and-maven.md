@@ -297,7 +297,7 @@ mvn dependency:copy \
   --global-settings settings.xml
 ```
 
-The benefit here is the input parameter for a separate `settings.xml`. This file can be used to contain Maven 
+The benefit here is the input parameter for a separate _settings.xml_. This file can be used to contain Maven 
 credentials to repository, useful if the `wget` or `curl` command won't have access to the `GITHUB_TOKEN` or if this
 command will be executed within a GitHub Action similar to how [Scala SBT Publishing to GitHub Packages]({% post_url
 2022-04-17-scala-sbt-publishing-to-github-packages %}) publishes Maven artifacts using `mvn deploy:deploy-file`.
@@ -335,7 +335,7 @@ transfer limits for private repos with free accounts. However, use-cases exist f
 such as _pom_, _md5_, _sha1_ and _maven-metadata.xml_.
 
 The _md5_ and _sha1_ are meant for use in integrity validation. In a multi-hop or cloud situation it is quite possible
-intermediate storage (such as S3) poses risks as an attack vector, opportunity for partial transfers, or file
+intermediate storage (such as AWS S3) poses risks as an attack vector, opportunity for partial transfers, or file
 corruption. Even if GitHub servers and the final deployment server are secure, if artifacts pass though a layer with
 security administered by a separate authority mistakes can happen. A final _md5_ comparison to the GitHub
 Packages hosted md5 file can ensure the correct artifacts were properly copied with little complexity or performance
