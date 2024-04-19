@@ -33,8 +33,8 @@ with frequent releases.
 
 ## Bypassing GitHub Transfer Limits
 
-An objective to bypassing transfer limits would be to reduce Maven traffic to GitHub Packages in favour of traffic
-occurring during a GitHub Action. This is practically applied in a separate
+GitHub Packages has restrictive transfer limits, but alternative means exist. GitHub will allow unlimited transfers
+within a GitHub Action, so transferring files during CI/CD is a practical workaround. This is written about in the
 article [Data Transfers and Egress within a GitHub Action]({% post_url
 2024-01-24-data-transfers-egress-github-actions %})
 
