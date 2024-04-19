@@ -15,7 +15,7 @@ for private repositories.
 
 {% include table-of-contents.html height="400px" %}
 
-## Private Repository Free-Tier Limits
+# Private Repository Free-Tier Limits
 
 GitHub has separate pricing tiers (or caps) for private repositories. Public repos are generally free for virtually all
 actions, while private repos generally have a free limited use, and beyond the limits requests are blocked unless paid
@@ -25,18 +25,21 @@ for. The private tier limits are currently:
 |:----------------:|:------------------------------------:|:--------------------------------:|
 |      500MB       |              Unlimited               |          1GB per Month           |
 
+## Artifact Caching to Reduce Transfers
+
 Depending on the number of developers, it is usually best practice to run a local Maven repository proxy such as
 [JFrog Artifactory](https://jfrog.com/artifactory/)
 or [Sonotype Nexus](https://www.sonatype.com/products/sonatype-nexus-repository) which will download files once and
-cache subsequent requests. This will minimize the metered transfers, but it is still quite easy to exceed 1GB/month
+cache subsequent requests. This will minimize the metered transfers, but it remains easy to exceed 1GB/month
 with frequent releases.
 
-## Bypassing GitHub Transfer Limits
+## Bypassing Transfer Limits
 
 GitHub Packages has restrictive transfer limits, but alternative means exist. GitHub will allow unlimited transfers
 within a GitHub Action, so transferring files during CI/CD is a practical workaround. This is written about in the
 article [Data Transfers and Egress within a GitHub Action]({% post_url
-2024-01-24-data-transfers-egress-github-actions %})
+2024-01-24-data-transfers-egress-github-actions %})  
+
 
 # GitHub Packages Maven via URL
 
