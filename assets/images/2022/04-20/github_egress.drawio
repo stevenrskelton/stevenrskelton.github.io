@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-04-19T18:39:03.424Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:125.0) Gecko/20100101 Firefox/125.0" etag="XNX_ydRRK5bEiRdns7U2" version="24.2.5" type="github">
+<mxfile host="app.diagrams.net" modified="2024-04-19T18:46:50.621Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:125.0) Gecko/20100101 Firefox/125.0" etag="46gTti4mzJJOpkft1Uvf" version="24.2.5" type="github">
   <diagram name="Page-1" id="1pSw0mMazfSblqHfW_n3">
     <mxGraphModel dx="1105" dy="721" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -14,7 +14,7 @@
           <mxGeometry x="300" y="30" width="120" height="120" as="geometry" />
         </mxCell>
         <mxCell id="poqatU7U9Uyuya-eAcOq-4" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://speedmedia.jfrog.com/08612fe1-9391-4cf3-ac1a-6dd49c36b276/https://media.jfrog.com/wp-content/uploads/2017/11/20133118/Maven-2.png;" vertex="1" parent="poqatU7U9Uyuya-eAcOq-8">
-          <mxGeometry x="315.43" y="90" width="89.14" height="40" as="geometry" />
+          <mxGeometry x="315.43" y="87" width="89.14" height="40" as="geometry" />
         </mxCell>
         <mxCell id="poqatU7U9Uyuya-eAcOq-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;sketch=1;curveFitting=1;jiggle=2;flowAnimation=0;strokeWidth=3;fillColor=#d5e8d4;strokeColor=#000000;" edge="1" parent="poqatU7U9Uyuya-eAcOq-8" source="poqatU7U9Uyuya-eAcOq-12" target="poqatU7U9Uyuya-eAcOq-10">
           <mxGeometry relative="1" as="geometry" />
@@ -47,12 +47,12 @@
           <mxGeometry x="300" y="30" width="120" height="120" as="geometry" />
         </mxCell>
         <mxCell id="poqatU7U9Uyuya-eAcOq-41" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://speedmedia.jfrog.com/08612fe1-9391-4cf3-ac1a-6dd49c36b276/https://media.jfrog.com/wp-content/uploads/2017/11/20133118/Maven-2.png;" vertex="1" parent="poqatU7U9Uyuya-eAcOq-38">
-          <mxGeometry x="315.43" y="90" width="89.14" height="40" as="geometry" />
+          <mxGeometry x="315.43" y="87" width="89.14" height="40" as="geometry" />
         </mxCell>
         <mxCell id="poqatU7U9Uyuya-eAcOq-42" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;sketch=1;curveFitting=1;jiggle=2;flowAnimation=0;strokeWidth=3;fillColor=#d5e8d4;strokeColor=#000000;" edge="1" parent="poqatU7U9Uyuya-eAcOq-38" source="poqatU7U9Uyuya-eAcOq-43" target="poqatU7U9Uyuya-eAcOq-40">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="poqatU7U9Uyuya-eAcOq-58" value="Backup" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontColor=#000000;labelBackgroundColor=none;fontStyle=1;fontSize=14;spacingTop=12;textShadow=0;" vertex="1" connectable="0" parent="poqatU7U9Uyuya-eAcOq-42">
+        <mxCell id="poqatU7U9Uyuya-eAcOq-58" value="Backup" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontColor=#000000;labelBackgroundColor=none;fontStyle=0;fontSize=12;spacingTop=12;textShadow=0;" vertex="1" connectable="0" parent="poqatU7U9Uyuya-eAcOq-42">
           <mxGeometry x="-0.1" y="-4" relative="1" as="geometry">
             <mxPoint x="4" y="-24" as="offset" />
           </mxGeometry>
@@ -78,9 +78,9 @@
         <mxCell id="poqatU7U9Uyuya-eAcOq-51" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#990000;sketch=1;curveFitting=1;jiggle=2;strokeWidth=3;dashed=1;dashPattern=1 4;" edge="1" parent="1" source="poqatU7U9Uyuya-eAcOq-52" target="poqatU7U9Uyuya-eAcOq-40">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="poqatU7U9Uyuya-eAcOq-80" value="Not" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#990000;" vertex="1" connectable="0" parent="poqatU7U9Uyuya-eAcOq-51">
+        <mxCell id="poqatU7U9Uyuya-eAcOq-80" value="Not Loaded" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;fontColor=#990000;labelBackgroundColor=none;" vertex="1" connectable="0" parent="poqatU7U9Uyuya-eAcOq-51">
           <mxGeometry x="-0.54" y="1" relative="1" as="geometry">
-            <mxPoint x="19" y="-3" as="offset" />
+            <mxPoint x="39" y="-3" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="poqatU7U9Uyuya-eAcOq-52" value="&lt;div&gt;&lt;font style=&quot;font-size: 16px;&quot;&gt;Self-Hosted&lt;/font&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;horizontal=1;verticalAlign=top;spacingTop=16;fillColor=none;" vertex="1" parent="1">
@@ -92,18 +92,23 @@
         <mxCell id="poqatU7U9Uyuya-eAcOq-72" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontColor=#82B366;labelBackgroundColor=none;sketch=1;curveFitting=1;jiggle=2;strokeWidth=3;fillColor=#d5e8d4;strokeColor=#82b366;dashed=1;dashPattern=1 4;" edge="1" parent="1" source="poqatU7U9Uyuya-eAcOq-54" target="poqatU7U9Uyuya-eAcOq-52">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
+        <mxCell id="poqatU7U9Uyuya-eAcOq-82" value="Pull Deployment" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;labelBackgroundColor=none;fontColor=#82B366;spacingLeft=-10;" vertex="1" connectable="0" parent="poqatU7U9Uyuya-eAcOq-72">
+          <mxGeometry y="-3" relative="1" as="geometry">
+            <mxPoint x="-1" y="-13" as="offset" />
+          </mxGeometry>
+        </mxCell>
         <mxCell id="poqatU7U9Uyuya-eAcOq-54" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Dev&lt;br&gt;Environment&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;horizontal=1;verticalAlign=top;spacingTop=8;fillColor=none;" vertex="1" parent="1">
-          <mxGeometry x="690" y="150" width="120" height="120" as="geometry" />
+          <mxGeometry x="650" y="150" width="120" height="120" as="geometry" />
         </mxCell>
         <mxCell id="poqatU7U9Uyuya-eAcOq-55" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;strokeWidth=1;align=center;outlineConnect=0;dashed=0;outlineConnect=0;shape=mxgraph.aws3d.dataServer;strokeColor=#5E5E5E;aspect=fixed;" vertex="1" parent="1">
-          <mxGeometry x="700.86" y="215.5" width="38.29" height="33" as="geometry" />
+          <mxGeometry x="660.86" y="215.5" width="38.29" height="33" as="geometry" />
         </mxCell>
-        <mxCell id="poqatU7U9Uyuya-eAcOq-56" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeWidth=3;sketch=1;curveFitting=1;jiggle=2;fillColor=#d5e8d4;strokeColor=#82b366;" edge="1" parent="1" source="poqatU7U9Uyuya-eAcOq-43" target="poqatU7U9Uyuya-eAcOq-54">
+        <mxCell id="poqatU7U9Uyuya-eAcOq-56" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeWidth=3;sketch=1;curveFitting=1;jiggle=2;fillColor=#d5e8d4;strokeColor=#82b366;curved=1;" edge="1" parent="1" source="poqatU7U9Uyuya-eAcOq-43" target="poqatU7U9Uyuya-eAcOq-54">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="poqatU7U9Uyuya-eAcOq-76" value="Push Deployment" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontColor=#82B366;fontSize=12;" vertex="1" connectable="0" parent="poqatU7U9Uyuya-eAcOq-56">
+        <mxCell id="poqatU7U9Uyuya-eAcOq-76" value="Push Deployment" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontColor=#82B366;fontSize=12;labelBackgroundColor=none;" vertex="1" connectable="0" parent="poqatU7U9Uyuya-eAcOq-56">
           <mxGeometry x="0.36" y="-2" relative="1" as="geometry">
-            <mxPoint as="offset" />
+            <mxPoint x="-57" y="-25" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="poqatU7U9Uyuya-eAcOq-57" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.75;exitY=0;exitDx=0;exitDy=0;strokeWidth=3;fillColor=#d5e8d4;strokeColor=#82B366;sketch=1;curveFitting=1;jiggle=2;curved=1;" edge="1" parent="1" source="poqatU7U9Uyuya-eAcOq-43">
@@ -115,23 +120,23 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="poqatU7U9Uyuya-eAcOq-79" value="Pre-cached" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontColor=#82B366;fontSize=12;" vertex="1" connectable="0" parent="poqatU7U9Uyuya-eAcOq-57">
+        <mxCell id="poqatU7U9Uyuya-eAcOq-79" value="Pre-loaded" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontColor=#82B366;fontSize=12;labelBackgroundColor=none;" vertex="1" connectable="0" parent="poqatU7U9Uyuya-eAcOq-57">
           <mxGeometry x="0.2144" y="3" relative="1" as="geometry">
             <mxPoint x="-2" y="-27" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="poqatU7U9Uyuya-eAcOq-61" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;strokeWidth=1;align=center;outlineConnect=0;dashed=0;outlineConnect=0;shape=mxgraph.aws3d.dataServer;strokeColor=#5E5E5E;aspect=fixed;" vertex="1" parent="1">
-          <mxGeometry x="760.86" y="215.5" width="38.29" height="33" as="geometry" />
+          <mxGeometry x="720.86" y="215.5" width="38.29" height="33" as="geometry" />
         </mxCell>
         <mxCell id="poqatU7U9Uyuya-eAcOq-60" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;strokeWidth=1;align=center;outlineConnect=0;dashed=0;outlineConnect=0;shape=mxgraph.aws3d.dataServer;strokeColor=#5E5E5E;aspect=fixed;" vertex="1" parent="1">
-          <mxGeometry x="731.72" y="215.5" width="38.29" height="33" as="geometry" />
+          <mxGeometry x="691.72" y="215.5" width="38.29" height="33" as="geometry" />
         </mxCell>
         <mxCell id="poqatU7U9Uyuya-eAcOq-73" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;strokeColor=#990000;strokeWidth=3;sketch=1;curveFitting=1;jiggle=2;curved=1;" edge="1" parent="1" source="poqatU7U9Uyuya-eAcOq-68" target="poqatU7U9Uyuya-eAcOq-10">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="poqatU7U9Uyuya-eAcOq-78" value="Pull Deployment" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontColor=#990000;fontSize=12;" vertex="1" connectable="0" parent="poqatU7U9Uyuya-eAcOq-73">
+        <mxCell id="poqatU7U9Uyuya-eAcOq-78" value="Pull Deployment" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontColor=#990000;fontSize=12;labelBackgroundColor=none;" vertex="1" connectable="0" parent="poqatU7U9Uyuya-eAcOq-73">
           <mxGeometry x="-0.8054" y="6" relative="1" as="geometry">
-            <mxPoint as="offset" />
+            <mxPoint x="-56" y="-3" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="poqatU7U9Uyuya-eAcOq-68" value="&lt;font style=&quot;font-size: 16px;&quot;&gt;Dev&lt;br&gt;Environment&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;sketch=1;curveFitting=1;jiggle=2;horizontal=1;verticalAlign=top;spacingTop=8;fillColor=none;" vertex="1" parent="1">
