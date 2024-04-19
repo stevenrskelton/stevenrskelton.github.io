@@ -36,15 +36,16 @@ with frequent releases.
 ## Bypassing Transfer Limits
 
 GitHub Packages has restrictive transfer limits, but alternative means exist. GitHub will allow unlimited transfers
-within a GitHub Action, so transferring files during CI/CD is a practical workaround. This is written about in the
-article [Data Transfers and Egress within a GitHub Action]({% post_url
-2024-01-24-data-transfers-egress-github-actions %})  
+within a GitHub Action, so transferring files during CI/CD is a practical workaround.
 
 {%
 include figure image_path="/assets/images/2022/04-20/github_egress.svg"
 caption="Egress alternatives with GitHub CI/CD using GitHub Actions and GitHub Packages"
-img_style="padding: 10px; background-color: white; height: 320px;"
+img_style="padding: 10px; background-color: white;"
 %}
+
+This is written about in the article [Data Transfers and Egress within a GitHub Action]({% post_url
+2024-01-24-data-transfers-egress-github-actions %})
 
 # GitHub Packages Maven via URL
 
