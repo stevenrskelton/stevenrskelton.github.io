@@ -45,7 +45,8 @@ img_style="padding: 10px; background-color: white;"
 %}
 
 This is written about in the article [Data Transfers and Egress within a GitHub Action]({% post_url
-2024-01-24-data-transfers-egress-github-actions %})
+2024-01-24-data-transfers-egress-github-actions %})  
+
 
 # GitHub Packages Maven via URL
 
