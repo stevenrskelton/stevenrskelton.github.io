@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2024-04-19T18:37:46.170Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:125.0) Gecko/20100101 Firefox/125.0" etag="3A1tJL9Ru25htXhNHHPI" version="24.2.5" type="github">
+<mxfile host="app.diagrams.net" modified="2024-04-19T18:39:03.424Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:125.0) Gecko/20100101 Firefox/125.0" etag="XNX_ydRRK5bEiRdns7U2" version="24.2.5" type="github">
   <diagram name="Page-1" id="1pSw0mMazfSblqHfW_n3">
     <mxGraphModel dx="1105" dy="721" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -146,11 +146,11 @@
         <mxCell id="poqatU7U9Uyuya-eAcOq-71" value="" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;strokeWidth=1;align=center;outlineConnect=0;dashed=0;outlineConnect=0;shape=mxgraph.aws3d.dataServer;strokeColor=#5E5E5E;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="231.72000000000003" y="144" width="38.29" height="33" as="geometry" />
         </mxCell>
-        <mxCell id="poqatU7U9Uyuya-eAcOq-74" value="Expensive use of GitHub Packages egress" style="text;html=1;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontColor=#990000;fontStyle=2;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="217.5" y="520" width="280.5" height="30" as="geometry" />
+        <mxCell id="poqatU7U9Uyuya-eAcOq-74" value="Expensive use of GitHub Packages egress" style="text;html=1;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontColor=#990000;fontStyle=3;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="160" y="520" width="338" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="poqatU7U9Uyuya-eAcOq-75" value="&lt;font style=&quot;font-size: 14px;&quot; color=&quot;#82b366&quot;&gt;Inexpensive use of GitHub Actions egress&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontColor=#990000;fontStyle=2;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="717.5" y="520" width="280.5" height="30" as="geometry" />
+        <mxCell id="poqatU7U9Uyuya-eAcOq-75" value="&lt;font color=&quot;#82b366&quot; style=&quot;font-size: 14px;&quot;&gt;Inexpensive use of GitHub Actions egress&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=top;whiteSpace=wrap;rounded=0;fontColor=#990000;fontStyle=3;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="660" y="520" width="338" height="30" as="geometry" />
         </mxCell>
         <mxCell id="poqatU7U9Uyuya-eAcOq-81" value="" style="endArrow=none;html=1;rounded=0;" edge="1" parent="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
