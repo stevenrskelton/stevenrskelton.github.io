@@ -90,7 +90,7 @@ must be synchronized, and all read operations can only parallelize with other re
 occurring during a write operation is vulnerable to a `ConcurrentModificationException` if it its `iterator` encounters
 stale state.
 
-## `Ref` and `Ref.Synchronized`
+## Ref and Ref.Synchronized
 
 In addition to semaphore, ZIO provides other concurrency mechanisms such as `Ref` and `STM`.
 [Software Transactional Memory](https://zio.dev/reference/stm/) is a powerful construct however requiring specialized
@@ -99,11 +99,11 @@ accessible mechanism in ZIO comparable to the `AtomicReference` class in the JDK
 downside
 is it is only suitable for immutable references. Our implementation uses a mutable `LinkedHashSet`.
 
-### Ref and HashCodes
+### Ref and Hash Codes
 
 There are fundamental differences between the Java and Scala library implementations of `LinkedHashSet`.
 
-#### `java.util.LinkedHashSet`
+#### java.util.LinkedHashSet
 
 The Java implementation of LinkedHashSet is a mutable implementation, and modifying it will not change its hashCode.
 This means that wrapping it within either a `Ref` or `Synchronized` will cause all atomic guarantees to brake. The
@@ -111,7 +111,7 @@ atomicity is implemented using hashCode verification to detect write conflicts r
 the memory address. This is better for performance, but in this case it will effectivily behave as if there were no
 write management at all.
 
-#### `scala.collection.mutable.LinkedHashSet`
+#### scala.collection.mutable.LinkedHashSet
 
 The Scala implementation of LinkedHashSet is a mutable implementation, however it has a dynamically computed hashCode.
 This will allow it to function correctly within a Ref under certain conditions. By incurring a performance overhead
@@ -157,9 +157,6 @@ call `notifyActivity` to complete the promise. The unblocked consumers are in a 
 until the queue is empty, initiating another blocked state.
 
 ```scala
-/**
- * Signal all consumers to recheck the queue
- */
 private def notifyActivity: UIO[Unit] =
   for {
     resetPromise <- Promise.make[Nothing, Unit]
@@ -217,7 +214,7 @@ The `takeUpToNQueue` implementation is best examined in 3 parts:
 - creating a scope with finalizer
 
 
-# Creating Scope using `acquireReleaseExit`
+# Creating Scope using acquireReleaseExit
 
 The `Scope` is a _trait_ and not typically defined as a named class. It should normally be anonymously constructed using
 one of the `acquireRelease` methods. There are variations, the simplest being `acquireRelease` where the _acquire_ is
@@ -252,7 +249,7 @@ below.
 
 
 
-## Defining Scope `acquire` and `release` Finalizer
+## Defining Scope acquire and release Finalizer
 
 ```scala
 def acquire: ZIO[?, ?, Seq]
@@ -333,10 +330,10 @@ consumers should opt to complete the scope as soon as possible, however long-run
 the queue as it is already optimized minimal memory consumption and internal iteration performance.
 
 ```scala
-val consumer: ZStream[Any, Throwable, A] = ZStream.repeatZIO {
+val consumer: ZStream[Any, Throwable, T] = ZStream.repeatZIO {
   ZIO.scoped {
     queue.takeUpToNQueued(?).map {
-      nonEmptyChunk => a
+      nonEmptyChunk => ??? //function to create Ts
     }
   }
 }

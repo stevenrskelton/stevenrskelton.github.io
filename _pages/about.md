@@ -6,7 +6,7 @@ title: "About"
   <h1> 🇨🇦&nbsp;Toronto, Canada</h1>
 
   <p>
-    <strong>Principal Engineer</strong><br>
+    <strong style="font-size:larger;">Principal Engineer</strong><br>
     Currently at a global digital-transformation consulting company
   </p>
 
@@ -37,7 +37,7 @@ title: "About"
 
   <p>
     <strong>3 years</strong> short engagement consulting across a diverse range of e-commerce, 
-    <wbr>customer data aggregation and non-for-profit.
+    <wbr>customer data analytics and non-for-profit.
   </p>
 </div>
 

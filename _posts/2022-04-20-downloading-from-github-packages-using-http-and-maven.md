@@ -7,13 +7,13 @@ tags:
   - GitHub
 ---
 
-*GitHub Packages* is a Maven compatible repository accessible outside of GitHub. Artifacts can be downloaded
-using Maven or directly through the GitHub web interface. There is no REST API available to search *GitHub Packages*
+GitHub Packages is a Maven compatible repository accessible outside of GitHub. Artifacts can be downloaded
+using Maven or directly through the GitHub web interface. There is no REST API available to search GitHub Packages
 so this article walks through the URLs exposed for Maven which can be used to create an API with only HTTP commands.
 The URLs to browse packages and download files will be covered, as well as steps to more effectively use the free tier
 for private repositories.
 
-{% include table-of-contents.html height="200px" %}
+{% include table-of-contents.html height="400px" %}
 
 ## Private Repository Free-Tier Limits
 
@@ -63,7 +63,7 @@ Maven exposes XML files as REST URLs, and the GitHub Packages artifact URLs have
 https://maven.pkg.github.com/{githubUser}/{githubRepository}/{groupId}/{artifactId}/maven-metadata.xml
 ```
 
-For example, a groupId of *ca.stevenskelton* and artifactId of *http-maven-receiver-assembly* would result in the URL:
+For example, a groupId of _ca.stevenskelton_ and artifactId of _http-maven-receiver-assembly_ has the URL:
 ```shell
 https://maven.pkg.github.com/stevenrskelton/http-maven-receiver/ca/stevenskelton/http-maven-receiver-assembly/maven-metadata.xml
 ```
@@ -220,23 +220,23 @@ For `SNAPSHOT` releases, the version number used to download file references the
 
 ## Downloading Artifacts using wget
 
-The direct download URL for all Maven artifacts (`jar`, `sha1`, `md5`, `pom`) are generated using the `version` field
-from `maven-metadata.xml`, or in the case of `SNAPSHOT` releases, the `value` field from `version/maven-metadata.xml`.
+The direct download URL for all Maven artifacts (_jar_, _sha1_, _md5_, _pom_) are generated using the `version` field
+from _maven-metadata.xml_, or in the case of `SNAPSHOT` releases, the `value` field from _version/maven-metadata.xml_.
 
-The `wget` command for a `jar` would be of the form:
+The `wget` command for a _jar_ is of the form:
 
 ```shell
 wget -d --header="Authorization: token {GITHUB_TOKEN}" \
  https://maven.pkg.github.com/{githubUser}/{githubRepository}/{groupId}/{artifactId}/{version}/{artifactId}-{value}.jar
 ```
 
-So for a `1.0.18` release it would be:
+So for a `1.0.18` release the wget command is:
 ```shell
 wget -d --header="Authorization: token {GITHUB_TOKEN}" \
  https://maven.pkg.github.com/stevenrskelton/http-maven-receiver/ca/stevenskelton/http-maven-receiver/1.0.18/http-maven-receiver-assembly-1.0.18.jar
 ```
 
-These URLs are visible in GitHub Action logs when artifacts are published to GitHub Packages using Maven.
+These URLs are visible in GitHub Action logs whenever artifacts are published to GitHub Packages using Maven.
 
 ## GitHub API Does Not Expose Download URLs
 
@@ -322,12 +322,12 @@ command will be executed within a GitHub Action similar to how [Scala SBT Publis
 
 There are costs associated with outbound traffic - either directly paid for GitHub Pro accounts or indirectly with 1GB
 transfer limits for private repos with free accounts. However, use-cases exist for the external access of smaller files
-such as `pom`, `md5`, `sha1` and `maven-metadata.xml`.
+such as _pom_, _md5_, _sha1_ and _maven-metadata.xml_.
 
-The `md5` and `sha1` are meant for use in integrity validation. In a multi-hop or cloud situation it is quite possible
+The _md5_ and _sha1_ are meant for use in integrity validation. In a multi-hop or cloud situation it is quite possible
 intermediate storage (such as S3) poses risks as an attack vector, opportunity for partial transfers, or file
 corruption. Even if GitHub servers and the final deployment server are secure, if artifacts pass though a layer with
-security administered by a separate authority mistakes can happen. A final `md5` comparison to the GitHub
+security administered by a separate authority mistakes can happen. A final _md5_ comparison to the GitHub
 Packages hosted md5 file can ensure the correct artifacts were properly copied with little complexity or performance
 overhead.
 
