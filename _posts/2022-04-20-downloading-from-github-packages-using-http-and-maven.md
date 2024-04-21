@@ -7,18 +7,19 @@ tags:
   - GitHub
 ---
 
-GitHub Packages is a Maven compatible repository accessible outside of GitHub. Artifacts can be downloaded
-using Maven or directly through the GitHub web interface. There is no REST API available to search GitHub Packages
-so this article walks through the URLs exposed for Maven which can be used to create an API with only HTTP commands.
-The URLs to browse packages and download files will be covered, as well as steps to more effectively use the free tier
-for private repositories.
+GitHub Packages is a Maven compatible repository accessible outside of GitHub. It serves as the code repository used in
+Java project compilation both on workstations and within a CI/CD pipeline, as well as allowing manual file downloads
+through the GitHub web interface. Because it is meant for only these 2 purposes there is no REST API available making
+custom integrations more difficult than need be. This article documents the URLs exposed through Maven which can be
+used to create an API of simple HTTP commands. URLs to browse packages and download files will be covered, as well as
+steps to more effectively use free tier resources allowed on private repositories.
 
 {% include table-of-contents.html height="400px" %}
 
 # Private Repository Free-Tier Limits
 
 GitHub has separate pricing tiers (or caps) for private repositories. Public repos are generally free for virtually all
-actions, while private repos generally have a free limited use, and beyond the limits requests are blocked unless paid
+actions, while private repos generally have a free limited use, and beyond those limits requests are blocked unless paid
 for. The private tier limits are currently:
 
 | Artifact Storage | Data transfer within a GitHub Action | Maven traffic to GitHub Packages |
@@ -27,15 +28,19 @@ for. The private tier limits are currently:
 
 ## Artifact Caching to Reduce Transfers
 
-Depending on the number of developers, it is usually best practice to run a local Maven repository proxy such as
+Unless paying for managed services is within budget, best practice is to run a local Maven repository proxy such as
 [JFrog Artifactory](https://jfrog.com/artifactory/)
-or [Sonotype Nexus](https://www.sonatype.com/products/sonatype-nexus-repository) which will download files once and
-cache subsequent requests. This will minimize the metered transfers, but it remains easy to exceed 1GB/month
-with frequent releases.
+or [Sonotype Nexus](https://www.sonatype.com/products/sonatype-nexus-repository) to minimize network use. Whether
+utilizing internal self-managed, or an externally managed service such as GitHub Packages when budget allows, network
+use can easy to exceed 1GB/month. Frequent releases, deep dependency graphs and large number of developers all
+contribute to growing this significantly. Another practical reason to choose a self-hosted repository is the increased
+flexibility in managing allow/deny lists of acceptable packages. Open-source software has a solid track record of
+security, but untrustworthy authors, abandoned projects, and the very nature of community contributed code make ongoing
+audit the external code dependencies a necessity.
 
 ## Bypassing Transfer Limits
 
-GitHub Packages has restrictive transfer limits, but alternative means exist. GitHub will allow unlimited transfers
+GitHub Packages has restrictive transfer limits, but an alternative exists. GitHub will allow unlimited transfers
 within a GitHub Action, so transferring files during CI/CD is a practical workaround.
 
 {%
@@ -45,21 +50,24 @@ img_style="padding: 10px; background-color: white;"
 %}
 
 This is further written about in <strong>[Data Transfers and Egress within a GitHub Action]({% post_url
-2024-01-24-data-transfers-egress-github-actions %})</strong>.  
-
+2024-01-24-data-transfers-egress-github-actions %})</strong>.
 
 # GitHub Packages Maven via URL
 
+Maven is based around an HTTP API, and all network operations are performed through simple HTTP requests. This
+exposes a foundation to build a capable custom API for uses beyond Maven functionality.
+
 ## Browsing Available Versions
 
-Maven operates through simple HTTP requests, and this article will document these calls such that they can be made
-without Maven installed, and directly made using `wget` or `curl`.
+This article will document useful Maven URLs such that they can be made without Maven installed and directly made
+using `wget` or `curl`.
 
 _All URLs in this document require an `Authorization: token GITHUB_TOKEN` HTTP header_
 
 Maven packaging defines 3 fields for every package:
 
 ```xml
+
 <dependency>
     <groupId>{groupId}</groupId>
     <artifactId>{artifactId}</artifactId>
@@ -74,14 +82,16 @@ https://maven.pkg.github.com/{githubUser}/{githubRepository}/{groupId}/{artifact
 ```
 
 For example, a groupId of _ca.stevenskelton_ and artifactId of _http-maven-receiver-assembly_ has the URL:
+
 ```shell
 https://maven.pkg.github.com/stevenrskelton/http-maven-receiver/ca/stevenskelton/http-maven-receiver-assembly/maven-metadata.xml
 ```
 
-At these URLs is XML metadata which can be used to construct all other REST URLs for the repository artifacts. An 
-example of the XML is:
+These URLs expose XML metadata which can construct all other REST URLs for the repository artifacts. An example of the
+XML is:
 
 ```xml
+
 <metadata>
     <groupId>ca.stevenskelton</groupId>
     <artifactId>http-maven-receiver-assembly</artifactId>
@@ -101,6 +111,7 @@ example of the XML is:
 The schema defines key fields:
 
 ```xml
+
 <metadata>
     <groupId>{groupId}</groupId>
     <artifactId>{artifactId}</artifactId>
@@ -116,11 +127,13 @@ The schema defines key fields:
 
 ### SNAPSHOT releases
 
-There is a special case for release versions which are a
-[SNAPSHOT](https://maven.apache.org/guides/getting-started/index.html#what-is-a-snapshot-version). Maven has defined 
-this functionality to accommodate rapidly evolving code such that versions can be auto-incremented on each subsequent 
-publish into Maven. The *version* has the form `version-SNAPSHOT` such that `SNAPSHOT` is replaced by corresponding 
-timestamp/iteration numbers on the artifacts. To resolve these values, Maven exposes the URLs:
+There is a special case
+for [SNAPSHOT](https://maven.apache.org/guides/getting-started/index.html#what-is-a-snapshot-version) release versions.
+Snapshot versions accommodate rapidly evolving releases by generating auto-incremented composite version numbers on
+each subsequent publish into Maven. The _version_ consists of an initial fixed number plus an iteration, with the form
+`version-SNAPSHOT` where the version is fixed and the `SNAPSHOT` part creates the unique timestamp/iteration for the
+release. This complexity requires an additional step to resolve all varying _SNAPSHOT_ parts, and for this Maven
+exposes the URL:
 
 ```shell
 https://maven.pkg.github.com/{githubUser}/{githubRepository}/{groupId}/{artifactId}/{version-SNAPSHOT}/maven-metadata.xml
@@ -135,6 +148,7 @@ https://maven.pkg.github.com/stevenrskelton/http-maven-receiver/ca/stevenskelton
 An example of the XML document for this URL is:
 
 ```xml
+
 <metadata modelVersion="">
     <groupId>ca.stevenskelton</groupId>
     <artifactId>http-maven-receiver-assembly</artifactId>
@@ -201,10 +215,15 @@ An example of the XML document for this URL is:
 </metadata>
 ```
 
-This example XML has two `0.1.0-SNAPSHOT` releases: `0.1.0-20230329.004700-13` and `0.1.0-20230330.234307-29`.
-These document schema expose the fields:
+This example XML has two `0.1.0-SNAPSHOT` releases:
+
+- `0.1.0-20230329.004700-13`
+- `0.1.0-20230330.234307-29`
+
+The document schema used at this URL exposes the fields:
 
 ```xml
+
 <metadata>
     <groupId>{groupId}</groupId>
     <artifactId>{artifactId}</artifactId>
@@ -226,7 +245,8 @@ These document schema expose the fields:
 </metadata>
 ```
 
-For `SNAPSHOT` releases, the version number used to download file references the `value` from this file.
+This `<value>` tag provides us with the composite `version` numbers to we need to reference `SNAPSHOT` releases in other
+Maven URLs based around version numbers.
 
 ## Downloading Artifacts using wget
 
@@ -241,6 +261,7 @@ wget -d --header="Authorization: token {GITHUB_TOKEN}" \
 ```
 
 So for a `1.0.18` release the wget command is:
+
 ```shell
 wget -d --header="Authorization: token {GITHUB_TOKEN}" \
  https://maven.pkg.github.com/stevenrskelton/http-maven-receiver/ca/stevenskelton/http-maven-receiver/1.0.18/http-maven-receiver-assembly-1.0.18.jar
@@ -297,12 +318,13 @@ mvn dependency:copy \
   --global-settings settings.xml
 ```
 
-The benefit here is the input parameter for a separate _settings.xml_. This file can be used to contain Maven 
+The benefit here is the input parameter for a separate _settings.xml_. This file can be used to contain Maven
 credentials to repository, useful if the `wget` or `curl` command won't have access to the `GITHUB_TOKEN` or if this
 command will be executed within a GitHub Action similar to how [Scala SBT Publishing to GitHub Packages]({% post_url
 2022-04-17-scala-sbt-publishing-to-github-packages %}) publishes Maven artifacts using `mvn deploy:deploy-file`.
 
 ```xml
+
 <settings>
     <profiles>
         <profile>
@@ -319,34 +341,32 @@ command will be executed within a GitHub Action similar to how [Scala SBT Publis
         </profile>
     </profiles>
     <servers>
-      <server>
-        <id>github</id>
-        <username>${GITHUB_REPOSITORY_OWNER}</username>
-        <password>${GITHUB_TOKEN}</password>
-      </server>
+        <server>
+            <id>github</id>
+            <username>${GITHUB_REPOSITORY_OWNER}</username>
+            <password>${GITHUB_TOKEN}</password>
+        </server>
     </servers>
 </settings>
 ```
 
 ## Private Repo Download Caps, what about MD5 files?
 
-There are costs associated with outbound traffic - either directly paid for GitHub Pro accounts or indirectly with 1GB
-transfer limits for private repos with free accounts. However, use-cases exist for the external access of smaller files
-such as _pom_, _md5_, _sha1_ and _maven-metadata.xml_.
+The primary consumer of network traffic are binary artifacts. Maven stores these large binary artifacts, but also the
+associated XML metadata and hash codes necessary for Maven. The XML metadata forms the basis for search/indexing binary 
+artifacts and has thus far served been the content of this article; but the hash codes also provide interesting 
+functionality opportunities.
 
-The _md5_ and _sha1_ are meant for use in integrity validation. In a multi-hop or cloud situation it is quite possible
-intermediate storage (such as AWS S3) poses risks as an attack vector, opportunity for partial transfers, or file
-corruption. Even if GitHub servers and the final deployment server are secure, if artifacts pass though a layer with
-security administered by a separate authority mistakes can happen. A final _md5_ comparison to the GitHub
-Packages hosted md5 file can ensure the correct artifacts were properly copied with little complexity or performance
-overhead.
+At their core hash codes such as _md5_ and _sha1_ are quick ways to verify file contents and integrity using a small 
+number of bytes. In multi-hop or cloud situations intermediate storage poses risks as an attack vector, area of version
+confusion or simply opportunities for file corruption due to partial transfers or network errors. 
+
+If CI/CD pipelines start on secure GitHub servers and end at secure VPC server deployments, if any stage passes through
+insecure or separately administered by security authorities mistakes can happen. A final _md5_ comparison to the 
+source GitHub Packages at any stage of the pipeline will catch almost any integrity error with minimal overhead.
 
 <img src="/assets/images/2022/04-20/md5validation.png" alt="MD5 Validation UML" title="MD5 Validation UML" style="text-align: center;"/>
 
-Another use is in version monitoring and publication. For Continuous Delivery pipelines that stop short of deployment
-upgrading, there can be a need for version publication and monitoring. Applications or tools can directly use GitHub
-Packages metadata to monitor release versions to provide update notification on projects that are not managed by a
-formal package manager.
-
-These are two practical uses of directly accessing GitHub Package files outside a GitHub Action. Neither will incur
-significant use of external bandwidth, and both can provide flexibility in custom CI/CD pipelines. 
+GitHub Packages can serve as a source of truth for CI/CD pipelines without necessarily having to be the primary hosting 
+platform for large binary artifacts. The minimal network egress demanded by _md5_ hash code files can allow GitHub 
+Packages to provide file integrity authority while remaining entirely on the free-tier plan.
