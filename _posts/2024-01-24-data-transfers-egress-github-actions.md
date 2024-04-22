@@ -21,7 +21,7 @@ platform means utilizing the unlimited egress bandwidth afforded to GitHub Actio
 # GitHub Packages as a Maven repository
 
 In an earlier article, [Downloading from GitHub Packages using HTTP and Maven]({% post_url
-2022-04-20-downloading-from-github-packages-using-http-and-maven %}) we investigated GitHub Packages as a Maven
+2022-05-downloading-from-github-packages-using-http-and-maven %}) we investigated GitHub Packages as a Maven
 repository for Java artifacts. Standard practices with any network service is evaluating the benefit of implementing a local cache. A
 local cache can speed up downloads, allow customized permissioning, and increased resiliency against network failures.
 Even if a local Maven repository proxy cache such as Artifactory or Nexus is selected, the question remains of how to

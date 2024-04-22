@@ -44,7 +44,7 @@ GitHub Packages has restrictive transfer limits, but an alternative exists. GitH
 within a GitHub Action, so transferring files during CI/CD is a practical workaround.
 
 {%
-include figure image_path="/assets/images/2022/04-20/github_egress.svg"
+include figure image_path="/assets/images/2022/05/github_egress.svg"
 caption="Egress alternatives with GitHub CI/CD using GitHub Actions and GitHub Packages"
 img_style="padding: 10px; background-color: white;"
 %}
@@ -365,7 +365,7 @@ If CI/CD pipelines start on secure GitHub servers and end at secure VPC server d
 insecure or separately administered by security authorities mistakes can happen. A final _md5_ comparison to the 
 source GitHub Packages at any stage of the pipeline will catch almost any integrity error with minimal overhead.
 
-<img src="/assets/images/2022/04-20/md5validation.png" alt="MD5 Validation UML" title="MD5 Validation UML" style="text-align: center;"/>
+<img src="/assets/images/2022/05/md5validation.png" alt="MD5 Validation UML" title="MD5 Validation UML" style="text-align: center;"/>
 
 GitHub Packages can serve as a source of truth for CI/CD pipelines without necessarily having to be the primary hosting 
 platform for large binary artifacts. The minimal network egress demanded by _md5_ hash code files can allow GitHub 
