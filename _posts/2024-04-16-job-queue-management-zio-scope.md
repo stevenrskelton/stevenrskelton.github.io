@@ -17,7 +17,7 @@ minimal waste, composability and reuse are increased, and logic is easier to rea
 for Functional Programming and their Effect Systems, such as ZIO. Effect systems are congruent to the enterprise job
 queue, with ZIO fibers performing work and ZIO [Resource Management](https://zio.dev/reference/resource/)
 forming the scheduling and supervision backbone. An efficient job queue can be written using ZIO constructs using
-surprisingly minimal amount of code.
+surprisingly minimal amount of code.<!--more-->
 
 {% include table-of-contents.html height="800px" %}
 
