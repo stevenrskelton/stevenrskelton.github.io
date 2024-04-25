@@ -214,7 +214,9 @@ The `takeUpToNQueue` implementation is best examined in 3 parts:
 - creating a scope with finalizer
 
 
-# Creating Scope using acquireReleaseExit
+# Creating Scope
+
+## Using acquireReleaseExit
 
 The `Scope` is a _trait_ and not typically defined as a named class. It should normally be anonymously constructed using
 one of the `acquireRelease` methods. There are variations, the simplest being `acquireRelease` where the _acquire_ is
