@@ -172,6 +172,9 @@ examples:
     name: "AWS Lambda DynamoDB importer"
     url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2022/scala3-aws-lambda-dynamodb-importer"
     description: "Scala3 and Python lambda functions to insert into a DynamoDB."
+    sources:
+      - "/src/main/python/handler.py"
+      - "/src/main/scala/Handler.scala"
   ordered-columns:
     name: "Ordered-Columns Web Component"
     url: "https://github.com/stevenrskelton/ordered-columns"
