@@ -3,7 +3,7 @@ permalink: /about/
 title: "About"
 ---
 <div class="img-bg" style="background-image:url('/assets/images/about/bg.jpg');">
-  <h1> 🇨🇦&nbsp;Toronto, Canada</h1>
+  <h1 style="margin-top:0;"> 🇨🇦&nbsp;Toronto, Canada</h1>
 
   <p>
     <strong style="font-size:larger;">Principal Engineer</strong><br>
@@ -12,7 +12,7 @@ title: "About"
 
   <p>
     <strong>Honours Bachelor of Mathematics</strong><br>
-    Double major honours (HBMath) in <i>Pure Mathematics</i> and <i>Applied Mathematics</i> from the University of Waterloo
+    Double Major Honours (HBMath) in <i>Pure Mathematics</i> and <i>Applied Mathematics</i> from the University of Waterloo
   </p>
 
   <h2 id="work-summary">Work Summary</h2>
