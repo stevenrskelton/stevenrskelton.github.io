@@ -389,7 +389,7 @@ at compile-time using SBT `sourceManaged` key. It represents a `Seq[File]` of al
 straight-forward to append custom generated Scala sources, to be externally exposed as a help command-line params or 
 an HTTP health check endpoint.
 
-```sbt
+```scala
 Compile / sourceGenerators += (Compile / sourceManaged, version, name).map {
   (sourceDirectory, version, name) =>
     val file = sourceDirectory / "SbtBuildInfo.scala"
@@ -405,7 +405,7 @@ Compile / sourceGenerators += (Compile / sourceManaged, version, name).map {
 }.taskValue
 ```
 
-## Authorization Zones Integrity
+## File Integrity Independent of User Authorization Zones
 
 Another possible use for hashcode verification is as a centralized file authentication. When CI/CD, DEV and PROD are 
 administered under separate user authentication paradigms, it may be easier to unify all user-permissions to a central
