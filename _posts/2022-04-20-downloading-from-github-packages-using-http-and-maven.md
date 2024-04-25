@@ -14,7 +14,7 @@ custom integrations more difficult than need be. This article documents the URLs
 used to create an API of simple HTTP commands. URLs to browse packages and download files will be covered, as well as
 steps to more effectively use free tier resources allowed on private repositories.
 
-{% include table-of-contents.html height="400px" %}
+{% include table-of-contents.html height="500px" %}
 
 # Private Repository Free-Tier Limits
 
@@ -350,23 +350,71 @@ command will be executed within a GitHub Action similar to how [Scala SBT Publis
 </settings>
 ```
 
-## Private Repo Download Caps, what about MD5 files?
+# Alternative Uses of MD5 Files
 
-The primary consumer of network traffic are binary artifacts. Maven stores these large binary artifacts, but also the
-associated XML metadata and hash codes necessary for Maven. The XML metadata forms the basis for search/indexing binary 
-artifacts and has thus far served been the content of this article; but the hash codes also provide interesting 
-functionality opportunities.
+The primary consumer of network traffic are large binary artifacts due to their size. Maven also is a repository for
+smaller files: XML metadata and multiple hashcode associated to the artifacts. Downloading these smaller files would
+have negligible contribution to network use while providing significant value.
 
-At their core hash codes such as _md5_ and _sha1_ are quick ways to verify file contents and integrity using a small 
-number of bytes. In multi-hop or cloud situations intermediate storage poses risks as an attack vector, area of version
-confusion or simply opportunities for file corruption due to partial transfers or network errors. 
+The XML metadata forms the basis for search/indexing functionality of the binary artifacts. Its alternative uses have
+been the topic of the article thus far; but the hashcode also provides interesting functional opportunities.
 
-If CI/CD pipelines start on secure GitHub servers and end at secure VPC server deployments, if any stage passes through
-insecure or separately administered by security authorities mistakes can happen. A final _md5_ comparison to the 
-source GitHub Packages at any stage of the pipeline will catch almost any integrity error with minimal overhead.
+## Transfer Verification
 
-<img src="/assets/images/2022/05/md5validation.png" alt="MD5 Validation UML" title="MD5 Validation UML" style="text-align: center;"/>
+At their core a hashcode such as _md5_ and _sha1_ is a quick ways to verify file contents and integrity using a small
+number of bytes. In multi-hop or cloud situations, every transfer and intermediate storage poses a risk for file
+corruption or file confusion. Research has shown TCP checksums will fail to
+detect [errors for roughly 1 in 16 million to 10 billion packets](https://dl.acm.org/doi/10.1145/347059.347561). If MTU
+is 1500 bytes, a worse case average would be undetected transfer error in every 24GB. File copy utilities typically have 
+hashcode validation built in to address this vulnerability.
 
-GitHub Packages can serve as a source of truth for CI/CD pipelines without necessarily having to be the primary hosting 
-platform for large binary artifacts. The minimal network egress demanded by _md5_ hash code files can allow GitHub 
-Packages to provide file integrity authority while remaining entirely on the free-tier plan.
+## Pipeline Integrity
+
+Even when network transfers are successful, the hashcode represents an intrinsic property of the files preserved across 
+file renaming. Any CI/CD pipeline configured to produce artifacts with a specific naming rather than automatically 
+generated creates a possibility for version confusion. This can be seen when QA testing fails during a release; a
+release candidate for version _x.x.x_ is produced, fails QA, and a second patched version of _x.x.x_ artifacts are 
+created. There are now 2 separate artifacts with identical filenames in existence.
+
+{%
+include figure image_path="/assets/images/2022/05/md5_version_validation.svg"
+caption="CI/CD integrity validation using GitHub Packages MD5 hashcode"
+img_style="padding: 8px; background-color: white;"
+%}
+
+The root cause of version confusion is attempting to preserve branch name as artifact filename. If a _release-x.x.x_ git 
+branch produces _x.x.x_ artifacts there is nothing linking artifacts to a particular commit. In addition to artifact
+hashcode, another approach is to embed git sha into the artifact as another intrinsic property. In SBT, this can be done
+at compile-time using SBT `sourceManaged` key. It represents a `Seq[File]` of all source-code to be compiled. It is 
+straight-forward to append custom generated Scala sources, to be externally exposed as a help command-line params or 
+an HTTP health check endpoint.
+
+```sbt
+Compile / sourceGenerators += (Compile / sourceManaged, version, name).map {
+  (sourceDirectory, version, name) =>
+    val file = sourceDirectory / "SbtBuildInfo.scala"
+    val gitSha = "git rev-parse HEAD".!!.trim
+    IO.write(file, """package ca.stevenskelton.httpmavenreceiver
+                     |object SbtBuildInfo {
+                     |  val version = "%s"
+                     |  val name = "%s"
+                     |  val gitSha = "%s"
+                     |}
+                     |""".stripMargin.format(version, name, gitSha))
+    Seq(file)
+}.taskValue
+```
+
+## Authorization Zones Integrity
+
+Another possible use for hashcode verification is as a centralized file authentication. When CI/CD, DEV and PROD are 
+administered under separate user authentication paradigms, it may be easier to unify all user-permissions to a central
+source. Artifact hashcodes are a secure file integrity mechanism unburdened from maintaining synchronization to user 
+auth systems. Publicly available artifact hashcodes don't represent confidential information an can allowing for a
+simplified implementation; though GitHub Packages would need a proxy layer working around a GITHUB_TOKEN requirement.
+
+{%
+include figure image_path="/assets/images/2022/05/md5_validation.svg"
+caption="File verification across different user authentication systems"
+img_style="padding: 8px; background-color: white;"
+%}
