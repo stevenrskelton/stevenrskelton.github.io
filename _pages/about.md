@@ -3,7 +3,7 @@ permalink: /about/
 title: "About"
 ---
 <div class="img-bg" style="background-image:url('/assets/images/about/bg.jpg');">
-  <h1 style="margin-top:0;"> 🇨🇦&nbsp;Toronto, Canada</h1>
+  <h1> 🇨🇦&nbsp;Toronto, Canada</h1>
 
   <p>
     <strong style="font-size:larger;">Principal Engineer</strong><br>
