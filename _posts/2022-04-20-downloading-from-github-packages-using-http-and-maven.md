@@ -377,7 +377,7 @@ release candidate for version _x.x.x_ is produced, fails QA, and a second patche
 created. There are now 2 separate artifacts with identical filenames in existence.
 
 {%
-include figure image_path="/assets/images/2022/05/md5_version_validation.svg"
+include figure image_path="/assets/images/2022/04/md5_version_validation.svg"
 caption="CI/CD integrity validation using GitHub Packages MD5 hashcode"
 img_style="padding: 8px; background-color: white;"
 %}
@@ -414,7 +414,7 @@ auth systems. Publicly available artifact hashcodes don't represent confidential
 simplified implementation; though GitHub Packages would need a proxy layer working around a GITHUB_TOKEN requirement.
 
 {%
-include figure image_path="/assets/images/2022/05/md5_validation.svg"
+include figure image_path="/assets/images/2022/04/md5_validation.svg"
 caption="File verification across different user authentication systems"
 img_style="padding: 8px; background-color: white;"
 %}
