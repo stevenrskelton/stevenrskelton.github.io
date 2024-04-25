@@ -12,7 +12,7 @@ title: "About"
 
   <p>
     <strong>Honours Bachelor of Mathematics</strong><br>
-    Double major in Pure and Applied Mathematics from the University of Waterloo
+    Double major honours (HBMath) in <i>Pure Mathematics</i> and <i>Applied Mathematics</i> from the University of Waterloo
   </p>
 
   <h2 id="work-summary">Work Summary</h2>
