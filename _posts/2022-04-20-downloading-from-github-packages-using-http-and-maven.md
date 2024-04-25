@@ -359,7 +359,7 @@ have negligible contribution to network use while providing significant value.
 The XML metadata forms the basis for search/indexing functionality of the binary artifacts. Its alternative uses have
 been the topic of the article thus far; but the hashcode also provides interesting functional opportunities.
 
-## Transfer Verification
+## Network Transfer File Integrity
 
 At their core a hashcode such as _md5_ and _sha1_ is a quick ways to verify file contents and integrity using a small
 number of bytes. In multi-hop or cloud situations, every transfer and intermediate storage poses a risk for file
@@ -368,7 +368,7 @@ detect [errors for roughly 1 in 16 million to 10 billion packets](https://dl.acm
 is 1500 bytes, a worse case average would be undetected transfer error in every 24GB. File copy utilities typically have 
 hashcode validation built in to address this vulnerability.
 
-## Pipeline Integrity
+## CI/CD Pipeline File Integrity
 
 Even when network transfers are successful, the hashcode represents an intrinsic property of the files preserved across 
 file renaming. Any CI/CD pipeline configured to produce artifacts with a specific naming rather than automatically 
@@ -379,15 +379,15 @@ created. There are now 2 separate artifacts with identical filenames in existenc
 {%
 include figure image_path="/assets/images/2022/04/md5_version_validation.svg"
 caption="CI/CD integrity validation using GitHub Packages MD5 hashcode"
-img_style="padding: 8px; background-color: white;"
+img_style="padding: 8px 6px 0px 8px; background-color: white;"
 %}
 
 The root cause of version confusion is attempting to preserve branch name as artifact filename. If a _release-x.x.x_ git 
 branch produces _x.x.x_ artifacts there is nothing linking artifacts to a particular commit. In addition to artifact
 hashcode, another approach is to embed git sha into the artifact as another intrinsic property. In SBT, this can be done
 at compile-time using SBT `sourceManaged` key. It represents a `Seq[File]` of all source-code to be compiled. It is 
-straight-forward to append custom generated Scala sources, to be externally exposed as a help command-line params or 
-an HTTP health check endpoint.
+straight-forward to append custom generated Scala sources, to be externally exposed as a help command-line parameter or 
+an HTTP health-check endpoint.
 
 ```scala
 Compile / sourceGenerators += (Compile / sourceManaged, version, name).map {
