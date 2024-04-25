@@ -44,7 +44,7 @@ GitHub Packages has restrictive transfer limits, but an alternative exists. GitH
 within a GitHub Action, so transferring files during CI/CD is a practical workaround.
 
 {%
-include figure image_path="/assets/images/2022/05/github_egress.svg"
+include figure image_path="/assets/images/2022/04/github_egress.svg"
 caption="Egress alternatives with GitHub CI/CD using GitHub Actions and GitHub Packages"
 img_style="padding: 10px; background-color: white;"
 %}
