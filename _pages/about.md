@@ -116,10 +116,7 @@ img="/assets/images/about/certifications/cert_mark_SA_badge_large_300px.png"
   <div style="height:0;clear:left"></div>
 </div>
 
-
-## GitHub Repositories
-
-### Public Projects
+## Public GitHub Repositories
 
 <div style="
   display: flex;
