@@ -73,7 +73,12 @@ img="/assets/images/about/certifications/cert_mark_SA_badge_large_300px.png"
 
 ## Portfolio
 
-<div class="img-bg" style="background-image:url('/assets/images/about/dancing_robots.jpg');margin-top: 50px;margin-bottom: 30px;">
+<div class="img-bg" style="
+  background-image: url('/assets/images/about/dancing_robots.jpg');
+  margin-top: 50px;
+  margin-bottom: 30px;
+  max-width: 1040px;
+">
   <h1>Trade Audit Android App</h1>
   
   <style>
@@ -116,7 +121,7 @@ img="/assets/images/about/certifications/cert_mark_SA_badge_large_300px.png"
   <div style="height:0;clear:left"></div>
 </div>
 
-## Public GitHub Repositories
+### Public GitHub Repositories
 
 <div style="
   display: flex;
