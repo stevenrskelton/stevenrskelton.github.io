@@ -50,6 +50,27 @@ title: "About"
 - **Data**: API efficiency and cacheability, read-write asymmetry, low-latency and event-driven streams.
 - **Cloud**: agnostic, scaling, resiliency, cost-mitigation, and 95th percentile mitigations.
 
+## Enterprise Certifications
+
+{%
+include certification.html
+name="SAFe 5.1 Advanced Scrum Master"
+description="Scaled Agile, Inc. 89485707-5065 Apr 2024"
+img="/assets/images/about/certifications/cert_mark_SASM_badge_large_300px.png"
+%}
+{%
+include certification.html
+name="SAFe 5.1 Scrum Master"
+description="Scaled Agile, Inc. 49059875-5668 Jun 2023"
+img="/assets/images/about/certifications/cert_mark_SSM_badge_large_300px.png"
+%}
+{%
+include certification.html
+name="SAFe 5.1 Leading SAFe"
+description="Scaled Agile, Inc. 49562821-2030 Jun 2022"
+img="/assets/images/about/certifications/cert_mark_SA_badge_large_300px.png"
+%}
+
 <div class="img-bg" style="background-image:url('/assets/images/about/dancing_robots.jpg');margin-top: 50px;margin-bottom: 30px;">
   <h1>Trade Audit Android App</h1>
   
