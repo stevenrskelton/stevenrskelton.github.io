@@ -450,12 +450,14 @@ a.github-project {
 
 .certification {
     display: inline-block;
-    width: 100px;
+    width: 110px;
     font-size: smaller;
     line-height: 1em;
     text-align: center;
-    margin: 0 0.5em;
+    margin: 0.1em 0.5em;
+    vertical-align: top;
 }
 .certification img {
     padding-bottom: 0.25em;
+    width: 90px;
 }
