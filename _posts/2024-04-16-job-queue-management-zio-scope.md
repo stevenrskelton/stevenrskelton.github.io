@@ -19,7 +19,7 @@ queue, with ZIO fibers performing work and ZIO [Resource Management](https://zio
 forming the scheduling and supervision backbone. An efficient job queue can be written using ZIO constructs using
 surprisingly minimal amount of code.<!--more-->
 
-{% include table-of-contents.html height="800px" %}
+{% include table-of-contents.html height="900px" %}
 
 # ZIO Resources and Scope
 
