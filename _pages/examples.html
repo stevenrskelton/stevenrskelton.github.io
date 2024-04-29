@@ -3,6 +3,11 @@ title: "Solutioning Examples"
 layout: archive
 permalink: /examples/
 ---
+{% assign height = "400px" %}
+<style>
+    .multiplex_responsive_1 { width: 360px; height: 100px; margin-top: 1em; margin-bottom: 1em; }
+    @media(min-width: 720px) { .multiplex_responsive_1 { width: 360px; margin: 0; height: {{ height }}; } }
+</style>
 <div class="toc-container">
     <aside class="sidebar__right">
         <nav class="toc">
@@ -26,7 +31,7 @@ permalink: /examples/
         </script></div>
 </div>
 
-<h1>Source Code</h1>
+<h1 style="margin-bottom: 1.5em;margin-top: 1.5em;">Source Code</h1>
 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
 {% for example_field in site.examples %}
