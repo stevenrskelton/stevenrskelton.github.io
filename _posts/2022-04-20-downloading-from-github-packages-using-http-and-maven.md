@@ -390,17 +390,27 @@ straight-forward to append custom generated Scala sources, to be externally expo
 an HTTP health-check endpoint.
 
 ```scala
-Compile / sourceGenerators += (Compile / sourceManaged, version, name).map {
-  (sourceDirectory, version, name) =>
+import scala.sys.process.*
+import sbt.TupleSyntax.t4ToTable4
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME
+
+Compile / sourceGenerators += (Compile / sourceManaged, name, version, scalaVersion).map {
+  case (sourceDirectory, name, version, scalaVersion) =>
     val file = sourceDirectory / "SbtBuildInfo.scala"
     val gitSha = "git rev-parse HEAD".!!.trim
+    val gitBranch = "git rev-parse --abbrev-ref HEAD".!!.trim
+    val buildTime = ZonedDateTime.now.format(ISO_ZONED_DATE_TIME)
     IO.write(file, """package ca.stevenskelton.httpmavenreceiver
                      |object SbtBuildInfo {
-                     |  val version = "%s"
                      |  val name = "%s"
+                     |  val version = "%s"
+                     |  val scalaVersion = "%s"
                      |  val gitSha = "%s"
+                     |  val gitBranch = "%s"
+                     |  val buildTime = "%s"
                      |}
-                     |""".stripMargin.format(version, name, gitSha))
+                     |""".stripMargin.format(name, version, scalaVersion, gitSha, gitBranch, buildTime))
     Seq(file)
 }.taskValue
 ```
