@@ -390,7 +390,7 @@ straight-forward to append custom generated Scala sources, to be externally expo
 an HTTP health-check endpoint.
 
 ```scala
-import scala.sys.process.*
+import scala.sys.process._
 import sbt.TupleSyntax.t4ToTable4
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter.ISO_ZONED_DATE_TIME
