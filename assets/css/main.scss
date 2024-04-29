@@ -141,6 +141,10 @@ html {
   html {
     font-size: 18px;
   }
+  .page {
+    width: calc(100% - 100px);
+    padding-right: 100px;
+  }
 }
 
 #main {

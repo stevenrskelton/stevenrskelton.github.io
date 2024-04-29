@@ -2,7 +2,10 @@
 permalink: /about/
 title: "About"
 ---
-<div class="img-bg" style="background-image:url('/assets/images/about/bg.jpg');">
+<div class="img-bg" style="
+  background-image:url('/assets/images/about/bg.jpg');
+  max-width: 1040px;">
+
   <h1> 🇨🇦&nbsp;Toronto, Canada</h1>
 
   <p>
@@ -71,7 +74,7 @@ description="Scaled Agile, Inc. 49562821-2030 Jun 2022"
 img="/assets/images/about/certifications/cert_mark_SA_badge_large_300px.png"
 %}
 
-## Portfolio
+## Public Portfolio
 
 <div class="img-bg" style="
   background-image: url('/assets/images/about/dancing_robots.jpg');
@@ -121,7 +124,7 @@ img="/assets/images/about/certifications/cert_mark_SA_badge_large_300px.png"
   <div style="height:0;clear:left"></div>
 </div>
 
-### Public GitHub Repositories
+### GitHub Repositories
 
 <div style="
   display: flex;
