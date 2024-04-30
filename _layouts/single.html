@@ -62,7 +62,8 @@ layout: default
                 {% assign example = site.examples[page.example] %}
                 <section id="{{ example.name | slugify | downcase }}" class="taxonomy__section">
                 {% include github_example_project.html id=page.example %}
-                {% assign sources = example.sources | concat: page.sources %}
+                {% assign page_sources = page.sources | default: nil %}
+                {% assign sources = example.sources | concat: page_sources %}
                 {% if sources %}
                     <ul>
                     {% for source_url in sources %}
