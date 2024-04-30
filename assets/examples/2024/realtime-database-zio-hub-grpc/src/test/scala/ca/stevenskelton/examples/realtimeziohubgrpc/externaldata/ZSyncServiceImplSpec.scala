@@ -1,8 +1,9 @@
-package ca.stevenskelton.examples.realtimeziohubgrpc
+package ca.stevenskelton.examples.realtimeziohubgrpc.externaldata
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.AuthenticatedUser.UserId
+import ca.stevenskelton.examples.realtimeziohubgrpc.{BidirectionalTestClients, DataRecord}
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.ETag
-import ca.stevenskelton.examples.realtimeziohubgrpc.ZSyncServiceImplSpec.*
+import ca.stevenskelton.examples.realtimeziohubgrpc.externaldata.ZSyncServiceImpl
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateRequest.DataUpdate
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse, UpdateRequest}
 import zio.stream.{UStream, ZStream}
@@ -62,7 +63,8 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
   override def spec: Spec[TestEnvironment & Scope, Any] = suite("multiple client listeners")(
     test("All updated") {
       for
-        clients <- BidirectionalTestClients.launch
+        zSyncService <- ZSyncServiceImpl.launch
+        clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id2))
@@ -78,7 +80,8 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     },
     test("Unsubscribe by Id") {
       for
-        clients <- BidirectionalTestClients.launch
+        zSyncService <- ZSyncServiceImpl.launch
+        clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
         _ <- clients.responses(6, (User2, SyncRequest(unsubscribes = Seq(SyncRequest.Unsubscribe(Id1)))))
@@ -95,7 +98,8 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     },
     test("Unsubscribe All") {
       for
-        clients <- BidirectionalTestClients.launch
+        zSyncService <- ZSyncServiceImpl.launch
+        clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
         _ <- clients.responses(7, (User2, SyncRequest(unsubscribes = Seq(SyncRequest.Unsubscribe(all = true)))))
@@ -113,7 +117,8 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     test("Subscribe Response when previous_etag matches") {
       val initialData = ZSyncServiceImplSpec.createUpdateRequest(1)
       for
-        clients <- BidirectionalTestClients.launch
+        zSyncService <- ZSyncServiceImpl.launch
+        clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
         _ <- clients.responses(1, (User1, SyncRequest(subscribes = Seq(SyncRequest.Subscribe(id = Id1)))))
         subscribe2Response <- clients.responses(2, (User2, SyncRequest(
@@ -134,13 +139,14 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     },
     test("Iterate active subscriptions") {
       for
-        clients <- BidirectionalTestClients.launch
-        subscribedIds0 <- clients.zSyncServiceImpl.externalData.subscribedIds
+        zSyncService <- ZSyncServiceImpl.launch
+        clients <- BidirectionalTestClients.launch(zSyncService)
+        subscribedIds0 <- zSyncService.externalData.subscribedIds
         responses <- clients.responses(5, SubscribeActions *)
-        subscribedIds1 <- clients.zSyncServiceImpl.externalData.subscribedIds
+        subscribedIds1 <- zSyncService.externalData.subscribedIds
         _ <- clients.client3.requests.shutdown
         _ <- Live.live(ZIO.attempt("pause for shutdown").delay(100.milliseconds))
-        subscribedIds2 <- clients.zSyncServiceImpl.externalData.subscribedIds
+        subscribedIds2 <- zSyncService.externalData.subscribedIds
       yield assertTrue:
         subscribedIds0.isEmpty &&
           responses.size == 5 &&

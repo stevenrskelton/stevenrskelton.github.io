@@ -9,9 +9,9 @@ excerpt_separator: <!--more-->
 example: realtime-database-zio-hub-grpc
 sources:
   - "/src/main/protobuf/sync_service.proto"
-  - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/Main.scala"
-  - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/ZSyncServiceImpl.scala"
-  - "/src/test/scala/ca/stevenskelton/examples/realtimeziohubgrpc/ZSyncServiceImplSpec.scala"
+  - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/grpcupdate/Main.scala"
+  - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/grpcupdate/ZSyncServiceImpl.scala"
+  - "/src/test/scala/ca/stevenskelton/examples/realtimeziohubgrpc/grpcupdate/ZSyncServiceImplSpec.scala"
 ---
 
 Realtime pushed-based databases such as [Google Firebase](https://firebase.google.com/docs/database) are a convenient

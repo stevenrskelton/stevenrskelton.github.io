@@ -1,5 +1,6 @@
-package ca.stevenskelton.examples.realtimeziohubgrpc
+package ca.stevenskelton.examples.realtimeziohubgrpc.externaldata
 
+import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord
 import zio.{Chunk, Hub, Queue, Ref, UIO, ZIO}
 
 import scala.collection.immutable.HashSet
@@ -30,4 +31,6 @@ class ExternalData(
       subscribedIdSets.flatten
   
   def queueFetchAll(ids: Seq[Int]): UIO[Chunk[Int]] = fetchQueue.offerAll(ids)
+  
+  
 

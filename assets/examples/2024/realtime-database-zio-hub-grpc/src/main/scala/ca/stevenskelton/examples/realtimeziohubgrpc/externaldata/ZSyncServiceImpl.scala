@@ -1,5 +1,6 @@
-package ca.stevenskelton.examples.realtimeziohubgrpc
+package ca.stevenskelton.examples.realtimeziohubgrpc.externaldata
 
+import ca.stevenskelton.examples.realtimeziohubgrpc.{AuthenticatedUser, DataRecord}
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateResponse.DataUpdateStatus
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{SyncRequest, SyncResponse, UpdateRequest, UpdateResponse, ZioSyncService}
 import io.grpc.StatusException
@@ -106,37 +107,4 @@ case class ZSyncServiceImpl private(
       .map:
         dataRecord => SyncResponse.of(dataRecord.data.id, dataRecord.etag, Some(dataRecord.data), SyncResponse.State.UPDATED)
 
-  override def update(request: UpdateRequest, context: AuthenticatedUser): IO[StatusException, UpdateResponse] =
-    import UpdateResponse.State.{CONFLICT, UNCHANGED, UPDATED}
-    for
-      now <- zio.Clock.instant
-      updatesFlaggedStatues <- databaseRecordsRef.modify:
-        database =>
-          val updateStatuses = request.updates
-            .flatMap:
-              dataUpdate => dataUpdate.data.map((_, dataUpdate.previousEtag))
-            .map:
-              (data, previousEtag) =>
-                val updateETag = DataRecord.calculateEtag(data)
-                database.get(data.id) match
-                  case Some(existing) if existing.etag == updateETag => (existing, UNCHANGED)
-                  case Some(existing) if existing.etag != previousEtag => (existing, CONFLICT)
-                  case _ => (DataRecord(data, now, updateETag), UPDATED)
-
-          val updates = updateStatuses.withFilter(_._2 == UPDATED).map:
-            (dataRecord, _) => dataRecord.data.id -> dataRecord
-
-          (updateStatuses, database ++ updates)
-
-      dataUpdateStatuses <- ZIO.collectAll:
-        updatesFlaggedStatues.map:
-          case (dataRecord, UNCHANGED) =>
-            ZIO.succeed(DataUpdateStatus.of(dataRecord.data.id, dataRecord.etag, UNCHANGED, None))
-          case (dataRecord, CONFLICT) =>
-            ZIO.succeed(DataUpdateStatus.of(dataRecord.data.id, dataRecord.etag, CONFLICT, Some(dataRecord.data)))
-          case (dataRecord, UPDATED) =>
-            journal.publish(dataRecord).as(DataUpdateStatus.of(dataRecord.data.id, dataRecord.etag, UPDATED, None))
-    yield
-      UpdateResponse.of(updateStatuses = dataUpdateStatuses)
-
-  end update
+  override def update(request: UpdateRequest, context: AuthenticatedUser): IO[StatusException, UpdateResponse] = ???

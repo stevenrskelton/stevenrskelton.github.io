@@ -1,6 +1,7 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.AuthenticatedUser.UserId
+import ca.stevenskelton.examples.realtimeziohubgrpc.externaldata.Main
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.ZioSyncService.SyncServiceClient
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{SyncRequest, SyncResponse, UpdateRequest, UpdateResponse}
 import io.grpc.{CallOptions, ManagedChannelBuilder}
@@ -29,7 +30,7 @@ object GrpcClient:
       val grpcLayer: ZLayer[Any, Throwable, SyncServiceClient] = SyncServiceClient.live(
         ZManagedChannel(ManagedChannelBuilder.forAddress("localhost", serverPort).usePlaintext()),
         options = CallOptions.DEFAULT,
-        metadata = SafeMetadata.make((Main.MetadataUserIdKey, userId.toString)),
+        metadata = SafeMetadata.make((AuthenticatedUser.MetadataUserIdKey, userId.toString)),
       )
 
       val responses = SyncServiceClient
