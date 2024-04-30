@@ -5,8 +5,7 @@ categories:
   - JavaScript
 tags:
   - Web_Components
-examples:
-  - ordered-columns
+example: ordered-columns
 ---
 
 {% include postlogo.html title="Web Components" src="/assets/images/2014/11/webcomponents.png" %} HTML elements are free

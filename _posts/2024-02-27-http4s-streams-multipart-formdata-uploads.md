@@ -6,8 +6,7 @@ tags:
   - Typelevel/Cats
   - Non-Blocking/Concurrency
 excerpt_separator: <!--more-->
-examples:
-  - http-maven-receiver
+example: http-maven-receiver
 ---
 
 Streaming is the primary mechanism to reduce memory requirements for processing large datasets. The approach is to 

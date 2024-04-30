@@ -5,8 +5,7 @@ categories:
 tags:
   - AWS
   - Cloud/Serverless
-examples:
-  - scala3-aws-lambda-dynamodb-importer
+example: scala3-aws-lambda-dynamodb-importer
 ---
 
 The suitability of programming languages across different domains is a contested topic. AWS Lambda Functions are a

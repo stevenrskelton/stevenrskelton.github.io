@@ -8,8 +8,7 @@ tags:
   - GitHub
   - Cloud/Serverless
 excerpt_separator: <!--more-->
-examples:
-  - scala3-aws-lambda-dynamodb-importer
+example: scala3-aws-lambda-dynamodb-importer
 ---
 
 AWS Lambda offer the ability to run code functions without a server. Basically standalone functions that receive JSON as

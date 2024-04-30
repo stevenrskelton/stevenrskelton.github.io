@@ -6,8 +6,7 @@ tags:
   - ZIO
   - Non-Blocking/Concurrency
 excerpt_separator: <!--more-->
-examples:
-  - job-queue-zio-scope
+example: job-queue-zio-scope
 ---
 
 Job Queues are critical parts of Enterprise workloads. Complex queues use distributed nodes, state machines, and

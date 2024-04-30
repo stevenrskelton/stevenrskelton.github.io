@@ -6,8 +6,12 @@ tags:
   - ZIO
   - Non-Blocking/Concurrency
 excerpt_separator: <!--more-->
-examples:
-  - realtime-database-zio-hub-grpc
+example: realtime-database-zio-hub-grpc
+sources:
+  - "/src/main/protobuf/sync_service.proto"
+  - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/Main.scala"
+  - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/ZSyncServiceImpl.scala"
+  - "/src/test/scala/ca/stevenskelton/examples/realtimeziohubgrpc/ZSyncServiceImplSpec.scala"
 ---
 
 Realtime pushed-based databases such as [Google Firebase](https://firebase.google.com/docs/database) are a convenient
@@ -30,7 +34,7 @@ evolving into the stream of data in both directions between the client and serve
 
 # gRPC Server Bi-Directional Streaming using HTTP/2
 
-The evolution of technology has resulted in 2 technology standards for web-based bi-directional communications:  
+The evolution of technology has resulted in two technology standards for web-based bi-directional communications:  
 [WebSockets](https://en.wikipedia.org/wiki/WebSocket) and HTTP/2 streams.
 
 WebSockets were created first as the ability for a standard HTTP/1.1 connection to upgrade to support bi-directional
@@ -39,7 +43,7 @@ JavaScript APIs within all browsers, backwards compatibility for HTTP/1.1-only c
 advantage of performance improvements offered by HTTP/2 and beyond.
 
 For non-browser communications, such as with mobile apps or inter-server communication WebSockets is an unnecessary
-layer. As WebSockets runs over HTTP, because HTTP/2 has directly integrated multiplexed streaming capabilities it is
+layer. As WebSockets runs over HTTP, because HTTP/2 has directly integrated multiplexed streaming capabilities, it is
 better for abstraction libraries such as gRPC to directly support HTTP/2 instead of the higher-level WebSocket layer.
 
 ```protobuf
@@ -80,7 +84,7 @@ The `Data` class will represent an arbitrary data record class, code will rely o
 represented as an `uint32`. While this type doesn't exist in Java, it adds clarity to the API, but as the Protocol
 Buffers Documentation [API Best Practices](https://protobuf.dev/programming-guides/api/) indicates, limits to even the
 _int64_ addressable range may make
-a [string id more preferable](https://protobuf.dev/programming-guides/api/#integer-field-for-id). The `field1` field is
+a [string id preferable](https://protobuf.dev/programming-guides/api/#integer-field-for-id). The `field1` field is
 unused in the sample code beyond ETag validation unit tests.
 
 ```protobuf
@@ -89,8 +93,49 @@ message Data {
   string field1 = 2;
 }
 ```
-Internally, it is helpful to know the last updated time and ETag of all `Data`, so we'll create a `DataRecord` class: 
+
+## ETag and Timestamp
+
+ETags are the part of the HTTP Specification and exist to reduce network transfer. The HTTP `If-None-Match` header, when
+implemented signals that should the response have the same generated ETag that the server should respond with a _HTTP
+304 Not Modified_ instead of a 200 Success with a populated body.  
+
+The usefulness of an ETag depends on server support: APIs may implement ETag support similiar to HTTP Specification and
+use it to omit a response body, others may use it internally to return a previous response from its cache, while others 
+solely include it as a convenience for clients.
+
+Our API will use an ETag to have our server only return a full Data object on subscription if the client either doesn't
+have a previous copy (ie: no ETag available) or has a stale version (ie: conflicting ETag).
+
+{%
+include figure image_path="/assets/images/2024/04/etag_use.svg"
+caption="Conflicting ETag hashcode will result in an update response from the server"
+img_style="padding: 10px; background-color: white; height: 320px;"
+%}
+
+To support this functionality, as well as many others which may depend on fetch/cache durations, we'll associate an 
+etag and last updated time to all `Data` elements by wrapping them in a new `DataRecord` class:
 
 ```scala
 case class DataRecord(data: Data, lastUpdate: Instant, etag: ETag)
 ```
+
+## External Datasource
+
+The focus of this article is the client-server communication, not the external datasource, so a very basic interface 
+will suffice:
+
+```scala
+trait ExternalData {
+
+  //Fetches `Data` from external datasource, 
+  // and if different than in cache update cache and queue message all subscribers
+  def queueFetchAll(ids: Seq[Int]): Unit
+  
+  //Returns all actively subscribed ids
+  def subscribedIds: ZIO[Any, Nothing, Set[Int]]
+  
+  
+}
+```
+

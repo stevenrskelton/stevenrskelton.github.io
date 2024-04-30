@@ -5,8 +5,7 @@ categories:
   - JavaScript
 tags:
   - Web_Components
-examples:
-  - sortable-table
+example: sortable-table
 ---
 
 {% include postlogo.html title="Web Components" src="/assets/images/2014/02/webcomponents.png" %} Most sortable HTML

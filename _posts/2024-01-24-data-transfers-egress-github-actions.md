@@ -6,8 +6,7 @@ tags:
   - SBT
   - GitHub
 excerpt_separator: <!--more-->
-examples:
-  - http-maven-receiver
+example: http-maven-receiver
 ---
 
 The free tier of GitHub Packages has limited bandwidth to download private artifacts; which can make it unsuitable for

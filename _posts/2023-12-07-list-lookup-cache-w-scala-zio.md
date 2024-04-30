@@ -6,8 +6,7 @@ tags:
   - ZIO
   - Non-Blocking/Concurrency
 excerpt_separator: <!--more-->
-examples:
-  - list-lookup-zio-cache
+example: list-lookup-zio-cache
 ---
 In-memory caches mapping `Key => Value` are a simple and versatile tool to reduce number of calls to an origin 
 datasource.  There are many use-cases requiring multiple cache calls, preferring `Seq[Key] => Seq[Value]`. Can a standard

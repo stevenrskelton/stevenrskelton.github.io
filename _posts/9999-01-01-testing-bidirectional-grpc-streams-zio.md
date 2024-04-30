@@ -6,7 +6,6 @@ tags:
   - ZIO
   - Non-Blocking/Concurrency
 excerpt_separator: <!--more-->
-examples:
-  - realtime-database-zio-hub-grpc
+example: realtime-database-zio-hub-grpc
 ---
 TODO:

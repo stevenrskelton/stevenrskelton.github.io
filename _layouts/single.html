@@ -54,33 +54,32 @@ layout: default
                 {% endif %}
                 {{ content }}
 
-                {% if page.examples %}
+                {% if page.example %}
                 <hr>
                 <h1>Sources</h1>
                 <div class="html-bg" style="margin-bottom:0.5em;">
                 {% assign entries_layout = page.entries_layout | default: 'list' %}
-                {% for example_id in page.examples %}
-                    {% assign example = site.examples[example_id] %}
-                    <section id="{{ example.name | slugify | downcase }}" class="taxonomy__section">
-                    {% include github_example_project.html id=example_id %}
-                    {% if example.sources %}
-                        <ul>
-                        {% for source_url in example.sources %}
-                            {% assign source_name = source_url | split: "/" | last %}
-                            <li><a href="{{ example.url }}{{ source_url }}" title="{{ source_name }}" target="_blank">{{ source_name }}</a></li>
-                        {% endfor %}
-                        </ul>
-                    {% endif %}
-                    {% assign related_posts = site.posts | where_exp:"item", "item.examples contains example_id" | where_exp:"item", "item != page" %}
-                    {% if related_posts %}
-                        <div class="entries-{{ entries_layout }}">
-                        {% for post in related_posts %}
-                            {% include archive-single.html type=entries_layout %}
-                        {% endfor %}
-                        </div>
-                    {% endif %}
-                    </section>
-                {% endfor %}
+                {% assign example = site.examples[page.example] %}
+                <section id="{{ example.name | slugify | downcase }}" class="taxonomy__section">
+                {% include github_example_project.html id=page.example %}
+                {% assign sources = example.sources | page.sources %}
+                {% if sources %}
+                    <ul>
+                    {% for source_url in sources %}
+                        {% assign source_name = source_url | split: "/" | last %}
+                        <li><a href="{{ example.url }}{{ source_url }}" title="{{ source_name }}" target="_blank">{{ source_name }}</a></li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+                {% assign related_posts = site.posts | where_exp:"item", "item.examples contains page.example" | where_exp:"item", "item != page" %}
+                {% if related_posts %}
+                    <div class="entries-{{ entries_layout }}">
+                    {% for post in related_posts %}
+                        {% include archive-single.html type=entries_layout %}
+                    {% endfor %}
+                    </div>
+                {% endif %}
+                </section>
                 </div>
                 {% endif %}
 
