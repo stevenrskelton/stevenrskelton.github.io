@@ -1,9 +1,53 @@
-<mxfile host="app.diagrams.net" modified="2024-04-30T18:11:39.933Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:125.0) Gecko/20100101 Firefox/125.0" version="24.3.0" etag="L6nH8DqsJAGrgKjZMdQ3" type="github">
+<mxfile host="app.diagrams.net" modified="2024-04-30T18:27:37.371Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:125.0) Gecko/20100101 Firefox/125.0" etag="VrG4uQ7ZlVjZEJbhaHPm" version="24.3.0" type="github">
   <diagram name="Page-1" id="LemARzdcaRKkrN3H_Rp8">
-    <mxGraphModel>
+    <mxGraphModel dx="1955" dy="721" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="aujMiwXBDl4TfSQO6VLi-7" value="Server gRPC" style="swimlane;whiteSpace=wrap;html=1;rounded=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="425" y="130" width="285" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="aujMiwXBDl4TfSQO6VLi-8" value="Subscription&lt;br&gt;Manager" style="shape=trapezoid;perimeter=trapezoidPerimeter;whiteSpace=wrap;html=1;fixedSize=1;fillColor=#ffe6cc;strokeColor=#d79b00;rounded=1;sketch=1;curveFitting=1;jiggle=2;shadow=0;textShadow=0;fontStyle=1" vertex="1" parent="aujMiwXBDl4TfSQO6VLi-7">
+          <mxGeometry x="45" y="58" width="110" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="aujMiwXBDl4TfSQO6VLi-9" value="Data&lt;br&gt;Cache" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#e1d5e7;strokeColor=#9673a6;sketch=1;curveFitting=1;jiggle=2;shadow=0;textShadow=0;fontStyle=1" vertex="1" parent="aujMiwXBDl4TfSQO6VLi-7">
+          <mxGeometry x="185" y="38" width="70" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="aujMiwXBDl4TfSQO6VLi-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;strokeWidth=2;fillColor=#e1d5e7;strokeColor=#9673a6;sketch=1;curveFitting=1;jiggle=2;" edge="1" parent="aujMiwXBDl4TfSQO6VLi-7" source="aujMiwXBDl4TfSQO6VLi-8" target="aujMiwXBDl4TfSQO6VLi-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="aujMiwXBDl4TfSQO6VLi-1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;shadow=0;textShadow=0;sketch=1;curveFitting=1;jiggle=2;flowAnimation=0;fillColor=#ffe6cc;strokeColor=#d79b00;strokeWidth=2;entryX=0;entryY=0.25;entryDx=0;entryDy=0;" edge="1" parent="1" target="aujMiwXBDl4TfSQO6VLi-8">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="470" y="203" as="targetPoint" />
+            <mxPoint x="110" y="204" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="470" y="203" />
+              <mxPoint x="470" y="204" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="aujMiwXBDl4TfSQO6VLi-2" value="&lt;div style=&quot;font-size: 13px;&quot;&gt;Subscribe with cached ETag&lt;br&gt;&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;fontSize=13;spacingTop=2;" vertex="1" connectable="0" parent="aujMiwXBDl4TfSQO6VLi-1">
+          <mxGeometry x="0.3196" y="-2" relative="1" as="geometry">
+            <mxPoint x="-76" y="-17" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="aujMiwXBDl4TfSQO6VLi-4" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;shadow=0;textShadow=0;sketch=1;curveFitting=1;jiggle=2;fillColor=#e1d5e7;strokeColor=#9673a6;strokeWidth=2;dashed=1;dashPattern=1 4;exitX=0;exitY=0.75;exitDx=0;exitDy=0;" edge="1" parent="1" source="aujMiwXBDl4TfSQO6VLi-8">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="370" y="300" as="sourcePoint" />
+            <mxPoint x="110" y="224" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="aujMiwXBDl4TfSQO6VLi-5" value="&lt;div&gt;Response when ETag different&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];labelBackgroundColor=none;fontSize=13;spacingTop=3;" vertex="1" connectable="0" parent="aujMiwXBDl4TfSQO6VLi-4">
+          <mxGeometry x="0.072" y="2" relative="1" as="geometry">
+            <mxPoint x="1" y="4" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="aujMiwXBDl4TfSQO6VLi-12" value="Client gRPC" style="swimlane;whiteSpace=wrap;html=1;rounded=1;sketch=1;curveFitting=1;jiggle=2;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="-20" y="130" width="170" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="aujMiwXBDl4TfSQO6VLi-14" value="&lt;b&gt;Local&lt;br&gt;Cache&lt;br&gt;&lt;/b&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#d5e8d4;strokeColor=#82b366;sketch=1;curveFitting=1;jiggle=2;" vertex="1" parent="aujMiwXBDl4TfSQO6VLi-12">
+          <mxGeometry x="55" y="38" width="70" height="90" as="geometry" />
+        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>
