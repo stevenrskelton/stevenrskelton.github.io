@@ -20,7 +20,7 @@ object BidirectionalTestClients {
       grpcServer <- ServerLayer
         .fromServiceList(
           ServerBuilder.forPort(serverPort).addService(ProtoReflectionService.newInstance()),
-          ServiceList.add(zSyncServiceImpl.transformContextZIO(SyncServer.authenticatedUserContext)),
+          ServiceList.add(zSyncServiceImpl.transformContextZIO(Main.authenticatedUserContext)),
         )
         .launch.forkScoped
       client1 <- GrpcClient.launch(1, serverPort)

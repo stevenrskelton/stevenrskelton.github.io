@@ -23,9 +23,9 @@ customized beyond what expensive paid-for services such as Firebase can do.<!--m
 # Client demands for data streaming
 
 The typical simple web-based client-server communication pattern is for data to be requested by the client. When
-clients want new data or otherwise interact, it will initiate a new request to the server. But as server technology 
+clients want new data or otherwise interact, it will initiate a new request to the server. But as server technology
 and hardware capacities have increased, user expectations have increased to expect all client UIs to present realtime
-data without the friction of manually requesting data updates. The typical client-server communication is slowly 
+data without the friction of manually requesting data updates. The typical client-server communication is slowly
 evolving into the stream of data in both directions between the client and server.
 
 # gRPC Server Bi-Directional Streaming using HTTP/2
@@ -33,13 +33,13 @@ evolving into the stream of data in both directions between the client and serve
 The evolution of technology has resulted in 2 technology standards for web-based bi-directional communications:  
 [WebSockets](https://en.wikipedia.org/wiki/WebSocket) and HTTP/2 streams.
 
-WebSockets were created first as the ability for a standard HTTP/1.1 connection to upgrade to support bi-directional 
-client-server streaming. This is still the best approach for browser-server communications because of its clear 
-JavaScript APIs within all browsers, backwards compatibility for HTTP/1.1-only clients, and its ability to take 
+WebSockets were created first as the ability for a standard HTTP/1.1 connection to upgrade to support bi-directional
+client-server streaming. This is still the best approach for browser-server communications because of its clear
+JavaScript APIs within all browsers, backwards compatibility for HTTP/1.1-only clients, and its ability to take
 advantage of performance improvements offered by HTTP/2 and beyond.
 
-For non-browser communications, such as with mobile apps or inter-server communication WebSockets is an unnecessary 
-layer. As WebSockets runs over HTTP, because HTTP/2 has directly integrated multiplexed streaming capabilities it is 
+For non-browser communications, such as with mobile apps or inter-server communication WebSockets is an unnecessary
+layer. As WebSockets runs over HTTP, because HTTP/2 has directly integrated multiplexed streaming capabilities it is
 better for abstraction libraries such as gRPC to directly support HTTP/2 instead of the higher-level WebSocket layer.
 
 ```protobuf
@@ -50,14 +50,11 @@ service SyncService {
 
 ```scala
 def bidirectional(request: Stream[StatusException, Request]): Stream[StatusException, Response] =
-  //request.flatMap:
-  //  Request => Stream[StatusException, Response]
+//request.flatMap:
+//  Request => Stream[StatusException, Response]
 ```
 
-
 ## ZIO Hub for Concurrency and Subscriptions
-
-
 
 ```protobuf
 message SyncRequest {
@@ -76,3 +73,24 @@ include figure image_path="/assets/images/2024/04/realtime_database.svg"
 caption="Realtime database pushing updates to clients using bi-directional gRPC Streams"
 img_style="padding: 10px; background-color: white; height: 320px;"
 %}
+
+# Data
+
+The `Data` class will represent an arbitrary data record class, code will rely on the presence of an `id` field, here
+represented as an `uint32`. While this type doesn't exist in Java, it adds clarity to the API, but as the Protocol
+Buffers Documentation [API Best Practices](https://protobuf.dev/programming-guides/api/) indicates, limits to even the
+_int64_ addressable range may make
+a [string id more preferable](https://protobuf.dev/programming-guides/api/#integer-field-for-id). The `field1` field is
+unused in the sample code beyond ETag validation unit tests.
+
+```protobuf
+message Data {
+  uint32 id = 1;
+  string field1 = 2;
+}
+```
+Internally, it is helpful to know the last updated time and ETag of all `Data`, so we'll create a `DataRecord` class: 
+
+```scala
+case class DataRecord(data: Data, lastUpdate: Instant, etag: ETag)
+```

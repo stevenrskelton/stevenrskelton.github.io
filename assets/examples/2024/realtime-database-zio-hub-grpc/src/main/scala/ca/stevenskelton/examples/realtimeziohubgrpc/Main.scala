@@ -5,7 +5,7 @@ import io.grpc.{Metadata, ServerBuilder, Status, StatusException}
 import scalapb.zio_grpc.{RequestContext, ServerLayer, ServiceList}
 import zio.{Cause, ExitCode, IO, URIO, ZIO, ZIOAppDefault}
 
-object SyncServer extends ZIOAppDefault:
+object Main extends ZIOAppDefault:
 
   val MetadataUserIdKey = "user-id"
 

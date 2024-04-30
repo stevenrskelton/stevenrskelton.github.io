@@ -10,11 +10,6 @@ Compile / PB.targets := Seq(
   scalapb.zio_grpc.ZioCodeGenerator -> (Compile / sourceManaged).value / "scalapb"
 )
 
-libraryDependencies ++= Seq(
-  "io.grpc" % "grpc-netty" % "1.62.2",
-  "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion
-)
-
 lazy val realtimeziohubgrpc = project
   .in(file("."))
   .settings(
@@ -32,7 +27,7 @@ lazy val realtimeziohubgrpc = project
       "dev.zio" %% "zio-test-magnolia"  % "2.1-RC1" % Test,
       "dev.zio" %% "zio-test-junit"     % "2.1-RC1" % Test,
     ),
-    javacOptions ++= Seq("-source", "11", "-target", "11"),
+    javacOptions ++= Seq("-source", "17", "-target", "17"),
     scalacOptions ++= Seq(
       "-encoding", "UTF-8",
 //      "-deprecation",

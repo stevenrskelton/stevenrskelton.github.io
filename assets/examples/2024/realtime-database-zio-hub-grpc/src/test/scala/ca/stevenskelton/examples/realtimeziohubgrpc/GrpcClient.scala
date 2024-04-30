@@ -29,7 +29,7 @@ object GrpcClient:
       val grpcLayer: ZLayer[Any, Throwable, SyncServiceClient] = SyncServiceClient.live(
         ZManagedChannel(ManagedChannelBuilder.forAddress("localhost", serverPort).usePlaintext()),
         options = CallOptions.DEFAULT,
-        metadata = SafeMetadata.make((SyncServer.MetadataUserIdKey, userId.toString)),
+        metadata = SafeMetadata.make((Main.MetadataUserIdKey, userId.toString)),
       )
 
       val responses = SyncServiceClient
