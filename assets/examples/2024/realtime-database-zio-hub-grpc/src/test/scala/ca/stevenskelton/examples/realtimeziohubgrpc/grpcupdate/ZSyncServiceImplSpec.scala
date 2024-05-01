@@ -12,7 +12,7 @@ import zio.test.{Live, Spec, TestEnvironment, assertTrue}
 import zio.{Scope, ZIO, durationInt}
 
 class ZSyncServiceImplSpec extends JUnitRunnableSpec:
-  override def spec = ZSyncServiceImplSpec.spec
+  override def spec: Spec[TestEnvironment & Scope, Any] = ZSyncServiceImplSpec.spec
 
 object ZSyncServiceImplSpec extends JUnitRunnableSpec:
 
@@ -66,9 +66,9 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
         zSyncService <- ZSyncServiceImpl.launch
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id2))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id3))
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(2))
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(3))
         responses <- clients.responses(15)
       yield assertTrue:
         responses.size == 15 &&
@@ -83,10 +83,10 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
         zSyncService <- ZSyncServiceImpl.launch
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
         _ <- clients.responses(6, (User2, SyncRequest(unsubscribes = Seq(SyncRequest.Unsubscribe(Id1)))))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id2))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id3))
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(2))
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(3))
         responses <- clients.responses(8)
       yield assertTrue:
         responses.length == 8 &&
@@ -101,10 +101,10 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
         zSyncService <- ZSyncServiceImpl.launch
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
         _ <- clients.responses(7, (User2, SyncRequest(unsubscribes = Seq(SyncRequest.Unsubscribe(all = true)))))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id2))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id3))
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(2))
+        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(3))
         responses <- clients.responses(6)
       yield assertTrue:
         responses.length == 6 &&

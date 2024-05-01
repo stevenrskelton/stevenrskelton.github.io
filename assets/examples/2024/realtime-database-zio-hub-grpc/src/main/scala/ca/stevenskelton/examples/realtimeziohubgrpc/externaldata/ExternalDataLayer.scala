@@ -19,30 +19,33 @@ class ExternalDataLayer(hardcodedData: Seq[Data]):
                      databaseRecordsRef: Ref[Map[Int, DataRecord]],
                      globalSubscribersRef: Ref[Set[Ref[HashSet[Int]]]],
                    ): UIO[ExternalDataService] =
+
+    var fetchData: Seq[Data] = hardcodedData
+
     for
       fetchQueue <- Queue.unbounded[Int]
+      _ <- ZStream.fromQueue(fetchQueue).mapZIO:
+        id =>
+          fetchData.find(_.id == id).map:
+            data =>
+              fetchData = fetchData.filterNot(_ eq data)
+              for
+                now <- zio.Clock.instant
+                updatesDataRecordOption <- databaseRecordsRef.modify:
+                  database =>
+                    val etag = DataRecord.calculateEtag(data)
+                    database.get(data.id) match
+                      case Some(existing) if existing.etag == etag => (None, database)
+                      case _ =>
+                        val dataRecord = DataRecord(data, now, etag)
+                        (Some(dataRecord), database.updated(dataRecord.data.id, dataRecord))
+                _ <- updatesDataRecordOption match
+                  case Some(dataRecord) => journal.publish(dataRecord)
+                  case _ => ZIO.unit
+              yield ()
+          .getOrElse:
+            ZIO.unit
+      .runDrain
+      .fork
     yield
-      new ExternalDataService(fetchQueue, journal, databaseRecordsRef, globalSubscribersRef):
-
-        var fetchData: Seq[Data] = hardcodedData
-
-        ZStream.fromQueue(fetchQueue).mapZIO:
-          id =>
-            fetchData.find(_.id == id).map:
-              data =>
-                fetchData = fetchData.filterNot(_ eq data)
-                for
-                  now <- zio.Clock.instant
-                  updatesFlaggedStatues <- databaseRecordsRef.update:
-                    database =>
-                      val etag = DataRecord.calculateEtag(data)
-                      database.get(data.id) match
-                        case Some(existing) if existing.etag == etag => database
-                        case _ =>
-                          val dataRecord = DataRecord(data, now, etag)
-                          journal.publish(dataRecord).as(DataUpdateStatus.of(dataRecord.data.id, dataRecord.etag, UPDATED, None))
-                          database.updated(dataRecord.data.id, dataRecord)
-                yield ()
-
-            .getOrElse:
-              ZIO.unit
+      ExternalDataService(fetchQueue, journal, databaseRecordsRef, globalSubscribersRef)
