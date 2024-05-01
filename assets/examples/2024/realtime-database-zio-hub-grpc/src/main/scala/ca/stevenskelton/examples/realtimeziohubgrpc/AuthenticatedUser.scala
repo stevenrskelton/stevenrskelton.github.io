@@ -8,7 +8,7 @@ case class AuthenticatedUser(userId: AuthenticatedUser.UserId) extends AnyVal
 
 object AuthenticatedUser:
   val MetadataUserIdKey = "user-id"
-  
+
   type UserId = Int
 
   def context(requestContext: RequestContext): IO[StatusException, AuthenticatedUser] =

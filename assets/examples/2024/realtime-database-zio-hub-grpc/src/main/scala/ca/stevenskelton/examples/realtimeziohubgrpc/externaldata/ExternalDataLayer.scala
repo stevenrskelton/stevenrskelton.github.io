@@ -1,12 +1,11 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc.externaldata
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, UpdateRequest}
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateRequest.DataUpdate
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateResponse.DataUpdateStatus
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateResponse.State.*
+import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, UpdateRequest}
 import zio.stream.ZStream
-import zio.{Chunk, Dequeue, Hub, Queue, Ref, UIO, ULayer, ZIO, ZLayer}
+import zio.{Hub, Queue, Ref, UIO, ULayer, ZIO, ZLayer}
 
 import scala.collection.immutable.HashSet
 
@@ -19,7 +18,7 @@ class ExternalDataLayer(hardcodedData: Seq[Data]):
                      journal: Hub[DataRecord],
                      databaseRecordsRef: Ref[Map[Int, DataRecord]],
                      globalSubscribersRef: Ref[Set[Ref[HashSet[Int]]]],
-            ): UIO[ExternalDataService] =
+                   ): UIO[ExternalDataService] =
     for
       fetchQueue <- Queue.unbounded[Int]
     yield

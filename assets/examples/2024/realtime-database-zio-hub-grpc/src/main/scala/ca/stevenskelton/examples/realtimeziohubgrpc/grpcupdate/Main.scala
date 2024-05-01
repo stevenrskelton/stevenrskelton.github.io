@@ -7,7 +7,7 @@ import scalapb.zio_grpc.{RequestContext, ServerLayer, ServiceList}
 import zio.{Cause, ExitCode, IO, URIO, ZIO, ZIOAppDefault}
 
 object Main extends ZIOAppDefault:
-  
+
   private val GRPCServerPort = 9000
 
   override def run: URIO[Any, ExitCode] =

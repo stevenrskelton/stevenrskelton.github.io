@@ -1,11 +1,11 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc.externaldata
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.AuthenticatedUser.UserId
-import ca.stevenskelton.examples.realtimeziohubgrpc.{BidirectionalTestClients, DataRecord}
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.ETag
 import ca.stevenskelton.examples.realtimeziohubgrpc.externaldata.ZSyncServiceImpl
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateRequest.DataUpdate
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse, UpdateRequest}
+import ca.stevenskelton.examples.realtimeziohubgrpc.{BidirectionalTestClients, DataRecord}
 import zio.stream.{UStream, ZStream}
 import zio.test.junit.JUnitRunnableSpec
 import zio.test.{Live, Spec, TestEnvironment, assertTrue}
@@ -59,10 +59,10 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
       .zip(createData(batch - 1))
       .map((data, previousData) => DataUpdate.of(Some(data), DataRecord.calculateEtag(previousData)))
   )
-  
-//  def createZSyncService(updates: UpdateRequest*): UIO[ZSyncServiceImpl] = {
-//    ZSyncServiceImpl.launch.provideLayer(ZLayer.succeed(ExternalDataLayer(updates)))
-//  }
+
+  //  def createZSyncService(updates: UpdateRequest*): UIO[ZSyncServiceImpl] = {
+  //    ZSyncServiceImpl.launch.provideLayer(ZLayer.succeed(ExternalDataLayer(updates)))
+  //  }
 
   override def spec: Spec[TestEnvironment & Scope, Any] = suite("multiple client listeners")(
     test("All updated") {

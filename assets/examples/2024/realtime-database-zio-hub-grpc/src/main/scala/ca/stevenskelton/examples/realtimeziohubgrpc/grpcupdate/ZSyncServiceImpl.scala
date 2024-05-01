@@ -1,9 +1,8 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc.grpcupdate
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.commands.{DatabaseUpdate, ModifyUserSubscriptions}
-import ca.stevenskelton.examples.realtimeziohubgrpc.{AuthenticatedUser, DataRecord}
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateResponse.DataUpdateStatus
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{SyncRequest, SyncResponse, UpdateRequest, UpdateResponse, ZioSyncService}
+import ca.stevenskelton.examples.realtimeziohubgrpc.{AuthenticatedUser, DataRecord}
 import io.grpc.StatusException
 import zio.stream.ZStream.HaltStrategy
 import zio.stream.{Stream, ZStream}
@@ -40,10 +39,10 @@ case class ZSyncServiceImpl private(
             ZStream.fromIterableZIO:
               databaseRecordsRef.get.flatMap:
                 databaseRecords => ModifyUserSubscriptions.process(syncRequest, userSubscriptionsRef, databaseRecords)
-        
+
         updateStream.merge(requestStreams, strategy = HaltStrategy.Right)
 
-  
+
   private def createUserSubscriptionStream(userSubscriptionsRef: Ref[HashSet[Int]]): ZIO[Scope, Nothing, Stream[StatusException, SyncResponse]] =
     ZStream.fromHubScoped(journal, ZSyncServiceImpl.HubMaxChunkSize).map:
       _.filterZIO:
