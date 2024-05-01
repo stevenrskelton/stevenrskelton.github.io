@@ -8,7 +8,6 @@ tags:
 excerpt_separator: <!--more-->
 example: realtime-database-zio-hub-grpc
 sources:
-  - "/src/main/protobuf/sync_service.proto"
   - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/grpcupdate/Main.scala"
   - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/grpcupdate/ZSyncServiceImpl.scala"
   - "/src/test/scala/ca/stevenskelton/examples/realtimeziohubgrpc/grpcupdate/ZSyncServiceImplSpec.scala"
