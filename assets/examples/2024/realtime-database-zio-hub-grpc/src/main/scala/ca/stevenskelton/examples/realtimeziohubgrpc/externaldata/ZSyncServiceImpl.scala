@@ -6,7 +6,7 @@ import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{SyncRequest, S
 import io.grpc.StatusException
 import zio.stream.ZStream.HaltStrategy
 import zio.stream.{Stream, ZStream}
-import zio.{Hub, IO, Ref, Scope, UIO, ZIO}
+import zio.{Hub, IO, Ref, Scope, UIO, ZIO, URIO}
 
 import scala.collection.immutable.HashSet
 
@@ -15,21 +15,24 @@ object ZSyncServiceImpl:
   private val HubCapacity = 1000
   private val HubMaxChunkSize = 1000
 
-  def launch: UIO[ZSyncServiceImpl] =
-    for
-      dataJournal <- Hub.sliding[DataRecord](HubCapacity)
-      databaseRef <- Ref.make[Map[Int, DataRecord]](Map.empty)
-      globalSubscribersRef <- Ref.make[Set[Ref[HashSet[Int]]]](Set.empty)
-      externalData <- ExternalData.create(dataJournal, databaseRef, globalSubscribersRef)
-    yield
-      ZSyncServiceImpl(dataJournal, databaseRef, globalSubscribersRef, externalData)
+  def launch: URIO[ExternalDataLayer, ZSyncServiceImpl] =
+    ZIO.serviceWithZIO[ExternalDataLayer]:
+      externalDataLayer =>
+        for
+          dataJournal <- Hub.sliding[DataRecord](HubCapacity)
+          databaseRef <- Ref.make[Map[Int, DataRecord]](Map.empty)
+          globalSubscribersRef <- Ref.make[Set[Ref[HashSet[Int]]]](Set.empty)
+          externalDataService <- externalDataLayer.createService(dataJournal, databaseRef, globalSubscribersRef)
+        yield
+          ZSyncServiceImpl(dataJournal, databaseRef, globalSubscribersRef, externalDataService)
+
 
 
 case class ZSyncServiceImpl private(
                                      journal: Hub[DataRecord],
                                      databaseRecordsRef: Ref[Map[Int, DataRecord]],
                                      globalSubscribersRef: Ref[Set[Ref[HashSet[Int]]]],
-                                     externalData: ExternalData,
+                                     externalDataService: ExternalDataService,
                                    ) extends ZioSyncService.ZSyncService[AuthenticatedUser]:
 
   override def bidirectionalStream(request: Stream[StatusException, SyncRequest], context: AuthenticatedUser): Stream[StatusException, SyncResponse] =
@@ -45,7 +48,7 @@ case class ZSyncServiceImpl private(
               databaseRecordsRef.get.flatMap:
                 databaseRecords => modifyUserSubscriptionsRef(syncRequest, userSubscriptionsRef, databaseRecords)
               .tap:
-                responses => externalData.queueFetchAll(responses.withFilter(_.state == SyncResponse.State.LOADING).map(_.id))
+                responses => externalDataService.queueFetchAll(responses.withFilter(_.state == SyncResponse.State.LOADING).map(_.id))
 
         val endOfAllRequestsStream = ZStream.finalizer:
           globalSubscribersRef.update:

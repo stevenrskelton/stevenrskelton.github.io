@@ -63,7 +63,7 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
   override def spec: Spec[TestEnvironment & Scope, Any] = suite("multiple client listeners")(
     test("All updated") {
       for
-        zSyncService <- ZSyncServiceImpl.launch
+        zSyncService <- ZSyncServiceImpl.launch.provideLayer(ExternalDataLayer.live)
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
@@ -80,7 +80,7 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     },
     test("Unsubscribe by Id") {
       for
-        zSyncService <- ZSyncServiceImpl.launch
+        zSyncService <- ZSyncServiceImpl.launch.provideLayer(ExternalDataLayer.live)
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
@@ -98,7 +98,7 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     },
     test("Unsubscribe All") {
       for
-        zSyncService <- ZSyncServiceImpl.launch
+        zSyncService <- ZSyncServiceImpl.launch.provideLayer(ExternalDataLayer.live)
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
@@ -117,7 +117,7 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     test("Subscribe Response when previous_etag matches") {
       val initialData = ZSyncServiceImplSpec.createUpdateRequest(1)
       for
-        zSyncService <- ZSyncServiceImpl.launch
+        zSyncService <- ZSyncServiceImpl.launch.provideLayer(ExternalDataLayer.live)
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
         _ <- clients.responses(1, (User1, SyncRequest(subscribes = Seq(SyncRequest.Subscribe(id = Id1)))))
@@ -139,14 +139,14 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     },
     test("Iterate active subscriptions") {
       for
-        zSyncService <- ZSyncServiceImpl.launch
+        zSyncService <- ZSyncServiceImpl.launch.provideLayer(ExternalDataLayer.live)
         clients <- BidirectionalTestClients.launch(zSyncService)
-        subscribedIds0 <- zSyncService.externalData.subscribedIds
+        subscribedIds0 <- zSyncService.externalDataService.subscribedIds
         responses <- clients.responses(5, SubscribeActions *)
-        subscribedIds1 <- zSyncService.externalData.subscribedIds
+        subscribedIds1 <- zSyncService.externalDataService.subscribedIds
         _ <- clients.client3.requests.shutdown
         _ <- Live.live(ZIO.attempt("pause for shutdown").delay(100.milliseconds))
-        subscribedIds2 <- zSyncService.externalData.subscribedIds
+        subscribedIds2 <- zSyncService.externalDataService.subscribedIds
       yield assertTrue:
         subscribedIds0.isEmpty &&
           responses.size == 5 &&

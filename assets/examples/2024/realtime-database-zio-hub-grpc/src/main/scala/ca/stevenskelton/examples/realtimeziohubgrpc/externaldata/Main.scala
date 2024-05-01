@@ -22,4 +22,4 @@ object Main extends ZIOAppDefault:
     yield
       grpcServer
 
-    app.forever.exitCode
+    app.provideLayer(ExternalDataLayer.live).forever.exitCode
