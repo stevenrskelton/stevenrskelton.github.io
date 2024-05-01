@@ -1,15 +1,18 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc.externaldata
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord
+import ca.stevenskelton.examples.realtimeziohubgrpc.commands.DatabaseUpdate
+import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{UpdateRequest, UpdateResponse}
+import zio.stream.ZStream
 import zio.{Chunk, Hub, Queue, Ref, UIO, ZIO}
 
 import scala.collection.immutable.HashSet
 
 class ExternalDataService(
-                                    fetchQueue: Queue[Int],
-                                    dataJournal: Hub[DataRecord],
-                                    databaseRef: Ref[Map[Int, DataRecord]],
-                                    globalSubscribersRef: Ref[Set[Ref[HashSet[Int]]]],
+                           fetchQueue: Queue[Int],
+                           journal: Hub[DataRecord],
+                           databaseRecordsRef: Ref[Map[Int, DataRecord]],
+                           globalSubscribersRef: Ref[Set[Ref[HashSet[Int]]]],
                                   ):
 
   def subscribedIds: UIO[Set[Int]] =
@@ -19,4 +22,6 @@ class ExternalDataService(
     yield
       subscribedIdSets.flatten
 
-  def queueFetchAll(ids: Seq[Int]): UIO[Chunk[Int]] = fetchQueue.offerAll(ids)
+  def queueFetchAll(ids: Iterable[Int]): UIO[Chunk[Int]] = fetchQueue.offerAll(ids)
+
+  def update(request: UpdateRequest): UIO[UpdateResponse] = DatabaseUpdate.process(request, journal, databaseRecordsRef)

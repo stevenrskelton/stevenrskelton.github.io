@@ -1,14 +1,15 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc.externaldata
 
-import ca.stevenskelton.examples.realtimeziohubgrpc.{AuthenticatedUser, DataRecord}
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateResponse.DataUpdateStatus
+import ca.stevenskelton.examples.realtimeziohubgrpc.commands.ModifyUserSubscriptions
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{SyncRequest, SyncResponse, UpdateRequest, UpdateResponse, ZioSyncService}
+import ca.stevenskelton.examples.realtimeziohubgrpc.{AuthenticatedUser, DataRecord}
 import io.grpc.StatusException
 import zio.stream.ZStream.HaltStrategy
 import zio.stream.{Stream, ZStream}
-import zio.{Hub, IO, Ref, Scope, UIO, ZIO, URIO}
+import zio.{Hub, IO, Ref, Scope, URIO, ZIO}
 
 import scala.collection.immutable.HashSet
+import scala.collection.mutable.ListBuffer
 
 object ZSyncServiceImpl:
 
@@ -19,13 +20,12 @@ object ZSyncServiceImpl:
     ZIO.serviceWithZIO[ExternalDataLayer]:
       externalDataLayer =>
         for
-          dataJournal <- Hub.sliding[DataRecord](HubCapacity)
-          databaseRef <- Ref.make[Map[Int, DataRecord]](Map.empty)
+          journal <- Hub.sliding[DataRecord](HubCapacity)
+          databaseRecordsRef <- Ref.make[Map[Int, DataRecord]](Map.empty)
           globalSubscribersRef <- Ref.make[Set[Ref[HashSet[Int]]]](Set.empty)
-          externalDataService <- externalDataLayer.createService(dataJournal, databaseRef, globalSubscribersRef)
+          externalDataService <- externalDataLayer.createService(journal, databaseRecordsRef, globalSubscribersRef)
         yield
-          ZSyncServiceImpl(dataJournal, databaseRef, globalSubscribersRef, externalDataService)
-
+          ZSyncServiceImpl(journal, databaseRecordsRef, globalSubscribersRef, externalDataService)
 
 
 case class ZSyncServiceImpl private(
@@ -46,9 +46,19 @@ case class ZSyncServiceImpl private(
           syncRequest =>
             ZStream.fromIterableZIO:
               databaseRecordsRef.get.flatMap:
-                databaseRecords => modifyUserSubscriptionsRef(syncRequest, userSubscriptionsRef, databaseRecords)
-              .tap:
-                responses => externalDataService.queueFetchAll(responses.withFilter(_.state == SyncResponse.State.LOADING).map(_.id))
+                databaseRecords => ModifyUserSubscriptions.process(syncRequest, userSubscriptionsRef, databaseRecords)
+              .flatMap:
+                responses =>
+                  val idsToFetch = new ListBuffer[Int]()
+                  val loadingResponses = responses.map:
+                    syncResponse =>
+                      if syncResponse.state == SyncResponse.State.NOT_FOUND then
+                        idsToFetch.append(syncResponse.id)
+                        syncResponse.copy(state = SyncResponse.State.LOADING)
+                      else syncResponse
+
+                  if idsToFetch.nonEmpty then externalDataService.queueFetchAll(idsToFetch).as(loadingResponses)
+                  else ZIO.succeed(loadingResponses)
 
         val endOfAllRequestsStream = ZStream.finalizer:
           globalSubscribersRef.update:
@@ -58,49 +68,6 @@ case class ZSyncServiceImpl private(
 
         updateStream.merge(requestStreams ++ endOfAllRequestsStream, strategy = HaltStrategy.Right)
 
-  end bidirectionalStream
-
-  private def modifyUserSubscriptionsRef(syncRequest: SyncRequest, userSubscriptionsRef: Ref[HashSet[Int]], databaseRecords: Map[Int, DataRecord]): UIO[Seq[SyncResponse]] =
-    import SyncResponse.State.{LOADING, NOT_SUBSCRIBED, UNCHANGED, UNSUBSCRIBED, UPDATED}
-
-    userSubscriptionsRef.modify:
-      originalSubscribedIds =>
-
-        var varSubscribedIds: HashSet[Int] = originalSubscribedIds
-
-        val unsubscribedIds =
-          if syncRequest.unsubscribes.isEmpty then Nil
-          else if syncRequest.unsubscribes.headOption.exists(_.all) then
-            varSubscribedIds = HashSet.empty
-            originalSubscribedIds.toSeq.map((_, true))
-          else
-            val (removed, remaining) = originalSubscribedIds.partition(id => syncRequest.unsubscribes.exists(_.id == id))
-            varSubscribedIds = remaining
-            removed.toSeq.map((_, true)) ++ syncRequest.unsubscribes.withFilter(o => !removed.contains(o.id)).map(o => (o.id, false))
-
-        val unsubscribedResponses = unsubscribedIds
-          .withFilter((id, _) => syncRequest.subscribes.forall(_.id != id))
-          .map:
-            case (id, true) => SyncResponse.of(id, "", None, UNSUBSCRIBED)
-            case (id, false) => SyncResponse.of(id, "", None, NOT_SUBSCRIBED)
-
-        val subscribedResponses =
-          if syncRequest.subscribes.isEmpty then Nil
-          else
-            syncRequest.subscribes.map:
-              subscribe =>
-                varSubscribedIds = varSubscribedIds.incl(subscribe.id)
-                databaseRecords.get(subscribe.id) match
-                  case Some(existing) if existing.etag == subscribe.previousEtag =>
-                    SyncResponse.of(subscribe.id, existing.etag, None, UNCHANGED)
-                  case Some(existing) =>
-                    SyncResponse.of(subscribe.id, existing.etag, Some(existing.data), UPDATED)
-                  case None =>
-                    SyncResponse.of(subscribe.id, "", None, LOADING)
-
-        (unsubscribedResponses ++ subscribedResponses, varSubscribedIds)
-
-  end modifyUserSubscriptionsRef
 
   private def createUserSubscriptionStream(userSubscriptionsRef: Ref[HashSet[Int]]): ZIO[Scope, Nothing, Stream[StatusException, SyncResponse]] =
     ZStream.fromHubScoped(journal, ZSyncServiceImpl.HubMaxChunkSize).map:

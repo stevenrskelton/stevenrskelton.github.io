@@ -44,6 +44,7 @@ message SyncResponse {
     LOADING = 2;
     UNSUBSCRIBED = 3;
     NOT_SUBSCRIBED = 4;
+    NOT_FOUND = 5;
   }
   State state = 4;
 }

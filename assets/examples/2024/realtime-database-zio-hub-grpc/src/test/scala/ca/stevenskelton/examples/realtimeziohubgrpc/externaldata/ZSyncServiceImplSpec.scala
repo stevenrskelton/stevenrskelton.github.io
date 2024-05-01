@@ -9,7 +9,7 @@ import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequ
 import zio.stream.{UStream, ZStream}
 import zio.test.junit.JUnitRunnableSpec
 import zio.test.{Live, Spec, TestEnvironment, assertTrue}
-import zio.{Scope, ZIO, durationInt}
+import zio.{Scope, UIO, ZIO, durationInt}
 
 class ZSyncServiceImplSpec extends JUnitRunnableSpec:
   override def spec = ZSyncServiceImplSpec.spec
@@ -59,6 +59,10 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
       .zip(createData(batch - 1))
       .map((data, previousData) => DataUpdate.of(Some(data), DataRecord.calculateEtag(previousData)))
   )
+  
+//  def createZSyncService(updates: UpdateRequest*): UIO[ZSyncServiceImpl] = {
+//    ZSyncServiceImpl.launch.provideLayer(ZLayer.succeed(ExternalDataLayer(updates)))
+//  }
 
   override def spec: Spec[TestEnvironment & Scope, Any] = suite("multiple client listeners")(
     test("All updated") {
@@ -66,9 +70,9 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
         zSyncService <- ZSyncServiceImpl.launch.provideLayer(ExternalDataLayer.live)
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id2))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id3))
+        _ <- zSyncService.externalDataService.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
+        _ <- zSyncService.externalDataService.update(ZSyncServiceImplSpec.createUpdateRequest(Id2))
+        _ <- zSyncService.externalDataService.update(ZSyncServiceImplSpec.createUpdateRequest(Id3))
         responses <- clients.responses(15)
       yield assertTrue:
         responses.size == 15 &&
@@ -83,10 +87,10 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
         zSyncService <- ZSyncServiceImpl.launch.provideLayer(ExternalDataLayer.live)
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
+        _ <- zSyncService.externalDataService.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
         _ <- clients.responses(6, (User2, SyncRequest(unsubscribes = Seq(SyncRequest.Unsubscribe(Id1)))))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id2))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id3))
+        _ <- zSyncService.externalDataService.update(ZSyncServiceImplSpec.createUpdateRequest(Id2))
+        _ <- zSyncService.externalDataService.update(ZSyncServiceImplSpec.createUpdateRequest(Id3))
         responses <- clients.responses(8)
       yield assertTrue:
         responses.length == 8 &&
@@ -101,10 +105,10 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
         zSyncService <- ZSyncServiceImpl.launch.provideLayer(ExternalDataLayer.live)
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
+        _ <- zSyncService.externalDataService.update(ZSyncServiceImplSpec.createUpdateRequest(Id1))
         _ <- clients.responses(7, (User2, SyncRequest(unsubscribes = Seq(SyncRequest.Unsubscribe(all = true)))))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id2))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(Id3))
+        _ <- zSyncService.externalDataService.update(ZSyncServiceImplSpec.createUpdateRequest(Id2))
+        _ <- zSyncService.externalDataService.update(ZSyncServiceImplSpec.createUpdateRequest(Id3))
         responses <- clients.responses(6)
       yield assertTrue:
         responses.length == 6 &&
@@ -119,14 +123,14 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
       for
         zSyncService <- ZSyncServiceImpl.launch.provideLayer(ExternalDataLayer.live)
         clients <- BidirectionalTestClients.launch(zSyncService)
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
+        _ <- zSyncService.externalDataService.update(ZSyncServiceImplSpec.createUpdateRequest(1))
         _ <- clients.responses(1, (User1, SyncRequest(subscribes = Seq(SyncRequest.Subscribe(id = Id1)))))
         subscribe2Response <- clients.responses(2, (User2, SyncRequest(
           subscribes = Seq(
             SyncRequest.Subscribe.of(id = Id1, previousEtag = initialData.updates.etag(Id1)),
             SyncRequest.Subscribe(id = Id2),
           ))))
-        _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(2))
+        _ <- zSyncService.externalDataService.update(ZSyncServiceImplSpec.createUpdateRequest(2))
         responses <- clients.responses(3)
       yield assertTrue:
         subscribe2Response.find(_._2.id == Id1).get._2.data.isEmpty &&
