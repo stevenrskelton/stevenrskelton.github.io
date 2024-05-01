@@ -1,5 +1,5 @@
 ---
-title: "Realtime Client Database with External Datasource"
+title: "Realtime Client Database with External Datasource using ZLayer"
 categories:
   - Scala
 tags:
