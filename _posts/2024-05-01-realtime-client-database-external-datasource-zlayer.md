@@ -1,5 +1,5 @@
 ---
-title: "Realtime Client Database with External Datasource using ZLayer"
+title: "Realtime Client Database with External Datasource using ZIO ZLayer"
 categories:
   - Scala
 tags:
@@ -16,3 +16,10 @@ sources:
 ---
 
 //TODO
+
+{%
+include multi_part_post.html
+series="Realtime Client Database"
+p1="2024-04-15-realtime-client-database-grpc-streams-zio"
+p2="2024-05-01-realtime-client-database-external-datasource-zlayer"
+%}

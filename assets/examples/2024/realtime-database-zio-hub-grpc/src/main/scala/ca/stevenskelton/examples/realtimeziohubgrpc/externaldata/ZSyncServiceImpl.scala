@@ -6,10 +6,10 @@ import ca.stevenskelton.examples.realtimeziohubgrpc.{AuthenticatedUser, DataReco
 import io.grpc.StatusException
 import zio.stream.ZStream.HaltStrategy
 import zio.stream.{Stream, ZStream}
-import zio.{Hub, IO, Ref, Scope, URIO, ZIO}
+import zio.{Hub, IO, Ref, Scope, UIO, URIO, ZIO}
 
 import scala.collection.immutable.HashSet
-import scala.collection.mutable.ListBuffer
+import scala.collection.mutable
 
 object ZSyncServiceImpl:
 
@@ -26,7 +26,6 @@ object ZSyncServiceImpl:
           externalDataService <- externalDataLayer.createService(journal, databaseRecordsRef, globalSubscribersRef)
         yield
           ZSyncServiceImpl(journal, databaseRecordsRef, globalSubscribersRef, externalDataService)
-
 
 case class ZSyncServiceImpl private(
                                      journal: Hub[DataRecord],
@@ -49,11 +48,11 @@ case class ZSyncServiceImpl private(
                 databaseRecords => ModifyUserSubscriptions.process(syncRequest, userSubscriptionsRef, databaseRecords)
               .flatMap:
                 responses =>
-                  val idsToFetch = new ListBuffer[Int]()
+                  val idsToFetch = new mutable.HashSet[Int]()
                   val loadingResponses = responses.map:
                     syncResponse =>
                       if syncResponse.state == SyncResponse.State.NOT_FOUND then
-                        idsToFetch.append(syncResponse.id)
+                        idsToFetch.add(syncResponse.id)
                         syncResponse.copy(state = SyncResponse.State.LOADING)
                       else syncResponse
 

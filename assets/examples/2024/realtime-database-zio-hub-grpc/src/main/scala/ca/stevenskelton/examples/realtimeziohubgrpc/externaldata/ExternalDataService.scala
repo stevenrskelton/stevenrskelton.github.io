@@ -13,14 +13,7 @@ class ExternalDataService(
                            databaseRecordsRef: Ref[Map[Int, DataRecord]],
                            globalSubscribersRef: Ref[Set[Ref[HashSet[Int]]]],
                          ):
-
-  def subscribedIds: UIO[Set[Int]] =
-    for
-      globalSubscribers <- globalSubscribersRef.get
-      subscribedIdSets <- ZIO.collectAll(globalSubscribers.map(_.get))
-    yield
-      subscribedIdSets.flatten
-
+  
   def queueFetchAll(ids: Iterable[Int]): UIO[Chunk[Int]] = fetchQueue.offerAll(ids)
 
   def update(request: UpdateRequest): UIO[UpdateResponse] = DatabaseUpdate.process(request, journal, databaseRecordsRef)

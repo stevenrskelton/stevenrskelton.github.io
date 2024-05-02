@@ -215,19 +215,11 @@ SBT subprojects will inherit properties from the root project so the `build.sbt`
 project dependencies. Our typical `build.sbt` used for each Quill subproject is similar to:
 
 ```sbt
-name := "sqluser"
-version := "0.1.0-SNAPSHOT"
-organization := "app.tradeaudit.tradeauditserver.sqldb"
+lazy val subprojectA = RootProject(file("../subproject-a"))
 
-scalaVersion := "3.4.0"
-
-val javaVersion = "17"
-
-lazy val sqlcommon = RootProject(file("../sqlcommon"))
-
-lazy val sqluser = (project in file("."))
-  .dependsOn(sqlcommon)
-  .aggregate(sqlcommon)
+lazy val root = (project in file("."))
+  .dependsOn(subprojectA)
+  .aggregate(subprojectA)
   .settings(
     scalacOptions ++= {
       Seq(

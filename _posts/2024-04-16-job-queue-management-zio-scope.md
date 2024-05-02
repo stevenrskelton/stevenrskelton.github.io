@@ -205,7 +205,7 @@ def takeUpToNQueued(max: Int):
 
 Implementation details of `add` / `addAll` are straight-forward queue enqueue operations. The return values of these
 may be immaterial for many use-cases. The example code emits enqueue outcomes to the server➤client stream, but for
-network efficiency these can be omitted.
+network efficiency, these can be omitted.
 
 The `takeUpToNQueue` implementation is best examined in 3 parts:
 - taking from the queue

@@ -17,11 +17,11 @@ object DatabaseUpdate:
             .flatMap:
               dataUpdate => dataUpdate.data.map((_, dataUpdate.previousEtag))
             .map:
-              (data, previousEtag) =>
+              (data, previousETag) =>
                 val updateETag = DataRecord.calculateEtag(data)
                 database.get(data.id) match
                   case Some(existing) if existing.etag == updateETag => (existing, UNCHANGED)
-                  case Some(existing) if existing.etag != previousEtag => (existing, CONFLICT)
+                  case Some(existing) if existing.etag != previousETag => (existing, CONFLICT)
                   case _ => (DataRecord(data, now, updateETag), UPDATED)
 
           val updates = updateStatuses.withFilter(_._2 == UPDATED).map:

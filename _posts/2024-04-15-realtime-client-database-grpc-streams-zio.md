@@ -21,6 +21,13 @@ immediately as they happen, or in the case of a client disconnect, immediately a
 and [ZIO Hub](https://zio.dev/reference/concurrency/hub/) allow this functionality to be easily replicated and
 customized beyond what expensive paid-for services such as Firebase can do.<!--more-->
 
+{%
+include multi_part_post.html
+series="Realtime Client Database"
+p1="2024-04-15-realtime-client-database-grpc-streams-zio"
+p2="2024-05-01-realtime-client-database-external-datasource-zlayer"
+%}
+
 {% include table-of-contents.html height="100px" %}
 
 # Client demands for data streaming
@@ -99,7 +106,7 @@ ETags are the part of the HTTP Specification and exist to reduce network transfe
 implemented signals that should the response have the same generated ETag that the server should respond with a _HTTP
 304 Not Modified_ instead of a 200 Success with a populated body.  
 
-The usefulness of an ETag depends on server support: APIs may implement ETag support similiar to HTTP Specification and
+The usefulness of an ETag depends on server support: APIs may implement ETag support similar to HTTP Specification and
 use it to omit a response body, others may use it internally to return a previous response from its cache, while others 
 solely include it as a convenience for clients.
 
@@ -113,7 +120,7 @@ img_style="padding: 10px; background-color: white; height: 320px;"
 %}
 
 To support this functionality, as well as many others which may depend on fetch/cache durations, we'll associate an 
-etag and last updated time to all `Data` elements by wrapping them in a new `DataRecord` class:
+ETag and last updated time to all `Data` elements by wrapping them in a new `DataRecord` class:
 
 ```scala
 case class DataRecord(data: Data, lastUpdate: Instant, etag: ETag)

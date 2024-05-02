@@ -137,6 +137,6 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
           responses.idRecords(Id1, User2).size == 1 &&
           responses.idRecords(Id2, User2).size == 1
     },
-  ) @@ zio.test.TestAspect.sequential //@@ zio.test.TestAspect.timeout(5.seconds)
+  ) @@zio.test.TestAspect.timeout(5.seconds) @@ zio.test.TestAspect.sequential
 
 
