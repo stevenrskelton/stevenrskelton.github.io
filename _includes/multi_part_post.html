@@ -2,7 +2,7 @@
 {% assign page_example = page.example %}
 {% assign related_posts = site.posts | where_exp:"item", "item.example == page_example" | where_exp:"item", "item != page" %}
 {% if related_posts %}
-<div class="html-bg" style="padding-bottom: 3em;">
+<div class="html-bg" style="padding-bottom: 2.5em;margin: 0.75em;">
   <strong>Other Posts in this Series</strong>
   {% for post in related_posts %}
 
@@ -14,7 +14,7 @@
 
     <div class="{{ include.type | default: 'list' }}__item">
       <article class="archive__item" itemscope itemtype="https://schema.org/CreativeWork">
-        <h3 class="archive__item-title no_toc" style="margin-bottom:0" itemprop="headline">
+        <h3 class="archive__item-title no_toc" itemprop="headline">
           {% if post.link %}
           <a href="{{ post.link }}">{{ title }}</a> <a href="{{ post.url | relative_url }}" rel="permalink"><i class="fas fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
           {% else %}
