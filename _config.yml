@@ -162,7 +162,7 @@ examples:
     description: "Realtime Database using ZIO Hub and Bi-Directional gRPC Streams."
     sources:
       - "/src/main/protobuf/sync_service.proto"
-      - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/Commands.scala"
+      - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/Effects.scala"
   http-maven-receiver:
     name: "HTTP Maven Receiver"
     url: "https://github.com/stevenrskelton/http-maven-receiver"

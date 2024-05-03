@@ -59,9 +59,10 @@ layout: default
                 <h1>Sources</h1>
                 <div class="html-bg" style="margin-bottom:0.5em;">
                 {% assign entries_layout = page.entries_layout | default: 'list' %}
-                {% assign example = site.examples[page.example] %}
+                {% assign page_example = page.example %}
+                {% assign example = site.examples[page_example] %}
                 <section id="{{ example.name | slugify | downcase }}" class="taxonomy__section">
-                {% include github_example_project.html id=page.example %}
+                {% include github_example_project.html id=page_example %}
                 {% assign empty_sources = '' | split: '' %}
                 {% assign config_sources = example.sources | default: empty_sources %}
                 {% assign sources = page.sources | concat: config_sources %}
@@ -73,7 +74,7 @@ layout: default
                     {% endfor %}
                     </ul>
                 {% endif %}
-                {% assign related_posts = site.posts | where_exp:"item", "item.examples contains page.example" | where_exp:"item", "item != page" %}
+                {% assign related_posts = site.posts | where_exp:"item", "item.examples contains page_example" | where_exp:"item", "item != page" %}
                 {% if related_posts %}
                     <div class="entries-{{ entries_layout }}">
                     {% for post in related_posts %}
