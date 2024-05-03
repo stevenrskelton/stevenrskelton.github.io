@@ -1,12 +1,12 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc.externaldata
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.commands.ModifyUserSubscriptions
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{SyncRequest, SyncResponse, UpdateRequest, UpdateResponse, ZioSyncService}
+import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse, UpdateRequest, UpdateResponse, ZioSyncService}
 import ca.stevenskelton.examples.realtimeziohubgrpc.{AuthenticatedUser, DataRecord}
 import io.grpc.StatusException
 import zio.stream.ZStream.HaltStrategy
 import zio.stream.{Stream, ZStream}
-import zio.{Hub, IO, Ref, Scope, UIO, URIO, ZIO}
+import zio.{Clock, Hub, IO, Ref, Scope, URIO, ZIO}
 
 import scala.collection.immutable.HashSet
 import scala.collection.mutable
@@ -16,12 +16,14 @@ object ZSyncServiceImpl:
   private val HubCapacity = 1000
   private val HubMaxChunkSize = 1000
 
-  def launch: URIO[ExternalDataLayer, ZSyncServiceImpl] =
+  def launch(initial: Seq[Data] = Nil): URIO[ExternalDataLayer, ZSyncServiceImpl] =
     ZIO.serviceWithZIO[ExternalDataLayer]:
       externalDataLayer =>
         for
           journal <- Hub.sliding[DataRecord](HubCapacity)
-          databaseRecordsRef <- Ref.make[Map[Int, DataRecord]](Map.empty)
+          now <- Clock.instant
+          initialMap = initial.map(data => data.id -> DataRecord(data, now, DataRecord.calculateEtag(data))).toMap
+          databaseRecordsRef <- Ref.make[Map[Int, DataRecord]](initialMap)
           globalSubscribersRef <- Ref.make[Set[Ref[HashSet[Int]]]](Set.empty)
           externalDataService <- externalDataLayer.createService(journal, databaseRecordsRef, globalSubscribersRef)
         yield

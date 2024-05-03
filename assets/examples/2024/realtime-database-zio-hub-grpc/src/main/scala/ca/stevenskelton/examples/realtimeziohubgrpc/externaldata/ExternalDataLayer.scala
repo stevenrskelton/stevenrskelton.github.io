@@ -2,11 +2,10 @@ package ca.stevenskelton.examples.realtimeziohubgrpc.externaldata
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord
 import ca.stevenskelton.examples.realtimeziohubgrpc.commands.DatabaseUpdate
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateResponse.DataUpdateStatus
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateResponse.State.*
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, UpdateRequest}
 import zio.stream.ZStream
-import zio.{Dequeue, Enqueue, Hub, Queue, Ref, Schedule, UIO, ULayer, ZIO, ZLayer, durationInt}
+import zio.{Dequeue, Enqueue, Hub, Queue, Ref, Schedule, UIO, ULayer, ZIO, ZLayer}
 
 import scala.collection.immutable.HashSet
 
@@ -35,19 +34,18 @@ class ExternalDataLayer(hardcodedData: Seq[Data], refreshSchedule: Schedule[Any,
       ExternalDataService(fetchQueue, journal, databaseRecordsRef, globalSubscribersRef)
 
   protected def attachFetchQueueListener(queue: Dequeue[Int], journal: Hub[DataRecord], databaseRecordsRef: Ref[Map[Int, DataRecord]]): UIO[Unit] =
-    var fetchData: Seq[Data] = hardcodedData
-    ZStream.fromQueue(queue).mapZIO:
-      id =>
+    ZStream.fromQueue(queue).mapAccumZIO(hardcodedData):
+      (fetchData, id) =>
         fetchData.find(_.id == id).map:
           data =>
-            fetchData = fetchData.filterNot(_ eq data)
             databaseRecordsRef.get.flatMap:
               database =>
                 val previousETag = database.get(id).map(_.etag).getOrElse("")
                 val updateRequest = UpdateRequest.of(Seq(UpdateRequest.DataUpdate.of(Some(data), previousETag)))
-                DatabaseUpdate.process(updateRequest, journal, databaseRecordsRef)
+                DatabaseUpdate.process(updateRequest, journal, databaseRecordsRef).map:
+                  _ => (fetchData.filterNot(_ eq data), ())
         .getOrElse:
-          ZIO.unit
+          ZIO.succeed((fetchData, ()))
     .runDrain
 
   protected def attachRefreshScheduler(queue: Enqueue[Int], globalSubscribersRef: Ref[Set[Ref[HashSet[Int]]]]): UIO[Unit] =

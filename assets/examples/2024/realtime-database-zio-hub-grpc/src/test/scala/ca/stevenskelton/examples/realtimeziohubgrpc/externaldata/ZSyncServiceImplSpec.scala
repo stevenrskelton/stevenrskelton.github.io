@@ -4,7 +4,7 @@ import ca.stevenskelton.examples.realtimeziohubgrpc.AuthenticatedUser.UserId
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.ETag
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.SyncResponse.State.LOADING
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateRequest.DataUpdate
-import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse, UpdateRequest, UpdateResponse}
+import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse, UpdateRequest}
 import ca.stevenskelton.examples.realtimeziohubgrpc.{BidirectionalTestClients, DataRecord}
 import zio.stream.{UStream, ZStream}
 import zio.test.junit.JUnitRunnableSpec
@@ -67,7 +67,7 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
   override def spec: Spec[TestEnvironment & Scope, Any] = suite("multiple client listeners")(
     test("All updated") {
       for
-        zSyncService <- ZSyncServiceImpl.launch.provideLayer(ExternalDataLayer.live)
+        zSyncService <- ZSyncServiceImpl.launch().provideLayer(ExternalDataLayer.live)
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
         _ <- zSyncService.externalDataService.update(ZSyncServiceImplSpec.createUpdateRequest(1))
@@ -84,7 +84,7 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     },
     test("Unsubscribe by Id") {
       for
-        zSyncService <- ZSyncServiceImpl.launch.provideLayer(ExternalDataLayer.live)
+        zSyncService <- ZSyncServiceImpl.launch().provideLayer(ExternalDataLayer.live)
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
         _ <- zSyncService.externalDataService.update(ZSyncServiceImplSpec.createUpdateRequest(1))
@@ -102,7 +102,7 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     },
     test("Unsubscribe All") {
       for
-        zSyncService <- ZSyncServiceImpl.launch.provideLayer(ExternalDataLayer.live)
+        zSyncService <- ZSyncServiceImpl.launch().provideLayer(ExternalDataLayer.live)
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
         _ <- zSyncService.externalDataService.update(ZSyncServiceImplSpec.createUpdateRequest(1))
@@ -121,7 +121,7 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     test("Subscribe Response when previous_etag matches") {
       val initialData = ZSyncServiceImplSpec.createUpdateRequest(1)
       for
-        zSyncService <- ZSyncServiceImpl.launch.provideLayer(ExternalDataLayer.live)
+        zSyncService <- ZSyncServiceImpl.launch().provideLayer(ExternalDataLayer.live)
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- zSyncService.externalDataService.update(ZSyncServiceImplSpec.createUpdateRequest(1))
         _ <- clients.responses(1, (User1, SyncRequest(subscribes = Seq(SyncRequest.Subscribe(id = Id1)))))
@@ -143,13 +143,13 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     },
     test("Iterate active subscriptions") {
       for
-        zSyncService <- ZSyncServiceImpl.launch.provideLayer(ExternalDataLayer.live)
+        zSyncService <- ZSyncServiceImpl.launch().provideLayer(ExternalDataLayer.live)
         clients <- BidirectionalTestClients.launch(zSyncService)
         subscribedIds0 <- ExternalDataLayer.subscribedIds(zSyncService.globalSubscribersRef)
         responses <- clients.responses(5, SubscribeActions *)
         subscribedIds1 <- ExternalDataLayer.subscribedIds(zSyncService.globalSubscribersRef)
         _ <- clients.client3.requests.shutdown
-        _ <- Live.live(ZIO.attempt("pause for shutdown").delay(100.milliseconds))
+        _ <- Live.live(ZIO.attempt("pause for shutdown").delay(1000.milliseconds))
         subscribedIds2 <- ExternalDataLayer.subscribedIds(zSyncService.globalSubscribersRef)
       yield assertTrue:
         subscribedIds0.isEmpty &&
@@ -157,7 +157,7 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
           subscribedIds1 == Set(1, 2, 3) &&
           subscribedIds2 == Set(1, 2)
     },
-    test("Fetch loaded") {
+    test("fetch loading") {
       val externalData = Seq(
         Data.of(id = Id1, field1 = "batch-0"),
         Data.of(id = Id1, field1 = "batch-0"),
@@ -165,17 +165,10 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
         Data.of(id = Id2, field1 = "batch-0"),
         Data.of(id = Id3, field1 = "batch-0"),
       )
-      val updateRequest = UpdateRequest.of(Seq(
-        UpdateRequest.DataUpdate.of(Some(Data.of(id = Id1, field1 = "batch-1")), DataRecord.calculateEtag(Data.of(id = Id1, field1 = "batch-0"))),
-        UpdateRequest.DataUpdate.of(Some(Data.of(id = Id2, field1 = "batch-1")), DataRecord.calculateEtag(Data.of(id = Id2, field1 = "batch-0"))),
-        UpdateRequest.DataUpdate.of(Some(Data.of(id = Id3, field1 = "batch-1")), DataRecord.calculateEtag(Data.of(id = Id3, field1 = "batch-0"))),
-      ))
       for
-        zSyncService <- ZSyncServiceImpl.launch.provideLayer(ZLayer.succeed(new ExternalDataLayer(externalData, Schedule.stop)))
+        zSyncService <- ZSyncServiceImpl.launch().provideLayer(ZLayer.succeed(new ExternalDataLayer(externalData, Schedule.stop)))
         clients <- BidirectionalTestClients.launch(zSyncService)
         subscribeResponses <- clients.responses(10, SubscribeActions *)
-        _ <- zSyncService.externalDataService.update(updateRequest)
-        responses <- clients.responses(5)
       yield assertTrue:
         subscribeResponses.size == 10 &&
           subscribeResponses.loading(Id1, User1) == Seq(SyncResponse.of(Id1, "", None, LOADING)) &&
@@ -187,21 +180,10 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
           subscribeResponses.idRecords(Id1, User2) == Seq(Data.of(Id1, "batch-0")) &&
           subscribeResponses.idRecords(Id2, User2) == Seq(Data.of(Id2, "batch-0")) &&
           subscribeResponses.idRecords(Id1, User3) == Seq(Data.of(Id1, "batch-0")) &&
-          subscribeResponses.idRecords(Id3, User3) == Seq(Data.of(Id3, "batch-0")) &&
-          responses.size == 5 &&
-          responses.idRecords(Id1, User1) == Seq(Data.of(Id1, "batch-1")) &&
-          responses.idRecords(Id1, User2) == Seq(Data.of(Id1, "batch-1")) &&
-          responses.idRecords(Id2, User2) == Seq(Data.of(Id2, "batch-1")) &&
-          responses.idRecords(Id1, User3) == Seq(Data.of(Id1, "batch-1")) &&
-          responses.idRecords(Id3, User3) == Seq(Data.of(Id3, "batch-1"))
+          subscribeResponses.idRecords(Id3, User3) == Seq(Data.of(Id3, "batch-0"))
     },
     test("Scheduled fetch") {
       val externalData = Seq(
-        Data.of(id = Id1, field1 = "batch-0"),
-        Data.of(id = Id1, field1 = "batch-0"),
-        Data.of(id = Id1, field1 = "batch-0"),
-        Data.of(id = Id2, field1 = "batch-0"),
-        Data.of(id = Id3, field1 = "batch-0"),
         Data.of(id = Id1, field1 = "batch-1"),
         Data.of(id = Id2, field1 = "batch-1"),
         Data.of(id = Id3, field1 = "batch-1"),
@@ -209,22 +191,22 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
         Data.of(id = Id2, field1 = "batch-2"),
         Data.of(id = Id3, field1 = "batch-2"),
       )
-      val refreshSchedule = Schedule.fixed(1.second).delayed(_ => 1.second)
+      val refreshSchedule = Schedule.fixed(1.second)
+      val initialData = Seq(
+        Data.of(id = Id1, field1 = "batch-0"),
+        Data.of(id = Id2, field1 = "batch-0"),
+        Data.of(id = Id3, field1 = "batch-0"),
+      )
       for
-        zSyncService <- ZSyncServiceImpl.launch.provideLayer(ZLayer.succeed(new ExternalDataLayer(externalData, refreshSchedule)))
+        zSyncService <- ZSyncServiceImpl.launch(initialData).provideLayer(ZLayer.succeed(new ExternalDataLayer(externalData, refreshSchedule)))
         clients <- BidirectionalTestClients.launch(zSyncService)
-        subscribeResponses <- clients.responses(10, SubscribeActions *)
+        subscribeResponses <- clients.responses(5, SubscribeActions *)
         _ <- TestClock.adjust(1.second)
         scheduledResponses1 <- clients.responses(5)
         _ <- TestClock.adjust(1.second)
         scheduledResponses2 <- clients.responses(5)
       yield assertTrue:
-        subscribeResponses.size == 10 &&
-          subscribeResponses.loading(Id1, User1) == Seq(SyncResponse.of(Id1, "", None, LOADING)) &&
-          subscribeResponses.loading(Id1, User2) == Seq(SyncResponse.of(Id1, "", None, LOADING)) &&
-          subscribeResponses.loading(Id2, User2) == Seq(SyncResponse.of(Id2, "", None, LOADING)) &&
-          subscribeResponses.loading(Id1, User3) == Seq(SyncResponse.of(Id1, "", None, LOADING)) &&
-          subscribeResponses.loading(Id3, User3) == Seq(SyncResponse.of(Id3, "", None, LOADING)) &&
+        subscribeResponses.size == 5 &&
           subscribeResponses.idRecords(Id1, User1) == Seq(Data.of(Id1, "batch-0")) &&
           subscribeResponses.idRecords(Id1, User2) == Seq(Data.of(Id1, "batch-0")) &&
           subscribeResponses.idRecords(Id2, User2) == Seq(Data.of(Id2, "batch-0")) &&

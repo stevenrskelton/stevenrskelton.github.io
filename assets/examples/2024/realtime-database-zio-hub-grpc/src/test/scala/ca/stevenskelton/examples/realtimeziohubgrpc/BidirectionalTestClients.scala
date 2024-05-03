@@ -1,7 +1,6 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.AuthenticatedUser.UserId
-import ca.stevenskelton.examples.realtimeziohubgrpc.externaldata.Main
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{SyncRequest, SyncResponse, ZioSyncService}
 import io.grpc.ServerBuilder
 import io.grpc.protobuf.services.ProtoReflectionService

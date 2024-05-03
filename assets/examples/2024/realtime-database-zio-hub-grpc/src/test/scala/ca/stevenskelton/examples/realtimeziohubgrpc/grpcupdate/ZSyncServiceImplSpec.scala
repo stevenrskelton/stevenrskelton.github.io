@@ -2,14 +2,13 @@ package ca.stevenskelton.examples.realtimeziohubgrpc.grpcupdate
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.AuthenticatedUser.UserId
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.ETag
-import ca.stevenskelton.examples.realtimeziohubgrpc.grpcupdate.ZSyncServiceImpl
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateRequest.DataUpdate
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse, UpdateRequest}
 import ca.stevenskelton.examples.realtimeziohubgrpc.{BidirectionalTestClients, DataRecord}
 import zio.stream.{UStream, ZStream}
 import zio.test.junit.JUnitRunnableSpec
-import zio.test.{Live, Spec, TestEnvironment, assertTrue}
-import zio.{Scope, ZIO, durationInt}
+import zio.test.{Spec, TestEnvironment, assertTrue}
+import zio.{Scope, durationInt}
 
 class ZSyncServiceImplSpec extends JUnitRunnableSpec:
   override def spec: Spec[TestEnvironment & Scope, Any] = ZSyncServiceImplSpec.spec
@@ -137,6 +136,6 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
           responses.idRecords(Id1, User2).size == 1 &&
           responses.idRecords(Id2, User2).size == 1
     },
-  ) @@zio.test.TestAspect.timeout(5.seconds) @@ zio.test.TestAspect.sequential
+  ) @@ zio.test.TestAspect.timeout(5.seconds) @@ zio.test.TestAspect.sequential
 
 
