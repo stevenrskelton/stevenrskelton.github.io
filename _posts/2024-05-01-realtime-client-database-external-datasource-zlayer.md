@@ -16,6 +16,7 @@ sources:
 ---
 
 //TODO
+<!--more-->
 
 {%
 include multi_part_post.html
