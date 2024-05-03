@@ -1,4 +1,22 @@
 
-{% comment %}
-[Developer Friendly Thrift Request Logging]({% post_url 2013-08-03-developer-friendly-thrift-request-logging %})
-{% endcomment %}
+{% assign page_example = page.example %}
+{% assign related_posts = site.posts | where_exp:"item", "item.example == page_example" | where_exp:"item", "item != page" %}
+{% if related_posts %}
+<h1>Other Posts in this Series</h1>
+<div class="entries-{{ entries_layout }}">
+  <ul>
+    {% for post in related_posts %}
+
+    <h2 class="archive__item-title no_toc" itemprop="headline">
+      {% if post.link %}
+      <a href="{{ post.link }}">{{ title }}</a> <a href="{{ post.url | relative_url }}" rel="permalink"><i class="fas fa-link" aria-hidden="true" title="permalink"></i><span class="sr-only">Permalink</span></a>
+      {% else %}
+      <a href="{{ post.url | relative_url }}" rel="permalink">{{ title }}</a>
+      {% endif %}
+    </h2>
+    {% include page__meta.html type=include.type %}
+
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}
