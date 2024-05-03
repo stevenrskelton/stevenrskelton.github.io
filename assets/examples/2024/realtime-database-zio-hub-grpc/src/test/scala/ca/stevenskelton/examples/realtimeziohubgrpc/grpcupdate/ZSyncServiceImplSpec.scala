@@ -39,7 +39,7 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
       .flatMap(_._2.data)
 
   extension (dataUpdates: Seq[DataUpdate])
-    def etag(id: DataId): ETag = DataRecord.calculateEtag(dataUpdates.find(_.data.exists(_.id == id)).get.data.get)
+    def etag(id: DataId): ETag = DataRecord.calculateETag(dataUpdates.find(_.data.exists(_.id == id)).get.data.get)
 
   def createUpdateRequest(batch: Int): UpdateRequest = {
     def createData(b: Int): Seq[Data] = Seq(
@@ -53,7 +53,7 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     UpdateRequest.of(
       updates = createData(batch)
         .zip(createData(batch - 1))
-        .map((data, previousData) => DataUpdate.of(Some(data), DataRecord.calculateEtag(previousData)))
+        .map((data, previousData) => DataUpdate.of(Some(data), DataRecord.calculateETag(previousData)))
     )
   }
 

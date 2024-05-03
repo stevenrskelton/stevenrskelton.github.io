@@ -60,12 +60,19 @@ abstract class ExternalDataLayer(refreshSchedule: Schedule[Any, Any, Any]) {
    * Update `databaseRecordsRef` when new data available without conflicts,
    * Emit data updates to `journal`.
    */
-  protected def attachFetchQueueListener(queue: Dequeue[DataId], journal: Hub[DataRecord], databaseRecordsRef: Ref[Map[DataId, DataRecord]]): UIO[Unit]
+  protected def attachFetchQueueListener(
+                                          queue: Dequeue[DataId], 
+                                          journal: Hub[DataRecord], 
+                                          databaseRecordsRef: Ref[Map[DataId, DataRecord]]
+                                        ): UIO[Unit]
 
   /**
    * On schedule, attempt to refresh all subscribed data.
    */
-  protected def attachRefreshScheduler(queue: Enqueue[DataId], globalSubscribersRef: Ref[Set[Ref[HashSet[DataId]]]]): UIO[Unit]
+  protected def attachRefreshScheduler(
+                                        queue: Enqueue[DataId], 
+                                        globalSubscribersRef: Ref[Set[Ref[HashSet[DataId]]]]
+                                      ): UIO[Unit]
 }
 ```
 

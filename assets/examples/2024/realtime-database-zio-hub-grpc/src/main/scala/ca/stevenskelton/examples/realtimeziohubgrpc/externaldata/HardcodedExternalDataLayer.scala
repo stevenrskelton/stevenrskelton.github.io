@@ -8,10 +8,11 @@ import zio.{Chunk, NonEmptyChunk, Ref, Schedule, UIO, ULayer, ZLayer}
 object HardcodedExternalDataLayer:
   def live(hardcodedData: Seq[Data], refreshSchedule: Schedule[Any, Any, Any]): ULayer[HardcodedExternalDataLayer] =
     ZLayer.fromZIO:
-      Ref.make(hardcodedData).map:
+      Ref.Synchronized.make(hardcodedData).map:
         HardcodedExternalDataLayer(_, refreshSchedule)
 
-class HardcodedExternalDataLayer(hardcodedData: Ref[Seq[Data]], refreshSchedule: Schedule[Any, Any, Any]) extends ExternalDataLayer(refreshSchedule):
+class HardcodedExternalDataLayer private(hardcodedData: Ref.Synchronized[Seq[Data]], refreshSchedule: Schedule[Any, Any, Any])
+  extends ExternalDataLayer(refreshSchedule):
 
   override protected def externalData(chunk: NonEmptyChunk[Either[DataId, DataRecord]]): UIO[Chunk[Data]] =
     hardcodedData.modify:

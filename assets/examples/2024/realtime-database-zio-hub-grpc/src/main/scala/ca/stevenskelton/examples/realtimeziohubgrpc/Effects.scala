@@ -10,7 +10,7 @@ import zio.{Hub, Ref, Scope, UIO, ZIO}
 
 import scala.collection.immutable.HashSet
 
-object Commands:
+object Effects:
 
   private val HubMaxChunkSize = 1000
 
@@ -25,8 +25,11 @@ object Commands:
         dataRecord => SyncResponse.of(dataRecord.data.id, dataRecord.etag, Some(dataRecord.data), SyncResponse.State.UPDATED)
 
   /**
-   * Update `databaseRecordsRef` with data in `request`, rejecting any conflicts
-   * Emit changes to `journal`.
+   * Update `databaseRecordsRef` with data in `request`, rejecting any conflicts.
+   * Conflicts are based on the included ETag:
+   * If the `previousEtag` doesn't match the ETag in the database it is a conflict. 
+   * New item creation ignores the `previousEtag` field.
+   * All database item creation / updates are emitting to `journal`.
    */
   def updateDatabaseRecords(request: UpdateRequest, journal: Hub[DataRecord], databaseRecordsRef: Ref[Map[DataId, DataRecord]]): UIO[UpdateResponse] =
     import UpdateResponse.State.{CONFLICT, UNCHANGED, UPDATED}
@@ -39,7 +42,7 @@ object Commands:
               dataUpdate => dataUpdate.data.map((_, dataUpdate.previousEtag))
             .map:
               (data, previousETag) =>
-                val updateETag = DataRecord.calculateEtag(data)
+                val updateETag = DataRecord.calculateETag(data)
                 database.get(data.id) match
                   case Some(existing) if existing.etag == updateETag => (existing, UNCHANGED)
                   case Some(existing) if existing.etag != previousETag => (existing, CONFLICT)

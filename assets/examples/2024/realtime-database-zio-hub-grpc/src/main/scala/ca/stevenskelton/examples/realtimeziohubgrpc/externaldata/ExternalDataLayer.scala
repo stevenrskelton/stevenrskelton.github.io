@@ -2,7 +2,7 @@ package ca.stevenskelton.examples.realtimeziohubgrpc.externaldata
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.DataId
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, UpdateRequest}
-import ca.stevenskelton.examples.realtimeziohubgrpc.{Commands, DataRecord}
+import ca.stevenskelton.examples.realtimeziohubgrpc.{Effects, DataRecord}
 import zio.stream.ZStream
 import zio.{Chunk, Dequeue, Enqueue, Hub, NonEmptyChunk, Queue, Ref, Schedule, UIO, ZIO}
 
@@ -78,7 +78,7 @@ trait ExternalDataLayer(refreshSchedule: Schedule[Any, Any, Any]):
                     data =>
                       val previousETag = chunkFromDatabase.find(_.exists(_.data.id == data.id)).flatMap(_.map(_.etag).toOption).getOrElse("")
                       UpdateRequest.DataUpdate.of(Some(data), previousETag)
-                Commands.updateDatabaseRecords(updateRequest, journal, databaseRecordsRef)
+                Effects.updateDatabaseRecords(updateRequest, journal, databaseRecordsRef)
     .runDrain
 
   /**

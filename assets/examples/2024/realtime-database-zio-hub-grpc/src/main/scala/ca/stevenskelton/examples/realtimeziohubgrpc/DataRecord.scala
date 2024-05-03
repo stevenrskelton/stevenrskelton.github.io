@@ -11,4 +11,4 @@ object DataRecord:
   type ETag = String
   type DataId = Int
 
-  def calculateEtag(data: Data): DataRecord.ETag = data.id.toString + data.field1
+  def calculateETag(data: Data): DataRecord.ETag = data.id.toString + data.field1

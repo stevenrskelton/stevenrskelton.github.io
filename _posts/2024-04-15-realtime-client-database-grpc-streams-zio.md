@@ -59,9 +59,24 @@ service SyncService {
 ```
 
 ```scala
-def bidirectional(request: Stream[StatusException, Request]): Stream[StatusException, Response] =
-//request.flatMap:
-//  Request => Stream[StatusException, Response]
+  /**
+ * Requests will subscribe/unsubscribe to `Data`.
+ * Data updates of subscribed elements is streamed in realtime.
+ */
+def bidirectionalStream(
+                         request: Stream[StatusException, SyncRequest], 
+                         context: AuthenticatedUser,
+                       ): Stream[StatusException, SyncResponse]
+//request.flatMap: Request => Stream[StatusException, Response]
+
+/**
+ * Creation / Update of `Data`. Response will indicate success or failure due to write conflict.
+ * Conflicts are detected based on the ETag in the request.
+ */
+def update(
+            request: UpdateRequest, 
+            context: AuthenticatedUser
+          ): IO[StatusException, UpdateResponse]
 ```
 
 ## ZIO Hub for Concurrency and Subscriptions
@@ -141,7 +156,40 @@ trait ExternalData {
   //Returns all actively subscribed ids
   def subscribedIds: ZIO[Any, Nothing, Set[Int]]
   
-  
 }
 ```
 
+# Common Helper Effects
+
+```scala
+/**
+ * Create Stream from database `journal`
+ */
+def userSubscriptionStream(
+                            userSubscriptionsRef: Ref[HashSet[Int]], 
+                            journal: Hub[DataRecord]
+                          ): ZIO[Scope, Nothing, Stream[StatusException, SyncResponse]]
+
+/**
+ * Update `databaseRecordsRef` with data in `request`, rejecting any conflicts.
+ * Conflicts are based on the included ETag:
+ * If the `previousEtag` doesn't match the ETag in the database it is a conflict. 
+ * New item creation ignores the `previousEtag` field.
+ * All database item creation / updates are emitting to `journal`.
+ */
+def updateDatabaseRecords(
+                           request: UpdateRequest, 
+                           journal: Hub[DataRecord], 
+                           databaseRecordsRef: Ref[Map[Int, DataRecord]]
+                         ): UIO[UpdateResponse]
+
+/**
+ * Update `userSubscriptionsRef` with subscription changes.
+ */
+def modifyUserSubscriptions(
+                             syncRequest: SyncRequest, 
+                             userSubscriptionsRef: Ref[HashSet[Int]], 
+                             databaseRecords: Map[Int, DataRecord]
+                           ): UIO[Seq[SyncResponse]]
+
+```

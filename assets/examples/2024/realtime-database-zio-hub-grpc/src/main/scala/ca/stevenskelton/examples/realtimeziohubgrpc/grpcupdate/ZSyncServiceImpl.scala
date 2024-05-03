@@ -2,7 +2,7 @@ package ca.stevenskelton.examples.realtimeziohubgrpc.grpcupdate
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.DataId
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{SyncRequest, SyncResponse, UpdateRequest, UpdateResponse, ZioSyncService}
-import ca.stevenskelton.examples.realtimeziohubgrpc.{AuthenticatedUser, Commands, DataRecord}
+import ca.stevenskelton.examples.realtimeziohubgrpc.{AuthenticatedUser, Effects, DataRecord}
 import io.grpc.StatusException
 import zio.stream.ZStream.HaltStrategy
 import zio.stream.{Stream, ZStream}
@@ -26,20 +26,27 @@ case class ZSyncServiceImpl private(
                                      journal: Hub[DataRecord],
                                      databaseRecordsRef: Ref[Map[DataId, DataRecord]]
                                    ) extends ZioSyncService.ZSyncService[AuthenticatedUser]:
-
+  /**
+   * Requests will subscribe/unsubscribe to `Data`.
+   * Data updates of subscribed elements is streamed in realtime.
+   */
   override def bidirectionalStream(request: Stream[StatusException, SyncRequest], context: AuthenticatedUser): Stream[StatusException, SyncResponse] =
     ZStream.unwrapScoped:
       for
         userSubscriptionsRef <- Ref.make(HashSet.empty[DataId])
-        updateStream <- Commands.userSubscriptionStream(userSubscriptionsRef, journal)
+        updateStream <- Effects.userSubscriptionStream(userSubscriptionsRef, journal)
       yield
         val requestStreams = request.flatMap:
           syncRequest =>
             ZStream.fromIterableZIO:
               databaseRecordsRef.get.flatMap:
-                Commands.modifyUserSubscriptions(syncRequest, userSubscriptionsRef, _)
+                Effects.modifyUserSubscriptions(syncRequest, userSubscriptionsRef, _)
 
         updateStream.merge(requestStreams, strategy = HaltStrategy.Right)
 
+  /**
+   * Creation / Update of `Data`. Response will indicate success or failure due to write conflict.
+   * Conflicts are detected based on the ETag in the request.
+   */
   override def update(request: UpdateRequest, context: AuthenticatedUser): IO[StatusException, UpdateResponse] =
-    Commands.updateDatabaseRecords(request, journal, databaseRecordsRef)
+    Effects.updateDatabaseRecords(request, journal, databaseRecordsRef)
