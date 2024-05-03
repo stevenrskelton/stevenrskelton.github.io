@@ -1,8 +1,8 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc
 
-import io.grpc.{Metadata, ServerBuilder, Status, StatusException}
-import scalapb.zio_grpc.{RequestContext, ServerLayer, ServiceList}
-import zio.{Cause, ExitCode, IO, URIO, ZIO, ZIOAppDefault}
+import io.grpc.{Metadata, Status, StatusException}
+import scalapb.zio_grpc.RequestContext
+import zio.{Cause, IO, ZIO}
 
 case class AuthenticatedUser(userId: AuthenticatedUser.UserId) extends AnyVal
 

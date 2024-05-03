@@ -1,7 +1,7 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc.externaldata
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.AuthenticatedUser.UserId
-import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.ETag
+import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.{DataId, ETag}
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.SyncResponse.State.LOADING
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateRequest.DataUpdate
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse, UpdateRequest}
@@ -20,11 +20,11 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
   private val User2: UserId = 2
   private val User3: UserId = 3
 
-  private val Id1 = 1
-  private val Id2 = 2
-  private val Id3 = 3
-  private val Id4 = 4
-  private val Id5 = 5
+  private val Id1: DataId = 1
+  private val Id2: DataId = 2
+  private val Id3: DataId = 3
+  private val Id4: DataId = 4
+  private val Id5: DataId = 5
 
   val SubscribeActions: Seq[(UserId, SyncRequest)] = Seq(
     //watch 1
@@ -40,15 +40,15 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
       .withFilter((uId, dataRecord) => uId == userId && dataRecord.data.exists(_.id == id))
       .flatMap(_._2.data)
 
-    def loading(id: Int, userId: UserId): Seq[SyncResponse] = userResponses
+    def loading(id: DataId, userId: UserId): Seq[SyncResponse] = userResponses
       .withFilter((uId, dataRecord) => uId == userId && dataRecord.id == id && dataRecord.state == SyncResponse.State.LOADING)
       .map(_._2)
 
   extension (dataUpdates: Seq[DataUpdate])
-    def etag(id: Int): ETag = DataRecord.calculateEtag(dataUpdates.find(_.data.exists(_.id == id)).get.data.get)
+    def etag(id: DataId): ETag = DataRecord.calculateEtag(dataUpdates.find(_.data.exists(_.id == id)).get.data.get)
 
   extension (streamActions: Seq[(UserId, SyncRequest)])
-    def stream: UStream[(UserId, SyncRequest)] = ZStream.fromIterable(streamActions, 1) //.throttleShape(1, 1.milliseconds)(_.size)
+    def stream: UStream[(UserId, SyncRequest)] = ZStream.fromIterable(streamActions, 1)
 
   private def createData(batch: Int): Seq[Data] = Seq(
     Data.of(id = Id1, field1 = s"batch-$batch"),

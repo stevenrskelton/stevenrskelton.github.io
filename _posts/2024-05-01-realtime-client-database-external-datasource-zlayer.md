@@ -23,3 +23,8 @@ series="Realtime Client Database"
 p1="2024-04-15-realtime-client-database-grpc-streams-zio"
 p2="2024-05-01-realtime-client-database-external-datasource-zlayer"
 %}
+
+# External Data using ZLayer
+
+
+
