@@ -5,7 +5,6 @@ import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.{DataId, ETag}
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.UpdateRequest.DataUpdate
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse, UpdateRequest}
 import ca.stevenskelton.examples.realtimeziohubgrpc.{BidirectionalTestClients, DataRecord}
-import zio.stream.{UStream, ZStream}
 import zio.test.junit.JUnitRunnableSpec
 import zio.test.{Spec, TestEnvironment, assertTrue}
 import zio.{Scope, durationInt}
@@ -42,22 +41,21 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
   extension (dataUpdates: Seq[DataUpdate])
     def etag(id: DataId): ETag = DataRecord.calculateEtag(dataUpdates.find(_.data.exists(_.id == id)).get.data.get)
 
-  extension (streamActions: Seq[(UserId, SyncRequest)])
-    def stream: UStream[(UserId, SyncRequest)] = ZStream.fromIterable(streamActions, 1)
+  def createUpdateRequest(batch: Int): UpdateRequest = {
+    def createData(b: Int): Seq[Data] = Seq(
+      Data.of(id = Id1, field1 = s"batch-$b"),
+      Data.of(id = Id2, field1 = s"batch-$b"),
+      Data.of(id = Id3, field1 = s"batch-$b"),
+      Data.of(id = Id4, field1 = s"batch-$b"),
+      Data.of(id = Id5, field1 = s"batch-$b"),
+    )
 
-  private def createData(batch: Int): Seq[Data] = Seq(
-    Data.of(id = Id1, field1 = s"batch-$batch"),
-    Data.of(id = Id2, field1 = s"batch-$batch"),
-    Data.of(id = Id3, field1 = s"batch-$batch"),
-    Data.of(id = Id4, field1 = s"batch-$batch"),
-    Data.of(id = Id5, field1 = s"batch-$batch"),
-  )
-
-  def createUpdateRequest(batch: Int): UpdateRequest = UpdateRequest.of(
-    updates = createData(batch)
-      .zip(createData(batch - 1))
-      .map((data, previousData) => DataUpdate.of(Some(data), DataRecord.calculateEtag(previousData)))
-  )
+    UpdateRequest.of(
+      updates = createData(batch)
+        .zip(createData(batch - 1))
+        .map((data, previousData) => DataUpdate.of(Some(data), DataRecord.calculateEtag(previousData)))
+    )
+  }
 
   override def spec: Spec[TestEnvironment & Scope, Any] = suite("multiple client listeners")(
     test("All updated") {

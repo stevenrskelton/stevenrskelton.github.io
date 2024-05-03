@@ -4,7 +4,7 @@ import ca.stevenskelton.examples.realtimeziohubgrpc.AuthenticatedUser
 import io.grpc.ServerBuilder
 import io.grpc.protobuf.services.ProtoReflectionService
 import scalapb.zio_grpc.{RequestContext, ServerLayer, ServiceList}
-import zio.{ExitCode, URIO, ZIOAppDefault}
+import zio.{ExitCode, Schedule, URIO, ZIOAppDefault, ZLayer}
 
 object Main extends ZIOAppDefault:
 
@@ -22,4 +22,4 @@ object Main extends ZIOAppDefault:
     yield
       grpcServer
 
-    app.provideLayer(ExternalDataLayer.live).forever.exitCode
+    app.provideLayer(HardcodedExternalDataLayer.live(Nil, Schedule.stop)).forever.exitCode

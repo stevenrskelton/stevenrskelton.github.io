@@ -6,7 +6,7 @@ import ca.stevenskelton.examples.realtimeziohubgrpc.{AuthenticatedUser, Commands
 import io.grpc.StatusException
 import zio.stream.ZStream.HaltStrategy
 import zio.stream.{Stream, ZStream}
-import zio.{Clock, Hub, IO, Ref, URIO, ZIO}
+import zio.{Clock, Enqueue, Hub, IO, Ref, URIO, ZIO}
 
 import scala.collection.immutable.HashSet
 import scala.collection.mutable
@@ -24,15 +24,15 @@ object ZSyncServiceImpl:
           initialMap = initial.map(data => data.id -> DataRecord(data, now, DataRecord.calculateEtag(data))).toMap
           databaseRecordsRef <- Ref.make[Map[DataId, DataRecord]](initialMap)
           globalSubscribersRef <- Ref.make[Set[Ref[HashSet[DataId]]]](Set.empty)
-          externalDataService <- externalDataLayer.createService(journal, databaseRecordsRef, globalSubscribersRef)
+          fetchQueue <- externalDataLayer.createFetchQueue(journal, databaseRecordsRef, globalSubscribersRef)
         yield
-          ZSyncServiceImpl(journal, databaseRecordsRef, globalSubscribersRef, externalDataService)
+          ZSyncServiceImpl(journal, databaseRecordsRef, globalSubscribersRef, fetchQueue)
 
 case class ZSyncServiceImpl private(
                                      journal: Hub[DataRecord],
                                      databaseRecordsRef: Ref[Map[DataId, DataRecord]],
                                      globalSubscribersRef: Ref[Set[Ref[HashSet[DataId]]]],
-                                     externalDataService: ExternalDataService,
+                                     fetchQueue: Enqueue[DataId],
                                    ) extends ZioSyncService.ZSyncService[AuthenticatedUser]:
 
   override def bidirectionalStream(request: Stream[StatusException, SyncRequest], context: AuthenticatedUser): Stream[StatusException, SyncResponse] =
@@ -57,7 +57,7 @@ case class ZSyncServiceImpl private(
                         syncResponse.copy(state = SyncResponse.State.LOADING)
                       else syncResponse
 
-                  if idsToFetch.nonEmpty then externalDataService.queueFetchAll(idsToFetch).as(loadingResponses)
+                  if idsToFetch.nonEmpty then fetchQueue.offerAll(idsToFetch).as(loadingResponses)
                   else ZIO.succeed(loadingResponses)
 
         val endOfAllRequestsStream = ZStream.finalizer:
