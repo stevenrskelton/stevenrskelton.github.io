@@ -74,7 +74,7 @@ layout: default
                     {% endfor %}
                     </ul>
                 {% endif %}
-                {% assign related_posts = site.posts | where_exp:"item", "item.examples contains page_example" | where_exp:"item", "item != page" %}
+                {% assign related_posts = site.posts | where_exp:"item", "item.example == page_example" | where_exp:"item", "item != page" %}
                 {% if related_posts %}
                     <div class="entries-{{ entries_layout }}">
                     {% for post in related_posts %}
