@@ -76,7 +76,7 @@ layout: default
                 {% endif %}
                 {% assign related_posts = site.posts | where_exp:"item", "item.example == page_example" | where_exp:"item", "item != page" %}
                 {% if related_posts %}
-                    <h1>Other Posts in this Series</h1>
+                    <strong style="margin-top: 2.5em;display: block;">Other Posts in this Series</strong>
                     <div class="entries-{{ entries_layout }}">
                     {% for post in related_posts %}
                         {% include archive-single.html type=entries_layout %}
