@@ -266,8 +266,8 @@ tr:last-of-type td {
   min-width: 1.5em;
   text-align: center;
 }
-.post__taxonomy-item a {
-  background-color: #f3f3f3;
+a.post__taxonomy-item, a.page__taxonomy-item {
+  background-color: #ffffff;
 }
 .post__taxonomy-item a:hover, .page__taxonomy-item a:hover {
   background-color: white;
@@ -420,6 +420,10 @@ figure.postlogo figcaption {
 .html-bg .taxonomy__section {
   margin-bottom: 0;
   padding-bottom: 0;
+}
+
+.html-bg .post__taxonomy-item {
+  background-color: #f3f3f3;
 }
 
 svg.html-bg {
