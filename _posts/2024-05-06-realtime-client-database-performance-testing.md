@@ -1,5 +1,5 @@
 ---
-title: "Realtime Client Database Performance Testing"
+title: "Realtime Client Database: Performance Testing"
 categories:
   - Scala
 tags:

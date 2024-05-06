@@ -1,5 +1,5 @@
 ---
-title: "Realtime Client Database using gRPC Bi-Directional Streams and ZIO Hub"
+title: "Realtime Client Database: gRPC Bi-Directional Streams and ZIO Hub"
 categories:
   - Scala
 tags:

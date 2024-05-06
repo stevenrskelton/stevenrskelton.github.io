@@ -1,5 +1,5 @@
 ---
-title: "Realtime Client Database with External Datasource using ZIO ZLayer"
+title: "Realtime Client Database: External Datasource using ZIO ZLayer"
 categories:
   - Scala
 tags:
