@@ -13,85 +13,117 @@ sources:
   - "/src/test/scala/ca/stevenskelton/examples/realtimeziohubgrpc/grpcupdate/ZSyncServiceImplSpec.scala"
 ---
 
-Realtime pushed-based databases such as [Google Firebase](https://firebase.google.com/docs/database) are a convenient
-way to ensure clients have the most recent data locally. Data updates are automatically streamed to clients
-immediately as they happen, or in the case of a client disconnect, immediately after reconnecting.
+Realtime push-based databases such as [Google Firebase](https://firebase.google.com/docs/database) conveniently ensure
+clients have locally stored data synchronized with the server. Data updates are streamed to clients immediately as they
+happen, or in the case of a client disconnect, immediately after reconnecting.
 
 [gRPC server streaming](https://grpc.io/docs/what-is-grpc/core-concepts/#server-streaming-rpc)
-and [ZIO Hub](https://zio.dev/reference/concurrency/hub/) allow this functionality to be easily replicated and
-customized beyond what expensive paid-for services such as Firebase can do.<!--more-->
+and [ZIO Hub](https://zio.dev/reference/concurrency/hub/) can be used to implement this functionality replicating
+expensive paid-for services such as Firebase while allowing for greater extensibility.<!--more-->
 
 {% include multi_part_post.html %}
 
 {% include table-of-contents.html height="100px" %}
 
-# Client demands for data streaming
+# Evolving User Demands for Data Streaming
 
-The typical simple web-based client-server communication pattern is for data to be requested by the client. When
-clients want new data or otherwise interact, it will initiate a new request to the server. But as server technology
-and hardware capacities have increased, user expectations have increased to expect all client UIs to present realtime
-data without the friction of manually requesting data updates. The typical client-server communication is slowly
-evolving into the stream of data in both directions between the client and server.
+Typical web-based client-server communication is to have clients initiate all requests to the server. This minimizes
+load on the server as very minimal processing needs to be performed between requests. As server technology and hardware
+performance have increased, more robust paradigms have evolved to cater to rising user expectations. To reduce change
+notification latencies it was imperative to allow server request initiation. As servers become aware to external changes
+they need to be able to push updates to clients without waiting for manual user initiations or for a polling to occur.
 
-# gRPC Server Bi-Directional Streaming using HTTP/2
+# Bi-Directional gRPC Streaming using HTTP/2
 
-The evolution of technology has resulted in two technology standards for web-based bi-directional communications:  
+Two technology standards for bi-directional web communications have become standards:
 [WebSockets](https://en.wikipedia.org/wiki/WebSocket) and HTTP/2 streams.
 
-WebSockets were created first as the ability for a standard HTTP/1.1 connection to upgrade to support bi-directional
-client-server streaming. This is still the best approach for browser-server communications because of its clear
-JavaScript APIs within all browsers, backwards compatibility for HTTP/1.1-only clients, and its ability to take
-advantage of performance improvements offered by HTTP/2 and beyond.
+## Web Standards
 
-For non-browser communications, such as with mobile apps or inter-server communication WebSockets is an unnecessary
-layer. As WebSockets runs over HTTP, because HTTP/2 has directly integrated multiplexed streaming capabilities, it is
-better for abstraction libraries such as gRPC to directly support HTTP/2 instead of the higher-level WebSocket layer.
+### WebSockets
+
+WebSockets was created first of the two as an expansion to the HTTP/1.1 standard. By allowing the client to issue
+an [Upgrade request](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade) over an established HTTP/1.1
+connection, the server can switch to the _websocket_ network protocol which supports bi-directional streaming. Since
+this is an upgrade mechanism, backwards compatibility and alternative approaches when older clients are less invasive
+to implement. WebSockets has a clear JavaScript API common across all browsers, meaning it today's preferred
+bidirectional protocol when interacting with browser clients. While there is no explicit _websocket_ version it has
+seen benefits added via iteration in the HTTP protocol. As HTTP/2 significantly improving connection performance by way
+of connection multiplexing, websockets have also benefited when operating multiple websocket connections simulataniously
+by being able to share a single upgraded HTTP/2 multiplexed connection.
+
+### HTTP/2 Streaming
+
+For non-browser communications, such as mobile apps or server-server communications WebSockets is an unnecessary
+layer. WebSockets is an upgraded HTTP connection, implemented by creating an additional layer in the networking
+protocol. The changes in HTTP/2 directly addressed bidirectional communication streams, so when the WebSocket API isn't
+beneficial it is optimal to use the HTTP protocol capabilities directly. HTTP/2 streaming is the preferred bidirectional
+mechanism for all use-cases without a web browser client or JavaScript dependency.
+
+## gRPC: A Remote Procedure Call (RPC) framework
+
+gRPC is a high-performance networking framework built on top of HTTP/2, supporting multiple programming languages for
+both client and server implementation. It encodes network traffic using [Protocol Buffers](https://protobuf.dev/) using
+_proto_ files and syntax, which also are used to define the server API exposed to clients.  
+
+A gRPC server which will be used for the realtime database will be called _SyncService_, and expose a bidirectional 
+stream on the _Bidirection_ endpoint, receiving _Request_ objects and emitting _Response_ objects to their respective
+streams.
+
+A _Update_ endpoint has also been defined, this is the typical client-initiated handler, which will receive a 
+`UpdateRequest` object from the client and return a `UpdateResponse` object to the client.
 
 ```protobuf
 service SyncService {
   rpc Bidirectional (stream Request) returns (stream Response);
+  rpc Update(UpdateRequest) returns (UpdateResponse);
 }
 ```
+The Scala implementation for the ZIO generated gRPC classes will be for the interface:
 
 ```scala
   /**
  * Requests will subscribe/unsubscribe to `Data`.
  * Data updates of subscribed elements is streamed in realtime.
  */
-def bidirectionalStream(
-                         request: Stream[StatusException, SyncRequest], 
-                         context: AuthenticatedUser,
-                       ): Stream[StatusException, SyncResponse]
+def bidirectionalStream(request: Stream[StatusException, SyncRequest]): Stream[StatusException, SyncResponse]
 //request.flatMap: Request => Stream[StatusException, Response]
 
 /**
  * Creation / Update of `Data`. Response will indicate success or failure due to write conflict.
  * Conflicts are detected based on the ETag in the request.
  */
-def update(
-            request: UpdateRequest, 
-            context: AuthenticatedUser
-          ): IO[StatusException, UpdateResponse]
+def update(request: UpdateRequest): IO[StatusException, UpdateResponse]
 ```
 
-## ZIO Hub for Concurrency and Subscriptions
+### gRPC Data Objects to Implement Subscriptions
+
+A basic subscription mechanism will allow clients to subscribe and unsubscribe to object updates based on the object id.
+The protobuf definition for these requests would be:
 
 ```protobuf
 message SyncRequest {
   repeated Subscribe subscribes = 1;
   repeated Unsubscribe unsubscribes = 2;
 }
+```
+The definition for responses is simply the object itself:
+
+```protobuf
 message SyncResponse {
   Data data = 1;
 }
 ```
 
-//TODO:
+Within the server implementation, we will define a _Subscription Manager_, which will remember the subscriptions for 
+a specific client. ZIO has a primitive called [ZIO Hub](https://zio.dev/reference/concurrency/hub/) which allows 
+subscriptions to a central message queue. The queue will receive notifications to all `Data` updates, and each client's
+serverside _Subscription Manager_ will subscribe to the Hub and filter for changes to any subscribed ids.
 
 {%
 include figure image_path="/assets/images/2024/04/realtime_database.svg"
 caption="Realtime database pushing updates to clients using bi-directional gRPC Streams"
-img_style="padding: 10px; background-color: white; height: 320px;"
+img_style="padding: 10px; background-color: white;"
 %}
 
 # Data
@@ -114,10 +146,10 @@ message Data {
 
 ETags are the part of the HTTP Specification and exist to reduce network transfer. The HTTP `If-None-Match` header, when
 implemented signals that should the response have the same generated ETag that the server should respond with a _HTTP
-304 Not Modified_ instead of a 200 Success with a populated body.  
+304 Not Modified_ instead of a 200 Success with a populated body.
 
 The usefulness of an ETag depends on server support: APIs may implement ETag support similar to HTTP Specification and
-use it to omit a response body, others may use it internally to return a previous response from its cache, while others 
+use it to omit a response body, others may use it internally to return a previous response from its cache, while others
 solely include it as a convenience for clients.
 
 Our API will use an ETag to have our server only return a full Data object on subscription if the client either doesn't
@@ -129,7 +161,7 @@ caption="Conflicting ETag hashcode will result in an update response from the se
 img_style="padding: 10px; background-color: white; height: 320px;"
 %}
 
-To support this functionality, as well as many others which may depend on fetch/cache durations, we'll associate an 
+To support this functionality, as well as many others which may depend on fetch/cache durations, we'll associate an
 ETag and last updated time to all `Data` elements by wrapping them in a new `DataRecord` class:
 
 ```scala
@@ -138,7 +170,7 @@ case class DataRecord(data: Data, lastUpdate: Instant, etag: ETag)
 
 ## External Datasource
 
-The focus of this article is the client-server communication, not the external datasource, so a very basic interface 
+The focus of this article is the client-server communication, not the external datasource, so a very basic interface
 will suffice:
 
 ```scala
@@ -147,21 +179,21 @@ trait ExternalData {
   //Fetches `Data` from external datasource, 
   // and if different than in cache update cache and queue message all subscribers
   def queueFetchAll(ids: Seq[Int]): Unit
-  
+
   //Returns all actively subscribed ids
   def subscribedIds: ZIO[Any, Nothing, Set[Int]]
-  
+
 }
 ```
 
-# Common Helper Effects
+# Common Effects
 
 ```scala
 /**
  * Create Stream from database `journal`
  */
 def userSubscriptionStream(
-                            userSubscriptionsRef: Ref[HashSet[Int]], 
+                            userSubscriptionsRef: Ref[HashSet[Int]],
                             journal: Hub[DataRecord]
                           ): ZIO[Scope, Nothing, Stream[StatusException, SyncResponse]]
 
@@ -173,8 +205,8 @@ def userSubscriptionStream(
  * All database item creation / updates are emitting to `journal`.
  */
 def updateDatabaseRecords(
-                           request: UpdateRequest, 
-                           journal: Hub[DataRecord], 
+                           request: UpdateRequest,
+                           journal: Hub[DataRecord],
                            databaseRecordsRef: Ref[Map[Int, DataRecord]]
                          ): UIO[UpdateResponse]
 
@@ -182,9 +214,17 @@ def updateDatabaseRecords(
  * Update `userSubscriptionsRef` with subscription changes.
  */
 def modifyUserSubscriptions(
-                             syncRequest: SyncRequest, 
-                             userSubscriptionsRef: Ref[HashSet[Int]], 
+                             syncRequest: SyncRequest,
+                             userSubscriptionsRef: Ref[HashSet[Int]],
                              databaseRecords: Map[Int, DataRecord]
                            ): UIO[Seq[SyncResponse]]
 
 ```
+
+
+
+//TODO:
+
+
+The `context: AuthenticatedUser` parameter is for a feature exposed by ZIO to handle gRPC metadata. Every gRPC request
+is able to provide headers, similiar to how HTTP allows request headers. ZIO generates 2 interface
