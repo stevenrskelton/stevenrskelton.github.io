@@ -30,6 +30,7 @@ p2="2024-05-01-realtime-client-database-external-datasource-zlayer"
 ```scala
 /**
  * Data layer that will refresh all subscribed data an external datasource based on a schedule.
+ *
  * @param refreshSchedule
  */
 abstract class ExternalDataLayer(refreshSchedule: Schedule[Any, Any, Any]) {
@@ -62,8 +63,8 @@ abstract class ExternalDataLayer(refreshSchedule: Schedule[Any, Any, Any]) {
    * Emit data updates to `journal`.
    */
   protected def attachFetchQueueListener(
-                                          queue: Dequeue[DataId], 
-                                          journal: Hub[DataRecord], 
+                                          queue: Dequeue[DataId],
+                                          journal: Hub[DataRecord],
                                           databaseRecordsRef: Ref[Map[DataId, DataRecord]]
                                         ): UIO[Unit]
 
@@ -71,11 +72,59 @@ abstract class ExternalDataLayer(refreshSchedule: Schedule[Any, Any, Any]) {
    * On schedule, attempt to refresh all subscribed data.
    */
   protected def attachRefreshScheduler(
-                                        queue: Enqueue[DataId], 
+                                        queue: Enqueue[DataId],
                                         globalSubscribersRef: Ref[Set[Ref[HashSet[DataId]]]]
                                       ): UIO[Unit]
 }
 ```
 
-## Hardcoded Implementation
+## Hardcoded Data Implementation
 
+A sample implementation for testing would be one which allows data to be specified on instantiation of the ZLayer, and 
+then consumed when called with the appropriate id. To maintain data order, calls to `externalData` require single 
+concurrency. In the Java thread paradigm this is done using `syncronize`, in ZIO `Ref.Synchronized` serves the same 
+purpose.
+
+```scala
+class HardcodedExternalDataLayer private(hardcodedData: Ref.Synchronized[Seq[Data]], refreshSchedule: Schedule[Any, Any, Any])
+  extends ExternalDataLayer(refreshSchedule) {
+
+  override protected def externalData(
+                                       chunk: NonEmptyChunk[Either[DataId, DataRecord]]
+                                     ): UIO[Chunk[Data]] = {
+    hardcodedData.modify {
+      fetchData =>
+        chunk.foldLeft((Chunk.empty[Data], fetchData))({
+          case ((foldData, foldFetchData), either) =>
+            val dataId = either.fold(identity, _.data.id)
+            foldFetchData.find(_.id == dataId).map {
+              data => (foldData :+ data, foldFetchData.filterNot(_ eq data))
+            }.getOrElse {
+              (foldData, foldFetchData)
+            }
+        })
+    }
+  }
+}
+```
+
+## Performance Testing Implementation
+
+A sample implementation for performance testing would timestamp on `Data` element updates allowing clients to compare 
+time lag between server updates and their notification of it.
+
+```scala
+class ClockExternalDataLayer private(clock: Clock, refreshSchedule: Schedule[Any, Any, Any])
+  extends ExternalDataLayer(refreshSchedule) {
+
+  override protected def externalData(
+                                       chunk: NonEmptyChunk[Either[DataId, DataRecord]]
+                                     ): UIO[Chunk[Data]] = {
+    clock.instant.map {
+      now =>
+        val dataId = either.fold(identity, _.data.id)
+        chunk.map(either => Data.of(dataId, now.toString))
+    }
+  }
+}
+```
