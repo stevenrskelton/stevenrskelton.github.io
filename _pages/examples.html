@@ -41,7 +41,7 @@ permalink: /examples/
             {% include github_example_project.html id=example_id %}
         </div>
         <div class="entries-{{ entries_layout }}">
-            {% for post in site.posts %}
+            {% for post in site.posts reversed %}
                 {% if post.example == example_id %}
                     {% include archive-single.html type=entries_layout %}
                 {% endif %}
