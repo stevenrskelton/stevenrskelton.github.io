@@ -19,12 +19,7 @@ sources:
 //TODO
 <!--more-->
 
-{%
-include multi_part_post.html
-series="Realtime Client Database"
-p1="2024-04-15-realtime-client-database-grpc-streams-zio"
-p2="2024-05-01-realtime-client-database-external-datasource-zlayer"
-%}
+{% include multi_part_post.html %}
 
 # External Data using ZLayer
 

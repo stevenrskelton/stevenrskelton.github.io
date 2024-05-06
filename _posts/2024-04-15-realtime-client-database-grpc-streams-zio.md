@@ -21,12 +21,7 @@ immediately as they happen, or in the case of a client disconnect, immediately a
 and [ZIO Hub](https://zio.dev/reference/concurrency/hub/) allow this functionality to be easily replicated and
 customized beyond what expensive paid-for services such as Firebase can do.<!--more-->
 
-{%
-include multi_part_post.html
-series="Realtime Client Database"
-p1="2024-04-15-realtime-client-database-grpc-streams-zio"
-p2="2024-05-01-realtime-client-database-external-datasource-zlayer"
-%}
+{% include multi_part_post.html %}
 
 {% include table-of-contents.html height="100px" %}
 
