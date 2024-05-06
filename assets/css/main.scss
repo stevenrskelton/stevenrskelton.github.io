@@ -127,6 +127,7 @@ ins {
   margin-bottom: 2em;
 }
 
+
 .initial-content {
   background-color: #f3f3f3;
 }
@@ -270,7 +271,8 @@ tr:last-of-type td {
 }
 a.post__taxonomy-item,
 a.page__taxonomy-item,
-.pagination--pager {
+.pagination--pager,
+.pagination a {
   background-color: #ffffff;
 }
 a.post__taxonomy-item:hover, a.page__taxonomy-item:hover {
