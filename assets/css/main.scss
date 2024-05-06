@@ -268,7 +268,9 @@ tr:last-of-type td {
   min-width: 1.5em;
   text-align: center;
 }
-a.post__taxonomy-item, a.page__taxonomy-item {
+a.post__taxonomy-item,
+a.page__taxonomy-item,
+.pagination--pager {
   background-color: #ffffff;
 }
 a.post__taxonomy-item:hover, a.page__taxonomy-item:hover {
