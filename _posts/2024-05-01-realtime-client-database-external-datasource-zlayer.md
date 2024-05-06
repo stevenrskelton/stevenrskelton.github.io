@@ -13,6 +13,7 @@ sources:
   - "/src/test/scala/ca/stevenskelton/examples/realtimeziohubgrpc/externaldata/ZSyncServiceImplSpec.scala"
   - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/externaldata/ExternalDataLayer.scala"
   - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/externaldata/HardcodedExternalDataLayer.scala"
+  - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/externaldata/ClockExternalDataLayer.scala"
 ---
 
 //TODO
@@ -111,7 +112,10 @@ class HardcodedExternalDataLayer private(hardcodedData: Ref.Synchronized[Seq[Dat
 ## Performance Testing Implementation
 
 A sample implementation for performance testing would timestamp on `Data` element updates allowing clients to compare 
-time lag between server updates and their notification of it.
+time lag between server updates and their notification of it.  
+
+Performance testing implementation and results are covered in [Realtime Client Database Performance Testing]({% post_url
+2024-05-06-realtime-client-database-performance-testing %}).  
 
 ```scala
 class ClockExternalDataLayer private(clock: Clock, refreshSchedule: Schedule[Any, Any, Any])
@@ -128,3 +132,4 @@ class ClockExternalDataLayer private(clock: Clock, refreshSchedule: Schedule[Any
   }
 }
 ```
+
