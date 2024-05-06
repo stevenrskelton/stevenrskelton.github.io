@@ -259,7 +259,9 @@ tr:last-of-type td {
   max-height: 2em;
 }
 
-.post__taxonomy-item img:hover, .page__taxonomy-item img:hover {
+.post__taxonomy-item img:hover,
+.page__taxonomy-item img:hover,
+.page__content .html-bg a:not(.btn):hover img {
   box-shadow: none;
 }
 .post__taxonomy-item div {
