@@ -1,6 +1,6 @@
 
 {% assign page_example = page.example %}
-{% assign related_posts = site.posts | where_exp:"item", "item.example == page_example" | where_exp:"item", "item != page" %}
+{% assign related_posts = site.posts | where_exp:"item", "item.example == page_example" | where_exp:"item", "item != page" | reverse %}
 {% if related_posts %}
 <div class="html-bg">
   <strong>Other Posts in this Series</strong>
