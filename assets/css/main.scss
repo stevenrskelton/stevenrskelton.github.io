@@ -259,7 +259,7 @@ tr:last-of-type td {
   max-height: 2em;
 }
 
-.post__taxonomy-item img:hover {
+.post__taxonomy-item img:hover, .page__taxonomy-item img:hover {
   box-shadow: none;
 }
 .post__taxonomy-item div {
@@ -269,8 +269,8 @@ tr:last-of-type td {
 a.post__taxonomy-item, a.page__taxonomy-item {
   background-color: #ffffff;
 }
-.post__taxonomy-item a:hover, .page__taxonomy-item a:hover {
-  background-color: white;
+a.post__taxonomy-item:hover, a.page__taxonomy-item:hover {
+  box-shadow: 0 0 10px rgba(0,0,0,0.25);
 }
 
 .page__taxonomy-item div {
