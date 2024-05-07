@@ -1,9 +1,8 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc.grpcupdate
 
-import ca.stevenskelton.examples.realtimeziohubgrpc.AuthenticatedUser
 import io.grpc.ServerBuilder
 import io.grpc.protobuf.services.ProtoReflectionService
-import scalapb.zio_grpc.{RequestContext, ServerLayer, ServiceList}
+import scalapb.zio_grpc.{ServerLayer, ServiceList}
 import zio.{ExitCode, URIO, ZIOAppDefault}
 
 object Main extends ZIOAppDefault:
@@ -16,7 +15,7 @@ object Main extends ZIOAppDefault:
       grpcServer <- ServerLayer
         .fromServiceList(
           ServerBuilder.forPort(GRPCServerPort).addService(ProtoReflectionService.newInstance()),
-          ServiceList.add(zSyncServiceImpl.transformContextZIO(AuthenticatedUser.context)),
+          ServiceList.add(zSyncServiceImpl),
         )
         .launch
     yield

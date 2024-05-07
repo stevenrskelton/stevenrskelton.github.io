@@ -2,7 +2,7 @@ package ca.stevenskelton.examples.realtimeziohubgrpc.externaldata
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.DataId
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, SyncRequest, SyncResponse, UpdateRequest, UpdateResponse, ZioSyncService}
-import ca.stevenskelton.examples.realtimeziohubgrpc.{AuthenticatedUser, Effects, DataRecord}
+import ca.stevenskelton.examples.realtimeziohubgrpc.{AuthenticatedUser, DataRecord, Effects}
 import io.grpc.StatusException
 import zio.stream.ZStream.HaltStrategy
 import zio.stream.{Stream, ZStream}

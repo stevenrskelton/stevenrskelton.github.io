@@ -1,8 +1,9 @@
 package ca.stevenskelton.examples.realtimeziohubgrpc.grpcupdate
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.DataId
+import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.ZioSyncService.SyncService
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{SyncRequest, SyncResponse, UpdateRequest, UpdateResponse, ZioSyncService}
-import ca.stevenskelton.examples.realtimeziohubgrpc.{AuthenticatedUser, Effects, DataRecord}
+import ca.stevenskelton.examples.realtimeziohubgrpc.{DataRecord, Effects}
 import io.grpc.StatusException
 import zio.stream.ZStream.HaltStrategy
 import zio.stream.{Stream, ZStream}
@@ -25,12 +26,12 @@ object ZSyncServiceImpl:
 case class ZSyncServiceImpl private(
                                      journal: Hub[DataRecord],
                                      databaseRecordsRef: Ref[Map[DataId, DataRecord]]
-                                   ) extends ZioSyncService.ZSyncService[AuthenticatedUser]:
+                                   ) extends SyncService:
   /**
    * Requests will subscribe/unsubscribe to `Data`.
    * Data updates of subscribed elements is streamed in realtime.
    */
-  override def bidirectionalStream(request: Stream[StatusException, SyncRequest], context: AuthenticatedUser): Stream[StatusException, SyncResponse] =
+  override def bidirectionalStream(request: Stream[StatusException, SyncRequest]): Stream[StatusException, SyncResponse] =
     ZStream.unwrapScoped:
       for
         userSubscriptionsRef <- Ref.make(HashSet.empty[DataId])
@@ -48,5 +49,5 @@ case class ZSyncServiceImpl private(
    * Creation / Update of `Data`. Response will indicate success or failure due to write conflict.
    * Conflicts are detected based on the ETag in the request.
    */
-  override def update(request: UpdateRequest, context: AuthenticatedUser): IO[StatusException, UpdateResponse] =
+  override def update(request: UpdateRequest): IO[StatusException, UpdateResponse] =
     Effects.updateDatabaseRecords(request, journal, databaseRecordsRef)

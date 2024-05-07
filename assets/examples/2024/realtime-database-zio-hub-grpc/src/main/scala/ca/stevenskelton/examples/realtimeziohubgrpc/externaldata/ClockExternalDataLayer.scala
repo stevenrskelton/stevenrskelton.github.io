@@ -3,7 +3,7 @@ package ca.stevenskelton.examples.realtimeziohubgrpc.externaldata
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.DataId
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.Data
-import zio.{Chunk, NonEmptyChunk, Schedule, UIO, ULayer, ZLayer, Clock}
+import zio.{Chunk, Clock, NonEmptyChunk, Schedule, UIO, ULayer, ZLayer}
 
 object ClockExternalDataLayer:
   def live(clock: Clock, refreshSchedule: Schedule[Any, Any, Any]): ULayer[ClockExternalDataLayer] =

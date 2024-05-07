@@ -2,7 +2,7 @@ package ca.stevenskelton.examples.realtimeziohubgrpc.externaldata
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.DataId
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.{Data, UpdateRequest}
-import ca.stevenskelton.examples.realtimeziohubgrpc.{Effects, DataRecord}
+import ca.stevenskelton.examples.realtimeziohubgrpc.{DataRecord, Effects}
 import zio.stream.ZStream
 import zio.{Chunk, Dequeue, Enqueue, Hub, NonEmptyChunk, Queue, Ref, Schedule, UIO, ZIO}
 
@@ -21,6 +21,7 @@ object ExternalDataLayer:
 
 /**
  * Data layer that will refresh all subscribed data an external datasource based on a schedule.
+ *
  * @param refreshSchedule
  */
 trait ExternalDataLayer(refreshSchedule: Schedule[Any, Any, Any]):
