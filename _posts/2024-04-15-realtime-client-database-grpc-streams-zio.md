@@ -81,7 +81,7 @@ service SyncService {
 }
 ```
 
-The Scala implementation for the ZIO generated gRPC classes will be for the interface:
+This maps to the Scala interface:
 
 ```scala
   /**
@@ -124,8 +124,8 @@ notifications to all `Data` updates, and each client _Subscription Manager_ will
 events of the ids its client has requested. Because this Hub will queue the stream of database changes, we will name
 it `journal` since database journals have similar behaviour.
 
-A helpful feature is for initiating subscriptions to return the current `Data` object back in the client response. This
-is indicated as the yellow dashed line in the function diagram.
+A helpful feature is to return the current `Data` object back in the client response when initiating a subscription. 
+This operation has been indicated by a yellow dashed line in the function diagram.
 
 {%
 include figure image_path="/assets/images/2024/04/realtime_database.svg"
@@ -150,48 +150,7 @@ message Data {
 }
 ```
 
-## External Datasource
 
-The focus of this article is the client-server communication, not the external datasource, so a very basic interface
-will suffice:
-
-```scala
-trait ExternalData {
-  //Fetches `Data` from external datasource, and
-  // update cache and queue notification to journal
-  def queueFetchAll(ids: Seq[Int]): Unit
-}
-```
-
-# Common Effects
-
-These effects are the remaining glue used to connect the server-side components.
-
-We will need to call an effect to connect the _Subscription Manager_ to the journal Hub:
-
-```scala
-/**
- * Create Stream from database `journal`
- */
-def userSubscriptionStream(
-                            userSubscriptionsRef: Ref[HashSet[Int]],
-                            journal: Hub[Data]
-                          ): ZIO[Scope, Nothing, Stream[StatusException, SyncResponse]]
-```
-
-We will need to connect the
-
-```scala
-/**
- * Update `userSubscriptionsRef` with subscription changes.
- */
-def modifyUserSubscriptions(
-                             syncRequest: SyncRequest,
-                             userSubscriptionsRef: Ref[HashSet[Int]],
-                             databaseRecords: Map[Int, Data]
-                           ): UIO[Seq[SyncResponse]]
-
-```
 
 # Adding Data Updates
 
@@ -234,6 +193,33 @@ def updateDatabaseRecords(
                            journal: Hub[Data],
                            databaseRecordsRef: Ref[Map[Int, Data]]
                          ): UIO[UpdateResponse]
+```
+
+
+We will need to call an effect to connect the _Subscription Manager_ to the journal Hub:
+
+```scala
+/**
+ * Create Stream from database `journal`
+ */
+def userSubscriptionStream(
+                            userSubscriptionsRef: Ref[HashSet[Int]],
+                            journal: Hub[Data]
+                          ): ZIO[Scope, Nothing, Stream[StatusException, SyncResponse]]
+```
+
+We will need to connect the
+
+```scala
+/**
+ * Update `userSubscriptionsRef` with subscription changes.
+ */
+def modifyUserSubscriptions(
+                             syncRequest: SyncRequest,
+                             userSubscriptionsRef: Ref[HashSet[Int]],
+                             databaseRecords: Map[Int, Data]
+                           ): UIO[Seq[SyncResponse]]
+
 ```
 
 //TODO:

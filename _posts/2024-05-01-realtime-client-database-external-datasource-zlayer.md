@@ -31,7 +31,7 @@ service implementation. The implementation details will depend on how and where 
 will be exposed with a simple interface mapping data ids to new data elements.
 
 The ZLayer _trait_ will contain the related methods used to transform inputs and outputs, as well as scheduling
-updates. With _protected_ visibility the implementations can be overriden to accomidate non-standard operation.
+updates. With _protected_ visibility implementations can be overriden accomidating non-standard operation.
 
 ```scala
 /**
@@ -91,8 +91,8 @@ abstract class ExternalDataLayer(refreshSchedule: Schedule[Any, Any, Any]) {
 A sample implementation useful for testing will allow data to be specified as a construction parameter. The data will
 be part of the ZLayer instance with it consumed by calls from the server. This will allow subsequent calls to return
 different data values allowing for state-based unit testing. However this requires strict ordering, so calls
-to `externalData` will require single concurrency. Java threading uses `syncronize` to serialize execution, in ZIO 
-because it uses fibers `Ref.Synchronized` achieves the same purpose.
+to `externalData` requires single concurrency. Java threading uses `syncronize` for serialize execution, in ZIO fiber
+synchronization is through `Ref.Synchronized`.
 
 ```scala
 class HardcodedExternalDataLayer private(
@@ -115,30 +115,6 @@ class HardcodedExternalDataLayer private(
               (foldData, foldFetchData)
             }
         })
-    }
-  }
-}
-```
-
-## Performance Testing Implementation
-
-A sample implementation for performance testing would timestamp on `Data` element updates allowing clients to compare
-time lag between server updates and their notification of it.
-
-Performance testing implementation and results are covered in [Realtime Client Database Performance Testing]({% post_url
-2024-05-06-realtime-client-database-performance-testing %}).
-
-```scala
-class ClockExternalDataLayer private(clock: Clock, refreshSchedule: Schedule[Any, Any, Any])
-  extends ExternalDataLayer(refreshSchedule) {
-
-  override protected def externalData(
-                                       chunk: NonEmptyChunk[Either[DataId, DataRecord]]
-                                     ): UIO[Chunk[Data]] = {
-    clock.instant.map {
-      now =>
-        val dataId = either.fold(identity, _.data.id)
-        chunk.map(either => Data.of(dataId, now.toString))
     }
   }
 }

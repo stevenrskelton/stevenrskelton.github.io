@@ -22,6 +22,32 @@ sources:
 
 The testing client for a performance test can be the same as one created for local unit tests.
 
+## Performance Testing Implementation
+
+A sample implementation for performance testing would timestamp on `Data` element updates allowing clients to compare
+time lag between server updates and their notification of it.
+
+Performance testing implementation and results are covered in [Realtime Client Database Performance Testing]({% post_url
+2024-05-06-realtime-client-database-performance-testing %}).
+
+```scala
+class ClockExternalDataLayer private(clock: Clock, refreshSchedule: Schedule[Any, Any, Any])
+  extends ExternalDataLayer(refreshSchedule) {
+
+  override protected def externalData(
+                                       chunk: NonEmptyChunk[Either[DataId, DataRecord]]
+                                     ): UIO[Chunk[Data]] = {
+    clock.instant.map {
+      now =>
+        val dataId = either.fold(identity, _.data.id)
+        chunk.map(either => Data.of(dataId, now.toString))
+    }
+  }
+}
+```
+
+
+
 ```scala
 case class GrpcClient(
                        userId: UserId,
