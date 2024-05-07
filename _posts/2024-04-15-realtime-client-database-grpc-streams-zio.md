@@ -14,12 +14,12 @@ sources:
 ---
 
 Realtime push-based databases such as [Google Firebase](https://firebase.google.com/docs/database) conveniently ensure
-clients have locally stored data synchronized with the server. Data updates are streamed to clients immediately as they
-happen, or in the case of a client disconnect, immediately after reconnecting.
+clients are synchronized with the server. Data updates stream to clients immediately as they happen; and if a client
+disconnects, updates are immediately processed after reconnecting.
 
 [gRPC server streaming](https://grpc.io/docs/what-is-grpc/core-concepts/#server-streaming-rpc)
-and [ZIO Hub](https://zio.dev/reference/concurrency/hub/) can be used to implement this functionality replicating
-expensive paid-for services such as Firebase while allowing for greater extensibility.<!--more-->
+and [ZIO Hub](https://zio.dev/reference/concurrency/hub/) can implement this functionality replicating an expensive paid
+Firebase service while allowing greater extensibility.<!--more-->
 
 {% include multi_part_post.html %}
 
@@ -36,25 +36,26 @@ external changes can be set to clients without waiting for manual user initiatio
 # Bi-Directional gRPC Streaming using HTTP/2
 
 Two technology standards for bi-directional web communications have become standards:
-[WebSockets](https://en.wikipedia.org/wiki/WebSocket) and HTTP/2 streams.
+[WebSockets](https://en.wikipedia.org/wiki/WebSocket)
+and [HTTP/2 streams](https://datatracker.ietf.org/doc/html/rfc9113#name-streams-and-multiplexing).
 
-## Web Standards
+## Today's Complementary Web Standards
 
 ### WebSockets
 
-WebSockets was created first of the two as an expansion to the HTTP/1.1 standard. By allowing the client to issue
-an [Upgrade request](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade) over an established HTTP/1.1
-connection, the server can switch to the _websocket_ network protocol which supports bi-directional streaming. Since
-this is an upgrade mechanism, backwards compatibility and alternative approaches when older clients are less invasive
-to implement. WebSockets has a clear JavaScript API common across all browsers, meaning it today's preferred
-bidirectional protocol when interacting with browser clients. While there is no explicit _websocket_ version it has
-seen benefits added via iteration in the HTTP protocol. As HTTP/2 significantly improving connection performance by way
-of connection multiplexing, websockets have also benefited when operating multiple websocket connections simultaneously
-by being able to share a single upgraded HTTP/2 multiplexed connection.
+WebSockets were created first of the two as an extension to the HTTP/1.1 standard. By allowing clients to issue
+an [Upgrade request](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Upgrade) on an established HTTP/1.1
+connection, capable servers can switch the connection to use the _websocket_ network protocol, supporting bi-directional
+streaming. Since this is an upgrade mechanism, backwards compatibility and fallback support for older clients has less
+complication to implement. The WebSocket protocol has a common JavaScript API across all browsers, making it today's
+preferred bidirectional protocol within browser use-cases. Despite _websocket_ being an unversioned specification it
+has seen improvements over time by way of it being built on top of an HTTP protocol. HTTP/2 significantly improved
+connection performance through connection multiplexing, allowing websockets to benefit when clients use multiple
+websocket connections simultaneously as they are now being multiplexed over the single upgraded HTTP/2 connection.
 
 ### HTTP/2 Streaming
 
-For non-browser communications, such as mobile apps or server-server communications WebSockets is an unnecessary
+For non-browser communications such as by mobile apps or server-server communications, WebSockets is an unnecessary
 layer. WebSockets is an upgraded HTTP connection, implemented by creating an additional layer in the networking
 protocol. The changes in HTTP/2 directly addressed bidirectional communication streams, so when the WebSocket API isn't
 beneficial, it is optimal to use the HTTP protocol capabilities directly. HTTP/2 streaming is the preferred
@@ -123,9 +124,8 @@ notifications to all `Data` updates, and each client _Subscription Manager_ will
 events of the ids its client has requested. Because this Hub will queue the stream of database changes, we will name
 it `journal` since database journals have similar behaviour.
 
-A helpful feature is to have new subscriptions return the current `Data` object back to the client. This is the most
-practical use-case, clients have an id and need the corresponding data, and should that data change in the future
-stream it to the client immediately. This is indicated as the yellow dashed line in the function diagram.
+A helpful feature is for initiating subscriptions to return the current `Data` object back in the client response. This
+is indicated as the yellow dashed line in the function diagram.
 
 {%
 include figure image_path="/assets/images/2024/04/realtime_database.svg"

@@ -13,15 +13,25 @@ sources:
   - "/src/test/scala/ca/stevenskelton/examples/realtimeziohubgrpc/externaldata/ZSyncServiceImplSpec.scala"
   - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/externaldata/ExternalDataLayer.scala"
   - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/externaldata/HardcodedExternalDataLayer.scala"
-  - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/externaldata/ClockExternalDataLayer.scala"
 ---
 
-//TODO
-<!--more-->
+Expanding on the realtime Firebase implementation in the previous article, this expands the functionality allowing the
+server to fetch data on-demand from an external datasource. Additionally, functionality to periodical refresh active
+data which is subscribed to by connected clients transforms this database into an efficient cache to evolving external
+data which can only be obtained by polling.<!--more-->
 
 {% include multi_part_post.html %}
 
-# External Data using ZLayer
+{% include table-of-contents.html height="100px" %}
+
+# External Data using a ZLayer
+
+The ZLayer mechanism in ZIO conveniently defines environment dependencies, and will be used to create an external data
+service implementation. The implementation details will depend on how and where the external data is stored, but it
+will be exposed with a simple interface mapping data ids to new data elements.
+
+The ZLayer _trait_ will contain the related methods used to transform inputs and outputs, as well as scheduling
+updates. With _protected_ visibility the implementations can be overriden to accomidate non-standard operation.
 
 ```scala
 /**
@@ -74,15 +84,21 @@ abstract class ExternalDataLayer(refreshSchedule: Schedule[Any, Any, Any]) {
 }
 ```
 
-## Hardcoded Data Implementation
+## External Data Sample Implementations
 
-A sample implementation for testing would be one which allows data to be specified on instantiation of the ZLayer, and 
-then consumed when called with the appropriate id. To maintain data order, calls to `externalData` require single 
-concurrency. In the Java thread paradigm this is done using `syncronize`, in ZIO `Ref.Synchronized` serves the same 
-purpose.
+### Hardcoded Data
+
+A sample implementation useful for testing will allow data to be specified as a construction parameter. The data will
+be part of the ZLayer instance with it consumed by calls from the server. This will allow subsequent calls to return
+different data values allowing for state-based unit testing. However this requires strict ordering, so calls
+to `externalData` will require single concurrency. Java threading uses `syncronize` to serialize execution, in ZIO 
+because it uses fibers `Ref.Synchronized` achieves the same purpose.
 
 ```scala
-class HardcodedExternalDataLayer private(hardcodedData: Ref.Synchronized[Seq[Data]], refreshSchedule: Schedule[Any, Any, Any])
+class HardcodedExternalDataLayer private(
+                                          hardcodedData: Ref.Synchronized[Seq[Data]],
+                                          refreshSchedule: Schedule[Any, Any, Any]
+                                        )
   extends ExternalDataLayer(refreshSchedule) {
 
   override protected def externalData(
@@ -106,11 +122,11 @@ class HardcodedExternalDataLayer private(hardcodedData: Ref.Synchronized[Seq[Dat
 
 ## Performance Testing Implementation
 
-A sample implementation for performance testing would timestamp on `Data` element updates allowing clients to compare 
-time lag between server updates and their notification of it.  
+A sample implementation for performance testing would timestamp on `Data` element updates allowing clients to compare
+time lag between server updates and their notification of it.
 
 Performance testing implementation and results are covered in [Realtime Client Database Performance Testing]({% post_url
-2024-05-06-realtime-client-database-performance-testing %}).  
+2024-05-06-realtime-client-database-performance-testing %}).
 
 ```scala
 class ClockExternalDataLayer private(clock: Clock, refreshSchedule: Schedule[Any, Any, Any])

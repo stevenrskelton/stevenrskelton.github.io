@@ -60,7 +60,7 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
   override def spec: Spec[TestEnvironment & Scope, Any] = suite("multiple client listeners")(
     test("All updated") {
       for
-        zSyncService <- ZSyncServiceImpl.launch
+        zSyncService <- ZSyncServiceImpl.launch()
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
@@ -77,7 +77,7 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     },
     test("Unsubscribe by Id") {
       for
-        zSyncService <- ZSyncServiceImpl.launch
+        zSyncService <- ZSyncServiceImpl.launch()
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
@@ -95,7 +95,7 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     },
     test("Unsubscribe All") {
       for
-        zSyncService <- ZSyncServiceImpl.launch
+        zSyncService <- ZSyncServiceImpl.launch()
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.responses(5, SubscribeActions *)
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
@@ -114,7 +114,7 @@ object ZSyncServiceImplSpec extends JUnitRunnableSpec:
     test("Subscribe Response when previous_etag matches") {
       val initialData = ZSyncServiceImplSpec.createUpdateRequest(1)
       for
-        zSyncService <- ZSyncServiceImpl.launch
+        zSyncService <- ZSyncServiceImpl.launch()
         clients <- BidirectionalTestClients.launch(zSyncService)
         _ <- clients.client1.update(ZSyncServiceImplSpec.createUpdateRequest(1))
         _ <- clients.responses(1, (User1, SyncRequest(subscribes = Seq(SyncRequest.Subscribe(id = Id1)))))

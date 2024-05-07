@@ -12,7 +12,7 @@ sources:
   - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/externaldata/ZSyncServiceImpl.scala"
   - "/src/test/scala/ca/stevenskelton/examples/realtimeziohubgrpc/externaldata/ZSyncServiceImplSpec.scala"
   - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/externaldata/ExternalDataLayer.scala"
-  - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/externaldata/ClockExternalDataLayer.scala"
+  - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/externaldata/performance/ClockExternalDataLayer.scala"
 ---
 
 //TODO
