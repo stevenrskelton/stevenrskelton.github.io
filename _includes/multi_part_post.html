@@ -1,7 +1,7 @@
 
 {% assign page_example = page.example %}
 {% assign related_posts = site.posts | where_exp:"item", "item.example == page_example" | where_exp:"item", "item != page" | reverse %}
-{% if related_posts %}
+{% if related_posts.size > 0 %}
 <div class="html-bg">
   <strong>Other Posts in this Series</strong>
   {% for post in related_posts %}
