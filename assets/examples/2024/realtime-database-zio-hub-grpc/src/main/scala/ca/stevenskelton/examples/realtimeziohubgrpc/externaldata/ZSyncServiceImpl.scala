@@ -12,14 +12,12 @@ import scala.collection.immutable.HashSet
 import scala.collection.mutable
 
 object ZSyncServiceImpl:
-
-  private val HubCapacity = 1000
-
-  def launch(initial: Seq[Data] = Nil): URIO[ExternalDataLayer, ZSyncServiceImpl] =
+  
+  def launch(initial: Seq[Data] = Nil, hubCapacity: Int = 1000): URIO[ExternalDataLayer, ZSyncServiceImpl] =
     ZIO.serviceWithZIO[ExternalDataLayer]:
       externalDataLayer =>
         for
-          journal <- Hub.sliding[DataRecord](HubCapacity)
+          journal <- Hub.sliding[DataRecord](hubCapacity)
           now <- Clock.instant
           initialMap = initial.map(data => data.id -> DataRecord(data, now, DataRecord.calculateETag(data))).toMap
           databaseRecordsRef <- Ref.make[Map[DataId, DataRecord]](initialMap)

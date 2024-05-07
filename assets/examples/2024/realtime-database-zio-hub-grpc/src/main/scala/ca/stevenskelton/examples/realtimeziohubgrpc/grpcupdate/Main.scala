@@ -11,7 +11,7 @@ object Main extends ZIOAppDefault:
 
   override def run: URIO[Any, ExitCode] =
     val app = for
-      zSyncServiceImpl <- ZSyncServiceImpl.launch
+      zSyncServiceImpl <- ZSyncServiceImpl.launch()
       grpcServer <- ServerLayer
         .fromServiceList(
           ServerBuilder.forPort(GRPCServerPort).addService(ProtoReflectionService.newInstance()),

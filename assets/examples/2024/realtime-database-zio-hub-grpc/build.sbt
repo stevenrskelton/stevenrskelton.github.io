@@ -43,4 +43,9 @@ lazy val realtimeziohubgrpc = project
     Test / scalacOptions --= Seq(
       "-Wnonunit-statement",
     ),
+    assembly / mainClass := Some("ca.stevenskelton.examples.realtimeziohubgrpc.externaldata.performance.MainServer"),
+    assembly / assemblyMergeStrategy := {
+      case PathList("META-INF", "io.netty.versions.properties") => MergeStrategy.concat
+      case _ => MergeStrategy.first
+    },
   )

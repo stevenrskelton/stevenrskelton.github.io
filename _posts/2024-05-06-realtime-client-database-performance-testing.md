@@ -61,3 +61,10 @@ object GrpcClient {
   }
 }
 ```
+
+Data ids: 
+1 - 600 are second markers.
+601 - 1000 are random
+
+Clients:
+Subscribe 1 - 600, subscribe i mod clientid

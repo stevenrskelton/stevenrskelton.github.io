@@ -1,7 +1,8 @@
-package ca.stevenskelton.examples.realtimeziohubgrpc.externaldata
+package ca.stevenskelton.examples.realtimeziohubgrpc.externaldata.performance
 
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord
 import ca.stevenskelton.examples.realtimeziohubgrpc.DataRecord.DataId
+import ca.stevenskelton.examples.realtimeziohubgrpc.externaldata.ExternalDataLayer
 import ca.stevenskelton.examples.realtimeziohubgrpc.sync_service.Data
 import zio.{Chunk, Clock, NonEmptyChunk, Schedule, UIO, ULayer, ZLayer}
 

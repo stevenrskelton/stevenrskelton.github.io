@@ -12,12 +12,10 @@ import zio.{Hub, IO, Ref, UIO}
 import scala.collection.immutable.HashSet
 
 object ZSyncServiceImpl:
-
-  private val HubCapacity = 1000
-
-  def launch: UIO[ZSyncServiceImpl] =
+  
+  def launch(hubCapacity: Int = 1000): UIO[ZSyncServiceImpl] =
     for
-      journal <- Hub.sliding[DataRecord](HubCapacity)
+      journal <- Hub.sliding[DataRecord](hubCapacity)
       databaseRecordsRef <- Ref.make[Map[DataId, DataRecord]](Map.empty)
     yield
       ZSyncServiceImpl(journal, databaseRecordsRef)
