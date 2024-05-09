@@ -55,6 +55,7 @@ title: "About"
 
 ## Enterprise Certifications
 
+<div>
 {%
 include certification.html
 name="SAFe 5.1<br>Advanced Scrum Master"
@@ -76,6 +77,7 @@ description="Scaled Agile, Inc. 49562821-2030 Jun 2022"
 img="/assets/images/about/certifications/cert_mark_SA_badge_large_300px.png"
 url="/assets/images/about/certifications/safe-leading-safe.pdf"
 %}
+</div>
 
 ## Public Portfolio
 
