@@ -60,18 +60,21 @@ include certification.html
 name="SAFe 5.1<br>Advanced Scrum Master"
 description="Scaled Agile, Inc. 89485707-5065 Apr 2024"
 img="/assets/images/about/certifications/cert_mark_SASM_badge_large_300px.png"
+url="/assets/images/about/certifications/safe-certified-advanced-scrum-master.pdf"
 %}
 {%
 include certification.html
 name="SAFe 5.1<br>Scrum Master"
 description="Scaled Agile, Inc. 49059875-5668 Jun 2023"
 img="/assets/images/about/certifications/cert_mark_SSM_badge_large_300px.png"
+url="/assets/images/about/certifications/safe-certified-scrum-master.pdf"
 %}
 {%
 include certification.html
 name="SAFe 5.1<br>Leading SAFe"
 description="Scaled Agile, Inc. 49562821-2030 Jun 2022"
 img="/assets/images/about/certifications/cert_mark_SA_badge_large_300px.png"
+url="/assets/images/about/certifications/safe-leading-safe.pdf"
 %}
 
 ## Public Portfolio
