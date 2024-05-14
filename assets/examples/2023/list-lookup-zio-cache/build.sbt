@@ -8,9 +8,9 @@ lazy val listlookupziocache = project
     scalaVersion := "3.4.1",
     libraryDependencies ++= Seq(
       "dev.zio" %% "zio-cache"         % "0.2.3",
-      "dev.zio" %% "zio-test"          % "2.1-RC1" % Test,
-      "dev.zio" %% "zio-test-sbt"      % "2.1-RC1" % Test,
-      "dev.zio" %% "zio-test-magnolia" % "2.1-RC1" % Test,
+      "dev.zio" %% "zio-test"          % "2.1.1" % Test,
+      "dev.zio" %% "zio-test-sbt"      % "2.1.1" % Test,
+      "dev.zio" %% "zio-test-magnolia" % "2.1.1" % Test,
       "org.scalatest" %% "scalatest"   % "3.2.18"  % Test,
     ),
     javacOptions ++= Seq("-source", "11", "-target", "11"),

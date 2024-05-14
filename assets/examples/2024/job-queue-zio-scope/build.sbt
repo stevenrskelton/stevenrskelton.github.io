@@ -7,11 +7,11 @@ lazy val jobqueuezioscope = project
     version := "0.1.0",
     scalaVersion := "3.4.1",
     libraryDependencies ++= Seq(
-      "dev.zio" %% "zio"                % "2.1-RC1",
-      "dev.zio" %% "zio-test"           % "2.1-RC1" % Test,
-      "dev.zio" %% "zio-test-sbt"       % "2.1-RC1" % Test,
-      "dev.zio" %% "zio-test-magnolia"  % "2.1-RC1" % Test,
-      "dev.zio" %% "zio-test-junit"     % "2.1-RC1" % Test,
+      "dev.zio" %% "zio"                % "2.1.1",
+      "dev.zio" %% "zio-test"           % "2.1.1" % Test,
+      "dev.zio" %% "zio-test-sbt"       % "2.1.1" % Test,
+      "dev.zio" %% "zio-test-magnolia"  % "2.1.1" % Test,
+      "dev.zio" %% "zio-test-junit"     % "2.1.1" % Test,
     ),
     javacOptions ++= Seq("-source", "11", "-target", "11"),
     scalacOptions ++= Seq(
