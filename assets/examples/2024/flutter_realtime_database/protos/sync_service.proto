@@ -1,0 +1,73 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "ca.stevenskelton.examples.realtimeziohubgrpc";
+option java_outer_classname = "SyncServiceProto";
+option objc_class_prefix = "SyncService";
+
+package grpc;
+
+message Data {
+  uint32 id = 1;
+  string field1 = 2;
+}
+
+service SyncService {
+  rpc BidirectionalStream (stream SyncRequest) returns (stream SyncResponse);
+
+  rpc Update(UpdateRequest) returns (UpdateResponse);
+}
+
+message SyncRequest {
+
+  message Subscribe {
+    uint32 id = 1;
+    string previous_etag = 3;
+  }
+
+  message Unsubscribe {
+    uint32 id = 1;
+    bool all = 2;
+  }
+
+  repeated Subscribe subscribes = 1;
+  repeated Unsubscribe unsubscribes = 2;
+}
+
+message SyncResponse {
+  uint32 id = 1;
+  string etag = 2;
+  Data data = 3;
+  enum State {
+    UNCHANGED = 0;
+    UPDATED = 1;
+    LOADING = 2;
+    UNSUBSCRIBED = 3;
+    NOT_SUBSCRIBED = 4;
+    NOT_FOUND = 5;
+  }
+  State state = 4;
+}
+
+message UpdateRequest {
+  message DataUpdate {
+    Data data = 1;
+    string previous_etag = 2;
+  }
+  repeated DataUpdate updates = 4;
+}
+
+message UpdateResponse {
+  enum State {
+    UNCHANGED = 0;
+    UPDATED = 1;
+    CONFLICT = 2;
+  }
+  message DataUpdateStatus {
+    uint32 id = 1;
+    string etag = 2;
+    State state = 3;
+    Data conflict = 4;
+  }
+  repeated DataUpdateStatus update_statuses = 1;
+}
