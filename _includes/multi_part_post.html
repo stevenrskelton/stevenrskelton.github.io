@@ -1,7 +1,9 @@
 
 {% assign page_example = page.example %}
 {% assign page_example_ref = site.examples[page_example].reference %}
-{% assign related_posts = site.posts | where_exp:"item", "item.example == page_example or item.example == page_example_ref" | where_exp:"item", "item != page" | reverse %}
+{% assign related_posts_0 = site.posts | where_exp:"item", "item.example == page_example" | where_exp:"item", "item != page" | reverse %}
+{% assign related_posts_1 = site.posts | where_exp:"item", "item.example == page_example_ref" | where_exp:"item", "item != page" | reverse %}
+{% assign related_posts = related_posts_0 | concat related_posts_1 %}
 {% if related_posts.size > 0 %}
 <div class="html-bg">
   <strong>Other Posts in this Series</strong>

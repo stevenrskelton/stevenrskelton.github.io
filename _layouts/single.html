@@ -75,7 +75,9 @@ layout: default
                     {% endfor %}
                     </ul>
                 {% endif %}
-                {% assign related_posts = site.posts | where_exp:"item", "item.example == page_example or item.example == page_example_ref" | where_exp:"item", "item != page" | reverse %}
+                {% assign related_posts_0 = site.posts | where_exp:"item", "item.example == page_example" | where_exp:"item", "item != page" | reverse %}
+                {% assign related_posts_1 = site.posts | where_exp:"item", "item.example == page_example_ref" | where_exp:"item", "item != page" | reverse %}
+                {% assign related_posts = related_posts_0 | concat related_posts_1 %}
                 {% if related_posts.size > 0 %}
                     <strong style="margin-top: 2.5em;display: block;">Other Posts in this Series</strong>
                     <div class="entries-{{ entries_layout }}">
