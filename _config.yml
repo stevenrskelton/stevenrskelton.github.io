@@ -149,6 +149,11 @@ tag_archive:
   path: /tags/
 
 examples:
+  flutter-realtime-database:
+    name: "Job Queue using ZIO Resource Scope"
+    url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2024/flutter_realtime_database"
+    description: "Streaming realtime updates using gRPC and Bloc."
+    reference: "realtime-database-zio-hub-grpc"
   job-queue-zio-scope:
     name: "Job Queue using ZIO Resource Scope"
     url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2024/job-queue-zio-scope"
@@ -163,6 +168,7 @@ examples:
     sources:
       - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/Effects.scala"
       - "/src/main/protobuf/sync_service.proto"
+    reference: "flutter-realtime-database"
   http-maven-receiver:
     name: "HTTP Maven Receiver"
     url: "https://github.com/stevenrskelton/http-maven-receiver"

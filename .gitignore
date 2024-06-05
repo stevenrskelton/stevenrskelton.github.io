@@ -54,6 +54,7 @@ Gemfile.lock
 **/test/files/target/
 **/test/target/
 **/build-sbt/
+**/lib/generated
 local.sbt
 jitwatch.out
 
