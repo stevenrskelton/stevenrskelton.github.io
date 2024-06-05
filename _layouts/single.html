@@ -61,6 +61,7 @@ layout: default
                 {% assign entries_layout = page.entries_layout | default: 'list' %}
                 {% assign page_example = page.example %}
                 {% assign example = site.examples[page_example] %}
+                {% assign page_example_ref = example.reference %}
                 <section id="{{ example.name | slugify | downcase }}" class="taxonomy__section">
                 {% include github_example_project.html id=page_example %}
                 {% assign empty_sources = '' | split: '' %}
@@ -74,7 +75,7 @@ layout: default
                     {% endfor %}
                     </ul>
                 {% endif %}
-                {% assign related_posts = site.posts | where_exp:"item", "item.example == page_example" | where_exp:"item", "item != page" | reverse %}
+                {% assign related_posts = site.posts | where_exp:"item", "item.example == page_example or item.example == page_example_ref" | where_exp:"item", "item != page" | reverse %}
                 {% if related_posts.size > 0 %}
                     <strong style="margin-top: 2.5em;display: block;">Other Posts in this Series</strong>
                     <div class="entries-{{ entries_layout }}">

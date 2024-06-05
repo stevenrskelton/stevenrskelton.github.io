@@ -150,9 +150,9 @@ tag_archive:
 
 examples:
   flutter-realtime-database:
-    name: "Job Queue using ZIO Resource Scope"
+    name: "Flutter Realtime Database"
     url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2024/flutter_realtime_database"
-    description: "Streaming realtime updates using gRPC and Bloc."
+    description: "Bloc persistence and streaming updates using gRPC."
     reference: "realtime-database-zio-hub-grpc"
   job-queue-zio-scope:
     name: "Job Queue using ZIO Resource Scope"
