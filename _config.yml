@@ -169,9 +169,9 @@ examples:
       - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/Effects.scala"
       - "/src/main/protobuf/sync_service.proto"
     reference: "flutter-realtime-database"
-  http-maven-receiver:
-    name: "HTTP Maven Receiver"
-    url: "https://github.com/stevenrskelton/http-maven-receiver"
+  build-action-file-receiver:
+    name: "Build Action File Receiver"
+    url: "https://github.com/stevenrskelton/build-action-file-receiver"
     description: "HTTP server that receives artifact uploads and verifies MD5 against Maven."
   list-lookup-zio-cache:
     name: "List Lookup ZIO Cache"

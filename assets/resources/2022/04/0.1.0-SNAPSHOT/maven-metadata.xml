@@ -1,6 +1,6 @@
 <metadata modelVersion="">
     <groupId>ca.stevenskelton</groupId>
-    <artifactId>http-maven-receiver-assembly</artifactId>
+    <artifactId>build-action-file-receiver-assembly</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <versioning>
         <snapshot>

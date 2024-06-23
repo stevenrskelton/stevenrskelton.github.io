@@ -6,7 +6,7 @@ tags:
   - SBT
   - GitHub
 excerpt_separator: <!--more-->
-example: http-maven-receiver
+example: build-action-file-receiver
 ---
 
 Scala Native is a compiler and JDK written in Scala with the goal of removing Scala's dependency on the JVM. This isn't
@@ -163,15 +163,15 @@ TODO: `CMAKE_EXE_LINKER_FLAGS` `LDFLAGS`
 The easiest option is to include the path in `build.sbt` though this path will differ between local development
 and within the GitHub Action.
 
-For example, within the `http-maven-receiver` project on GitHub, the runner installed S2N in the following path:
+For example, within the `build-action-file-receiver` project on GitHub, the runner installed S2N in the following path:
 
 ```scala
-nativeLinkingOptions += s"-L/home/runner/work/http-maven-receiver/http-maven-receiver/s2n-tls/s2n-tls-install/lib"
+nativeLinkingOptions += s"-L/home/runner/work/build-action-file-receiver/build-action-file-receiver/s2n-tls/s2n-tls-install/lib"
 ```
 
 ## Scala Native library dependencies in SBT
 
-The `http-maven-receiver` is a typical Scala web server application, but with compatibility to run Scala Native making
+The `build-action-file-receiver` is a typical Scala web server application, but with compatibility to run Scala Native making
 it suitable for this article. Scala Native compatibility is dictated by the availability of Scala Native versions for
 all library dependencies. These are exist as separate artifacts:
 

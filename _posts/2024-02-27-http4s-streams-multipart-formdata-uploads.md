@@ -6,7 +6,7 @@ tags:
   - Typelevel/Cats
   - Non-Blocking/Concurrency
 excerpt_separator: <!--more-->
-example: http-maven-receiver
+example: build-action-file-receiver
 ---
 
 Streaming is the primary mechanism to reduce memory requirements for processing large datasets. The approach is to 
@@ -246,7 +246,7 @@ restricting the JVM heap size to be smaller than the stream data would indicate 
 Running the JVM with a 128Mb memory allocation can use the `Xmx` parameter:
 
 ```shell
-java -Xmx128m -jar http-maven-receiver-assembly-1.0.25.jar 
+java -Xmx128m -jar build-action-file-receiver-assembly-1.0.25.jar 
 ```
 
 ## Implementation

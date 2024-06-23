@@ -81,10 +81,10 @@ Maven exposes XML files as REST URLs, and the GitHub Packages artifact URLs have
 https://maven.pkg.github.com/{githubUser}/{githubRepository}/{groupId}/{artifactId}/maven-metadata.xml
 ```
 
-For example, a groupId of _ca.stevenskelton_ and artifactId of _http-maven-receiver-assembly_ has the URL:
+For example, a groupId of _ca.stevenskelton_ and artifactId of _build-action-file-receiver-assembly_ has the URL:
 
 ```shell
-https://maven.pkg.github.com/stevenrskelton/http-maven-receiver/ca/stevenskelton/http-maven-receiver-assembly/maven-metadata.xml
+https://maven.pkg.github.com/stevenrskelton/build-action-file-receiver/ca/stevenskelton/build-action-file-receiver-assembly/maven-metadata.xml
 ```
 
 These URLs expose XML metadata which can construct all other REST URLs for the repository artifacts. An example of the
@@ -94,7 +94,7 @@ XML is:
 
 <metadata>
     <groupId>ca.stevenskelton</groupId>
-    <artifactId>http-maven-receiver-assembly</artifactId>
+    <artifactId>build-action-file-receiver-assembly</artifactId>
     <versioning>
         <latest>1.0.18</latest>
         <versions>
@@ -142,7 +142,7 @@ https://maven.pkg.github.com/{githubUser}/{githubRepository}/{groupId}/{artifact
 So for version `0.1.0-SNAPSHOT` the URL would be:
 
 ```shell
-https://maven.pkg.github.com/stevenrskelton/http-maven-receiver/ca/stevenskelton/http-maven-receiver-assembly/0.1.0-SNAPSHOT/maven-metadata.xml
+https://maven.pkg.github.com/stevenrskelton/build-action-file-receiver/ca/stevenskelton/build-action-file-receiver-assembly/0.1.0-SNAPSHOT/maven-metadata.xml
 ```
 
 An example of the XML document for this URL is:
@@ -151,7 +151,7 @@ An example of the XML document for this URL is:
 
 <metadata modelVersion="">
     <groupId>ca.stevenskelton</groupId>
-    <artifactId>http-maven-receiver-assembly</artifactId>
+    <artifactId>build-action-file-receiver-assembly</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <versioning>
         <snapshot>
@@ -264,7 +264,7 @@ So for a `1.0.18` release the wget command is:
 
 ```shell
 wget -d --header="Authorization: token {GITHUB_TOKEN}" \
- https://maven.pkg.github.com/stevenrskelton/http-maven-receiver/ca/stevenskelton/http-maven-receiver/1.0.18/http-maven-receiver-assembly-1.0.18.jar
+ https://maven.pkg.github.com/stevenrskelton/build-action-file-receiver/ca/stevenskelton/build-action-file-receiver/1.0.18/build-action-file-receiver-assembly-1.0.18.jar
 ```
 
 These URLs are visible in GitHub Action logs whenever artifacts are published to GitHub Packages using Maven.
@@ -401,7 +401,7 @@ Compile / sourceGenerators += (Compile / sourceManaged, name, version, scalaVers
     val gitSha = "git rev-parse HEAD".!!.trim
     val gitBranch = "git rev-parse --abbrev-ref HEAD".!!.trim
     val buildTime = ZonedDateTime.now.format(ISO_ZONED_DATE_TIME)
-    IO.write(file, """package ca.stevenskelton.httpmavenreceiver
+    IO.write(file, """package ca.stevenskelton.buildactionfilereceiver
                      |object SbtBuildInfo {
                      |  val name = "%s"
                      |  val version = "%s"

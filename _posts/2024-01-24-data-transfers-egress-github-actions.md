@@ -6,7 +6,7 @@ tags:
   - SBT
   - GitHub
 excerpt_separator: <!--more-->
-example: http-maven-receiver
+example: build-action-file-receiver
 ---
 
 The free tier of GitHub Packages has limited bandwidth to download private artifacts; which can make it unsuitable for
@@ -51,7 +51,7 @@ validated by accessing GitHub Packages using the GitHub auth token and comparing
 
 {%
 include figure
-image_path="https://raw.githubusercontent.com/stevenrskelton/http-maven-receiver/main/requests.drawio.svg"
+image_path="https://raw.githubusercontent.com/stevenrskelton/build-action-file-receiver/main/requests.drawio.svg"
 class="figsvgpadding"
 alt="GitHub Actions file push using POST"
 caption="GitHub Action to POST artifacts using HTTP uploads to an external receiver"
