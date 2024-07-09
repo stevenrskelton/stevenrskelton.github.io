@@ -63,8 +63,6 @@ description="Google Cloud July 2024"
 img="/assets/images/about/certifications/gcp_associate_cloud_engineer.png"
 url="/assets/images/about/certifications/"
 %}
-</div>
-<div>
 {%
 include certification.html
 name="SAFe 5.1<br>Advanced Scrum Master"
