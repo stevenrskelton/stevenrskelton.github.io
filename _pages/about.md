@@ -58,6 +58,15 @@ title: "About"
 <div>
 {%
 include certification.html
+name="Associate Cloud Engineer<br>Certification"
+description="Google Cloud July 2024"
+img="/assets/images/about/certifications/gcp_associate_cloud_engineer.png"
+url="/assets/images/about/certifications/"
+%}
+</div>
+<div>
+{%
+include certification.html
 name="SAFe 5.1<br>Advanced Scrum Master"
 description="Scaled Agile, Inc. 89485707-5065 Apr 2024"
 img="/assets/images/about/certifications/cert_mark_SASM_badge_large_300px.png"
