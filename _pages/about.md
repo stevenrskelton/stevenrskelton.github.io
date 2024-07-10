@@ -58,7 +58,7 @@ title: "About"
 <div>
 {%
 include certification.html
-name="Associate Cloud Engineer<br>Certification"
+name="Google Cloud<br>Associate Cloud Engineer"
 description="Google Cloud July 2024"
 img="/assets/images/about/certifications/gcp_associate_cloud_engineer.png"
 url="/assets/images/about/certifications/"
