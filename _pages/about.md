@@ -59,9 +59,9 @@ title: "About"
 {%
 include certification.html
 name="Google Cloud<br>Associate Cloud Engineer"
-description="Google Cloud July 2024"
+description="Google Cloud 0e4c4f24bc7945a499aaad77a0530eaf Series 144815 Jul 2024"
 img="/assets/images/about/certifications/gcp_associate_cloud_engineer.png"
-url="/assets/images/about/certifications/"
+url="/assets/images/about/certifications/AssociateCloudEngineer20240711-7-h9f128.pdf"
 %}
 {%
 include certification.html
