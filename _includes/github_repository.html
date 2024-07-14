@@ -158,7 +158,7 @@
                   <text data-testid="forkcount" class="gray">{{ include.forks_count }}</text>
                </g>
             </g>
-            {% assign lastlength = include.forks_count | size | times: 6 | plus: 10 | plus: languagelength %}
+            {% assign lastlength = include.forks_count | size | times: 6 | plus: 50 | plus: languagelength %}
             <g transform="translate({{ lastlength }}, 0)">
                <g transform="translate(0, 0)">
                   <svg
