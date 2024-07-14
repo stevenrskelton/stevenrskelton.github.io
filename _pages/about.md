@@ -157,6 +157,7 @@ url="/assets/images/about/certifications/safe-leading-safe.pdf"
   language=repository.language
   stargazers_count=repository.stargazers_count
   forks_count=repository.forks_count
+  watchers_count=repository.watchers_count
   archived=repository.archived
 %}
 {% endfor %}
@@ -180,6 +181,7 @@ url="/assets/images/about/certifications/safe-leading-safe.pdf"
   language=repository.language
   stargazers_count=repository.stargazers_count
   forks_count=repository.forks_count
+  watchers_count=repository.watchers_count
   archived=repository.archived
 %}
 {% endif %}
