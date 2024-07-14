@@ -46,12 +46,11 @@ title: "About"
 
 ## Principal Skills
 
-- **Communication**: technology evangelist, ways of working, skills development, inter-team cohesion.
-- **Proactive**: architectural runway, enterprise best practices, industry awareness, maintaining product agility.
-- **R&D**: benefit analysis, feasibility, integration strategies, adoption timelines and planning.
-- **Security**: audits, integrations, end-to-end encryption, PII privacy enforcements.
-- **Data**: API efficiency and cacheability, read-write asymmetry, low-latency and event-driven streams.
-- **Cloud**: agnostic, scaling, resiliency, cost-mitigation, and 95th percentile mitigations.
+- **Leader**: technology evangelist, ways of working, skills development, inter-team cohesion.
+- **Proactive**: architectural runway, enterprise best practices, industry awareness.
+- **Cloud**: SRE, DevOps, scaling, resiliency, security, disaster recover and respecting the 95th percentile.
+- **R&D**: benefit analysis, feasibility, integration strategies, adoption timelines.
+- **Data**: PII governance, read-write asymmetry, event-driven, low-latency streams.
 
 ## Enterprise Certifications
 
