@@ -158,13 +158,13 @@
                   <text data-testid="forkcount" class="gray">{{ include.forks_count }}</text>
                </g>
             </g>
-            {% assign lastlength = include.forks_count | size | times: 6 | plus: 50 | plus: languagelength %}
+            {% assign lastlength = include.forks_count | size | times: 6 | plus: 64 | plus: languagelength %}
             <g transform="translate({{ lastlength }}, 0)">
                <g transform="translate(0, 0)">
                   <svg
                           class="icon"
                           y="-12"
-                          viewBox="0 0 16 16"
+                          viewBox="0 0 576 512"
                           version="1.1"
                           width="16"
                           height="16"
@@ -173,7 +173,7 @@
                   </svg>
                </g>
                <g transform="translate(20, 0)">
-                  <text data-testid="watcherscount" class="gray">{{ include.watchers_count }}</text>
+                  <text data-testid="watcherscount" class="gray">{{ include.watchers }}</text>
                </g>
             </g>
          </g>
