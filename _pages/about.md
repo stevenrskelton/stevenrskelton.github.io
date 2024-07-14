@@ -46,7 +46,7 @@ title: "About"
 
 ## Principal Skills
 
-- **Leader**: technology evangelist, ways of working, skills development, inter-team cohesion.
+- **Leader**: technology evangelist, ways of working, skill development, inter-team cohesion.
 - **Proactive**: architectural runway, enterprise best practices, industry awareness.
 - **Cloud**: SRE, DevOps, scaling, resiliency, security, disaster recover and respecting the 95th percentile.
 - **R&D**: benefit analysis, feasibility, integration strategies, adoption timelines.
