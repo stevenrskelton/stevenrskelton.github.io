@@ -146,8 +146,6 @@ url="/assets/images/about/certifications/safe-leading-safe.pdf"
   padding-top: 0.75em;
 ">
 
-{{ site.github }}
-
 {% assign list = site.github.public_repositories | where: "archived", false | where: "fork", false | sort: 'pushed_at' | reverse %}
 {% for repository in list %}
   {% include github_repository.html repository_id=repository.id %}
