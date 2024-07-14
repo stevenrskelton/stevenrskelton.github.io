@@ -146,20 +146,13 @@ url="/assets/images/about/certifications/safe-leading-safe.pdf"
   padding-top: 0.75em;
 ">
 
+{{ site.github }}
+
 {% assign list = site.github.public_repositories | where: "archived", false | where: "fork", false | sort: 'pushed_at' | reverse %}
 {% for repository in list %}
-{{ repository }}
 {%
   include github_repository.html
-  name=repository.name
-  homepage=repository.homepage
-  html_url=repository.html_url
-  description=repository.description
-  language=repository.language
-  stargazers_count=repository.stargazers_count
-  forks_count=repository.forks_count
-  watchers_count=repository.watchers_count
-  archived=repository.archived
+  repository_id=repository.id
 %}
 {% endfor %}
 
@@ -175,15 +168,7 @@ url="/assets/images/about/certifications/safe-leading-safe.pdf"
 {% if repository.stargazers_count > 2 %}
 {%
   include github_repository.html
-  name=repository.name
-  homepage=repository.homepage
-  html_url=repository.html_url
-  description=repository.description
-  language=repository.language
-  stargazers_count=repository.stargazers_count
-  forks_count=repository.forks_count
-  watchers_count=repository.watchers_count
-  archived=repository.archived
+  repository_id=repository.id
 %}
 {% endif %}
 {% endfor %}

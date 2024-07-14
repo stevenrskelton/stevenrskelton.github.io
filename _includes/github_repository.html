@@ -1,17 +1,18 @@
-{% if include.language == "Scala" %}
+{% assign repository = site.github.public_repositories | where: "id", include.repository_id %}
+{% if repository.language == "Scala" %}
 {% assign lang-color = "#c22d40" %}
-{% elsif include.language == "HTML" %}
+{% elsif repository.language == "HTML" %}
 {% assign lang-color = "#e34c26" %}
-{% elsif include.language == "JavaScript" %}
+{% elsif repository.language == "JavaScript" %}
 {% assign lang-color = "#f1e05a" %}
-{% elsif include.language == "Java" %}
+{% elsif repository.language == "Java" %}
 {% assign lang-color = "#b07219" %}
-{% elsif include.language == "Dart" %}
+{% elsif repository.language == "Dart" %}
 {% assign lang-color = "#00B4AB" %}
 {% else %}
 {% assign lang-color = "#000000" %}
 {% endif %}
-<a href="{{ include.html_url }}" style="cursor:pointer;display:flex;" target="_blank">
+<a href="{{ repository.html_url }}" style="cursor:pointer;display:flex;" target="_blank">
    <svg
       width="340"
       viewBox="0 0 350 140"
@@ -21,8 +22,8 @@
       aria-labelledby="descId"
       class="html-bg"
    >
-      <title id="titleId">{{ include.name | escape }}</title>
-      <desc id="descId">{{ include.description | escape }}</desc>
+      <title id="titleId">{{ repository.name | escape }}</title>
+      <desc id="descId">{{ repository.description | escape }}</desc>
       <style>
          .header {
            font: 600 18px 'Segoe UI', Ubuntu, Sans-Serif;
@@ -98,28 +99,28 @@
                y="0"
                class="header"
                data-testid="header"
-               >{{ include.name | escape }}</text>
+               >{{ repository.name | escape }}</text>
          </g>
       </g>
       <g
          data-testid="main-card-body"
          transform="translate(0, 55)"
       >
-         {% if include.archive %}
+         {% if repository.archive %}
          <foreignObject x="25" y="-5" width="320" height="50">
             <span class="archive">Archive</span>
          </foreignObject>
          {% endif %}
          <foreignObject x="25" y="-5" width="320" height="50">
            <div xmlns="http://www.w3.org/1999/xhtml" class="description">
-               {{ include.description | escape }}
+               {{ repository.description | escape }}
            </div>
          </foreignObject>
          <g transform="translate(30, 65)">
             <g transform="translate(0, 0)">
                <g data-testid="primary-lang">
                   <circle data-testid="lang-color" cx="0" cy="-5" r="6" stroke="#848d97" stroke-width="1" fill="{{ lang-color }}" />
-                  <text data-testid="lang-name" class="gray" x="15">{{ include.language }}</text>
+                  <text data-testid="lang-name" class="gray" x="15">{{ repository.language }}</text>
                </g>
             </g>
             <g transform="translate(130, 0)">
@@ -136,7 +137,7 @@
                   </svg>
                </g>
                <g transform="translate(20, 0)">
-                  <text data-testid="stargazers" class="gray">{{ include.stargazers_count }}</text>
+                  <text data-testid="stargazers" class="gray">{{ repository.stargazers_count }}</text>
                </g>
             </g>
             <g transform="translate(190, 0)">
@@ -153,7 +154,7 @@
                   </svg>
                </g>
                <g transform="translate(20, 0)">
-                  <text data-testid="forkcount" class="gray">{{ include.forks_count }}</text>
+                  <text data-testid="forkcount" class="gray">{{ repository.forks_count }}</text>
                </g>
             </g>
             <g transform="translate(250, 0)">
@@ -170,7 +171,7 @@
                   </svg>
                </g>
                <g transform="translate(20, 0)">
-                  <text data-testid="watcherscount" class="gray">{{ include.watchers_count }}</text>
+                  <text data-testid="watcherscount" class="gray">{{ repository.watchers_count }}</text>
                </g>
             </g>
          </g>
