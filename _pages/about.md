@@ -6,11 +6,9 @@ title: "About"
   background-image:url('/assets/images/about/bg.jpg');
   max-width: 1040px;">
 
-  <h1> 🇨🇦&nbsp;Toronto, Canada</h1>
-
+  <h1 style="margin-bottom:0">Principal Software Engineer</h1>
   <p>
-    <strong style="font-size:larger;">Principal Engineer</strong><br>
-    Currently at a global digital-transformation consulting company
+    <strong> 🇨🇦&nbsp;Toronto, Canada</strong>
   </p>
 
   <p>
