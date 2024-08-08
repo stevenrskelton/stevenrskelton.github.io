@@ -37,7 +37,7 @@ title: "About"
   </ul>
 
   <p>
-    <strong>3 years</strong> short engagement consulting across a diverse range of e-commerce, 
+    <strong>3 years</strong> short engagement consulting and FTE across a diverse range of e-commerce, 
     <wbr>customer data analytics and non-for-profit.
   </p>
 </div>
