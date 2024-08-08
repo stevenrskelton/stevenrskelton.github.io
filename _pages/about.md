@@ -37,17 +37,17 @@ title: "About"
   </ul>
 
   <p>
-    <strong>3 years</strong> short engagement consulting and FTE across a diverse range of e-commerce, 
+    <strong>3 years</strong> consulting and FTE across a diverse range of e-commerce, 
     <wbr>customer data analytics and non-for-profit.
   </p>
 </div>
 
 ## Principal Skills
 
-- **Leader**: technology evangelist, ways of working, skill development, inter-team cohesion.
+- **Leader**: technology evangelist, ways of working, skill development, mentoring, and inter-team cohesion.
 - **Proactive**: architectural runway, enterprise best practices, industry awareness.
 - **Cloud**: SRE, DevOps, scaling, resiliency, security, disaster recover and respecting the 95th percentile.
-- **R&D**: benefit analysis, feasibility, integration strategies, adoption timelines.
+- **R&D**: benefit analysis, feasibility, integration strategies, and working with key stakeholders on adoption timelines.
 - **Data**: PII governance, read-write asymmetry, event-driven, low-latency streams.
 
 ## Enterprise Certifications
