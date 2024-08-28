@@ -3,7 +3,7 @@ name := "examples"
 version := "0.1.0-SNAPSHOT"
 organization := "ca.stevenskelton"
 
-scalaVersion := "3.4.1"
+scalaVersion := "3.5.0"
 
 val javaVersion = "21"
 
@@ -34,7 +34,7 @@ lazy val root = (project in file("."))
       "-unchecked",
       "-indent", //"-rewrite",
       //        "-Yexplicit-nulls",
-      "-Ysafe-init",
+      "-Wsafe-init",
       "-Wunused:all",
       "-Wvalue-discard",
       "-Wnonunit-statement",

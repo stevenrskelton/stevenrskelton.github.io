@@ -231,7 +231,7 @@ lazy val root = (project in file("."))
         "-language:higherKinds",
         "-language:implicitConversions",
         "-Ykind-projector",
-        "-Ysafe-init",
+        "-Wsafe-init",
         // "-Xfatal-warnings"
       )
     },
