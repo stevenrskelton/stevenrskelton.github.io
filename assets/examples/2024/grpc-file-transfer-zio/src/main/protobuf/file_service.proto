@@ -6,23 +6,23 @@ option java_outer_classname = "FileServiceProto";
 option objc_class_prefix = "FileService";
 
 service FileService {
-  rpc GetImage (GetImageRequest) returns (stream ImageChunk);
-  rpc SetImage (stream ImageChunk) returns (SetImageResponse);
+  rpc GetFile (GetFileRequest) returns (stream FileChunk);
+  rpc SetFile (stream FileChunk) returns (SetFileResponse);
 }
 
-message ImageChunk {
+message FileChunk {
   string filename = 1;
-  uint32 size = 2;
-  uint32 offset = 3;
+  uint64 size = 2;
+  uint64 offset = 3;
   bool success = 4;
   string error = 5;
   bytes body = 6;
 }
 
-message GetImageRequest {
-  string img_path = 1;
+message GetFileRequest {
+  string filename = 1;
 }
 
-message SetImageResponse {
-  string img_path = 1;
+message SetFileResponse {
+  string filename = 1;
 }

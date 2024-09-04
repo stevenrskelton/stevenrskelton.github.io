@@ -22,6 +22,7 @@ lazy val grpcfiletransferzio = project
       "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion,
       "io.grpc" %  "grpc-netty"         % "1.65.1",
       "dev.zio" %% "zio"                % "2.1.6",
+      "dev.zio" %% "zio-nio"            % "2.0.2",
       "dev.zio" %% "zio-test"           % "2.1.4" % Test,
       "dev.zio" %% "zio-test-sbt"       % "2.1.6" % Test,
       "dev.zio" %% "zio-test-magnolia"  % "2.1.6" % Test,
