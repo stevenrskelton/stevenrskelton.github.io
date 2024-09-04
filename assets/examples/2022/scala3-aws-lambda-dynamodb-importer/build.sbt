@@ -6,7 +6,7 @@ lazy val scala3awslambdadynamodbimporter = project
     description := "Lambda function that inserts new items into a DynamoDB table",
     version := "0.1.0",
     scalaVersion := "3.5.0",
-    javacOptions ++= Seq("-source", "11", "-target", "11"),
+    javacOptions ++= Seq("-source", "21", "-target", "21"),
     libraryDependencies ++= Seq(
       "com.amazonaws" % "aws-lambda-java-core" % "1.2.2",
       "com.amazonaws" % "aws-lambda-java-events" % "3.12.0",

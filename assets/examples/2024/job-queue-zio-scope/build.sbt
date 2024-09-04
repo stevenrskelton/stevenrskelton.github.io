@@ -13,7 +13,7 @@ lazy val jobqueuezioscope = project
       "dev.zio" %% "zio-test-magnolia"  % "2.1.6" % Test,
       "dev.zio" %% "zio-test-junit"     % "2.1.5" % Test,
     ),
-    javacOptions ++= Seq("-source", "11", "-target", "11"),
+    javacOptions ++= Seq("-source", "21", "-target", "21"),
     scalacOptions ++= Seq(
       "-encoding", "UTF-8",
       "-deprecation",

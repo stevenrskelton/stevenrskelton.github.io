@@ -1,3 +1,15 @@
+Compile / PB.targets := Seq(
+  scalapb.gen(
+    flatPackage = false,
+    javaConversions = false,
+    grpc = true,
+    singleLineToProtoString = true,
+    asciiFormatToString = true,
+    lenses = true
+  ) -> (Compile / sourceManaged).value / "scalapb",
+  scalapb.zio_grpc.ZioCodeGenerator -> (Compile / sourceManaged).value / "scalapb"
+)
+
 lazy val grpcfiletransferzio = project
   .in(file("."))
   .settings(
@@ -7,24 +19,29 @@ lazy val grpcfiletransferzio = project
     version := "0.1.0",
     scalaVersion := "3.5.0",
     libraryDependencies ++= Seq(
+      "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion,
+      "io.grpc" %  "grpc-netty"         % "1.65.1",
       "dev.zio" %% "zio"                % "2.1.6",
       "dev.zio" %% "zio-test"           % "2.1.4" % Test,
       "dev.zio" %% "zio-test-sbt"       % "2.1.6" % Test,
       "dev.zio" %% "zio-test-magnolia"  % "2.1.6" % Test,
       "dev.zio" %% "zio-test-junit"     % "2.1.5" % Test,
     ),
-    javacOptions ++= Seq("-source", "11", "-target", "11"),
+    javacOptions ++= Seq("-source", "21", "-target", "21"),
     scalacOptions ++= Seq(
       "-encoding", "UTF-8",
-      "-deprecation",
+      //      "-deprecation",
       "-feature",
       "-unchecked",
-      "-new-syntax", "-rewrite",
+      //      "-new-syntax", "-rewrite",
       "-Wsafe-init",
-      "-Wunused:all",
-      "-Wvalue-discard",
+      //      "-Wunused:all",
+      //      "-Wvalue-discard",
+      //      "-Wnonunit-statement",
+      //      "-Xfatal-warnings",
+    ),
+    Test / scalacOptions --= Seq(
       "-Wnonunit-statement",
-      "-Xfatal-warnings",
     ),
     Test / scalacOptions --= Seq(
       "-Wnonunit-statement",

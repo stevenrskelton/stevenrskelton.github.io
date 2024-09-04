@@ -13,7 +13,7 @@ lazy val listlookupziocache = project
       "dev.zio" %% "zio-test-magnolia" % "2.1.6" % Test,
       "org.scalatest" %% "scalatest"   % "3.2.18"  % Test,
     ),
-    javacOptions ++= Seq("-source", "11", "-target", "11"),
+    javacOptions ++= Seq("-source", "21", "-target", "21"),
     scalacOptions ++= Seq(
       "-encoding", "UTF-8",
       "-deprecation",
