@@ -1,18 +1,12 @@
 package ca.stevenskelton.examples.grpcfiletransferzio
 
-import ca.stevenskelton.examples.grpcfiletransferzio.file_service.ZioFileService.FileService
 import ca.stevenskelton.examples.grpcfiletransferzio.file_service.{FileChunk, GetFileRequest, SetFileResponse}
 import com.google.protobuf.ByteString
-import io.grpc.StatusException
-import zio.nio.channels.*
 import zio.nio.file.*
-import zio.stream.{Stream, UStream, ZSink, ZStream}
-import zio.{Cause, Chunk, IO, Scope, ZIO, stream}
+import zio.stream
+import zio.stream.ZStream
 import zio.test.*
 
-import java.io.File
-import java.nio.file.StandardOpenOption
-import java.nio.file.attribute.FileAttribute
 import java.util.UUID
 
 object FileServiceImplSpec extends ZIOSpecDefault:
