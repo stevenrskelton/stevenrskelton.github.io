@@ -31,7 +31,7 @@ class FileServiceImpl(filesDirectory: File, chunkSize: Int, maxFileSize: Long) e
           )
           (sentBytes + byteString.size, fileChunk)
         )
-      .catchAll: ex => 
+      .catchAll: ex =>
         ZStream.fromZIO(ZIO.logCause("updateUserSocial", Cause.fail(ex)).flatMap(_ => ZIO.fail(StatusException(io.grpc.Status.fromThrowable(ex)))))
 
   override def setFile(request: Stream[StatusException, FileChunk]): IO[StatusException, SetFileResponse] = {
@@ -71,13 +71,15 @@ class FileServiceImpl(filesDirectory: File, chunkSize: Int, maxFileSize: Long) e
           else if fileChunk.size < chunk.length then
             ZIO.fail(IOException(s"Invalid chunk ${chunk.length} exceeds total size ${fileChunk.size}"))
           else
-            AsynchronousFileChannel.open(
+            for
+              _ <- ZIO.log(s"Uploading file ${path.toString}, size ${fileChunk.size}")
+              channel <- AsynchronousFileChannel.open(
                 path,
                 StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE
               )
-              .flatMap: channel =>
-                val saveFileAccum = SaveFileAccum(channel, file, fileChunk.size, chunk.length)
-                channel.writeChunk(chunk, 0).as(Some(saveFileAccum))
+              _ <- channel.writeChunk(chunk, 0)
+            yield
+              Some(SaveFileAccum(channel, file, fileChunk.size, chunk.length))
     )
     val z = ZIO.scoped {
       request.run(sink).flatMap:
@@ -87,7 +89,7 @@ class FileServiceImpl(filesDirectory: File, chunkSize: Int, maxFileSize: Long) e
         case _ =>
           ZIO.fail(StatusException(io.grpc.Status.NOT_FOUND))
     }
-    z.catchAll: ex => 
+    z.catchAll: ex =>
       ZIO.logCause("setFile", Cause.fail(ex)).flatMap(_ => ZIO.fail(StatusException(io.grpc.Status.fromThrowable(ex))))
   }
 
@@ -95,12 +97,12 @@ class FileServiceImpl(filesDirectory: File, chunkSize: Int, maxFileSize: Long) e
     val path = Path.fromJava(file.toPath)
     Files.exists(path)
       .filterOrFail(_ == true)(FileNotFoundException(file.getName))
-      .flatMap: _ => 
+      .flatMap: _ =>
         Files.size(path)
 
   private def readFile(file: File): UStream[ByteString] =
     ZStream.fromPath(file.toPath, chunkSize = chunkSize)
-      .chunks.map: chunk => 
+      .chunks.map: chunk =>
         ByteString.copyFrom(chunk.toArray)
-      .catchAll: ex => 
+      .catchAll: ex =>
         ZStream.fromZIO(ZIO.logErrorCause(s"Error reading file ${file.getName}", Cause.fail(ex))).drain
