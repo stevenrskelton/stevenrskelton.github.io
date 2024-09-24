@@ -19,8 +19,8 @@ title: "About"
   <h2 id="work-summary">Work Summary</h2>
 
   <p>
-    <strong>8 years e-commerce</strong> consultant for Walmart Canada, leading technical development of the e-commerce website 
-    and API for mobile clients, with key successes in cloud re-platforming, continuous delivery and internal/3rd-party integrations.
+    <strong>8 years e-commerce</strong> consultant for <em>Walmart Canada</em> and <em>Walmart Global Tech</em>, leading technical development of the e-commerce website 
+    and API for mobile clients, with key successes in cloud re-platforming, continuous delivery and integrations of internal and 3rd-party microservices.
   </p>
 
   <p>
