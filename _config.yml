@@ -151,19 +151,19 @@ tag_archive:
 examples:
   flutter-realtime-database:
     name: "Flutter Realtime Database"
-    url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2024/flutter_realtime_database"
+    url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/examples/2024/flutter_realtime_database"
     description: "Bloc persistence and streaming updates using gRPC."
     reference: "realtime-database-zio-hub-grpc"
   job-queue-zio-scope:
     name: "Job Queue using ZIO Resource Scope"
-    url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2024/job-queue-zio-scope"
+    url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/examples/2024/job-queue-zio-scope"
     description: "Queue using ZIO Scope to manage queue removal after external execution."
     sources:
       - "/src/main/scala/ca/stevenskelton/examples/jobqueuezioscope/SynchronizedUniqueJobQueue.scala"
       - "/src/test/scala/ca/stevenskelton/examples/jobqueuezioscope/SynchronizedUniqueJobQueueSpec.scala"
   realtime-database-zio-hub-grpc:
     name: "Realtime Push Database"
-    url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2024/realtime-database-zio-hub-grpc"
+    url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/examples/2024/realtime-database-zio-hub-grpc"
     description: "Realtime Database using ZIO Hub and Bi-Directional gRPC Streams."
     sources:
       - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/Effects.scala"
@@ -175,11 +175,11 @@ examples:
     description: "HTTP server that receives artifact uploads and verifies MD5 against Maven."
   list-lookup-zio-cache:
     name: "List Lookup ZIO Cache"
-    url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2023/list-lookup-zio-cache"
+    url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/examples/2023/list-lookup-zio-cache"
     description: "ZIO Cache expanded to efficiently support Seq[Key] calls."
   scala3-aws-lambda-dynamodb-importer:
     name: "AWS Lambda DynamoDB importer"
-    url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/assets/examples/2022/scala3-aws-lambda-dynamodb-importer"
+    url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/examples/2022/scala3-aws-lambda-dynamodb-importer"
     description: "Scala3 and Python lambda functions to insert into a DynamoDB."
     sources:
       - "/src/main/python/handler.py"
