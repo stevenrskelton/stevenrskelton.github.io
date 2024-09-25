@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "ca.stevenskelton.examples.grpcfiletransferzio";
+option java_outer_classname = "FileServiceProto";
+option objc_class_prefix = "FileService";
+
+service FileService {
+  rpc GetFile (GetFileRequest) returns (stream FileChunk);
+  rpc SetFile (stream FileChunk) returns (SetFileResponse);
+}
+
+message FileChunk {
+  string filename = 1;
+  uint64 size = 2;
+  uint64 offset = 3;
+  bool success = 4;
+  bytes body = 6;
+}
+
+message GetFileRequest {
+  string filename = 1;
+}
+
+message SetFileResponse {
+  string filename = 1;
+}

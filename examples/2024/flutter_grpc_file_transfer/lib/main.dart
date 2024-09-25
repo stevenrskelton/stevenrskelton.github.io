@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_grpc_file_transfer/generated/protobuf/file_service.pbgrpc.dart';
+import 'package:grpc/grpc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,6 +12,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    final channel = ClientChannel(
+      'localhost',
+      port: 50051,
+      options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
+    );
+    final fileServiceClient = FileServiceClient(channel);
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
