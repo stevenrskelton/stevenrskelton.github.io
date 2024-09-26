@@ -43,7 +43,7 @@ class FileTransferGrpcClient {
     final getFileRequest = GetFileRequest(
       filename: serverFilename,
     );
-    final fileReceiveChangeNotifier = FileReceiveChangeNotifier(0);
+    final fileReceiveChangeNotifier = FileReceiveChangeNotifier();
     _fileServiceClient.getFile(getFileRequest).fold(false, (s, fileChunk) {
       if (kDebugMode) {
         print("Received chunk size ${fileChunk.body.length}");
@@ -53,7 +53,7 @@ class FileTransferGrpcClient {
       return fileChunk.success;
     }).then((isSuccess) {
       if (isSuccess) {
-        fileReceiveChangeNotifier.close(output);
+        fileReceiveChangeNotifier.close(output.path);
       }
     });
     return fileReceiveChangeNotifier;

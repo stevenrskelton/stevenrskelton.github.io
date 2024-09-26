@@ -95,7 +95,7 @@ class FileTransferWidget extends StatelessWidget {
                             builder: (context, child) {
                               final localFilename = fileReceiveChangeNotifier.progress.filename;
                               if (localFilename == null) {
-                                return FileTransferProgressBarWidget(fileTransferChangeNotifierNotifier: _downloadProgress);
+                                return Card(child: FileTransferProgressBarWidget(fileTransferChangeNotifierNotifier: _downloadProgress));
                               } else {
                                 return Card(
                                   child: Column(

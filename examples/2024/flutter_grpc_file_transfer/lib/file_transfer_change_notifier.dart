@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_grpc_file_transfer/file_transfer_progress.dart';
@@ -19,11 +18,16 @@ abstract class FileTransferChangeNotifier with ChangeNotifier {
   DateTime _lastUpdate;
 
   FileTransferProgress get progress => _progress;
+
+  void update(FileChunk fileChunk);
+
+  void close(String filename);
 }
 
 class FileSendChangeNotifier extends FileTransferChangeNotifier {
   FileSendChangeNotifier(super.fileSizeInBytes);
 
+  @override
   void update(FileChunk fileChunk) {
     final now = DateTime.timestamp();
     if (_progress.startTimestamp == null) {
@@ -42,14 +46,13 @@ class FileSendChangeNotifier extends FileTransferChangeNotifier {
           : FileTransferChangeNotifier.exponentialMovingAverage(lastChunkBytesPerSecond, _progress.bytesPerSecond.toDouble());
       final transferredBytes = fileChunk.offset.toInt();
       final bytesRemaining = _progress.fileSizeInBytes - transferredBytes;
-      final secondsRemaining = bytesRemaining ~/ bytesPerSecond;
 
       _progress = FileTransferProgress(
         startTimestamp: _progress.startTimestamp,
         fileSizeInBytes: _progress.fileSizeInBytes,
         transferredBytes: transferredBytes,
         bytesPerSecond: bytesPerSecond.toInt(),
-        secondsRemaining: secondsRemaining.toInt(),
+        secondsRemaining: (bytesRemaining / bytesPerSecond).ceil(),
         chunkSizeInBytes: fileChunk.body.length,
       );
     }
@@ -57,6 +60,7 @@ class FileSendChangeNotifier extends FileTransferChangeNotifier {
     notifyListeners();
   }
 
+  @override
   void close(String filename) {
     final startTimestamp = _progress.startTimestamp;
     if (startTimestamp == null) {
@@ -84,8 +88,9 @@ class FileSendChangeNotifier extends FileTransferChangeNotifier {
 }
 
 class FileReceiveChangeNotifier extends FileTransferChangeNotifier {
-  FileReceiveChangeNotifier(super.fileSizeInBytes);
+  FileReceiveChangeNotifier() : super(0);
 
+  @override
   void update(FileChunk fileChunk) {
     final now = DateTime.timestamp();
     if (fileChunk.success) {
@@ -110,14 +115,14 @@ class FileReceiveChangeNotifier extends FileTransferChangeNotifier {
           ? lastChunkBytesPerSecond
           : FileTransferChangeNotifier.exponentialMovingAverage(lastChunkBytesPerSecond, _progress.bytesPerSecond.toDouble());
       final bytesRemaining = _progress.fileSizeInBytes - transferredBytes;
-      final secondsRemaining = bytesRemaining ~/ bytesPerSecond;
+      final secondsRemaining = (bytesRemaining / bytesPerSecond).ceil();
 
       _progress = FileTransferProgress(
         startTimestamp: _progress.startTimestamp ?? _lastUpdate,
         fileSizeInBytes: fileChunk.fileSize.toInt(),
         transferredBytes: transferredBytes,
         bytesPerSecond: bytesPerSecond.toInt(),
-        secondsRemaining: secondsRemaining.toInt(),
+        secondsRemaining: secondsRemaining,
         chunkSizeInBytes: fileChunk.body.length,
       );
     }
@@ -126,14 +131,15 @@ class FileReceiveChangeNotifier extends FileTransferChangeNotifier {
     notifyListeners();
   }
 
-  void close(File file) {
+  @override
+  void close(String filename) {
     _progress = FileTransferProgress(
       startTimestamp: _progress.startTimestamp,
       endTimestamp: _progress.endTimestamp,
       fileSizeInBytes: _progress.fileSizeInBytes,
       transferredBytes: _progress.transferredBytes,
       bytesPerSecond: _progress.bytesPerSecond,
-      filename: file.path,
+      filename: filename,
     );
     _lastUpdate = DateTime.timestamp();
     notifyListeners();
