@@ -19,11 +19,15 @@ abstract class FileTransferChangeNotifier with ChangeNotifier {
 
   FileTransferProgress get progress => _progress;
 
+  /// `fileChunk` is about to be sent on send, or has been received on receive.
   void update(FileChunk fileChunk);
 
+  /// Mark the transfer as successful and complete.
+  /// `filename` argument should be the server reference on send, or the local file path if received.
   void close(String filename);
 }
 
+/// Tracks the progress of a file being sent (upload)
 class FileSendChangeNotifier extends FileTransferChangeNotifier {
   FileSendChangeNotifier(super.fileSizeInBytes);
 
@@ -87,6 +91,7 @@ class FileSendChangeNotifier extends FileTransferChangeNotifier {
   }
 }
 
+/// Tracks the progress of a file being received (download)
 class FileReceiveChangeNotifier extends FileTransferChangeNotifier {
   FileReceiveChangeNotifier() : super(0);
 
