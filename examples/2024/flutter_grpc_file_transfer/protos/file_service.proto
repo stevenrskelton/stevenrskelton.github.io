@@ -12,7 +12,7 @@ service FileService {
 
 message FileChunk {
   string filename = 1;
-  uint64 size = 2;
+  uint64 file_size = 2;
   uint64 offset = 3;
   bool success = 4;
   bytes body = 6;

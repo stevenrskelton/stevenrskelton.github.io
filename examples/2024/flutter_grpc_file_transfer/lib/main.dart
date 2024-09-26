@@ -11,11 +11,15 @@ void main() {
           shape: WidgetStateProperty.all<OutlinedBorder>(RoundedRectangleBorder(borderRadius: BorderRadius.circular(4))),
         ),
       ),
+      cardTheme: CardTheme(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        // margin: EdgeInsets.zero,
+        // color: Colors.blueGrey,
+      ),
     ),
     home: Scaffold(
       body: Container(
-        padding: const EdgeInsets.all(8),
-        color: Colors.blueGrey,
+        color: Colors.grey,
         child: FileTransferWidget(fileTransferGrpcClient: FileTransferGrpcClient.localhost()),
       ),
     ),

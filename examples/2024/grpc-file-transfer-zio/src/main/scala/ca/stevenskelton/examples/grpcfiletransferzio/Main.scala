@@ -9,7 +9,7 @@ object Main extends ServerMain:
   override def port: Int = 50051
 
   private val FilesDirectory = File("files")
-  private val ChunkSize = 65_536
+  private val ChunkSize = 2000 //65_536
   private val MaxFileSize = 250 * 1_048_576L
 
   override def services: ServiceList[Any] = ServiceList.add(FileServiceImpl(FilesDirectory, ChunkSize, MaxFileSize))

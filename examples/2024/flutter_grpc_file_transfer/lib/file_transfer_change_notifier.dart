@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_grpc_file_transfer/file_transfer_progress.dart';
@@ -19,14 +20,46 @@ class FileTransferChangeNotifier with ChangeNotifier {
 
   FileTransferProgress get progress => _progress;
 
-  void close(String filename) {
+  void updateSend(FileChunk fileChunk) {
+    final now = DateTime.timestamp();
+    if (_progress.startTimestamp == null) {
+      _progress = FileTransferProgress(
+        startTimestamp: now,
+        fileSizeInBytes: _progress.fileSizeInBytes,
+        chunkSizeInBytes: fileChunk.body.length,
+      );
+    } else {
+      final lastChunkSizeInBytes = fileChunk.offset - _progress.transferredBytes;
+      final lastChunkDurationInSeconds = max(1, now.difference(_lastUpdate).inMilliseconds) / 1000;
+      final lastChunkBytesPerSecond = lastChunkSizeInBytes.toDouble() / lastChunkDurationInSeconds;
+
+      final bytesPerSecond =
+          _progress.transferredBytes == 0 ? lastChunkBytesPerSecond : exponentialMovingAverage(lastChunkBytesPerSecond, _progress.bytesPerSecond.toDouble());
+      final transferredBytes = fileChunk.offset.toInt();
+      final bytesRemaining = _progress.fileSizeInBytes - transferredBytes;
+      final secondsRemaining = bytesRemaining ~/ bytesPerSecond;
+
+      _progress = FileTransferProgress(
+        startTimestamp: _progress.startTimestamp,
+        fileSizeInBytes: _progress.fileSizeInBytes,
+        transferredBytes: transferredBytes,
+        bytesPerSecond: bytesPerSecond.toInt(),
+        secondsRemaining: secondsRemaining.toInt(),
+        chunkSizeInBytes: fileChunk.body.length,
+      );
+    }
+    _lastUpdate = now;
+    notifyListeners();
+  }
+
+  void closeSend(String filename) {
     final startTimestamp = _progress.startTimestamp;
-    if(startTimestamp == null) {
+    if (startTimestamp == null) {
       throw Exception("Transfer not started.");
     }
 
     final transferredBytes = _progress.transferredBytes + _progress.chunkSizeInBytes;
-    if(transferredBytes != _progress.fileSizeInBytes){
+    if (transferredBytes != _progress.fileSizeInBytes) {
       throw Exception("Expected ${_progress.fileSizeInBytes}, only $transferredBytes transferred.");
     }
 
@@ -37,40 +70,62 @@ class FileTransferChangeNotifier with ChangeNotifier {
       endTimestamp: now,
       fileSizeInBytes: _progress.fileSizeInBytes,
       transferredBytes: transferredBytes,
-      bytesPerSecond: transferredBytes / durationInSeconds,
-      secondsRemaining: -1,
+      bytesPerSecond: transferredBytes ~/ durationInSeconds,
       filename: filename,
     );
+    _lastUpdate = now;
+    notifyListeners();
   }
 
-  void update(FileChunk fileChunk) {
+  void updateReceived(FileChunk fileChunk) {
     final now = DateTime.timestamp();
-    if(_progress.startTimestamp == null) {
+    if (fileChunk.success) {
+      final startTimestamp = _progress.startTimestamp ?? _lastUpdate;
+      final durationInSeconds = max(1, now.difference(startTimestamp).inMilliseconds) / 1000;
+      final transferredBytes = fileChunk.fileSize.toInt();
       _progress = FileTransferProgress(
-        startTimestamp: now,
-        fileSizeInBytes: _progress.fileSizeInBytes,
+        startTimestamp: startTimestamp,
+        endTimestamp: now,
+        fileSizeInBytes: transferredBytes,
+        transferredBytes: transferredBytes,
+        bytesPerSecond: transferredBytes ~/ durationInSeconds,
       );
     } else {
-      final lastChunkSizeInBytes = fileChunk.offset - _progress.transferredBytes;
+      final lastChunkSizeInBytes = fileChunk.body.length;
       final lastChunkDurationInSeconds = max(1, now.difference(_lastUpdate).inMilliseconds) / 1000;
       final lastChunkBytesPerSecond = lastChunkSizeInBytes.toDouble() / lastChunkDurationInSeconds;
 
-      final bytesPerSecond = _progress.transferredBytes == 0
-          ? lastChunkBytesPerSecond
-          : exponentialMovingAverage(lastChunkBytesPerSecond, _progress.bytesPerSecond);
-      final bytesRemaining = _progress.fileSizeInBytes - fileChunk.offset.toInt();
+      final transferredBytes = fileChunk.offset.toInt() + fileChunk.body.length;
+
+      final bytesPerSecond =
+          _progress.bytesPerSecond == 0 ? lastChunkBytesPerSecond : exponentialMovingAverage(lastChunkBytesPerSecond, _progress.bytesPerSecond.toDouble());
+      final bytesRemaining = _progress.fileSizeInBytes - transferredBytes;
       final secondsRemaining = bytesRemaining ~/ bytesPerSecond;
 
       _progress = FileTransferProgress(
-        startTimestamp: _progress.startTimestamp,
-        fileSizeInBytes: _progress.fileSizeInBytes,
-        transferredBytes: _progress.transferredBytes + fileChunk.offset.toInt(),
-        bytesPerSecond: bytesPerSecond,
+        startTimestamp: _progress.startTimestamp ?? _lastUpdate,
+        fileSizeInBytes: fileChunk.fileSize.toInt(),
+        transferredBytes: transferredBytes,
+        bytesPerSecond: bytesPerSecond.toInt(),
         secondsRemaining: secondsRemaining.toInt(),
         chunkSizeInBytes: fileChunk.body.length,
       );
     }
+
     _lastUpdate = now;
+    notifyListeners();
+  }
+
+  void closeReceived(File file) {
+    _progress = FileTransferProgress(
+      startTimestamp: _progress.startTimestamp,
+      endTimestamp: _progress.endTimestamp,
+      fileSizeInBytes: _progress.fileSizeInBytes,
+      transferredBytes: _progress.transferredBytes,
+      bytesPerSecond: _progress.bytesPerSecond,
+      filename: file.path,
+    );
+    _lastUpdate = DateTime.timestamp();
     notifyListeners();
   }
 }

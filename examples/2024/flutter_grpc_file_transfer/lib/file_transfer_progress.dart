@@ -14,7 +14,7 @@ class FileTransferProgress {
   final DateTime? endTimestamp;
   final int fileSizeInBytes;
   final int transferredBytes;
-  final double bytesPerSecond;
+  final int bytesPerSecond;
   final int secondsRemaining;
   final int chunkSizeInBytes;
   final String? filename;

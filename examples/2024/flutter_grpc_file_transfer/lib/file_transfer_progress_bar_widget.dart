@@ -12,19 +12,19 @@ class FileTransferProgressBarWidget extends StatelessWidget {
       if (fileTransferProgress.fileSizeInBytes == 0) {
         return (0, "Awaiting start", "");
       } else {
-        return (0, "Awaiting start", "${fileTransferProgress.fileSizeInBytes}bytes");
+        return (0, "Awaiting start", "${fileTransferProgress.fileSizeInBytes} bytes");
       }
     } else {
       if (fileTransferProgress.endTimestamp == null) {
         final progress = fileTransferProgress.transferredBytes.toDouble() / fileTransferProgress.fileSizeInBytes.toDouble();
         final bytesRemaining = "${fileTransferProgress.transferredBytes} of ${fileTransferProgress.fileSizeInBytes}";
-        final timeRemaining = "${fileTransferProgress.bytesPerSecond}bps ${fileTransferProgress.secondsRemaining}s remaining.";
+        final timeRemaining = "${fileTransferProgress.bytesPerSecond} bytes/sec, ${fileTransferProgress.secondsRemaining} seconds remaining.";
         return (progress, bytesRemaining, timeRemaining);
       } else {
-        final bytesRemaining = "Completed ${fileTransferProgress.fileSizeInBytes}bytes";
+        final bytesCompleted = "Completed upload of ${fileTransferProgress.fileSizeInBytes} bytes";
         final secondsDuration = fileTransferProgress.endTimestamp!.difference(fileTransferProgress.startTimestamp!).inSeconds;
-        final timeRemaining = "${fileTransferProgress.bytesPerSecond}bps for ${secondsDuration}s.";
-        return (1, bytesRemaining, timeRemaining);
+        final timeElapsed = "${fileTransferProgress.bytesPerSecond} bytes/sec for $secondsDuration seconds.";
+        return (1, bytesCompleted, timeElapsed);
       }
     }
   }
@@ -43,7 +43,7 @@ class FileTransferProgressBarWidget extends StatelessWidget {
               final (value, line1, line2) = calculateTextAndProgress(fileTransferChangeNotifier.progress);
               return Column(
                 children: [
-                  LinearProgressIndicator(value: value),
+                  LinearProgressIndicator(value: value, minHeight: 12),
                   Text(line1),
                   Text(line2),
                 ],

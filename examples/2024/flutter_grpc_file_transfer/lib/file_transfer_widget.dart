@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:math';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_grpc_file_transfer/file_transfer_change_notifier.dart';
 import 'package:flutter_grpc_file_transfer/file_transfer_grpc_client.dart';
@@ -15,7 +13,6 @@ class FileTransferWidget extends StatelessWidget {
 
   final _uploadImage = ValueNotifier<XFile?>(null);
   final _uploadProgress = ValueNotifier<FileTransferChangeNotifier?>(null);
-  final _downloadImage = ValueNotifier<Uint8List?>(null);
   final _downloadProgress = ValueNotifier<FileTransferChangeNotifier?>(null);
 
   void selectUploadImage() async {
@@ -23,7 +20,13 @@ class FileTransferWidget extends StatelessWidget {
     _uploadImage.value = xFile;
     if (xFile != null) {
       _uploadProgress.value = await fileTransferGrpcClient.upload(xFile);
+      _downloadProgress.value = null;
     }
+  }
+
+  void downloadServerImage(String filename) async {
+    final tempDir = await Directory.systemTemp.createTemp('flutter_grpc_file_transfer');
+    _downloadProgress.value = fileTransferGrpcClient.download(filename, File('${tempDir.path}/download.bin'));
   }
 
   @override
@@ -32,89 +35,90 @@ class FileTransferWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        ListenableBuilder(
-          listenable: _uploadImage,
-          builder: (context, child) {
-            final xFile = _uploadImage.value;
+        ValueListenableBuilder(
+          valueListenable: _uploadImage,
+          builder: (context, xFile, child) {
             if (xFile == null) {
               return ElevatedButton(
                 onPressed: selectUploadImage,
-                child: const SizedBox(
-                  width: 320,
-                  height: 240,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Text("Select Upload Image", textAlign: TextAlign.center),
-                  ),
-                ),
+                child: const Text("Select Upload Image", textAlign: TextAlign.center),
               );
             } else {
-              final filename = xFile.path.substring(max(0, xFile.path.lastIndexOf("/")));
-              return Column(
-                children: [
-                  ElevatedButton(
-                    onPressed: selectUploadImage,
-                    child: Container(
-                      width: 320,
-                      height: 240,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: FileImage(File(xFile.path)),
-                          fit: BoxFit.scaleDown,
+              // final filename = xFile.path.substring(max(0, xFile.path.lastIndexOf("/")));
+              return Card(
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: selectUploadImage,
+                      child: Container(
+                        width: 320,
+                        height: 240,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: FileImage(File(xFile.path)),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  FileTransferProgressBarWidget(fileTransferChangeNotifierNotifier: _uploadProgress),
-                ],
+                    FileTransferProgressBarWidget(fileTransferChangeNotifierNotifier: _uploadProgress),
+                  ],
+                ),
               );
             }
           },
         ),
-        ListenableBuilder(
-          listenable: _uploadProgress,
-          builder: (context, child) {
-            final filename = _uploadProgress.value?.progress.filename;
-            if (filename == null) {
+        ValueListenableBuilder(
+          valueListenable: _uploadProgress,
+          builder: (context, uploadFileTransferChangeNotifier, child) {
+            if (uploadFileTransferChangeNotifier == null) {
               return Container();
             } else {
               return ListenableBuilder(
-                listenable: _downloadProgress,
+                listenable: uploadFileTransferChangeNotifier,
                 builder: (context, child) {
-                  if (_downloadProgress.value == null) {
-                    return ElevatedButton(
-                      onPressed: selectUploadImage,
-                      child: const SizedBox(
-                        width: 320,
-                        height: 240,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text("Download Upload Image", textAlign: TextAlign.center),
-                        ),
-                      ),
-                    );
+                  final uploadedServerFilename = uploadFileTransferChangeNotifier.progress.filename;
+                  if (uploadedServerFilename == null) {
+                    return Container();
                   } else {
-                    return ListenableBuilder(
-                      listenable: _downloadImage,
-                      builder: (context, child) {
-                        final bytes = _downloadImage.value;
-                        if (bytes == null) {
-                          return FileTransferProgressBarWidget(fileTransferChangeNotifierNotifier: _downloadProgress);
+                    return ValueListenableBuilder(
+                      valueListenable: _downloadProgress,
+                      builder: (context, downloadFileTransferChangeNotifier, child) {
+                        if (downloadFileTransferChangeNotifier == null) {
+                          return ElevatedButton(
+                            onPressed: () => downloadServerImage(uploadedServerFilename),
+                            child: const Text("Download Image", textAlign: TextAlign.center),
+                          );
                         } else {
-                          return Column(
-                            children: [
-                              Container(
-                                width: 320,
-                                height: 240,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: MemoryImage(bytes),
-                                    fit: BoxFit.cover,
+                          return ListenableBuilder(
+                            listenable: downloadFileTransferChangeNotifier,
+                            builder: (context, child) {
+                              final localFilename = downloadFileTransferChangeNotifier.progress.filename;
+                              if (localFilename == null) {
+                                return FileTransferProgressBarWidget(fileTransferChangeNotifierNotifier: _downloadProgress);
+                              } else {
+                                return Card(
+                                  child: Column(
+                                    children: [
+                                      ElevatedButton(
+                                        onPressed: () => downloadServerImage(uploadedServerFilename),
+                                        child: Container(
+                                          width: 320,
+                                          height: 240,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: FileImage(File(localFilename)),
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      FileTransferProgressBarWidget(fileTransferChangeNotifierNotifier: _downloadProgress),
+                                    ],
                                   ),
-                                ),
-                              ),
-                              FileTransferProgressBarWidget(fileTransferChangeNotifierNotifier: _downloadProgress),
-                            ],
+                                );
+                              }
+                            },
                           );
                         }
                       },
