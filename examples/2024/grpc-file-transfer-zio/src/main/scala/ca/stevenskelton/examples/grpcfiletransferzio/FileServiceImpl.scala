@@ -95,8 +95,7 @@ class FileServiceImpl(filesDirectory: File, chunkSize: Int, maxFileSize: Long) e
           ZIO.succeed(response)
 
         case Some(SaveFileAccum(_, file, expectedSize, actualSize)) =>
-          ZIO.logError(s"Upload ended at $actualSize of $expectedSize")
-            *> ZIO.fail(StatusException(CANCELLED))
+          ZIO.logError(s"Upload ended at $actualSize of $expectedSize") *> ZIO.fail(StatusException(CANCELLED))
 
         case _ =>
           ZIO.logError("Could not create file") *> ZIO.fail(StatusException(UNKNOWN))

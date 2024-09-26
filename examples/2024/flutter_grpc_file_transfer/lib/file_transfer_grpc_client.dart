@@ -1,17 +1,22 @@
+import 'dart:math';
+
+import 'package:collection/collection.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_grpc_file_transfer/file_transfer_change_notifier.dart';
 import 'package:flutter_grpc_file_transfer/generated/protobuf/file_service.pbgrpc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'dart:io';
-import 'dart:math';
 import 'dart:typed_data';
 import 'package:fixnum/fixnum.dart';
 
 class FileTransferGrpcClient {
+  static const uploadFileChunkSize = 4000;
+
   factory FileTransferGrpcClient.localhost() {
     final channel = ClientChannel(
-      'localhost',
+      '127.0.0.1',
       port: 50051,
       options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
     );
@@ -41,12 +46,12 @@ class FileTransferGrpcClient {
       filename: serverFilename,
     );
     final fileTransferChangeNotifier = FileTransferChangeNotifier(0);
-    _fileServiceClient.getFile(getFileRequest).fold(false, (s, fileChunk){
+    _fileServiceClient.getFile(getFileRequest).fold(false, (s, fileChunk) {
       fileTransferChangeNotifier.update(fileChunk);
       output.writeAsBytesSync(fileChunk.body, mode: FileMode.append);
       return fileChunk.success;
     }).then((isSuccess) {
-      if(isSuccess) {
+      if (isSuccess) {
         fileTransferChangeNotifier.close(output.path);
       }
     });
@@ -55,16 +60,36 @@ class FileTransferGrpcClient {
 
   static Stream<(Uint8List, int)> _calcOffset<T>(Stream<Uint8List> input) async* {
     var offset = 0;
-    await for (final event in input) {
-      yield (event, offset);
-      offset = offset + event.length;
+    await for (final chunk in input) {
+      yield (chunk, offset);
+      offset = offset + chunk.length;
+    }
+  }
+
+  static Stream<Uint8List> _rechunkStream(Stream<Uint8List> input) {
+    return input.expand((chunk) {
+      if (kDebugMode) {
+        print("IO read chunk size ${chunk.length}");
+      }
+      if (chunk.lengthInBytes == uploadFileChunkSize) {
+        return [chunk];
+      } else {
+        return _rechunkUint8List(chunk, uploadFileChunkSize);
+      }
+    });
+  }
+
+  static Iterable<Uint8List> _rechunkUint8List(Uint8List list, int length) sync* {
+    for (var i = 0; i < list.length; i += uploadFileChunkSize) {
+      yield Uint8List.sublistView(list, i, min(i + length, list.length));
     }
   }
 
   static Future<Stream<FileChunk>> _readXFile(XFile xFile) async {
-    final bodyStream = xFile.openRead();
-    final offsetStream = _calcOffset(bodyStream);
     final size = await xFile.length();
+    final bodyStream = xFile.openRead();
+    final chunkedStream = _rechunkStream(bodyStream);
+    final offsetStream = _calcOffset(chunkedStream);
     return offsetStream.map((listUInt8List) {
       final (body, offset) = listUInt8List;
       return FileChunk(
