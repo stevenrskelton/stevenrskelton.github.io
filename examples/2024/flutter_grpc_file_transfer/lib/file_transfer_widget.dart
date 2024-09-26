@@ -12,8 +12,8 @@ class FileTransferWidget extends StatelessWidget {
   final FileTransferGrpcClient fileTransferGrpcClient;
 
   final _uploadImage = ValueNotifier<XFile?>(null);
-  final _uploadProgress = ValueNotifier<FileTransferChangeNotifier?>(null);
-  final _downloadProgress = ValueNotifier<FileTransferChangeNotifier?>(null);
+  final _uploadProgress = ValueNotifier<FileSendChangeNotifier?>(null);
+  final _downloadProgress = ValueNotifier<FileReceiveChangeNotifier?>(null);
 
   void selectUploadImage() async {
     final xFile = await ImagePicker().pickImage(source: ImageSource.gallery);
@@ -70,30 +70,30 @@ class FileTransferWidget extends StatelessWidget {
         ),
         ValueListenableBuilder(
           valueListenable: _uploadProgress,
-          builder: (context, uploadFileTransferChangeNotifier, child) {
-            if (uploadFileTransferChangeNotifier == null) {
+          builder: (context, fileSendChangeNotifier, child) {
+            if (fileSendChangeNotifier == null) {
               return Container();
             } else {
               return ListenableBuilder(
-                listenable: uploadFileTransferChangeNotifier,
+                listenable: fileSendChangeNotifier,
                 builder: (context, child) {
-                  final uploadedServerFilename = uploadFileTransferChangeNotifier.progress.filename;
+                  final uploadedServerFilename = fileSendChangeNotifier.progress.filename;
                   if (uploadedServerFilename == null) {
                     return Container();
                   } else {
                     return ValueListenableBuilder(
                       valueListenable: _downloadProgress,
-                      builder: (context, downloadFileTransferChangeNotifier, child) {
-                        if (downloadFileTransferChangeNotifier == null) {
+                      builder: (context, fileReceiveChangeNotifier, child) {
+                        if (fileReceiveChangeNotifier == null) {
                           return ElevatedButton(
                             onPressed: () => downloadServerImage(uploadedServerFilename),
                             child: const Text("Download Image", textAlign: TextAlign.center),
                           );
                         } else {
                           return ListenableBuilder(
-                            listenable: downloadFileTransferChangeNotifier,
+                            listenable: fileReceiveChangeNotifier,
                             builder: (context, child) {
-                              final localFilename = downloadFileTransferChangeNotifier.progress.filename;
+                              final localFilename = fileReceiveChangeNotifier.progress.filename;
                               if (localFilename == null) {
                                 return FileTransferProgressBarWidget(fileTransferChangeNotifierNotifier: _downloadProgress);
                               } else {

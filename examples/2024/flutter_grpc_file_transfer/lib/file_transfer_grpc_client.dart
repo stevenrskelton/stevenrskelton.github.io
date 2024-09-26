@@ -25,38 +25,38 @@ class FileTransferGrpcClient {
 
   final FileServiceClient _fileServiceClient;
 
-  Future<FileTransferChangeNotifier> upload(XFile xFile) async {
+  Future<FileSendChangeNotifier> upload(XFile xFile) async {
     final fileSizeInBytes = await xFile.length();
-    final fileTransferChangeNotifier = FileTransferChangeNotifier(fileSizeInBytes);
+    final fileSendChangeNotifier = FileSendChangeNotifier(fileSizeInBytes);
     final fileChunkStream = await _readXFile(xFile);
     final tapStream = fileChunkStream.map((fileChunk) {
-      fileTransferChangeNotifier.updateSend(fileChunk);
+      fileSendChangeNotifier.update(fileChunk);
       return fileChunk;
     });
     _fileServiceClient.setFile(tapStream).then((setFileResponse) {
-      fileTransferChangeNotifier.closeSend(setFileResponse.filename);
+      fileSendChangeNotifier.close(setFileResponse.filename);
     });
-    return fileTransferChangeNotifier;
+    return fileSendChangeNotifier;
   }
 
-  FileTransferChangeNotifier download(String serverFilename, File output) {
+  FileReceiveChangeNotifier download(String serverFilename, File output) {
     final getFileRequest = GetFileRequest(
       filename: serverFilename,
     );
-    final fileTransferChangeNotifier = FileTransferChangeNotifier(0);
+    final fileReceiveChangeNotifier = FileReceiveChangeNotifier(0);
     _fileServiceClient.getFile(getFileRequest).fold(false, (s, fileChunk) {
       if (kDebugMode) {
         print("Received chunk size ${fileChunk.body.length}");
       }
-      fileTransferChangeNotifier.updateReceived(fileChunk);
+      fileReceiveChangeNotifier.update(fileChunk);
       output.writeAsBytesSync(fileChunk.body, mode: FileMode.append);
       return fileChunk.success;
     }).then((isSuccess) {
       if (isSuccess) {
-        fileTransferChangeNotifier.closeReceived(output);
+        fileReceiveChangeNotifier.close(output);
       }
     });
-    return fileTransferChangeNotifier;
+    return fileReceiveChangeNotifier;
   }
 
   static Stream<(Uint8List, int)> _calcOffset<T>(Stream<Uint8List> input) async* {
