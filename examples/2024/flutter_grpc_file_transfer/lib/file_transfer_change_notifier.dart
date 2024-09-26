@@ -1,6 +1,5 @@
 import 'dart:math';
 import 'package:flutter/widgets.dart';
-import 'package:fixnum/fixnum.dart';
 import 'package:flutter_grpc_file_transfer/file_transfer_progress.dart';
 import 'generated/protobuf/file_service.pb.dart';
 
@@ -11,14 +10,8 @@ class FileTransferChangeNotifier with ChangeNotifier {
     return x * _smoothingFactor + (1 - _smoothingFactor) * previous;
   }
 
-  FileTransferChangeNotifier(FileChunk first)
-      : _progress = FileTransferProgress(
-          startTime: DateTime.timestamp(),
-          fileSize: first.size,
-          transferred: Int64.ZERO,
-          bytesPerSecond: 0,
-          secondsRemaining: 0,
-        ),
+  FileTransferChangeNotifier(int fileSizeInBytes)
+      : _progress = FileTransferProgress(fileSizeInBytes: fileSizeInBytes),
         _lastUpdate = DateTime.timestamp();
 
   FileTransferProgress _progress;
@@ -26,26 +19,57 @@ class FileTransferChangeNotifier with ChangeNotifier {
 
   FileTransferProgress get progress => _progress;
 
+  void close(String filename) {
+    final startTimestamp = _progress.startTimestamp;
+    if(startTimestamp == null) {
+      throw Exception("Transfer not started.");
+    }
+
+    final transferredBytes = _progress.transferredBytes + _progress.chunkSizeInBytes;
+    if(transferredBytes != _progress.fileSizeInBytes){
+      throw Exception("Expected ${_progress.fileSizeInBytes}, only $transferredBytes transferred.");
+    }
+
+    final now = DateTime.timestamp();
+    final durationInSeconds = max(1, now.difference(startTimestamp).inMilliseconds) / 1000;
+    _progress = FileTransferProgress(
+      startTimestamp: _progress.startTimestamp,
+      endTimestamp: now,
+      fileSizeInBytes: _progress.fileSizeInBytes,
+      transferredBytes: transferredBytes,
+      bytesPerSecond: transferredBytes / durationInSeconds,
+      secondsRemaining: -1,
+      filename: filename,
+    );
+  }
+
   void update(FileChunk fileChunk) {
     final now = DateTime.timestamp();
+    if(_progress.startTimestamp == null) {
+      _progress = FileTransferProgress(
+        startTimestamp: now,
+        fileSizeInBytes: _progress.fileSizeInBytes,
+      );
+    } else {
+      final lastChunkSizeInBytes = fileChunk.offset - _progress.transferredBytes;
+      final lastChunkDurationInSeconds = max(1, now.difference(_lastUpdate).inMilliseconds) / 1000;
+      final lastChunkBytesPerSecond = lastChunkSizeInBytes.toDouble() / lastChunkDurationInSeconds;
 
-    final lastChunkSizeInBytes = fileChunk.offset - _progress.transferred;
-    final lastChunkDurationInSeconds = max(1, now.difference(_lastUpdate).inMilliseconds) / 1000;
-    final lastChunkBytesPerSecond = lastChunkSizeInBytes.toDouble() / lastChunkDurationInSeconds;
+      final bytesPerSecond = _progress.transferredBytes == 0
+          ? lastChunkBytesPerSecond
+          : exponentialMovingAverage(lastChunkBytesPerSecond, _progress.bytesPerSecond);
+      final bytesRemaining = _progress.fileSizeInBytes - fileChunk.offset.toInt();
+      final secondsRemaining = bytesRemaining ~/ bytesPerSecond;
 
-    final bytesPerSecond = _progress.transferred.isZero
-        ? lastChunkBytesPerSecond
-        : exponentialMovingAverage(lastChunkBytesPerSecond, _progress.bytesPerSecond);
-    final bytesRemaining = _progress.fileSize - fileChunk.offset;
-    final secondsRemaining = bytesRemaining ~/ bytesPerSecond;
-
-    _progress = FileTransferProgress(
-      startTime: _progress.startTime,
-      fileSize: _progress.fileSize,
-      transferred: _progress.transferred + fileChunk.offset,
-      bytesPerSecond: bytesPerSecond,
-      secondsRemaining: secondsRemaining.toInt(),
-    );
+      _progress = FileTransferProgress(
+        startTimestamp: _progress.startTimestamp,
+        fileSizeInBytes: _progress.fileSizeInBytes,
+        transferredBytes: _progress.transferredBytes + fileChunk.offset.toInt(),
+        bytesPerSecond: bytesPerSecond,
+        secondsRemaining: secondsRemaining.toInt(),
+        chunkSizeInBytes: fileChunk.body.length,
+      );
+    }
     _lastUpdate = now;
     notifyListeners();
   }

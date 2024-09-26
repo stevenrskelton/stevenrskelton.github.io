@@ -1,17 +1,21 @@
-import 'package:fixnum/fixnum.dart';
-
 class FileTransferProgress {
   const FileTransferProgress({
-    required this.startTime,
-    required this.fileSize,
-    required this.transferred,
-    required this.bytesPerSecond,
-    required this.secondsRemaining,
+    required this.fileSizeInBytes,
+    this.startTimestamp,
+    this.endTimestamp,
+    this.transferredBytes = 0,
+    this.bytesPerSecond = 0,
+    this.secondsRemaining = -1,
+    this.chunkSizeInBytes = 0,
+    this.filename,
   });
 
-  final DateTime startTime;
-  final Int64 fileSize;
-  final Int64 transferred;
+  final DateTime? startTimestamp;
+  final DateTime? endTimestamp;
+  final int fileSizeInBytes;
+  final int transferredBytes;
   final double bytesPerSecond;
   final int secondsRemaining;
+  final int chunkSizeInBytes;
+  final String? filename;
 }
