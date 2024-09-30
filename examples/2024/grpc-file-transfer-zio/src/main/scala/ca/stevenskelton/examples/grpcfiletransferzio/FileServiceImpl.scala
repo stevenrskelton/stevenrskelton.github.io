@@ -25,7 +25,7 @@ class FileServiceImpl(filesDirectory: File, chunkSize: Int, maxFileSize: Long) e
         readFile(file).mapAccum(0L)((sentBytes, byteString) =>
           val fileChunk = FileChunk.of(
             filename = file.getName,
-            size = fileSize,
+            fileSize = fileSize,
             offset = sentBytes,
             success = sentBytes + byteString.size == fileSize,
             body = byteString,
@@ -70,22 +70,22 @@ class FileServiceImpl(filesDirectory: File, chunkSize: Int, maxFileSize: Long) e
           val file = javaFile(fileChunk.filename)
           val path = Path.fromJava(file.toPath)
           val chunk = Chunk.from(fileChunk.body.asScala.map(Byte.unbox))
-          if fileChunk.size > maxFileSize then
-            ZIO.logError(s"File too large, attempted ${fileChunk.size} bytes")
+          if fileChunk.fileSize > maxFileSize then
+            ZIO.logError(s"File too large, attempted ${fileChunk.fileSize} bytes")
               *> ZIO.fail(StatusException(OUT_OF_RANGE))
-          else if fileChunk.size < chunk.length then
-            ZIO.logError(s"Invalid chunk ${chunk.length} exceeds total size ${fileChunk.size}")
+          else if fileChunk.fileSize < chunk.length then
+            ZIO.logError(s"Invalid chunk ${chunk.length} exceeds total size ${fileChunk.fileSize}")
               *> ZIO.fail(StatusException(INVALID_ARGUMENT))
           else
             for
-              _ <- ZIO.log(s"Uploading file ${path.toString}, size ${fileChunk.size}")
+              _ <- ZIO.log(s"Uploading file ${path.toString}, size ${fileChunk.fileSize}")
               channel <- AsynchronousFileChannel.open(
                 path,
                 StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING, StandardOpenOption.CREATE
               )
               _ <- channel.writeChunk(chunk, 0)
             yield
-              Some(SaveFileAccum(channel, file, fileChunk.size, chunk.length))
+              Some(SaveFileAccum(channel, file, fileChunk.fileSize, chunk.length))
     )
     val z = ZIO.scoped:
       request.run(sink).flatMap:

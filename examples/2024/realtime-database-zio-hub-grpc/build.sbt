@@ -27,7 +27,7 @@ lazy val realtimeziohubgrpc = project
       "dev.zio" %% "zio-test-magnolia"  % "2.1.6" % Test,
       "dev.zio" %% "zio-test-junit"     % "2.1.5" % Test,
     ),
-    javacOptions ++= Seq("-source", "17", "-target", "17"),
+    javacOptions ++= Seq("-source", "21", "-target", "21"),
     scalacOptions ++= Seq(
       "-encoding", "UTF-8",
 //      "-deprecation",

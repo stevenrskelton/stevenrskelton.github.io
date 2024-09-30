@@ -235,7 +235,7 @@ lazy val root = (project in file("."))
         // "-Xfatal-warnings"
       )
     },
-    javacOptions ++= Seq("-source", javaVersion, "-target", javaVersion),
+    javacOptions ++= Seq("-source", 21, "-target", 21),
   )
 ```
 

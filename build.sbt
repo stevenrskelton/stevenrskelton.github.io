@@ -5,8 +5,6 @@ organization := "ca.stevenskelton"
 
 scalaVersion := "3.5.0"
 
-val javaVersion = "21"
-
 lazy val scala3_aws_lambda_dynamodb_importer = RootProject(file("./examples/2022/scala3-aws-lambda-dynamodb-importer"))
 lazy val list_lookup_zio_cache = RootProject(file("./examples/2023/list-lookup-zio-cache"))
 lazy val realtime_database_zio_hub_grpc = RootProject(file("./examples/2024/realtime-database-zio-hub-grpc"))
@@ -45,5 +43,5 @@ lazy val root = (project in file("."))
     Test / scalacOptions --= Seq(
       "-Wnonunit-statement",
     ),
-    javacOptions ++= Seq("-source", javaVersion, "-target", javaVersion),
+    javacOptions ++= Seq("-source", "21", "-target", "21"),
   )
