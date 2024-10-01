@@ -5,6 +5,7 @@ categories:
 tags:
   - ZIO
   - Non-Blocking/Concurrency
+  - gRPC
 excerpt_separator: <!--more-->
 example: realtime-database-zio-hub-grpc
 sources:

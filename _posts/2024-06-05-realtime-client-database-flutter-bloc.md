@@ -4,6 +4,7 @@ categories:
   - Dart
 tags:
   - Bloc
+  - gRPC
 excerpt_separator: <!--more-->
 example: flutter-realtime-database
 ---
