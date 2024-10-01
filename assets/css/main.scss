@@ -73,12 +73,13 @@ tbody {
   background-image: url('/assets/images/inv-background.jpg');
 }
 
-.toc__menu div {
+.toc__menu div.category_logo {
   display: inline-block;
   vertical-align: baseline;
   padding-right: 0.2em;
+  width: 70px;
 }
-.toc__menu img {
+.toc__menu div.category_logo img {
   height: 1em;
 }
 
