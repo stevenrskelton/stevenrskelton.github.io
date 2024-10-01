@@ -16,7 +16,8 @@ permalink: /examples/
             {% for example_field in site.examples %}
                 {% assign example_id=example_field[0] %}
                 {% assign example=example_field[1] %}
-                <li><a href="#{{ example_id }}" id="markdown-toc-{{ example_id }}">{{ example.name }}</a></li>
+                <li><a href="#{{ example_id }}" id="markdown-toc-{{ example_id }}"
+                    >{% include category_logo.html category=example.category %}{{ example.name }}</a></li>
             {% endfor %}
             </ul>
         </nav>

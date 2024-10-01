@@ -153,11 +153,13 @@ examples:
     name: "Flutter Realtime Database"
     url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/examples/2024/flutter_realtime_database"
     description: "Bloc persistence and streaming updates using gRPC."
+    category: "Dart"
     reference: "realtime-database-zio-hub-grpc"
   job-queue-zio-scope:
     name: "Job Queue using ZIO Resource Scope"
     url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/examples/2024/job-queue-zio-scope"
     description: "Queue using ZIO Scope to manage queue removal after external execution."
+    category: "Scala"
     sources:
       - "/src/main/scala/ca/stevenskelton/examples/jobqueuezioscope/SynchronizedUniqueJobQueue.scala"
       - "/src/test/scala/ca/stevenskelton/examples/jobqueuezioscope/SynchronizedUniqueJobQueueSpec.scala"
@@ -165,6 +167,7 @@ examples:
     name: "Realtime Push Database"
     url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/examples/2024/realtime-database-zio-hub-grpc"
     description: "Realtime Database using ZIO Hub and Bi-Directional gRPC Streams."
+    category: "Scala"
     sources:
       - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/Effects.scala"
       - "/src/main/protobuf/sync_service.proto"
@@ -173,14 +176,17 @@ examples:
     name: "Build Action File Receiver"
     url: "https://github.com/stevenrskelton/build-action-file-receiver"
     description: "HTTP server that receives artifact uploads and verifies MD5 against Maven."
+    category: "Scala"
   list-lookup-zio-cache:
     name: "List Lookup ZIO Cache"
     url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/examples/2023/list-lookup-zio-cache"
     description: "ZIO Cache expanded to efficiently support Seq[Key] calls."
+    category: "Scala"
   scala3-aws-lambda-dynamodb-importer:
     name: "AWS Lambda DynamoDB importer"
     url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/examples/2022/scala3-aws-lambda-dynamodb-importer"
     description: "Scala3 and Python lambda functions to insert into a DynamoDB."
+    category: "Scala"
     sources:
       - "/src/main/python/handler.py"
       - "/src/main/scala/Handler.scala"
@@ -188,9 +194,11 @@ examples:
     name: "Ordered-Columns Web Component"
     url: "https://github.com/stevenrskelton/ordered-columns"
     description: "Polymer Web Component that builds vertically ordered columns (timelines) from arbitrary DOM content."
+    category: "JavaScript"
     archived: true
   sortable-table:
     name: "Sortable-Table Web Component"
     url: "https://github.com/stevenrskelton/sortable-table"
     description: "Polymer Web Component that generates a sortable &lt;table&gt; from inlined or AJAX JSON, JSON5, and arrays."
+    category: "JavaScript"
     archived: true
