@@ -149,6 +149,22 @@ tag_archive:
   path: /tags/
 
 examples:
+  flutter-grpc-file-transfer:
+    name: "Flutter gRPC File Transfer"
+    url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/examples/2024/flutter_grpc_file_transfer"
+    description: ""
+    category: "Dart"
+    reference: "grpc-file-transfer-zio"
+    sources:
+      - "/protos/file_service.proto"
+  grpc-file-transfer-zio:
+    name: "ZIO gRPC File Transfers"
+    url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/examples/2024/grpc-file-transfer-zio"
+    description: ""
+    category: "Scala"
+    reference: "flutter-grpc-file-transfer"
+    sources:
+      - "/src/main/protobuf/file_service.proto"
   flutter-realtime-database:
     name: "Flutter Realtime Database"
     url: "https://github.com/stevenrskelton/stevenrskelton.github.io/tree/main/examples/2024/flutter_realtime_database"
