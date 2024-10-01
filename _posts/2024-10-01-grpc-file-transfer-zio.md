@@ -1,12 +1,12 @@
 ---
-title: "Flutter gRPC File Transfers"
+title: "File Transfers using gRPC and ZIO"
 categories:
-  - Dart
+  - Scala
 tags:
-  - Bloc
+  - ZIO
   - gRPC
 excerpt_separator: <!--more-->
-example: flutter-grpc-file-transfer
+example: grpc-file-transfer-zio
 ---
 //TODO
 <!--more-->
