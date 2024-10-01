@@ -157,7 +157,8 @@
                   <text data-testid="forkcount" class="gray">{{ repository.forks_count }}</text>
                </g>
             </g>
-            <g transform="translate(150, 0)">
+            {% comment %}
+            <g transform="translate(250, 0)">
                <g transform="translate(0, 0)">
                   <svg
                           class="icon"
@@ -174,6 +175,7 @@
                   <text data-testid="watcherscount" class="gray">{{ repository.subscribers_count }}</text>
                </g>
             </g>
+            {% endcomment %}
          </g>
       </g>
    </svg>
