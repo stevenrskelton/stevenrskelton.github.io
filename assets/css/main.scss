@@ -73,6 +73,15 @@ tbody {
   background-image: url('/assets/images/inv-background.jpg');
 }
 
+.toc__menu div {
+  display: inline-block;
+  vertical-align: baseline;
+  padding-right: 0.2em;
+}
+.toc__menu img {
+  height: 1em;
+}
+
 .archive {
   margin-top: 0;
   margin-bottom: 0;
