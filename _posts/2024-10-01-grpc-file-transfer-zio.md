@@ -10,21 +10,22 @@ example: grpc-file-transfer-zio
 ---
 gRPC with Protobuf is a framework to efficiently simplify the client-server networking requirements of modern 
 applications. One use-case where the low-level simplicity of pure HTTP maintains an advantage over gRPC is handling file 
-transfers: the uploading and downloading of contiguous binary block data. gRPC is built directly on top of HTTP/2, so 
-it is understandable that when advanced functionality isn't required it becomes an onerous addition. While gRPC 
-represents HTTP/2 with overhead, meaning it can never have the resource efficiency of a pure HTTP server, gRPC can 
-replicate all HTTP file transfer features within its Protobuf message framework making it unnecessary to host both gRPC 
-and separate HTTP servers for many types of applications.
-<!--more-->
+transfers: the uploading and downloading of contiguous binary block data. But gRPC can efficiently replicate all HTTP 
+functionality within its Protobuf message framework making it unnecessary to host separate gRPC and HTTP servers for 
+applications.<!--more-->  
+
+Because gRPC is built directly on top of HTTP/2 it is understandable that for simple file transfers gRPC is HTTP/2 
+with overhead, meaning gRPC can never reach the resource efficiency of a pure HTTP server for certain tasks.  
 
 Use-cases with significant file transfers should prefer a stock HTTP implementation over gRPC. This may change in the 
-future via additional development to the gRPC libraries, however it is not a priority for current gRPC implementations.
-Typically, gRPC will copy data models multiple times in memory for various reasons. The Java gRPC implementation will 
-intentionally array copy data to a second array to ensure immutability, allowing assertions about internal state to be 
-made to prioritize faster serialization.
+future via additional development of the gRPC libraries, however it will likely never be a priority. 
 
-An HTTP server maintains low-level code paths to directly read/write data from storage to network with zero or minimal 
-memory buffering or CPU processing.
+Typically, gRPC intentionally creates overhead by copying data models multiple times in memory for various reasons. The 
+Java gRPC implementation will copy all array data to a second array to ensure immutability, thereby allowing assertions 
+about internal state to be made leading to optimized serialization code paths.
+
+On the other hand, HTTP servers typically optimize for low-level code paths by directly reading/writing data from 
+storage to network with zero or minimal memory buffering or CPU processing.
 
 {% include multi_part_post.html %}
 
