@@ -79,20 +79,87 @@ service FileService {
   rpc GetFile (GetFileRequest) returns (stream FileChunk);
   rpc SetFile (stream FileChunk) returns (SetFileResponse);
 }
-
-message GetFileRequest {
-  //Resource identifier for client entity
-  string filename = 1;
-}
-
-message SetFileResponse {
-  //Resource identifier for server entity
-  string filename = 1;
-}
 ```
 # Server Implementation
 
-## Send (Upload)
+## Client GetFile (Download)
 
-## Receive (Download)
+```protobuf
+message GetFileRequest {
+  string filename = 1;
+}
+```
 
+```scala
+def getFile(request: GetFileRequest): Stream[StatusException, FileChunk]
+```
+
+```scala
+ private def readFileSize(file: File): IO[IOException, Long] = {
+  val path = Path.fromJava(file.toPath)
+  Files.exists(path)
+    .filterOrFail(_ == true)(FileNotFoundException(file.getName))
+    .flatMap(_ => Files.size(path))
+}
+```
+
+```scala
+private def readFile(file: File): UStream[ByteString] = {
+  ZStream.fromPath(file.toPath, chunkSize = chunkSize)
+    .chunks.map(chunk => ByteString.copyFrom(chunk.toArray))
+    .catchAll { 
+      ex => 
+        ZStream.fromZIO {
+          ZIO.logErrorCause(s"Error reading file ${file.getName}", Cause.fail(ex))
+        }.drain
+    }
+}
+```
+
+```scala
+private def javaFile(unsafeFilename: String): File = {
+  File(s"${filesDirectory.getPath}/$unsafeFilename")
+}
+```
+
+```scala
+  override def getFile(request: GetFileRequest): Stream[StatusException, FileChunk] = {
+    val file = javaFile(request.filename)
+    ZStream.fromZIO(readFileSize(file))
+      .flatMap { fileSize =>
+        readFile(file).mapAccum(0L)((sentBytes, byteString) {
+        val fileChunk = FileChunk.of(
+          filename = file.getName,
+          fileSize = fileSize,
+          offset = sentBytes,
+          body = byteString,
+        )
+        (sentBytes + byteString.size, fileChunk)
+        })
+      }
+      .catchAll { ex =>
+        ZStream.fromZIO(ZIO.logCause("updateUserSocial", Cause.fail(ex)).flatMap(_ => ZIO.fail(StatusException(io.grpc.Status.fromThrowable(ex)))))
+      }
+  }
+```
+
+## Client SetFile (Upload)
+
+```protobuf
+message SetFileResponse {
+  string filename = 1;
+}
+```
+
+```scala
+def setFile(request: Stream[StatusException, FileChunk]): IO[StatusException, SetFileResponse]
+```
+
+```scala
+case class SaveFileAccum(
+  asynchronousFileChannel: AsynchronousFileChannel,
+  file: File,
+  totalSize: Long,
+  offset: Long,
+)
+```
