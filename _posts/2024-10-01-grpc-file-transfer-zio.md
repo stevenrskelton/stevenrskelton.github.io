@@ -14,20 +14,25 @@ transfers: the uploading and downloading of contiguous binary block data. But gR
 functionality within its Protobuf message framework making it unnecessary to host separate gRPC and HTTP servers for 
 applications.<!--more-->  
 
-Because gRPC is built directly on top of HTTP/2 it is understandable that for simple file transfers gRPC is HTTP/2 
-with overhead, meaning gRPC can never reach the resource efficiency of a pure HTTP server for certain tasks.  
-
-Use-cases with significant file transfers should prefer a stock HTTP implementation over gRPC. This may change in the 
-future via additional development of the gRPC libraries, however it will likely never be a priority. 
-
-Typically, gRPC intentionally creates overhead by copying data models multiple times in memory for various reasons. The 
-Java gRPC implementation will copy all array data to a second array to ensure immutability, thereby allowing assertions 
-about internal state to be made leading to optimized serialization code paths.
-
-On the other hand, HTTP servers typically optimize for low-level code paths by directly reading/writing data from 
-storage to network with zero or minimal memory buffering or CPU processing.
-
 {% include multi_part_post.html %}
+
+# Comparison of gRPC to HTTP/2
+
+Because gRPC is built directly on top of HTTP/2 it is understandable that for simple file transfers gRPC can be viewed 
+as HTTP/2 with unnecessary overhead. For certain simple tasks, gRPC can never reach the resource efficiency of a pure 
+HTTP implementation.  
+
+For this reason, use-cases with significant or performance critical file transfers should prefer stock HTTP over 
+gRPC. Unfortunately this may mean adding a second cluster of HTTP servers to your deployments, making the performance
+gain a trade-off against system complexity. While gRPC is in active development, it is unlikely to ever optimize for 
+such a specialized task considering HTTP is ultimately the better alternative. 
+
+Most of the overhead of gRPC comes from intentionally copying in-memory data models. The Java gRPC implementation will 
+copy array data to secondary arrays to break all code references and ensure immutability. This will allow assertions 
+about internal state lending to a heavily optimized serialization code path.
+
+On the other hand, HTTP servers have optimized code paths for reading/writing data directly from storage to network 
+with zero or minimal memory buffering or CPU processing. Exactly what is wanted for a file transfer.
 
 # Protobuf Definition
 
@@ -62,10 +67,8 @@ message FileChunk {
   uint64 file_size = 2;
   //Starting offset of current chunk
   uint64 offset = 3;
-  //True if last chunk
-  bool success = 4;
   //Binary data of chunk
-  bytes body = 6;
+  bytes body = 4;
 }
 ```
 
@@ -87,8 +90,9 @@ message SetFileResponse {
   string filename = 1;
 }
 ```
+# Server Implementation
 
-# Server Send (Upload)
+## Send (Upload)
 
-# Server Receive (Download)
+## Receive (Download)
 

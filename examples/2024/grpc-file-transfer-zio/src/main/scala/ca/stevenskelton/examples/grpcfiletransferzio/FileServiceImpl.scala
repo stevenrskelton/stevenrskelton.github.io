@@ -27,7 +27,6 @@ class FileServiceImpl(filesDirectory: File, chunkSize: Int, maxFileSize: Long) e
             filename = file.getName,
             fileSize = fileSize,
             offset = sentBytes,
-            success = sentBytes + byteString.size == fileSize,
             body = byteString,
           )
           (sentBytes + byteString.size, fileChunk)

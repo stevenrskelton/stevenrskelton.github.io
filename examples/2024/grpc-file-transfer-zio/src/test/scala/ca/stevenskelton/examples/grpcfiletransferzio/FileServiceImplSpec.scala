@@ -28,9 +28,8 @@ object FileServiceImplSpec extends ZIOSpecDefault:
         i =>
           FileChunk.of(
             filename = filename,
-            size = 5 * chunk10b,
+            fileSize = 5 * chunk10b,
             offset = i * chunk10b,
-            success = i == 4,
             body = createCountingByteString(i * chunk10b, chunk10b),
           )
 
@@ -43,9 +42,8 @@ object FileServiceImplSpec extends ZIOSpecDefault:
         setFileResponse.filename == filename,
         savedFileChunk.size == 4,
         savedFileChunk.last.filename == filename,
-        savedFileChunk.last.size == 5 * chunk10b,
+        savedFileChunk.last.fileSize == 5 * chunk10b,
         savedFileChunk.last.offset == 3 * chunk16b,
-        savedFileChunk.last.success,
         savedFileChunk.last.body.size == (5 * chunk10b) - (3 * chunk16b),
         hasCountingLength(savedFileChunk.map(_.body)) == 5 * chunk10b
       )
@@ -59,9 +57,8 @@ object FileServiceImplSpec extends ZIOSpecDefault:
         i =>
           FileChunk.of(
             filename = filename,
-            size = 3 * chunk16b,
+            fileSize = 3 * chunk16b,
             offset = i * chunk16b,
-            success = i == 2,
             body = createCountingByteString(i * chunk16b, chunk16b),
           )
 
@@ -74,9 +71,8 @@ object FileServiceImplSpec extends ZIOSpecDefault:
         setFileResponse.filename == filename,
         savedFileChunk.size == 5,
         savedFileChunk.last.filename == filename,
-        savedFileChunk.last.size == 3 * chunk16b,
+        savedFileChunk.last.fileSize == 3 * chunk16b,
         savedFileChunk.last.offset == 4 * chunk10b,
-        savedFileChunk.last.success,
         savedFileChunk.last.body.size == (3 * chunk16b) - (4 * chunk10b),
         hasCountingLength(savedFileChunk.map(_.body)) == 3 * chunk16b
       )
@@ -88,23 +84,20 @@ object FileServiceImplSpec extends ZIOSpecDefault:
       val validFileChunks = Seq(
         FileChunk.of(
           filename = filename,
-          size = 4 + 5 + 3,
+          fileSize = 4 + 5 + 3,
           offset = 0,
-          success = false,
           body = createCountingByteString(0, 4),
         ),
         FileChunk.of(
           filename = filename,
-          size = 4 + 5 + 3,
+          fileSize = 4 + 5 + 3,
           offset = 4,
-          success = false,
           body = createCountingByteString(4, 5),
         ),
         FileChunk.of(
           filename = filename,
-          size = 4 + 5 + 3,
+          fileSize = 4 + 5 + 3,
           offset = 4 + 5,
-          success = true,
           body = createCountingByteString(9, 3),
         ),
       )
@@ -118,9 +111,8 @@ object FileServiceImplSpec extends ZIOSpecDefault:
         setFileResponse.filename == filename,
         savedFileChunk.size == 1,
         savedFileChunk.last.filename == filename,
-        savedFileChunk.last.size == 4 + 5 + 3,
+        savedFileChunk.last.fileSize == 4 + 5 + 3,
         savedFileChunk.last.offset == 0,
-        savedFileChunk.last.success,
         savedFileChunk.last.body.size == 4 + 5 + 3,
         hasCountingLength(savedFileChunk.map(_.body)) == 4 + 5 + 3
       )
@@ -130,9 +122,8 @@ object FileServiceImplSpec extends ZIOSpecDefault:
 
       val validFileChunk = FileChunk.of(
         filename = UUID.randomUUID.toString,
-        size = chunk16b,
+        fileSize = chunk16b,
         offset = 0,
-        success = true,
         body = createCountingByteString(0, chunk16b),
       )
 
@@ -151,16 +142,14 @@ object FileServiceImplSpec extends ZIOSpecDefault:
       val invalidFileChunks = Seq(
         FileChunk.of(
           filename = filename,
-          size = 8,
+          fileSize = 8,
           offset = 0,
-          success = false,
           body = createCountingByteString(0, 8),
         ),
         FileChunk.of(
           filename = filename,
-          size = 8,
+          fileSize = 8,
           offset = 8,
-          success = true,
           body = createCountingByteString(8, 8),
         ),
       )
