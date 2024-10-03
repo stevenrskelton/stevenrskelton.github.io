@@ -253,10 +253,12 @@ of them so it will have `Nothing` remaining elements, and its output will be an 
 The choice to return an `Option[SaveFileAccum]` allows us to externalize more code from the sink than if it returned
 a `SetFileResponse` directly.
 
-After the sink runs, the value of `Option[SaveFileAccum]` represents 3 possible outcomes:
-- If `Some` then a file was created, but it could be in 2 states. Either the client's `filesize` matches our file size doesn't match our file size then it was incomplete
-and the upload was successful, or they are different and the upload is incomplete.
+After the sink runs, the value of `Option[SaveFileAccum]` is either:
+- If `Some` then a file was created. Either:
+  - The client's `filesize` matches our file size means the upload was successful, or
+  - The file size doesn't match, meaning the upload was incomplete.
 - If `None`, then no file was created.
+
 
 The ZIO code for this is:
 
