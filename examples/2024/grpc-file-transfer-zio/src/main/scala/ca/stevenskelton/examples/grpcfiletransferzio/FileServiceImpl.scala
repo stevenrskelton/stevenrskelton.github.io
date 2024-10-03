@@ -47,24 +47,6 @@ class FileServiceImpl(filesDirectory: File, chunkSize: Int, maxFileSize: Long) e
     val sink = ZSink.foldLeftZIO[Scope, StatusException | IOException, FileChunk, Option[SaveFileAccum]](None)((saveFileAccum, fileChunk) =>
       saveFileAccum match
 
-        case Some(SaveFileAccum(_, _, _, offset)) if fileChunk.offset != offset =>
-          ZIO.logError(s"Invalid chunk offset ${fileChunk.offset}, expected $offset")
-            *> ZIO.fail(StatusException(INVALID_ARGUMENT))
-
-        case Some(SaveFileAccum(asyncFileChannel, file, totalSize, offset)) =>
-          val chunk = Chunk.from(fileChunk.body.asScala.map(Byte.unbox))
-          val saveFileAccum = SaveFileAccum(
-            asynchronousFileChannel = asyncFileChannel,
-            file = file,
-            totalSize = totalSize,
-            offset = offset + chunk.length,
-          )
-          if saveFileAccum.offset > totalSize then
-            ZIO.logError(s"Invalid chunk ${fileChunk.offset} exceeds total size $totalSize")
-              *> ZIO.fail(StatusException(OUT_OF_RANGE))
-          else
-            asyncFileChannel.writeChunk(chunk, offset).as(Some(saveFileAccum))
-
         case None =>
           val file = javaFile(fileChunk.filename)
           val path = Path.fromJava(file.toPath)
@@ -85,6 +67,24 @@ class FileServiceImpl(filesDirectory: File, chunkSize: Int, maxFileSize: Long) e
               _ <- channel.writeChunk(chunk, 0)
             yield
               Some(SaveFileAccum(channel, file, fileChunk.fileSize, chunk.length))
+
+        case Some(SaveFileAccum(_, _, _, offset)) if fileChunk.offset != offset =>
+          ZIO.logError(s"Invalid chunk offset ${fileChunk.offset}, expected $offset")
+            *> ZIO.fail(StatusException(INVALID_ARGUMENT))
+
+        case Some(SaveFileAccum(_, _, totalSize, offset)) if fileChunk.body.size() > totalSize - offset =>
+          ZIO.logError(s"Invalid chunk ${fileChunk.offset} exceeds total size $totalSize")
+            *> ZIO.fail(StatusException(OUT_OF_RANGE))
+
+        case Some(SaveFileAccum(asyncFileChannel, file, totalSize, offset)) =>
+          val chunk = Chunk.from(fileChunk.body.asScala.map(Byte.unbox))
+          val saveFileAccum = SaveFileAccum(
+            asynchronousFileChannel = asyncFileChannel,
+            file = file,
+            totalSize = totalSize,
+            offset = offset + chunk.length,
+          )
+          asyncFileChannel.writeChunk(chunk, offset).as(Some(saveFileAccum))
     )
     val z = ZIO.scoped:
       request.run(sink).flatMap:
