@@ -1,12 +1,10 @@
 import 'dart:math';
-
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_grpc_file_transfer/file_transfer_change_notifier.dart';
 import 'package:flutter_grpc_file_transfer/generated/protobuf/file_service.pbgrpc.dart';
 import 'package:grpc/grpc.dart';
 import 'package:image_picker/image_picker.dart';
-
-import 'dart:io';
 import 'package:fixnum/fixnum.dart';
 
 class FileTransferGrpcClient {

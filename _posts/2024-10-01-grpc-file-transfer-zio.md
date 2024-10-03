@@ -25,17 +25,17 @@ Because gRPC is built directly on top of HTTP/2 it is understandable that for si
 as HTTP/2 with unnecessary overhead. For certain simple tasks, gRPC can never reach the resource efficiency of a pure
 HTTP implementation.
 
-For this reason, use-cases with significant or performance critical file transfers should prefer stock HTTP over
-gRPC. Unfortunately this may mean adding a second cluster of HTTP servers to your deployments, making the performance
-gain a trade-off against system complexity. While gRPC is in active development, it is unlikely to ever optimize for
-such a specialized task considering HTTP is ultimately the better alternative.
+For this reason, use-cases with significant volume or large file transfers will see noticeably reduced server resource
+demands using HTTP instead of gRPC. However, this comes with the burden of maintaining another server cluster for HTTP,
+or sideloading an HTTP server onto the gRPC server. The HTTP performance gain becomes a trade-off against system 
+complexity.
 
-Most of the overhead of gRPC comes from intentionally copying in-memory data models. The Java gRPC implementation will
-copy array data to secondary arrays to break all code references and ensure immutability. This will allow assertions
-about internal state lending to a heavily optimized serialization code path.
+Most gRPC overhead comes from the intentional copying of in-memory data models. The Java gRPC implementation will 
+recopy userspace data to yet another array simply as a precaution: ensuring no code references and data immutability. 
+This to enable assertions about internal state in order to optimize serialization code paths.
 
-On the other hand, HTTP servers have optimized code paths for reading/writing data directly from storage to network
-with zero or minimal memory buffering or CPU processing. Exactly what is wanted for a file transfer.
+On the other hand, HTTP servers can be optimized for their simpler code paths without extra work; reading and writing 
+data directly from storage to network with zero or minimal memory buffering and CPU processing.
 
 # Protobuf Definition
 

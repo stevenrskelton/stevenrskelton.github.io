@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_grpc_file_transfer/file_transfer_change_notifier.dart';
 import 'package:flutter_grpc_file_transfer/file_transfer_grpc_client.dart';
 import 'package:flutter_grpc_file_transfer/file_transfer_progress_bar_widget.dart';
-
 import 'package:image_picker/image_picker.dart';
 
 class FileTransferWidget extends StatelessWidget {
@@ -95,7 +94,9 @@ class FileTransferWidget extends StatelessWidget {
                             builder: (context, child) {
                               final localFilename = fileReceiveChangeNotifier.progress.filename;
                               if (localFilename == null) {
-                                return Card(child: FileTransferProgressBarWidget(fileTransferChangeNotifierNotifier: _downloadProgress));
+                                return Card(
+                                  child: FileTransferProgressBarWidget(fileTransferChangeNotifierNotifier: _downloadProgress),
+                                );
                               } else {
                                 return Card(
                                   child: Column(
