@@ -294,13 +294,27 @@ The sink will process the stream using a `foldLeftZIO` since we will need to mai
 updating it during each chunk processing.
 ```scala
 ZSink.foldLeftZIO(None)((saveFileAccum, fileChunk) {
-  //case 1: file channel not open => open file channel and write first chunk
-  //case 2: file channel open, but chunk offset != expected throw INVALID_ARGUMENT
-  //case 3: file channel open, but chunk greater than remaining bytes
-  //case 4: channel open, chunk valid => append to file channel
+  //case 1: invalid chunk size, throw INVALID_ARGUMENT
+  //case 2: file channel not open => open file channel and write first chunk
+  //case 3: file channel open, but chunk offset != expected throw INVALID_ARGUMENT
+  //case 4: file channel open, but chunk greater than remaining bytes
+  //case 5: channel open, chunk valid => append to file channel
 })
 ```
-##### Case 1: File Channel Not Open
+
+##### Case 1: Invalid Chunk Size
+
+Separate from `maxFileSize` it is also important to limit how large individual chunks can be. Noted earlier, gRPC will 
+perform multiple copies of the body data so allowing too large of chunks will result in more memory churn and GC 
+pressure. For example, allowing 100MB chunk sizes may require > 300MB of memory to properly process the request.
+
+```scala
+case _  if fileChunk.body.size() > maxChunkSize =>
+  ZIO.logError(s"Chunk size ${fileChunk.body.size()} exceeds maximum $maxChunkSize") 
+    *> ZIO.fail(StatusException(INVALID_ARGUMENT))
+```
+
+##### Case 2: File Channel Not Open
 
 This should only run on the first chunk. It will either create an open `AsynchronousFileChannel` or determine that the
 file upload is invalid and throw an exception.
@@ -331,7 +345,7 @@ if (fileChunk.fileSize > maxFileSize) {
 }
 ```
 
-##### Case 2: File Channel Open But Invalid Offset 
+##### Case 3: File Channel Open But Invalid Offset 
 
 Verifies that this `FileChunk` is at the expected offset.
 
@@ -341,9 +355,9 @@ case Some(SaveFileAccum(_, _, _, offset)) if fileChunk.offset != offset =>
     *> ZIO.fail(StatusException(INVALID_ARGUMENT))
 ```
 
-##### Case 3: File Channel Open, But Chunk Greater Than Remaining Bytes
+##### Case 4: File Channel Open, But Chunk Greater Than Remaining Bytes
 
-Verifies that this `FileChunk` body doesn't exceed the remaining number of bytes left in the stored file.
+Verifies that this `FileChunk` body doesn't exceed the remaining number of bytes left in the stored file. 
 
 ```scala
 case Some(SaveFileAccum(_, _, totalSize, offset)) if fileChunk.body.size() > totalSize - offset =>
@@ -351,7 +365,7 @@ case Some(SaveFileAccum(_, _, totalSize, offset)) if fileChunk.body.size() > tot
     *> ZIO.fail(StatusException(OUT_OF_RANGE))
 ```
 
-##### Case 4: File Channel Open, Write to Channel
+##### Case 5: File Channel Open, Write to Channel
 
 All invalid `FileChunk` cases have been checked, the `body` should be appended to the open file channel and the sink
 state updated with the new expected offset for the next element of the stream.
