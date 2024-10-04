@@ -2,6 +2,7 @@ import 'dart:math';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_grpc_file_transfer/file_transfer_progress.dart';
 import 'generated/protobuf/file_service.pb.dart';
+import 'package:fixnum/fixnum.dart';
 
 abstract class FileTransferChangeNotifier with ChangeNotifier {
   static const _smoothingFactor = 0.75;
@@ -98,7 +99,7 @@ class FileReceiveChangeNotifier extends FileTransferChangeNotifier {
   @override
   void update(FileChunk fileChunk) {
     final now = DateTime.timestamp();
-    if (fileChunk.success) {
+    if (Int64(fileChunk.body.length) + fileChunk.offset == fileChunk.fileSize) {
       final startTimestamp = _progress.startTimestamp ?? _lastUpdate;
       final durationInSeconds = max(1, now.difference(startTimestamp).inMilliseconds) / 1000;
       final transferredBytes = fileChunk.fileSize.toInt();

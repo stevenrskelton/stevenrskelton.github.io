@@ -17,7 +17,7 @@ lazy val realtimeziohubgrpc = project
     organization := "ca.stevenskelton.examples",
     description := "Bi-directional GRPC using ZIO Hub.",
     version := "0.1.0",
-    scalaVersion := "3.5.0",
+    scalaVersion := "3.5.1",
     libraryDependencies ++= Seq(
       "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion,
       "io.grpc" %  "grpc-netty"         % "1.65.1",

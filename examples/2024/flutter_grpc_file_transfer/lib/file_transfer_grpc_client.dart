@@ -48,7 +48,8 @@ class FileTransferGrpcClient {
       }
       fileReceiveChangeNotifier.update(fileChunk);
       output.writeAsBytesSync(fileChunk.body, mode: FileMode.append);
-      return fileChunk.success;
+      final isSuccess = fileChunk.offset + fileChunk.body.length == fileChunk.fileSize;
+      return isSuccess;
     }).then((isSuccess) {
       if (isSuccess) {
         fileReceiveChangeNotifier.close(output.path);
@@ -99,7 +100,6 @@ class FileTransferGrpcClient {
         filename: xFile.name,
         fileSize: Int64(fileSize),
         offset: Int64(offset),
-        success: (body.length + offset) == fileSize,
         body: body,
       );
     });

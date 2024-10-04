@@ -14,7 +14,7 @@ import java.io.{File, FileNotFoundException, IOException}
 import java.nio.file.StandardOpenOption
 import scala.jdk.CollectionConverters.*
 
-class FileServiceImpl(filesDirectory: File, chunkSize: Int, maxFileSize: Long) extends FileService:
+class FileServiceImpl(filesDirectory: File, chunkSize: Int, maxFileSize: Long, maxChunkSize: Int) extends FileService:
 
   private def javaFile(unsafeFilename: String): File = File(s"${filesDirectory.getPath}/$unsafeFilename")
 
@@ -47,6 +47,10 @@ class FileServiceImpl(filesDirectory: File, chunkSize: Int, maxFileSize: Long) e
     val sink = ZSink.foldLeftZIO[Scope, StatusException | IOException, FileChunk, Option[SaveFileAccum]](None)((saveFileAccum, fileChunk) =>
       saveFileAccum match
 
+        case _ if fileChunk.body.size() > maxChunkSize =>
+          ZIO.logError(s"Chunk size ${fileChunk.body.size()} exceeds maximum $maxChunkSize")
+            *> ZIO.fail(StatusException(INVALID_ARGUMENT))
+          
         case None =>
           val file = javaFile(fileChunk.filename)
           val path = Path.fromJava(file.toPath)

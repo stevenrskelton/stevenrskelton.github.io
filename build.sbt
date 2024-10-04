@@ -3,7 +3,7 @@ name := "examples"
 version := "0.1.0-SNAPSHOT"
 organization := "ca.stevenskelton"
 
-scalaVersion := "3.5.0"
+scalaVersion := "3.5.1"
 
 lazy val scala3_aws_lambda_dynamodb_importer = RootProject(file("./examples/2022/scala3-aws-lambda-dynamodb-importer"))
 lazy val list_lookup_zio_cache = RootProject(file("./examples/2023/list-lookup-zio-cache"))

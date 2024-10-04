@@ -5,7 +5,7 @@ lazy val jobqueuezioscope = project
     organization := "ca.stevenskelton.examples",
     description := "Job Queue using ZIO Scope to manage removal.",
     version := "0.1.0",
-    scalaVersion := "3.5.0",
+    scalaVersion := "3.5.1",
     libraryDependencies ++= Seq(
       "dev.zio" %% "zio"                % "2.1.6",
       "dev.zio" %% "zio-test"           % "2.1.4" % Test,

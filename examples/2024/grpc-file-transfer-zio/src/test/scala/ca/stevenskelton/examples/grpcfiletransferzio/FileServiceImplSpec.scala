@@ -35,7 +35,7 @@ object FileServiceImplSpec extends ZIOSpecDefault:
 
       for
         tempDirectory <- Files.createTempDirectory(tmpDirectory, Nil)
-        fileService = FileServiceImpl(tempDirectory.toFile, chunkSize = chunk16b, maxFileSize = Byte.MaxValue)
+        fileService = FileServiceImpl(tempDirectory.toFile, chunkSize = chunk16b, maxFileSize = Byte.MaxValue, maxChunkSize = Int.MaxValue)
         setFileResponse <- fileService.setFile(ZStream.fromIterable(validFileChunks))
         savedFileChunk <- fileService.getFile(GetFileRequest.of(filename)).runCollect
       yield assertTrue(
@@ -64,7 +64,7 @@ object FileServiceImplSpec extends ZIOSpecDefault:
 
       for
         tempDirectory <- Files.createTempDirectory(tmpDirectory, Nil)
-        fileService = FileServiceImpl(tempDirectory.toFile, chunkSize = chunk10b, maxFileSize = Byte.MaxValue)
+        fileService = FileServiceImpl(tempDirectory.toFile, chunkSize = chunk10b, maxFileSize = Byte.MaxValue, maxChunkSize = Int.MaxValue)
         setFileResponse <- fileService.setFile(ZStream.fromIterable(validFileChunks))
         savedFileChunk <- fileService.getFile(GetFileRequest.of(filename)).runCollect
       yield assertTrue(
@@ -104,7 +104,7 @@ object FileServiceImplSpec extends ZIOSpecDefault:
 
       for
         tempDirectory <- Files.createTempDirectory(tmpDirectory, Nil)
-        fileService = FileServiceImpl(tempDirectory.toFile, chunkSize = chunk16b, maxFileSize = Byte.MaxValue)
+        fileService = FileServiceImpl(tempDirectory.toFile, chunkSize = chunk16b, maxFileSize = Byte.MaxValue, maxChunkSize = Int.MaxValue)
         setFileResponse <- fileService.setFile(ZStream.fromIterable(validFileChunks))
         savedFileChunk <- fileService.getFile(GetFileRequest.of(filename)).runCollect
       yield assertTrue(
@@ -129,7 +129,7 @@ object FileServiceImplSpec extends ZIOSpecDefault:
 
       for
         tempDirectory <- Files.createTempDirectory(tmpDirectory, Nil)
-        fileService = FileServiceImpl(tempDirectory.toFile, chunkSize = chunk10b, maxFileSize = chunk10b)
+        fileService = FileServiceImpl(tempDirectory.toFile, chunkSize = chunk10b, maxFileSize = chunk10b, maxChunkSize = Int.MaxValue)
         exit <- fileService.setFile(ZStream.from(validFileChunk)).exit
       yield
         assertTrue(exit.is(_.failure).getStatus == OUT_OF_RANGE)
@@ -156,7 +156,7 @@ object FileServiceImplSpec extends ZIOSpecDefault:
 
       for
         tempDirectory <- Files.createTempDirectory(tmpDirectory, Nil)
-        fileService = FileServiceImpl(tempDirectory.toFile, chunkSize = chunk10b, maxFileSize = chunk10b)
+        fileService = FileServiceImpl(tempDirectory.toFile, chunkSize = chunk10b, maxFileSize = chunk10b, maxChunkSize = Int.MaxValue)
         exit <- fileService.setFile(ZStream.fromIterable(invalidFileChunks)).exit
       yield
         assertTrue(exit.is(_.failure).getStatus == OUT_OF_RANGE)

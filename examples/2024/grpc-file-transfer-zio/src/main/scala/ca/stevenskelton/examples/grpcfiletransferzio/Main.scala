@@ -11,5 +11,6 @@ object Main extends ServerMain:
   private val FilesDirectory = File("files")
   private val ChunkSize = 65_536
   private val MaxFileSize = 250 * 1_048_576L
+  private val MaxChunkSize = ChunkSize
 
-  override def services: ServiceList[Any] = ServiceList.add(FileServiceImpl(FilesDirectory, ChunkSize, MaxFileSize))
+  override def services: ServiceList[Any] = ServiceList.add(FileServiceImpl(FilesDirectory, ChunkSize, MaxFileSize, MaxChunkSize))

@@ -17,7 +17,7 @@ lazy val grpcfiletransferzio = project
     organization := "ca.stevenskelton.examples",
     description := "File upload/download using gRPC structs.",
     version := "0.1.0",
-    scalaVersion := "3.5.0",
+    scalaVersion := "3.5.1",
     libraryDependencies ++= Seq(
       "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion,
       "io.grpc" %  "grpc-netty"         % "1.65.1",

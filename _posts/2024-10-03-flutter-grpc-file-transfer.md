@@ -39,6 +39,44 @@ This sample client requires 2 Flutter libraries:
 - [grpc](https://pub.dev/packages/grpc) core implementation for networking.
 - [image_picker](https://pub.dev/packages/image_picker) implements an image picker widget to easily select upload files.
 
+# Flutter UI Flow
+
+{%
+include figure image_path="/assets/images/2024/10/01_select_upload_image.jpg"
+caption=""
+img_style="padding: 0 20px 10px 20px; background-color: white; height: 450px;"
+%}
+
+{%
+include figure image_path="/assets/images/2024/10/02_image_picker.jpg"
+caption=""
+img_style="padding: 0 20px 10px 20px; background-color: white; height: 450px;"
+%}
+
+{%
+include figure image_path="/assets/images/2024/10/03_upload_progress.jpg"
+caption=""
+img_style="padding: 0 20px 10px 20px; background-color: white; height: 450px;"
+%}
+
+{%
+include figure image_path="/assets/images/2024/10/04_upload_complete.jpg"
+caption=""
+img_style="padding: 0 20px 10px 20px; background-color: white; height: 450px;"
+%}
+
+{%
+include figure image_path="/assets/images/2024/10/04_download_progress.jpg"
+caption=""
+img_style="padding: 0 20px 10px 20px; background-color: white; height: 450px;"
+%}
+
+{%
+include figure image_path="/assets/images/2024/10/04_download_complete.jpg"
+caption=""
+img_style="padding: 0 20px 10px 20px; background-color: white; height: 450px;"
+%}
+
 # Classes
 
 ## file_transfer_change_notifier.dart

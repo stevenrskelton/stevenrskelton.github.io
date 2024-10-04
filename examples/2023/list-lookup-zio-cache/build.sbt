@@ -5,7 +5,7 @@ lazy val listlookupziocache = project
     organization := "ca.stevenskelton.examples",
     description := "ZIO Cache expanded to efficiently support Seq[Key] calls.",
     version := "0.1.0",
-    scalaVersion := "3.5.0",
+    scalaVersion := "3.5.1",
     libraryDependencies ++= Seq(
       "dev.zio" %% "zio-cache"         % "0.2.3",
       "dev.zio" %% "zio-test"          % "2.1.4" % Test,
