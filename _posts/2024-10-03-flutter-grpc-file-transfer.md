@@ -41,6 +41,9 @@ This sample client requires 2 Flutter libraries:
 
 # Flutter UI Flow
 
+[MACS J0417.5-1154 Wide Field](https://webbtelescope.org/contents/media/images/2024/128/01J6CXCDNSGF87TZEX379WHDXB)
+Full Res (For Display), 4623 X 4623, PNG (35.14 MB)
+
 {%
 include figure image_path="/assets/images/2024/10/01_select_upload_image.jpg"
 caption=""
