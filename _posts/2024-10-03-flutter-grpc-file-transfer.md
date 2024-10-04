@@ -66,13 +66,13 @@ img_style="padding: 0 20px 10px 20px; background-color: white; height: 450px;"
 %}
 
 {%
-include figure image_path="/assets/images/2024/10/04_download_progress.jpg"
+include figure image_path="/assets/images/2024/10/05_download_progress.jpg"
 caption=""
 img_style="padding: 0 20px 10px 20px; background-color: white; height: 450px;"
 %}
 
 {%
-include figure image_path="/assets/images/2024/10/04_download_complete.jpg"
+include figure image_path="/assets/images/2024/10/06_download_complete.jpg"
 caption=""
 img_style="padding: 0 20px 10px 20px; background-color: white; height: 450px;"
 %}
