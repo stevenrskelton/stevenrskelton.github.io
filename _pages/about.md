@@ -81,7 +81,7 @@ url="/assets/images/about/certifications/safe-leading-safe.pdf"
 %}
 </div>
 
-## Public Portfolio
+## Developing Personal Project
 
 <div class="img-bg" style="
   background-image: url('/assets/images/about/dancing_robots.jpg');
@@ -131,7 +131,7 @@ url="/assets/images/about/certifications/safe-leading-safe.pdf"
   <div style="height:0;clear:left"></div>
 </div>
 
-### GitHub Repositories
+## GitHub Repositories
 
 <div style="
   display: flex;
@@ -149,8 +149,9 @@ url="/assets/images/about/certifications/safe-leading-safe.pdf"
 
 </div>
 
-### Archived GitHub Repositories
-#### Polymer Web Components and older incompatible JavaScript and Scala code.
+## Archived GitHub Repositories
+
+### Polymer Web Components and older incompatible JavaScript and Scala code.
 
 *Polymer Library was deprecated in 2019 when functionality became browser native, <wbr>remaining Polymer functionality became [Lit](https://lit.dev/)*
 
