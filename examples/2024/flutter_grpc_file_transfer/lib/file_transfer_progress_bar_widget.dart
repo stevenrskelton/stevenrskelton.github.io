@@ -7,6 +7,8 @@ class FileTransferProgressBarWidget extends StatelessWidget {
 
   final ValueNotifier<FileTransferChangeNotifier?> fileTransferChangeNotifierNotifier;
 
+  /// Returns % progress, display text: line1, line 2
+  /// action = 'upload' or 'download'
   static (double, String, String) calculateTextAndProgress(FileTransferProgress fileTransferProgress, String action) {
     if (fileTransferProgress.startTimestamp == null || fileTransferProgress.fileSizeInBytes == 0) {
       if (fileTransferProgress.fileSizeInBytes == 0) {
