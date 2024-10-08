@@ -13,6 +13,7 @@ sources:
   - "/lib/file_transfer_progress_bar_widget.dart"
   - "/lib/file_transfer_widget.dart"
 example: flutter-grpc-file-transfer
+todo: "Complete code documentation"
 ---
 Modern mobile apps are benefiting from using gRPC with Protobuf to reduce boilerplate code for their client-server 
 networking implementation. While directly implemented by gRPC, the library can easily implement all necessary features

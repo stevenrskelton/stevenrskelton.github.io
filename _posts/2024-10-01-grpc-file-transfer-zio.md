@@ -19,7 +19,7 @@ applications.<!--more-->
 
 {% include multi_part_post.html %}
 
-{% include table-of-contents.html height="500px" %}
+{% include table-of-contents.html height="700px" %}
 
 # Comparison of gRPC to HTTP/2
 
