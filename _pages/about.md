@@ -149,7 +149,8 @@ url="/assets/images/about/certifications/safe-leading-safe.pdf"
 
 </div>
 
-### Archived Polymer Web Components, Outdated JS and Scala
+### Archived GitHub Repositories
+Polymer Web Components and older incompatible JavaScript and Scala code.
 *Polymer Library was deprecated in 2019 when functionality became browser native, <wbr>remaining Polymer functionality became [Lit](https://lit.dev/)*
 
 <div style="display:flex;flex-wrap:wrap;-webkit-flex-wrap:wrap;list-style:none;padding-inline-start:0px;">
