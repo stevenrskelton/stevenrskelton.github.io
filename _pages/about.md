@@ -24,8 +24,7 @@ title: "About"
   </p>
 
   <p>
-    <strong>7 years</strong> software consulting in <strong>financial services</strong> and fintech; 
-    <wbr>including:
+    <strong>7 years financial services and fintech</strong> consulting, including:
   </p> 
   <ul style="padding-bottom:0.5em">
     <li><em>Gluskin Sheff + Associates</em></li>
@@ -37,8 +36,7 @@ title: "About"
   </ul>
 
   <p>
-    <strong>3 years</strong> consulting and FTE across a diverse range of e-commerce, 
-    <wbr>customer data analytics and non-for-profit.
+    <strong>3 years</strong> consulting and FTE across a diverse range of e-commerce and customer-focused product development.
   </p>
 </div>
 
