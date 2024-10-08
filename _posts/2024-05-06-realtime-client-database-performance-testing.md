@@ -14,6 +14,7 @@ sources:
   - "/src/test/scala/ca/stevenskelton/examples/realtimeziohubgrpc/externaldata/ZSyncServiceImplSpec.scala"
   - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/externaldata/ExternalDataLayer.scala"
   - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/externaldata/performance/ClockExternalDataLayer.scala"
+todo: "Better example for testing"
 ---
 
 //TODO

@@ -20,6 +20,8 @@ for efficient file transfers.<!--more-->
 
 {% include multi_part_post.html %}
 
+{% include table-of-contents.html height="500px" %}
+
 # gRPC versus JavaScript libraries
 
 Cloud providers have libraries with support for uploading and downloading from cloud storage. These libraries approach

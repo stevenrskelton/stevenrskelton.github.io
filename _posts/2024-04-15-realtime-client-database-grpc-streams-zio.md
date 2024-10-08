@@ -12,6 +12,7 @@ sources:
   - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/grpcupdate/Main.scala"
   - "/src/main/scala/ca/stevenskelton/examples/realtimeziohubgrpc/grpcupdate/ZSyncServiceImpl.scala"
   - "/src/test/scala/ca/stevenskelton/examples/realtimeziohubgrpc/grpcupdate/ZSyncServiceImplSpec.scala"
+todo: "Finish feature documentation"
 ---
 
 Realtime push-based databases such as [Google Firebase](https://firebase.google.com/docs/database) conveniently ensure

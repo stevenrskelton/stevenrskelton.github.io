@@ -19,6 +19,8 @@ applications.<!--more-->
 
 {% include multi_part_post.html %}
 
+{% include table-of-contents.html height="500px" %}
+
 # Comparison of gRPC to HTTP/2
 
 Because gRPC is built directly on top of HTTP/2 it is understandable that for simple file transfers gRPC can be viewed
