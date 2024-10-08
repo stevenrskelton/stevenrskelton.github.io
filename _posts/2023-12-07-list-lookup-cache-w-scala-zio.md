@@ -12,7 +12,7 @@ In-memory caches mapping `Key => Value` are a simple and versatile tool to reduc
 datasource.  There are many use-cases requiring multiple cache calls, preferring `Seq[Key] => Seq[Value]`. Can a standard
 cache implementation be expanded to efficiently handle this scenario?<!--more-->
 
-{% include table-of-contents.html height="100px" %}
+{% include table-of-contents.html height="600px" %}
 
 # Making `Seq[Key]` Calls Efficiently
 
