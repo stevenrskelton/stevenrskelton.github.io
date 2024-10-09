@@ -1,5 +1,5 @@
 ---
-title: "Example Code Solutions and Demos"
+title: "Code Examples and Demos"
 layout: archive
 permalink: /examples/
 ---
@@ -11,7 +11,7 @@ permalink: /examples/
 <div class="toc-container">
     <aside class="sidebar__right">
         <nav class="toc">
-            <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Project Repository</h4></header>
+            <header><h4 class="nav__title"><i class="fas fa-file-alt"></i> Source Repository</h4></header>
             <ul class="toc__menu" id="markdown-toc">
             {% for example_field in site.examples %}
                 {% assign example_id=example_field[0] %}
@@ -32,7 +32,7 @@ permalink: /examples/
         </script></div>
 </div>
 
-<h1 style="margin-bottom: 1.5em;margin-top: 1.5em;">Source Code</h1>
+<h1 style="margin-bottom: 1.5em;margin-top: 1.5em;">Source Code and Related Articles</h1>
 
 {% assign entries_layout = page.entries_layout | default: 'list' %}
 {% for example_field in site.examples %}
