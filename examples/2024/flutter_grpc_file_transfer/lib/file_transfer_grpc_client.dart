@@ -13,6 +13,7 @@ class FileTransferGrpcClient {
   factory FileTransferGrpcClient.localhost() {
     final channel = ClientChannel(
       '10.0.2.2', //localhost for Android emulators
+      //'localhost',
       port: 50051,
       options: const ChannelOptions(credentials: ChannelCredentials.insecure()),
     );

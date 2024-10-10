@@ -9,13 +9,12 @@ package grpc;
 
 message Data {
   uint32 id = 1;
-  string field1 = 2;
+  string etag = 2;
+  string field1 = 3;
 }
 
 service SyncService {
   rpc BidirectionalStream (stream SyncRequest) returns (stream SyncResponse);
-
-  rpc Update(UpdateRequest) returns (UpdateResponse);
 }
 
 message SyncRequest {
@@ -35,9 +34,7 @@ message SyncRequest {
 }
 
 message SyncResponse {
-  uint32 id = 1;
-  string etag = 2;
-  Data data = 3;
+  Data data = 1;
   enum State {
     UNCHANGED = 0;
     UPDATED = 1;
@@ -46,28 +43,5 @@ message SyncResponse {
     NOT_SUBSCRIBED = 4;
     NOT_FOUND = 5;
   }
-  State state = 4;
-}
-
-message UpdateRequest {
-  message DataUpdate {
-    Data data = 1;
-    string previous_etag = 2;
-  }
-  repeated DataUpdate updates = 4;
-}
-
-message UpdateResponse {
-  enum State {
-    UNCHANGED = 0;
-    UPDATED = 1;
-    CONFLICT = 2;
-  }
-  message DataUpdateStatus {
-    uint32 id = 1;
-    string etag = 2;
-    State state = 3;
-    Data conflict = 4;
-  }
-  repeated DataUpdateStatus update_statuses = 1;
+  State state = 2;
 }
