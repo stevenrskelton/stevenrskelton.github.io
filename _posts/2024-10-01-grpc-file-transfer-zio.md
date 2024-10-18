@@ -41,7 +41,11 @@ data directly from storage to network with zero or minimal memory buffering and 
 
 ## HTTP/2 Backpressure
 
-//TODO
+The gRPC server implementations leverage the flow control in HTTP/2 streams to apply backpressure. The particular 
+settings are implementation dependent, but can usually be modified when initializing the server implementation. 
+Performance tuning the gRPC implementation is beyond the scope of this article, with the takeaway being that how much 
+data the server will receive from a client before blocking the client stream will also impact transfer performance, 
+memory usage, and code settings such as `chunk_size`. 
 
 # Protobuf Definition
 

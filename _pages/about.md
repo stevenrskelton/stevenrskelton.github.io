@@ -40,12 +40,13 @@ title: "About"
   </p>
 </div>
 
-## Principal Skills
+## Principal Archetypes and Skills
 
 - **Leader**: technology evangelist, ways of working, skill development, mentoring, and inter-team cohesion.
 - **Proactive**: architectural runway, enterprise best practices, industry awareness.
-- **Cloud**: SRE, DevOps, scaling, resiliency, security, disaster recover and respecting the 95th percentile.
 - **R&D**: benefit analysis, feasibility, integration strategies, and working with key stakeholders on adoption timelines.
+- **Communicator**: presentations, pitch decks, business understanding with domain language for every audience.
+- **Cloud**: SRE, DevOps, scaling, resiliency, security, disaster recover and respecting the 95th percentile.
 - **Data**: PII governance, read-write asymmetry, event-driven, low-latency streams.
 
 ## Enterprise Certifications
