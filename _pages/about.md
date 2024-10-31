@@ -42,7 +42,7 @@ title: "About"
 
 ## Principal Archetypes and Skills
 
-- **Leader**: technology evangelist, ways of working, skill development, mentoring, and inter-team cohesion.
+- **Leader**: technology evangelist, ways of working, skill development, mentoring, growing trust and inter-team cohesion.
 - **Proactive**: architectural runway, systemic problem discovery, enterprise best practices, industry awareness.
 - **R&D**: benefit analysis, feasibility, integration strategies, and working with key stakeholders on adoption timelines.
 - **Communicator**: presentations, pitch decks, business understanding with domain language for every audience.
