@@ -6,7 +6,7 @@ title: "About"
   background-image:url('/assets/images/about/bg.jpg');
   max-width: 1040px;">
 
-  <h1 style="margin-bottom:0">Principal Software Engineer</h1>
+  <h1 style="margin-bottom:0">Principal / Staff+ Software Engineer</h1>
   <p>
     <strong> 🇨🇦&nbsp;Toronto, Canada</strong>
   </p>
