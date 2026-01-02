@@ -54,9 +54,16 @@ title: "About"
 <div>
 {%
 include certification.html
+name="Google Cloud<br>Professional Cloud Architect"
+description="Google Cloud 97b36f2eb24d433cb01584de16b46bac Series 117737 Dec 2025"
+img="/assets/images/about/certifications/gcp_professional.png"
+url="/assets/images/about/certifications/ProfessionalCloudArchitect20260102-31-b27dke.pdf"
+%}
+{%
+include certification.html
 name="Google Cloud<br>Associate Cloud Engineer"
 description="Google Cloud 0e4c4f24bc7945a499aaad77a0530eaf Series 144815 Jul 2024"
-img="/assets/images/about/certifications/gcp_associate_cloud_engineer.png"
+img="/assets/images/about/certifications/gcp_associate.png"
 url="/assets/images/about/certifications/AssociateCloudEngineer20240711-7-h9f128.pdf"
 %}
 {%
