@@ -51,6 +51,8 @@ title: "About"
 
 ## Enterprise Certifications
 
+<a href="https://www.credly.com/users/steven-skelton.fce312cb" target="_blank">Credly</a>
+
 <div>
 {%
 include certification.html
