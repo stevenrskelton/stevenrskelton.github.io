@@ -51,8 +51,6 @@ title: "About"
 
 ## Enterprise Certifications
 
-<a href="https://www.credly.com/users/steven-skelton.fce312cb" target="_blank">Credly</a>
-
 <div>
 {%
 include certification.html
@@ -90,6 +88,7 @@ img="/assets/images/about/certifications/cert_mark_SA_badge_large_300px.png"
 url="/assets/images/about/certifications/safe-leading-safe.pdf"
 %}
 </div>
+<a href="https://www.credly.com/users/steven-skelton.fce312cb" target="_blank">Credly Profile</a>
 
 ## Developing Personal Project
 
