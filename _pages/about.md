@@ -90,7 +90,7 @@ url="/assets/images/about/certifications/safe-leading-safe.pdf"
 {%
 include certification.html
 name="Data Streaming Engineer<br>Apache Flink"
-description="Confluent Nov 2026"
+description="Confluent, an IBM Company, 8e4454f9-5381-4ee1-bf34-9b31d5acce7f Nov 2026"
 img="/assets/images/about/certifications/confluent_apache-flink_400px.png"
 url="/assets/images/about/certifications/credential-w3cvc-8e4454f9-5381-4ee1-bf34-9b31d5acce7f.json"
 %}
