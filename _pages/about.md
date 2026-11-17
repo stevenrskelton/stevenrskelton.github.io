@@ -49,7 +49,9 @@ title: "About"
 - **Cloud**: SRE, DevOps, scaling, resiliency, security, disaster recover, and respecting the 95th percentile.
 - **Data**: PII governance, read-write asymmetry, event-driven, and low-latency streams.
 
-## Enterprise Certifications
+## Certifications
+
+### Enterprise 
 
 <div>
 {%
@@ -88,6 +90,16 @@ img="/assets/images/about/certifications/cert_mark_SA_badge_large_300px.png"
 url="/assets/images/about/certifications/safe-leading-safe.pdf"
 %}
 </div>
+
+### Platform
+
+{%
+include certification.html
+name="Data Streaming Engineer<br>Apache Flink"
+description="Confluent Nov 2026"
+img="/assets/images/about/certifications/confluent_apache-flink_400px.png"
+url="/assets/images/about/certifications/credential-w3cvc-8e4454f9-5381-4ee1-bf34-9b31d5acce7f.json"
+%}
 
 ## Developing Personal Project
 
