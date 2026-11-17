@@ -93,7 +93,7 @@ url="/assets/images/about/certifications/safe-leading-safe.pdf"
 %}
 </div>
 
-<div><div>
+</div><div>
 
 ### Platform
 
