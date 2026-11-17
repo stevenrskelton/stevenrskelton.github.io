@@ -51,6 +51,7 @@ title: "About"
 
 ## Certifications
 
+<div>
 {%
 include certification.html
 name="Google Cloud<br>Professional Cloud Architect"
@@ -93,6 +94,7 @@ description="Confluent Nov 2026"
 img="/assets/images/about/certifications/confluent_apache-flink_400px.png"
 url="/assets/images/about/certifications/credential-w3cvc-8e4454f9-5381-4ee1-bf34-9b31d5acce7f.json"
 %}
+</div>
 
 ## Developing Personal Project
 
