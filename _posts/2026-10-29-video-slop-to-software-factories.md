@@ -1,5 +1,5 @@
 ---
-title: "Slop to Software Factories with Dexter Horthy"
+title: "VIDEO: Slop to Software Factories with Dexter Horthy"
 categories:
   - AI
 tags:

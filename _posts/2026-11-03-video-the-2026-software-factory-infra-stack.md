@@ -1,5 +1,5 @@
 ---
-title: "The 2026 Software Factory Infra Stack — Zach Lloyd, Warp.dev"
+title: "VIDEO: The 2026 Software Factory Infra Stack — Zach Lloyd, Warp.dev"
 categories:
   - AI
 tags:
