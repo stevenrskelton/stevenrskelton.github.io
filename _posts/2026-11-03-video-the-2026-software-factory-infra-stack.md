@@ -1,13 +1,15 @@
 ---
+layout: youtube
 title: "VIDEO: The 2026 Software Factory Infra Stack — Zach Lloyd, Warp.dev"
 categories:
   - AI
 tags:
   - Software Factory
 excerpt_separator: <!--more-->
+videoid: "LL0YmIyBKSU"
 ---
 
-{% include video id="LL0YmIyBKSU" provider="youtube" %}
+{% include video id=page.videoid provider="youtube" %}
 
 - some insights here
 - some insights here

@@ -1,13 +1,15 @@
 ---
+layout: youtube
 title: "VIDEO: Slop to Software Factories with Dexter Horthy"
 categories:
   - AI
 tags:
   - Software Factory
 excerpt_separator: <!--more-->
+videoid: "RKO64zarTDw"
 ---
 
-{% include video id="RKO64zarTDw" provider="youtube" %}
+{% include video id=page.videoid provider="youtube" %}
 
 - some insights here
 - some insights here
