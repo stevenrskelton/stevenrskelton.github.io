@@ -7,11 +7,6 @@ tags:
 excerpt_separator: <!--more-->
 ---
 
-{% include video id="LL0YmIyBKSU" provider="youtube" %}
-
-- some insights here
-- some insights here
-
 {% include video id="RKO64zarTDw" provider="youtube" %}
 
 - some insights here
@@ -35,3 +30,17 @@ And why is something broken
 and you shout at the bottle and you just
 keep pulling the slot machine
 and it just can't fix it.
+
+
+17:40 And uh
+17:43 with 4.8,
+17:44 this is Opus 4.8, not even like a super
+17:46 dope model, right? Uh I mean, Opus 4 is
+17:48 pretty damn good.
+17:50 Uh before up until Opus 4.8, I was a 4.5
+17:53 guy. I didn't
+17:54 really You didn't go to the 4.6.
+17:55 I mean, I tried it a little bit. I tried
+17:57 4.7 was like super spazzy. 4.8 was like
+18:02 it was good at the kind of things that I
+18:03 use.
