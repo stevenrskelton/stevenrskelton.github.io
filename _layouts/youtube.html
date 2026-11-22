@@ -10,7 +10,7 @@ layout: youtube
     var player;
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
-            videoId: 'VIDEO_ID',
+            videoId: '{{ page.videoid }}',
             playerVars: { playsinline: 1 }
         });
     }
