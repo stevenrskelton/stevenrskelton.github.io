@@ -1,9 +1,9 @@
 ---
-title: "Insights into Software Factories"
+title: "Slop to Software Factories with Dexter Horthy"
 categories:
   - AI
 tags:
-  - AI
+  - Software Factory
 excerpt_separator: <!--more-->
 ---
 

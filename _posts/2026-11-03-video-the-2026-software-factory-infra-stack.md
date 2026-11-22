@@ -1,9 +1,9 @@
 ---
-title: "Insights into Software Factories"
+title: "The 2026 Software Factory Infra Stack — Zach Lloyd, Warp.dev"
 categories:
   - AI
 tags:
-  - AI
+  - Software Factory
 excerpt_separator: <!--more-->
 ---
 
