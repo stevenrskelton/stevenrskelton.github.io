@@ -14,13 +14,12 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Steven Skelton
-subtitle: Scala, Flutter, Cloud Platform and occasionally hating on JavaScript
+subtitle: Staff+ IC leading innovative platform transformations
 name: Steven Skelton
 email:
 url: "https://www.stevenskelton.ca"
 description: >-
-  Code examples and implementation details encountered during my software development.
-  Mostly back-end = Scala; mobile = Dart && Flutter.
+  20+ year history of technology leadership driving impactful software solutions through every stage of corporate growth cycle, product maturity and economic condition.
 #twitter_username: username
 github_username: stevenrskelton
 minimal_mistakes_skin: dirt
