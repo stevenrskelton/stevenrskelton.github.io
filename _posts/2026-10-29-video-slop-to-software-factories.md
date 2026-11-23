@@ -12,7 +12,8 @@ Summary of some insights I have about this video.<!--more-->
 - some insights here
 - some insights here
 
-6:19 Are maintain a code base as you have
+{% include youtube_quote.html minute="6" second="19" %}
+> Are maintain a code base as you have
 pointed out and we're just continuing
 the slop. But my big question is if it
 runs does it matter?
@@ -32,7 +33,8 @@ keep pulling the slot machine
 and it just can't fix it.
 
 
-17:40 And uh
+{% include youtube_quote.html minute="17" second="40" %}
+> And uh
 17:43 with 4.8,
 17:44 this is Opus 4.8, not even like a super
 17:46 dope model, right? Uh I mean, Opus 4 is
