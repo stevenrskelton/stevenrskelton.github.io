@@ -1,15 +1,16 @@
 ---
-layout: posts
+layout: post
 ---
 
 {% assign parts = content | split: page.excerpt_separator %}
 
 <script>
-    var tag = document.createElement('script');
+    const tag = document.createElement('script');
     tag.src = "https://youtube.com";
     document.head.appendChild(tag);
 
-    var player;
+    let player;
+
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
             videoId: '{{ page.videoid }}',
