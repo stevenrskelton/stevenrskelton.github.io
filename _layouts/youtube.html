@@ -8,7 +8,7 @@ layout: single
 {{ parts[0] }}
 # youtube
 
-<div class="responsive-video-container"  id="player"></div>
+<div style="max-width:100%" id="player"></div>
 <script>
     // 2. This code loads the IFrame Player API code asynchronously.
     const tag = document.createElement('script');
@@ -23,6 +23,8 @@ layout: single
 
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
+            height: '573',
+            width: '1020',
             videoId: '{{ page.video_id }}',
             playerVars: {
                 'playsinline': 1
