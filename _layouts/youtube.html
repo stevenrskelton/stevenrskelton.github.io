@@ -13,8 +13,8 @@ layout: single
     let player;
 
     function onYouTubeIframeAPIReady() {
-        player = new YT.Player('fitvid0', {
-            videoId: '{{ page.videoid }}',
+        player = new YT.Player('player', {
+            videoId: '{{ page.video_id }}',
             playerVars: { playsinline: 1 }
         });
     }
@@ -30,9 +30,8 @@ layout: single
 {{ parts[0] }}
 # youtube
 
-<div class="responsive-video-container">
-    <iframe src="https://www.youtube-nocookie.com/embed/{{ video_id }}?enablejsapi=1" title="{{ page.title }}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowfullscreen></iframe>
-</div>
+<div class="responsive-video-container" id="player"></div>
+
 {% include video id=page.videoid provider="youtube" %}
 
 # youtube2
