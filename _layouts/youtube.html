@@ -5,6 +5,10 @@ layout: single
 {% assign parts = content | split: page.excerpt_separator %}
 {% assign video_src = "" %}
 
+{{ parts[0] }}
+# youtube
+
+<div id="player"></div>
 <script>
     const tag = document.createElement('script');
     tag.src = 'https://youtube.com';
@@ -34,11 +38,6 @@ layout: single
         }
     }
 </script>
-
-{{ parts[0] }}
-# youtube
-
-<div class="responsive-video-container" id="player"></div>
 
 # youtube2
 
