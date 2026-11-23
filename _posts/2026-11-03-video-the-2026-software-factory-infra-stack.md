@@ -8,9 +8,7 @@ tags:
 excerpt_separator: <!--more-->
 videoid: "LL0YmIyBKSU"
 ---
-
-{% include video id=page.videoid provider="youtube" %}
-
+Summary of some insights I have about this video.<!--more-->
 - some insights here
 - some insights here
 

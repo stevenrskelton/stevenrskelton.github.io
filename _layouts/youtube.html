@@ -1,6 +1,8 @@
 ---
-layout: default
+layout: posts
 ---
+
+{% assign parts = content | split: page.excerpt_separator %}
 
 <script>
     var tag = document.createElement('script');
@@ -23,6 +25,11 @@ layout: default
     }
 </script>
 
+{{ parts[0] }}
 # youtube
 
-{{ content }}
+{% include video id=page.videoid provider="youtube" %}
+
+# youtube2
+
+{{ parts[1] }}
