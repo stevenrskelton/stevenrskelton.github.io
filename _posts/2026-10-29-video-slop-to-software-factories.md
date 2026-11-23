@@ -6,7 +6,7 @@ categories:
 tags:
   - Software Factory
 excerpt_separator: <!--more-->
-videoid: "RKO64zarTDw"
+video_id: "RKO64zarTDw"
 ---
 Summary of some insights I have about this video.<!--more-->
 - some insights here

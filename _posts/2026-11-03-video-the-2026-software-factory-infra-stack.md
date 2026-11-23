@@ -6,7 +6,7 @@ categories:
 tags:
   - Software Factory
 excerpt_separator: <!--more-->
-videoid: "LL0YmIyBKSU"
+video_id: "LL0YmIyBKSU"
 ---
 Summary of some insights I have about this video.<!--more-->
 - some insights here

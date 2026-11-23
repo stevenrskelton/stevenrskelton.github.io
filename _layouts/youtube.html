@@ -3,6 +3,7 @@ layout: single
 ---
 
 {% assign parts = content | split: page.excerpt_separator %}
+{% assign video_src = "" %}
 
 <script>
     const tag = document.createElement('script');
@@ -12,7 +13,7 @@ layout: single
     let player;
 
     function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
+        player = new YT.Player('fitvid0', {
             videoId: '{{ page.videoid }}',
             playerVars: { playsinline: 1 }
         });
@@ -29,6 +30,9 @@ layout: single
 {{ parts[0] }}
 # youtube
 
+<div class="responsive-video-container">
+    <iframe src="https://www.youtube-nocookie.com/embed/{{ video_id }}?enablejsapi=1" title="{{ page.title }}" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowfullscreen></iframe>
+</div>
 {% include video id=page.videoid provider="youtube" %}
 
 # youtube2
