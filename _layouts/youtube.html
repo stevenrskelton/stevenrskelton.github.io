@@ -8,49 +8,11 @@ layout: single
 {{ parts[0] }}
 # youtube
 
-<div style="max-width:100%" id="player"></div>
+{% include video id="{{ page.video_id }}" provider="youtube" %}
+
 <script>
-    // 2. This code loads the IFrame Player API code asynchronously.
-    const tag = document.createElement('script');
-
-    tag.src = "https://www.youtube.com/iframe_api";
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    // 3. This function creates an <iframe> (and YouTube player)
-    //    after the API code downloads.
-    let player;
-
-    function onYouTubeIframeAPIReady() {
-        player = new YT.Player('player', {
-            height: '573',
-            width: '1020',
-            videoId: '{{ page.video_id }}',
-            playerVars: {
-                'playsinline': 1
-            },
-            events: {
-                'onReady': onPlayerReady
-            }
-        });
-    }
-
-    // 4. The API will call this function when the video player is ready.
-    function onPlayerReady(event) {
-        event.target.playVideo();
-    }
-
     function jumpToTime(seconds) {
-        if (player && typeof player.seekTo === 'function') {
-            player.seekTo(seconds, true);
-        }
-    }
-
-    function seekBy(deltaSeconds) {
-        if (player && typeof player.getCurrentTime === 'function') {
-            const target = Math.max(0, player.getCurrentTime() + deltaSeconds);
-            player.seekTo(target, true);
-        }
+        document.getElementById("fitvid0").src = 'https://www.youtube-nocookie.com/embed/{{ video_id }}?t=' + seconds;
     }
 </script>
 # youtube2

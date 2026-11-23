@@ -14,7 +14,7 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Steven Skelton
-subtitle: Staff+ IC leading innovative platform transformations for 20+ years
+subtitle: Staff+ IC leading innovative platform transformations
 name: Steven Skelton
 email:
 url: "https://www.stevenskelton.ca"
