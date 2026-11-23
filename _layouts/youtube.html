@@ -12,7 +12,8 @@ layout: single
 
 <script>
     function jumpToTime(seconds) {
-        document.getElementById("fitvid0").src = 'https://www.youtube-nocookie.com/embed/{{ video_id }}?t=' + seconds;
+        const iframe = document.getElementById("fitvid0");
+        iframe.src = `https://www.youtube-nocookie.com/embed/{{ video_id }}?start=${seconds}`;
     }
 </script>
 # youtube2
