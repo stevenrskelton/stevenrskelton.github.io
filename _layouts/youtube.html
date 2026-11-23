@@ -3,13 +3,18 @@ layout: single
 ---
 
 {% assign parts = content | split: page.excerpt_separator %}
+{% assign video_src = "" %}
 
 {{ parts[0] }}
 # youtube
 
 {% include video id="{{ page.video_id }}" provider="youtube" %}
 
-
+<script>
+    function jumpToTime(seconds) {
+        document.getElementById("fitvid0").src = 'https://www.youtube-nocookie.com/embed/{{ video_id }}?t=' + seconds;
+    }
+</script>
 # youtube2
 
 {{ parts[1] }}
