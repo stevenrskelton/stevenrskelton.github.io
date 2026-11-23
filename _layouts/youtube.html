@@ -9,12 +9,7 @@ layout: single
 
 {% include video id="{{ page.video_id }}" provider="youtube" %}
 
-<script>
-    function jumpToTime(seconds) {
-        const iframe = document.getElementById("fitvid0");
-        iframe.src = "https://www.youtube-nocookie.com/embed/{{ page.video_id }}?start=" + seconds;
-    }
-</script>
+
 # youtube2
 
 {{ parts[1] }}
