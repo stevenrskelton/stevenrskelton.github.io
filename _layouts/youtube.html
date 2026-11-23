@@ -7,22 +7,30 @@ layout: single
 
 <script>
     const tag = document.createElement('script');
-    tag.src = "https://youtube.com";
+    tag.src = 'https://youtube.com';
     document.head.appendChild(tag);
 
     let player;
 
     function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
+            height: '360',
+            width: '640',
             videoId: '{{ page.video_id }}',
             playerVars: { playsinline: 1 }
         });
     }
 
-    function jumpTo(seconds) {
+    function jumpToTime(seconds) {
         if (player && typeof player.seekTo === 'function') {
             player.seekTo(seconds, true);
-            player.playVideo();
+        }
+    }
+
+    function seekBy(deltaSeconds) {
+        if (player && typeof player.getCurrentTime === 'function') {
+            const target = Math.max(0, player.getCurrentTime() + deltaSeconds);
+            player.seekTo(target, true);
         }
     }
 </script>

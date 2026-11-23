@@ -1,3 +1,3 @@
 {% assign seconds = 60 | times: include.minute | plus: include.second %}
 
-<button type="button" onclick="jumpTo({{ seconds }})">Jump to {{ include.minute }}:{{ include.second }}</button>
+<button type="button" onclick="jumpToTime({{ seconds }})">Jump to {{ include.minute }}:{{ include.second }}</button>
