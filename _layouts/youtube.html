@@ -3,7 +3,6 @@ layout: single
 ---
 
 {% assign parts = content | split: page.excerpt_separator %}
-{% assign video_src = "" %}
 
 {{ parts[0] }}
 # youtube
@@ -12,7 +11,7 @@ layout: single
 
 <script>
     function jumpToTime(seconds) {
-        document.getElementById("fitvid0").src = 'https://www.youtube-nocookie.com/embed/{{ video_id }}?t=' + seconds;
+        document.getElementById("fitvid0").src = 'https://www.youtube-nocookie.com/embed/{{ page.video_id }}?t=' + seconds;
     }
 </script>
 # youtube2
